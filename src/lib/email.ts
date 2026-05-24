@@ -1,7 +1,5 @@
 import sgMail from '@sendgrid/mail'
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY!)
-
 interface EmailOptions {
   to:      string
   subject: string
@@ -10,6 +8,11 @@ interface EmailOptions {
 }
 
 export async function sendEmail({ to, subject, html, text }: EmailOptions) {
+  if (!process.env.SENDGRID_API_KEY) {
+    console.warn('SENDGRID_API_KEY not set, skipping email')
+    return
+  }
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY)
   await sgMail.send({
     to,
     from: {
