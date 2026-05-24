@@ -32,6 +32,13 @@ interface FormData {
   phone:           string
   telegram:        string
   education_level: string
+  gender:          string
+  marital_status:  string
+  arabic_level:    string
+  english_level:   string
+  guardian_name:   string
+  guardian_phone:  string
+  guardian_email:  string
 }
 
 interface UploadedDoc {
@@ -107,6 +114,13 @@ function ApplyContent() {
     phone:           '',
     telegram:        '',
     education_level: '',
+    gender:          '',
+    marital_status:  '',
+    arabic_level:    '',
+    english_level:   '',
+    guardian_name:   '',
+    guardian_phone:  '',
+    guardian_email:  '',
   })
 
   const [docs, setDocs] = useState<Record<DocumentType, UploadedDoc | undefined>>({} as any)
@@ -126,8 +140,8 @@ function ApplyContent() {
 
   // Step 1 — personal info
   const handleStep1 = () => {
-    if (!form.full_name || !form.citizenship || !form.phone) {
-      toast.error(lang === 'ru' ? 'Заполните обязательные поля' : 'Fill required fields')
+    if (!form.full_name || !form.citizenship || !form.phone || !form.gender || !form.marital_status || !form.arabic_level || !form.english_level) {
+      toast.error(lang === 'ru' ? 'Заполните все обязательные поля' : 'Fill all required fields')
       return
     }
     setStep(2)
@@ -170,6 +184,13 @@ function ApplyContent() {
           phone:           form.phone,
           telegram:        form.telegram || null,
           education_level: form.education_level || null,
+          gender:          form.gender || null,
+          marital_status:  form.marital_status || null,
+          arabic_level:    form.arabic_level || null,
+          english_level:   form.english_level || null,
+          guardian_name:   form.guardian_name || null,
+          guardian_phone:  form.guardian_phone || null,
+          guardian_email:  form.guardian_email || null,
         })
         .select()
         .single()
@@ -312,6 +333,96 @@ function ApplyContent() {
                   onChange={e => setForm({ ...form, education_level: e.target.value })}
                   options={EDUCATION_OPTIONS_RU}
                 />
+
+                {/* Пол */}
+                <Select
+                  label={(lang === 'ru' ? 'Пол' : 'Gender') + ' *'}
+                  value={form.gender}
+                  onChange={e => setForm({ ...form, gender: e.target.value })}
+                  options={[
+                    { value: '',       label: lang === 'ru' ? 'Выберите...' : 'Select...' },
+                    { value: 'male',   label: lang === 'ru' ? 'Мужчина' : 'Male' },
+                    { value: 'female', label: lang === 'ru' ? 'Женщина' : 'Female' },
+                  ]}
+                />
+
+                {/* Семейное положение */}
+                <Select
+                  label={(lang === 'ru' ? 'Семейное положение' : 'Marital status') + ' *'}
+                  value={form.marital_status}
+                  onChange={e => setForm({ ...form, marital_status: e.target.value })}
+                  options={[
+                    { value: '',         label: lang === 'ru' ? 'Выберите...' : 'Select...' },
+                    { value: 'single',   label: lang === 'ru' ? 'Не в браке' : 'Single' },
+                    { value: 'married',  label: lang === 'ru' ? 'В браке' : 'Married' },
+                    { value: 'divorced', label: lang === 'ru' ? 'Разведён(а)' : 'Divorced' },
+                    { value: 'widowed',  label: lang === 'ru' ? 'Вдовец/Вдова' : 'Widowed' },
+                  ]}
+                />
+
+                {/* Уровень арабского */}
+                <Select
+                  label={(lang === 'ru' ? 'Уровень знания арабского языка' : 'Arabic language level') + ' *'}
+                  value={form.arabic_level}
+                  onChange={e => setForm({ ...form, arabic_level: e.target.value })}
+                  options={[
+                    { value: '',             label: lang === 'ru' ? 'Выберите...' : 'Select...' },
+                    { value: 'none',         label: lang === 'ru' ? 'Не знаю' : 'No knowledge' },
+                    { value: 'beginner',     label: lang === 'ru' ? 'Начальный' : 'Beginner' },
+                    { value: 'elementary',   label: lang === 'ru' ? 'Элементарный' : 'Elementary' },
+                    { value: 'intermediate', label: lang === 'ru' ? 'Средний' : 'Intermediate' },
+                    { value: 'upper',        label: lang === 'ru' ? 'Выше среднего' : 'Upper-Intermediate' },
+                    { value: 'advanced',     label: lang === 'ru' ? 'Продвинутый' : 'Advanced' },
+                    { value: 'fluent',       label: lang === 'ru' ? 'Свободно' : 'Fluent' },
+                  ]}
+                />
+
+                {/* Уровень английского */}
+                <Select
+                  label={(lang === 'ru' ? 'Уровень знания английского языка' : 'English language level') + ' *'}
+                  value={form.english_level}
+                  onChange={e => setForm({ ...form, english_level: e.target.value })}
+                  options={[
+                    { value: '',             label: lang === 'ru' ? 'Выберите...' : 'Select...' },
+                    { value: 'none',         label: lang === 'ru' ? 'Не знаю' : 'No knowledge' },
+                    { value: 'beginner',     label: lang === 'ru' ? 'Начальный' : 'Beginner' },
+                    { value: 'elementary',   label: lang === 'ru' ? 'Элементарный' : 'Elementary' },
+                    { value: 'intermediate', label: lang === 'ru' ? 'Средний' : 'Intermediate' },
+                    { value: 'upper',        label: lang === 'ru' ? 'Выше среднего' : 'Upper-Intermediate' },
+                    { value: 'advanced',     label: lang === 'ru' ? 'Продвинутый' : 'Advanced' },
+                    { value: 'fluent',       label: lang === 'ru' ? 'Свободно' : 'Fluent' },
+                  ]}
+                />
+
+                {/* Контакт родного (необязательно) */}
+                <div className="pt-2 border-t border-border">
+                  <p className="text-sm font-semibold text-ink mb-3">
+                    {lang === 'ru' ? 'Контакт близкого человека' : 'Emergency contact'}{' '}
+                    <span className="text-muted font-normal text-xs">({lang === 'ru' ? 'необязательно' : 'optional'})</span>
+                  </p>
+                  <div className="space-y-3">
+                    <Input
+                      label={lang === 'ru' ? 'Имя' : 'Full name'}
+                      value={form.guardian_name}
+                      onChange={e => setForm({ ...form, guardian_name: e.target.value })}
+                      placeholder={lang === 'ru' ? 'Иванов Иван' : 'John Doe'}
+                    />
+                    <Input
+                      label={lang === 'ru' ? 'Номер телефона' : 'Phone number'}
+                      type="tel"
+                      value={form.guardian_phone}
+                      onChange={e => setForm({ ...form, guardian_phone: e.target.value })}
+                      placeholder="+998901234567"
+                    />
+                    <Input
+                      label={lang === 'ru' ? 'Email' : 'Email'}
+                      type="email"
+                      value={form.guardian_email}
+                      onChange={e => setForm({ ...form, guardian_email: e.target.value })}
+                      placeholder="example@mail.com"
+                    />
+                  </div>
+                </div>
               </div>
               <div className="flex justify-end mt-6">
                 <Button onClick={handleStep1} size="lg" iconRight={<ChevronRight className="w-4 h-4" />}>
@@ -428,6 +539,39 @@ function ApplyContent() {
                   <span className="text-muted">{t.apply.citizenship}</span><span className="text-ink">{form.citizenship}</span>
                   <span className="text-muted">{t.apply.phone}</span><span className="text-ink">{form.phone}</span>
                   {form.telegram && <><span className="text-muted">Telegram</span><span className="text-ink">{form.telegram}</span></>}
+                  {form.gender && <>
+                    <span className="text-muted">{lang === 'ru' ? 'Пол' : 'Gender'}</span>
+                    <span className="text-ink">{form.gender === 'male' ? (lang === 'ru' ? 'Мужчина' : 'Male') : (lang === 'ru' ? 'Женщина' : 'Female')}</span>
+                  </>}
+                  {form.marital_status && <>
+                    <span className="text-muted">{lang === 'ru' ? 'Семейное положение' : 'Marital status'}</span>
+                    <span className="text-ink">{
+                      form.marital_status === 'single'   ? (lang === 'ru' ? 'Не в браке' : 'Single') :
+                      form.marital_status === 'married'  ? (lang === 'ru' ? 'В браке' : 'Married') :
+                      form.marital_status === 'divorced' ? (lang === 'ru' ? 'Разведён(а)' : 'Divorced') :
+                      (lang === 'ru' ? 'Вдовец/Вдова' : 'Widowed')
+                    }</span>
+                  </>}
+                  {form.arabic_level && <>
+                    <span className="text-muted">{lang === 'ru' ? 'Арабский' : 'Arabic'}</span>
+                    <span className="text-ink">{form.arabic_level}</span>
+                  </>}
+                  {form.english_level && <>
+                    <span className="text-muted">{lang === 'ru' ? 'Английский' : 'English'}</span>
+                    <span className="text-ink">{form.english_level}</span>
+                  </>}
+                  {form.guardian_name && <>
+                    <span className="text-muted">{lang === 'ru' ? 'Контакт близкого' : 'Emergency contact'}</span>
+                    <span className="text-ink">{form.guardian_name}</span>
+                  </>}
+                  {form.guardian_phone && <>
+                    <span className="text-muted">{lang === 'ru' ? 'Тел. близкого' : 'Contact phone'}</span>
+                    <span className="text-ink">{form.guardian_phone}</span>
+                  </>}
+                  {form.guardian_email && <>
+                    <span className="text-muted">{lang === 'ru' ? 'Email близкого' : 'Contact email'}</span>
+                    <span className="text-ink">{form.guardian_email}</span>
+                  </>}
                 </div>
               </div>
 
