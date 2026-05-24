@@ -266,11 +266,26 @@ function ApplyContent() {
                   onChange={e => setForm({ ...form, full_name: e.target.value })}
                   placeholder="Иванов Иван Иванович"
                 />
-                <Input
+                <Select
                   label={t.apply.citizenship + ' *'}
                   value={form.citizenship}
                   onChange={e => setForm({ ...form, citizenship: e.target.value })}
-                  placeholder="Узбекистан"
+                  options={[
+                    { value: '', label: lang === 'ru' ? 'Выберите страну...' : 'Select country...' },
+                    { value: 'Узбекистан', label: 'Узбекистан' },
+                    { value: 'Казахстан', label: 'Казахстан' },
+                    { value: 'Таджикистан', label: 'Таджикистан' },
+                    { value: 'Кыргызстан', label: 'Кыргызстан' },
+                    { value: 'Туркменистан', label: 'Туркменистан' },
+                    { value: 'Азербайджан', label: 'Азербайджан' },
+                    { value: 'Россия', label: 'Россия' },
+                    { value: 'Украина', label: 'Украина' },
+                    { value: 'Беларусь', label: 'Беларусь' },
+                    { value: 'Молдова', label: 'Молдова' },
+                    { value: 'Грузия', label: 'Грузия' },
+                    { value: 'Армения', label: 'Армения' },
+                    { value: 'Другое', label: lang === 'ru' ? 'Другое' : 'Other' },
+                  ]}
                 />
                 <Input
                   label={t.apply.dob}
