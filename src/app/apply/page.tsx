@@ -1,5 +1,5 @@
 'use client'
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useDropzone } from 'react-dropzone'
@@ -89,7 +89,7 @@ function DropZone({ docType, label, onUpload, uploaded, onRemove }: {
   )
 }
 
-export default function ApplyPage() {
+function ApplyContent() {
   const router       = useRouter()
   const searchParams = useSearchParams()
   const [lang, setLang] = useState<AppLanguage>('ru')
@@ -462,5 +462,13 @@ export default function ApplyPage() {
         </AnimatePresence>
       </div>
     </div>
+  )
+}
+
+export default function ApplyPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-surface flex items-center justify-center"><div className="w-8 h-8 border-2 border-brand-400 border-t-transparent rounded-full animate-spin" /></div>}>
+      <ApplyContent />
+    </Suspense>
   )
 }

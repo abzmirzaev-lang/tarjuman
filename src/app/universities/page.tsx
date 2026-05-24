@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { motion } from 'framer-motion'
 import { Search, ExternalLink, GraduationCap, MapPin } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
@@ -31,7 +31,7 @@ const PROGRAMS_RU: Record<string, string> = {
   'Arts & Sciences': 'Гуманитарные науки',
 }
 
-export default function UniversitiesPage() {
+function UniversitiesContent() {
   const searchParams = useSearchParams()
   const [lang,   setLang]   = useState<AppLanguage>('ru')
   const [unis,   setUnis]   = useState<UniversityRow[]>([])
@@ -185,5 +185,13 @@ export default function UniversitiesPage() {
       </div>
       <Footer lang={lang} />
     </>
+  )
+}
+
+export default function UniversitiesPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-surface flex items-center justify-center"><div className="w-8 h-8 border-2 border-brand-400 border-t-transparent rounded-full animate-spin" /></div>}>
+      <UniversitiesContent />
+    </Suspense>
   )
 }
