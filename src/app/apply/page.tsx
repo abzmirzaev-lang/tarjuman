@@ -287,6 +287,19 @@ function ApplyContent() {
                   onChange={e => setForm({ ...form, full_name: e.target.value })}
                   placeholder="Иванов Иван Иванович"
                 />
+
+                {/* Пол */}
+                <Select
+                  label={(lang === 'ru' ? 'Пол' : 'Gender') + ' *'}
+                  value={form.gender}
+                  onChange={e => setForm({ ...form, gender: e.target.value })}
+                  options={[
+                    { value: '',       label: lang === 'ru' ? 'Выберите...' : 'Select...' },
+                    { value: 'male',   label: lang === 'ru' ? 'Мужчина' : 'Male' },
+                    { value: 'female', label: lang === 'ru' ? 'Женщина' : 'Female' },
+                  ]}
+                />
+
                 <Select
                   label={t.apply.citizenship + ' *'}
                   value={form.citizenship}
@@ -332,18 +345,6 @@ function ApplyContent() {
                   value={form.education_level}
                   onChange={e => setForm({ ...form, education_level: e.target.value })}
                   options={EDUCATION_OPTIONS_RU}
-                />
-
-                {/* Пол */}
-                <Select
-                  label={(lang === 'ru' ? 'Пол' : 'Gender') + ' *'}
-                  value={form.gender}
-                  onChange={e => setForm({ ...form, gender: e.target.value })}
-                  options={[
-                    { value: '',       label: lang === 'ru' ? 'Выберите...' : 'Select...' },
-                    { value: 'male',   label: lang === 'ru' ? 'Мужчина' : 'Male' },
-                    { value: 'female', label: lang === 'ru' ? 'Женщина' : 'Female' },
-                  ]}
                 />
 
                 {/* Семейное положение */}
