@@ -71,9 +71,9 @@ export default function ContactPage() {
             {/* Channels */}
             <div className="space-y-4">
               {[
-                { icon: MessageSquare, label: 'Telegram', value: '@tarjumanuz', href: 'https://t.me/tarjumanuz', color: 'bg-blue-50 text-blue-600' },
-                { icon: Mail, label: 'Email', value: 'info@tarjuman.com', href: 'mailto:info@tarjuman.com', color: 'bg-brand-50 text-brand-600' },
-                { icon: Phone, label: lang === 'ru' ? 'Телефон' : 'Phone', value: '+998 90 123 45 67', href: 'tel:+998901234567', color: 'bg-purple-50 text-purple-600' },
+                { icon: Phone,        label: lang === 'ru' ? 'Телефон' : 'Phone', value: '+966 59 770 3132',   href: 'tel:+966597703132',           color: 'bg-purple-50 text-purple-600' },
+                { icon: MessageSquare, label: 'Telegram',                          value: '@TARJUMAN_KSA',      href: 'https://t.me/TARJUMAN_KSA',   color: 'bg-blue-50 text-blue-600' },
+                { icon: Mail,          label: 'Email',                             value: 'tarjuman777@gmail.com', href: 'mailto:tarjuman777@gmail.com', color: 'bg-brand-50 text-brand-600' },
               ].map((c, i) => (
                 <motion.a
                   key={i}
