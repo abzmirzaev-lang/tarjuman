@@ -74,6 +74,13 @@ export interface ApplicationRow {
   phone?:          string
   telegram?:       string
   education_level?: string
+  gender?:         string
+  marital_status?: string
+  arabic_level?:   string
+  english_level?:  string
+  guardian_name?:  string
+  guardian_phone?: string
+  guardian_email?: string
   notes?:          string
   submitted_at?:   string
   completed_at?:   string
