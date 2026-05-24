@@ -3,12 +3,12 @@ import { useState, useCallback, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useDropzone } from 'react-dropzone'
-import { CheckCircle2, Upload, X, FileText, AlertCircle, ChevronRight, ChevronLeft } from 'lucide-react'
+import { CheckCircle2, Upload, X, FileText, AlertCircle, ChevronRight, ChevronLeft, ChevronDown, ChevronUp, GraduationCap } from 'lucide-react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase/client'
 import { Button, Input, Select } from '@/components/ui'
 import { PACKAGES, DOCUMENT_LABELS } from '@/types'
-import type { AppLanguage, ServicePackage, DocumentType } from '@/types'
+import type { AppLanguage, ServicePackage, DocumentType, UniversityRow } from '@/types'
 import { translations } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
@@ -22,8 +22,9 @@ const EDUCATION_OPTIONS_RU = [
   { value: 'master',      label: 'Магистратура' },
 ]
 
-const REQUIRED_DOCS: DocumentType[]  = ['PASSPORT', 'PHOTO', 'DIPLOMA', 'MEDICAL', 'CRIMINAL_RECORD']
-const OPTIONAL_DOCS: DocumentType[]  = ['IELTS', 'ARABIC_CERT', 'RECOMMENDATION', 'TRANSCRIPT']
+const REQUIRED_DOCS: DocumentType[] = ['PASSPORT', 'PHOTO', 'DIPLOMA', 'MEDICAL', 'CRIMINAL_RECORD']
+const OPTIONAL_DOCS: DocumentType[] = ['IELTS', 'ARABIC_CERT', 'RECOMMENDATION', 'TRANSCRIPT']
+const MAX_FACULTIES = 25
 
 interface FormData {
   full_name:       string
@@ -39,6 +40,12 @@ interface FormData {
   guardian_name:   string
   guardian_phone:  string
   guardian_email:  string
+}
+
+interface SelectedFaculty {
+  university_id:   string
+  university_name: string
+  faculty:         string
 }
 
 interface UploadedDoc {
@@ -102,10 +109,16 @@ function ApplyContent() {
   const [lang, setLang] = useState<AppLanguage>('ru')
   const t = translations[lang]
 
-  const [step, setStep]   = useState(1)
-  const [user, setUser]   = useState<any>(null)
+  const [step, setStep]     = useState(1)
+  const [user, setUser]     = useState<any>(null)
   const [loading, setLoading] = useState(false)
-  const [appId, setAppId] = useState<string | null>(null)
+  const [appId, setAppId]   = useState<string | null>(null)
+
+  // Universities state
+  const [universities, setUniversities]         = useState<UniversityRow[]>([])
+  const [universitiesLoading, setUniversitiesLoading] = useState(false)
+  const [expandedUniversity, setExpandedUniversity]   = useState<string | null>(null)
+  const [selectedFaculties, setSelectedFaculties]     = useState<SelectedFaculty[]>([])
 
   const [form, setForm] = useState<FormData>({
     full_name:       '',
@@ -128,8 +141,8 @@ function ApplyContent() {
     (searchParams.get('package') as ServicePackage) || 'STANDARD'
   )
 
-  const universityId   = searchParams.get('university') || undefined
-  const countryParam   = searchParams.get('country') as 'SA' | 'AE' || 'SA'
+  const universityId = searchParams.get('university') || undefined
+  const countryParam = searchParams.get('country') as 'SA' | 'AE' || 'SA'
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -138,7 +151,44 @@ function ApplyContent() {
     })
   }, [router])
 
-  // Step 1 — personal info
+  // Load universities when entering step 3
+  useEffect(() => {
+    if (step === 3 && universities.length === 0) {
+      setUniversitiesLoading(true)
+      supabase
+        .from('universities')
+        .select('*')
+        .eq('is_active', true)
+        .order('rank', { ascending: true })
+        .then(({ data, error }) => {
+          if (!error && data) setUniversities(data as UniversityRow[])
+          setUniversitiesLoading(false)
+        })
+    }
+  }, [step, universities.length])
+
+  const toggleFaculty = (university: UniversityRow, faculty: string) => {
+    const key = `${university.id}__${faculty}`
+    const exists = selectedFaculties.find(f => f.university_id === university.id && f.faculty === faculty)
+    if (exists) {
+      setSelectedFaculties(prev => prev.filter(f => !(f.university_id === university.id && f.faculty === faculty)))
+    } else {
+      if (selectedFaculties.length >= MAX_FACULTIES) {
+        toast.error(lang === 'ru' ? `Максимум ${MAX_FACULTIES} факультетов` : `Maximum ${MAX_FACULTIES} faculties`)
+        return
+      }
+      setSelectedFaculties(prev => [...prev, {
+        university_id:   university.id,
+        university_name: lang === 'ru' ? university.name_ru : university.name_en,
+        faculty,
+      }])
+    }
+  }
+
+  const isFacultySelected = (universityId: string, faculty: string) =>
+    selectedFaculties.some(f => f.university_id === universityId && f.faculty === faculty)
+
+  // Step handlers
   const handleStep1 = () => {
     if (!form.full_name || !form.citizenship || !form.phone || !form.gender || !form.marital_status || !form.arabic_level || !form.english_level) {
       toast.error(lang === 'ru' ? 'Заполните все обязательные поля' : 'Fill all required fields')
@@ -147,7 +197,6 @@ function ApplyContent() {
     setStep(2)
   }
 
-  // Step 2 — documents (just validate required)
   const handleStep2 = () => {
     const missing = REQUIRED_DOCS.filter(d => !docs[d])
     if (missing.length > 0) {
@@ -161,36 +210,43 @@ function ApplyContent() {
     setStep(3)
   }
 
-  // Step 3 — package
-  const handleStep3 = () => setStep(4)
+  const handleStep3 = () => {
+    if (selectedFaculties.length === 0) {
+      toast.error(lang === 'ru' ? 'Выберите хотя бы один факультет' : 'Please select at least one faculty')
+      return
+    }
+    setStep(4)
+  }
 
-  // Step 4 — create application + upload docs + redirect to payment
+  const handleStep4 = () => setStep(5)
+
+  // Submit
   const handleSubmit = async () => {
     if (!user) return
     setLoading(true)
     try {
-      // 1. Create application
       const { data: app, error: appErr } = await supabase
         .from('applications')
         .insert({
-          user_id:         user.id,
-          university_id:   universityId || null,
-          country:         countryParam,
-          service_package: pkg,
-          status:          'REGISTERED',
-          full_name:       form.full_name,
-          citizenship:     form.citizenship,
-          date_of_birth:   form.date_of_birth || null,
-          phone:           form.phone,
-          telegram:        form.telegram || null,
-          education_level: form.education_level || null,
-          gender:          form.gender || null,
-          marital_status:  form.marital_status || null,
-          arabic_level:    form.arabic_level || null,
-          english_level:   form.english_level || null,
-          guardian_name:   form.guardian_name || null,
-          guardian_phone:  form.guardian_phone || null,
-          guardian_email:  form.guardian_email || null,
+          user_id:            user.id,
+          university_id:      universityId || null,
+          country:            countryParam,
+          service_package:    pkg,
+          status:             'REGISTERED',
+          full_name:          form.full_name,
+          citizenship:        form.citizenship,
+          date_of_birth:      form.date_of_birth || null,
+          phone:              form.phone,
+          telegram:           form.telegram || null,
+          education_level:    form.education_level || null,
+          gender:             form.gender || null,
+          marital_status:     form.marital_status || null,
+          arabic_level:       form.arabic_level || null,
+          english_level:      form.english_level || null,
+          guardian_name:      form.guardian_name || null,
+          guardian_phone:     form.guardian_phone || null,
+          guardian_email:     form.guardian_email || null,
+          selected_faculties: selectedFaculties,
         })
         .select()
         .single()
@@ -198,13 +254,13 @@ function ApplyContent() {
       if (appErr) throw appErr
       setAppId(app.id)
 
-      // 2. Upload documents
+      // Upload documents
       const uploadPromises = Object.entries(docs)
         .filter(([, d]) => d != null)
         .map(async ([type, doc]) => {
           const docData = doc!
-          const ext     = docData.file.name.split('.').pop()
-          const path    = `${user.id}/${app.id}/${type}_${uuidv4()}.${ext}`
+          const ext  = docData.file.name.split('.').pop()
+          const path = `${user.id}/${app.id}/${type}_${uuidv4()}.${ext}`
 
           const { error: storageErr } = await supabase.storage
             .from('documents')
@@ -225,7 +281,7 @@ function ApplyContent() {
 
       await Promise.all(uploadPromises)
 
-      // 3. Redirect to payment
+      // Redirect to payment
       const res = await fetch('/api/payments/create-checkout', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -240,7 +296,13 @@ function ApplyContent() {
     }
   }
 
-  const STEPS = [t.apply.step1, t.apply.step2, t.apply.step3, t.apply.step4]
+  const STEPS = [
+    t.apply.step1,
+    t.apply.step2,
+    lang === 'ru' ? 'Университеты' : 'Universities',
+    t.apply.step3,
+    t.apply.step4,
+  ]
 
   if (!user) return null
 
@@ -253,15 +315,15 @@ function ApplyContent() {
             <span className="w-7 h-7 bg-brand-400 rounded-lg flex items-center justify-center text-white text-xs font-bold">T</span>
             TARJUMAN
           </Link>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             {STEPS.map((s, i) => (
               <div key={i} className={cn(
                 'flex items-center gap-1.5 text-sm',
                 i + 1 === step ? 'text-brand-500 font-medium' : i + 1 < step ? 'text-brand-400' : 'text-muted'
               )}>
                 <span className={cn(
-                  'w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold',
-                  i + 1 < step  ? 'bg-brand-400 text-white' :
+                  'w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold shrink-0',
+                  i + 1 < step   ? 'bg-brand-400 text-white' :
                   i + 1 === step ? 'bg-brand-400 text-white' :
                                    'bg-border text-muted'
                 )}>
@@ -276,7 +338,8 @@ function ApplyContent() {
 
       <div className="container-narrow py-10 max-w-2xl">
         <AnimatePresence mode="wait">
-          {/* ── STEP 1 ── */}
+
+          {/* ── STEP 1 — Анкета ── */}
           {step === 1 && (
             <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
               <h1 className="text-2xl font-bold text-ink mb-6">{t.apply.step1}</h1>
@@ -287,8 +350,6 @@ function ApplyContent() {
                   onChange={e => setForm({ ...form, full_name: e.target.value })}
                   placeholder="Иванов Иван Иванович"
                 />
-
-                {/* Пол */}
                 <Select
                   label={(lang === 'ru' ? 'Пол' : 'Gender') + ' *'}
                   value={form.gender}
@@ -299,7 +360,6 @@ function ApplyContent() {
                     { value: 'female', label: lang === 'ru' ? 'Женщина' : 'Female' },
                   ]}
                 />
-
                 <Select
                   label={t.apply.citizenship + ' *'}
                   value={form.citizenship}
@@ -346,8 +406,6 @@ function ApplyContent() {
                   onChange={e => setForm({ ...form, education_level: e.target.value })}
                   options={EDUCATION_OPTIONS_RU}
                 />
-
-                {/* Семейное положение */}
                 <Select
                   label={(lang === 'ru' ? 'Семейное положение' : 'Marital status') + ' *'}
                   value={form.marital_status}
@@ -360,8 +418,6 @@ function ApplyContent() {
                     { value: 'widowed',  label: lang === 'ru' ? 'Вдовец/Вдова' : 'Widowed' },
                   ]}
                 />
-
-                {/* Уровень арабского */}
                 <Select
                   label={(lang === 'ru' ? 'Уровень знания арабского языка' : 'Arabic language level') + ' *'}
                   value={form.arabic_level}
@@ -377,8 +433,6 @@ function ApplyContent() {
                     { value: 'fluent',       label: lang === 'ru' ? 'Свободно' : 'Fluent' },
                   ]}
                 />
-
-                {/* Уровень английского */}
                 <Select
                   label={(lang === 'ru' ? 'Уровень знания английского языка' : 'English language level') + ' *'}
                   value={form.english_level}
@@ -394,8 +448,6 @@ function ApplyContent() {
                     { value: 'fluent',       label: lang === 'ru' ? 'Свободно' : 'Fluent' },
                   ]}
                 />
-
-                {/* Контакт родного (необязательно) */}
                 <div className="pt-2 border-t border-border">
                   <p className="text-sm font-semibold text-ink mb-3">
                     {lang === 'ru' ? 'Контакт близкого человека' : 'Emergency contact'}{' '}
@@ -433,11 +485,10 @@ function ApplyContent() {
             </motion.div>
           )}
 
-          {/* ── STEP 2 ── */}
+          {/* ── STEP 2 — Документы ── */}
           {step === 2 && (
             <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
               <h1 className="text-2xl font-bold text-ink mb-6">{t.apply.uploadTitle}</h1>
-
               <div className="card p-6">
                 <h3 className="text-sm font-semibold text-ink mb-3 flex items-center gap-1">
                   <AlertCircle className="w-4 h-4 text-red-400" />
@@ -455,9 +506,7 @@ function ApplyContent() {
                     />
                   ))}
                 </div>
-
                 <div className="divider my-5" />
-
                 <h3 className="text-sm font-semibold text-ink mb-3">{t.apply.optional}</h3>
                 <div className="grid sm:grid-cols-2 gap-3">
                   {OPTIONAL_DOCS.map(dtype => (
@@ -472,7 +521,6 @@ function ApplyContent() {
                   ))}
                 </div>
               </div>
-
               <div className="flex justify-between mt-6">
                 <Button variant="secondary" onClick={() => setStep(1)} icon={<ChevronLeft className="w-4 h-4" />}>{t.apply.back}</Button>
                 <Button onClick={handleStep2} iconRight={<ChevronRight className="w-4 h-4" />}>{t.apply.next}</Button>
@@ -480,9 +528,142 @@ function ApplyContent() {
             </motion.div>
           )}
 
-          {/* ── STEP 3 ── */}
+          {/* ── STEP 3 — Выбор университетов и факультетов ── */}
           {step === 3 && (
             <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+              <div className="flex items-center justify-between mb-2">
+                <h1 className="text-2xl font-bold text-ink">
+                  {lang === 'ru' ? 'Выберите университеты' : 'Select Universities'}
+                </h1>
+                <span className={cn(
+                  'text-sm font-semibold px-3 py-1 rounded-full',
+                  selectedFaculties.length >= MAX_FACULTIES
+                    ? 'bg-red-100 text-red-600'
+                    : 'bg-brand-50 text-brand-600'
+                )}>
+                  {selectedFaculties.length}/{MAX_FACULTIES}
+                </span>
+              </div>
+              <p className="text-sm text-muted mb-6">
+                {lang === 'ru'
+                  ? 'Нажмите на университет чтобы увидеть факультеты. Можно выбрать до 25 факультетов из разных университетов.'
+                  : 'Click a university to see its faculties. You can select up to 25 faculties from different universities.'}
+              </p>
+
+              {universitiesLoading ? (
+                <div className="flex justify-center py-12">
+                  <div className="w-8 h-8 border-2 border-brand-400 border-t-transparent rounded-full animate-spin" />
+                </div>
+              ) : (
+                <div className="space-y-3 mb-4">
+                  {universities.map(uni => {
+                    const isExpanded = expandedUniversity === uni.id
+                    const selectedCount = selectedFaculties.filter(f => f.university_id === uni.id).length
+                    return (
+                      <div key={uni.id} className={cn(
+                        'card overflow-hidden transition-all border-2',
+                        selectedCount > 0 ? 'border-brand-300' : 'border-transparent'
+                      )}>
+                        {/* University header */}
+                        <button
+                          className="w-full p-4 flex items-center justify-between text-left hover:bg-surface transition-colors"
+                          onClick={() => setExpandedUniversity(isExpanded ? null : uni.id)}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 bg-brand-50 rounded-lg flex items-center justify-center shrink-0">
+                              <GraduationCap className="w-5 h-5 text-brand-500" />
+                            </div>
+                            <div>
+                              <p className="font-semibold text-ink text-sm">
+                                {lang === 'ru' ? uni.name_ru : uni.name_en}
+                              </p>
+                              <p className="text-xs text-muted">{uni.city} · {uni.country === 'SA' ? (lang === 'ru' ? 'Саудовская Аравия' : 'Saudi Arabia') : (lang === 'ru' ? 'ОАЭ' : 'UAE')}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0">
+                            {selectedCount > 0 && (
+                              <span className="badge badge-green text-[11px]">
+                                {selectedCount} {lang === 'ru' ? 'выбр.' : 'sel.'}
+                              </span>
+                            )}
+                            {isExpanded ? <ChevronUp className="w-4 h-4 text-muted" /> : <ChevronDown className="w-4 h-4 text-muted" />}
+                          </div>
+                        </button>
+
+                        {/* Faculties list */}
+                        {isExpanded && (
+                          <div className="px-4 pb-4 border-t border-border">
+                            <p className="text-xs text-muted mt-3 mb-2 font-medium uppercase tracking-wide">
+                              {lang === 'ru' ? 'Факультеты' : 'Faculties'}
+                            </p>
+                            <div className="grid sm:grid-cols-2 gap-2">
+                              {(uni.programs || []).map(faculty => {
+                                const selected = isFacultySelected(uni.id, faculty)
+                                return (
+                                  <button
+                                    key={faculty}
+                                    onClick={() => toggleFaculty(uni, faculty)}
+                                    className={cn(
+                                      'flex items-center gap-2 p-2.5 rounded-lg text-sm text-left transition-all border',
+                                      selected
+                                        ? 'bg-brand-50 border-brand-300 text-brand-700 font-medium'
+                                        : 'border-border hover:border-brand-200 hover:bg-brand-50/50 text-ink'
+                                    )}
+                                  >
+                                    <span className={cn(
+                                      'w-4 h-4 rounded border-2 flex items-center justify-center shrink-0',
+                                      selected ? 'bg-brand-400 border-brand-400' : 'border-border'
+                                    )}>
+                                      {selected && <CheckCircle2 className="w-3 h-3 text-white" />}
+                                    </span>
+                                    {faculty}
+                                  </button>
+                                )
+                              })}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+
+              {/* Selected faculties summary */}
+              {selectedFaculties.length > 0 && (
+                <div className="card p-4 bg-brand-50/50 border border-brand-200">
+                  <p className="text-xs font-semibold text-brand-700 mb-2">
+                    {lang === 'ru' ? 'Выбранные факультеты:' : 'Selected faculties:'}
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {selectedFaculties.map((f, i) => (
+                      <span
+                        key={i}
+                        className="inline-flex items-center gap-1 text-xs bg-white border border-brand-200 text-brand-700 px-2 py-1 rounded-lg"
+                      >
+                        {f.faculty}
+                        <button
+                          onClick={() => setSelectedFaculties(prev => prev.filter((_, pi) => pi !== i))}
+                          className="hover:text-red-500 transition-colors"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="flex justify-between mt-6">
+                <Button variant="secondary" onClick={() => setStep(2)} icon={<ChevronLeft className="w-4 h-4" />}>{t.apply.back}</Button>
+                <Button onClick={handleStep3} iconRight={<ChevronRight className="w-4 h-4" />}>{t.apply.next}</Button>
+              </div>
+            </motion.div>
+          )}
+
+          {/* ── STEP 4 — Пакет ── */}
+          {step === 4 && (
+            <motion.div key="step4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
               <h1 className="text-2xl font-bold text-ink mb-6">{t.apply.step3}</h1>
               <div className="grid gap-4">
                 {(['SUBMISSION', 'STANDARD', 'VIP'] as ServicePackage[]).map(k => {
@@ -500,9 +681,7 @@ function ApplyContent() {
                         <div>
                           <span className="font-semibold text-ink">{lang === 'ru' ? p.name_ru : p.name_en}</span>
                           {k === 'STANDARD' && (
-                            <span className="ml-2 badge badge-green text-[11px]">
-                              {t.pricing.popular}
-                            </span>
+                            <span className="ml-2 badge badge-green text-[11px]">{t.pricing.popular}</span>
                           )}
                         </div>
                         <div className="text-xl font-bold text-ink">${p.priceUSD}</div>
@@ -519,22 +698,19 @@ function ApplyContent() {
                 })}
               </div>
               <div className="flex justify-between mt-6">
-                <Button variant="secondary" onClick={() => setStep(2)} icon={<ChevronLeft className="w-4 h-4" />}>{t.apply.back}</Button>
-                <Button onClick={handleStep3} iconRight={<ChevronRight className="w-4 h-4" />}>{t.apply.next}</Button>
+                <Button variant="secondary" onClick={() => setStep(3)} icon={<ChevronLeft className="w-4 h-4" />}>{t.apply.back}</Button>
+                <Button onClick={handleStep4} iconRight={<ChevronRight className="w-4 h-4" />}>{t.apply.next}</Button>
               </div>
             </motion.div>
           )}
 
-          {/* ── STEP 4 — Review & Pay ── */}
-          {step === 4 && (
-            <motion.div key="step4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+          {/* ── STEP 5 — Проверка и оплата ── */}
+          {step === 5 && (
+            <motion.div key="step5" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
               <h1 className="text-2xl font-bold text-ink mb-6">{t.apply.step4}</h1>
 
-              {/* Summary */}
               <div className="card p-6 mb-4">
-                <h3 className="font-semibold text-ink mb-3">
-                  {lang === 'ru' ? 'Ваши данные' : 'Your Details'}
-                </h3>
+                <h3 className="font-semibold text-ink mb-3">{lang === 'ru' ? 'Ваши данные' : 'Your Details'}</h3>
                 <div className="grid grid-cols-2 gap-y-2 text-sm">
                   <span className="text-muted">{t.apply.fullName}</span><span className="text-ink font-medium">{form.full_name}</span>
                   <span className="text-muted">{t.apply.citizenship}</span><span className="text-ink">{form.citizenship}</span>
@@ -553,26 +729,9 @@ function ApplyContent() {
                       (lang === 'ru' ? 'Вдовец/Вдова' : 'Widowed')
                     }</span>
                   </>}
-                  {form.arabic_level && <>
-                    <span className="text-muted">{lang === 'ru' ? 'Арабский' : 'Arabic'}</span>
-                    <span className="text-ink">{form.arabic_level}</span>
-                  </>}
-                  {form.english_level && <>
-                    <span className="text-muted">{lang === 'ru' ? 'Английский' : 'English'}</span>
-                    <span className="text-ink">{form.english_level}</span>
-                  </>}
-                  {form.guardian_name && <>
-                    <span className="text-muted">{lang === 'ru' ? 'Контакт близкого' : 'Emergency contact'}</span>
-                    <span className="text-ink">{form.guardian_name}</span>
-                  </>}
-                  {form.guardian_phone && <>
-                    <span className="text-muted">{lang === 'ru' ? 'Тел. близкого' : 'Contact phone'}</span>
-                    <span className="text-ink">{form.guardian_phone}</span>
-                  </>}
-                  {form.guardian_email && <>
-                    <span className="text-muted">{lang === 'ru' ? 'Email близкого' : 'Contact email'}</span>
-                    <span className="text-ink">{form.guardian_email}</span>
-                  </>}
+                  {form.arabic_level && <><span className="text-muted">{lang === 'ru' ? 'Арабский' : 'Arabic'}</span><span className="text-ink">{form.arabic_level}</span></>}
+                  {form.english_level && <><span className="text-muted">{lang === 'ru' ? 'Английский' : 'English'}</span><span className="text-ink">{form.english_level}</span></>}
+                  {form.guardian_name && <><span className="text-muted">{lang === 'ru' ? 'Контакт близкого' : 'Emergency contact'}</span><span className="text-ink">{form.guardian_name}</span></>}
                 </div>
               </div>
 
@@ -592,33 +751,41 @@ function ApplyContent() {
                 </div>
               </div>
 
+              <div className="card p-6 mb-4">
+                <h3 className="font-semibold text-ink mb-3">
+                  {lang === 'ru' ? 'Выбранные факультеты' : 'Selected Faculties'}{' '}
+                  <span className="badge badge-green text-[11px]">{selectedFaculties.length}</span>
+                </h3>
+                <div className="flex flex-wrap gap-1.5">
+                  {selectedFaculties.map((f, i) => (
+                    <span key={i} className="badge badge-gray text-[11px]">
+                      {f.university_name} — {f.faculty}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
               <div className="card p-6 mb-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-semibold text-ink">
                       {lang === 'ru' ? PACKAGES[pkg].name_ru : PACKAGES[pkg].name_en}
                     </h3>
-                    <p className="text-xs text-muted mt-0.5">
-                      {lang === 'ru' ? 'Выбранный пакет' : 'Selected package'}
-                    </p>
+                    <p className="text-xs text-muted mt-0.5">{lang === 'ru' ? 'Выбранный пакет' : 'Selected package'}</p>
                   </div>
                   <div className="text-2xl font-bold text-ink">${PACKAGES[pkg].priceUSD}</div>
                 </div>
               </div>
 
               <div className="flex justify-between">
-                <Button variant="secondary" onClick={() => setStep(3)} icon={<ChevronLeft className="w-4 h-4" />}>{t.apply.back}</Button>
-                <Button
-                  size="lg"
-                  loading={loading}
-                  onClick={handleSubmit}
-                  iconRight={<ChevronRight className="w-5 h-5" />}
-                >
+                <Button variant="secondary" onClick={() => setStep(4)} icon={<ChevronLeft className="w-4 h-4" />}>{t.apply.back}</Button>
+                <Button size="lg" loading={loading} onClick={handleSubmit} iconRight={<ChevronRight className="w-5 h-5" />}>
                   {t.apply.submit} — ${PACKAGES[pkg].priceUSD}
                 </Button>
               </div>
             </motion.div>
           )}
+
         </AnimatePresence>
       </div>
     </div>

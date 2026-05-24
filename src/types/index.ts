@@ -78,10 +78,11 @@ export interface ApplicationRow {
   marital_status?: string
   arabic_level?:   string
   english_level?:  string
-  guardian_name?:  string
-  guardian_phone?: string
-  guardian_email?: string
-  notes?:          string
+  guardian_name?:      string
+  guardian_phone?:     string
+  guardian_email?:     string
+  selected_faculties?: any[]
+  notes?:              string
   submitted_at?:   string
   completed_at?:   string
   created_at:      string
