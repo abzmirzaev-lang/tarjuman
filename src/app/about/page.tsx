@@ -25,10 +25,10 @@ export default function AboutPage() {
             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
               className="page-subtitle max-w-2xl mx-auto">
               {lang === 'ru'
-                ? 'Мы помогаем студентам из СНГ поступить в университеты Саудовской Аравии — быстро, правильно и без лишних хлопот.'
+                ? 'Мы помогаем студентам из СНГ быстро и правильно подать документы в университеты Саудовской Аравии.'
                 : lang === 'uz'
-                ? 'Biz MDH talabalarига Saudiya Arabistoni universitetlariga tez va to\'g\'ri kirish imkonini beramiz.'
-                : 'We help CIS students get into Saudi universities — fast, correctly, and without unnecessary stress.'}
+                ? 'Biz MDH talabalariga Saudiya Arabistoni universitetlariga hujjatlarni tez va to\'g\'ri topshirishda yordam beramiz.'
+                : 'We help CIS students submit documents to Saudi universities — fast and correctly.'}
             </motion.p>
           </div>
         </div>
@@ -38,8 +38,7 @@ export default function AboutPage() {
           <div className="container-narrow">
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { icon: Users,  n: '500+', l: lang === 'ru' ? 'Студентов поступили' : 'Students admitted' },
-                { icon: Award,  n: '6',    l: lang === 'ru' ? 'Партнёрских университетов' : 'Partner Universities' },
+                { icon: Users,  n: '0',    l: lang === 'ru' ? 'Студентов подали документы' : 'Students submitted' },
                 { icon: Clock,  n: '6ч',   l: lang === 'ru' ? 'Минимальное время подачи' : 'Min. submission time' },
                 { icon: Shield, n: '100%', l: lang === 'ru' ? 'Правильно с первого раза' : 'Correct first time' },
               ].map((item, i) => (
@@ -71,13 +70,13 @@ export default function AboutPage() {
               </p>
               <p>
                 {lang === 'ru'
-                  ? 'Наша фишка — скорость и точность. Пакет «Стандарт» — подача за 24 часа, VIP — за 6 часов. Документы переводим правильно с первого раза, потому что знаем требования каждого университета. А после зачисления мы остаёмся на связи — чтобы вы не остались один на один с новой страной.'
-                  : 'Our thing is speed and accuracy. Standard package — submission in 24 hours, VIP — in 6 hours. Documents translated correctly the first time, because we know each university\'s requirements. And after admission, we stay in touch.'}
+                  ? 'Наша фишка — скорость и точность. Пакет «Стандарт» — подача за 24 часа, VIP — за 6 часов. Документы переводим правильно с первого раза, потому что знаем требования каждого университета. А после подачи мы остаёмся на связи — чтобы вы были в курсе каждого шага.'
+                  : 'Our thing is speed and accuracy. Standard package — submission in 24 hours, VIP — in 6 hours. Documents translated correctly the first time, because we know each university\'s requirements. And after submission, we stay in touch.'}
               </p>
               <p>
                 {lang === 'ru'
-                  ? 'Более 500 студентов уже учатся в Саудовской Аравии благодаря TARJUMAN. Следующий — вы.'
-                  : 'Over 500 students are already studying in Saudi Arabia thanks to TARJUMAN. You could be next.'}
+                  ? 'Мы только начинаем — и именно поэтому каждый клиент для нас важен. Вы получите максимум внимания и заботы.'
+                  : 'We are just getting started — which is exactly why every client matters to us. You will get our full attention.'}
               </p>
             </div>
           </div>
