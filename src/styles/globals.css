@@ -1,0 +1,154 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@layer base {
+  :root {
+    --brand:   #6FAF9B;
+    --surface: #F8FAF9;
+    --ink:     #0F172A;
+    --muted:   #64748B;
+    --border:  #E2E8F0;
+  }
+
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  html {
+    @apply scroll-smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-surface text-ink font-sans;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+
+  ::selection {
+    background: rgb(111 175 155 / 0.25);
+    color: #0F172A;
+  }
+}
+
+@layer components {
+  /* ── Buttons ── */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl
+           font-medium transition-all duration-200 cursor-pointer
+           focus-visible:outline-none focus-visible:ring-2
+           focus-visible:ring-brand-400 focus-visible:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed select-none;
+  }
+  .btn-primary {
+    @apply btn bg-brand-400 text-white hover:bg-brand-500
+           active:scale-[0.98] shadow-sm hover:shadow-md;
+  }
+  .btn-secondary {
+    @apply btn bg-white text-ink border border-border
+           hover:bg-brand-50 hover:border-brand-300 active:scale-[0.98];
+  }
+  .btn-ghost {
+    @apply btn text-muted hover:text-ink hover:bg-ink/5 active:scale-[0.98];
+  }
+  .btn-danger {
+    @apply btn bg-red-500 text-white hover:bg-red-600 active:scale-[0.98];
+  }
+  .btn-sm  { @apply px-3 py-1.5 text-sm; }
+  .btn-md  { @apply px-4 py-2.5 text-sm; }
+  .btn-lg  { @apply px-6 py-3 text-base; }
+  .btn-xl  { @apply px-8 py-4 text-base; }
+
+  /* ── Cards ── */
+  .card {
+    @apply bg-white rounded-2xl border border-border shadow-card;
+  }
+  .card-hover {
+    @apply card hover:shadow-md hover:-translate-y-0.5
+           transition-all duration-200 cursor-pointer;
+  }
+
+  /* ── Inputs ── */
+  .input {
+    @apply w-full rounded-xl border border-border bg-white
+           px-4 py-2.5 text-sm text-ink placeholder:text-muted
+           transition-all duration-150
+           focus:outline-none focus:ring-2 focus:ring-brand-400/30
+           focus:border-brand-400
+           disabled:opacity-50 disabled:bg-surface;
+  }
+  .label {
+    @apply text-sm font-medium text-ink mb-1.5 block;
+  }
+
+  /* ── Badges ── */
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-0.5
+           rounded-full text-xs font-medium;
+  }
+  .badge-green  { @apply badge bg-brand-100 text-brand-700; }
+  .badge-blue   { @apply badge bg-blue-50 text-blue-700; }
+  .badge-yellow { @apply badge bg-yellow-50 text-yellow-700; }
+  .badge-red    { @apply badge bg-red-50 text-red-600; }
+  .badge-gray   { @apply badge bg-slate-100 text-slate-600; }
+
+  /* ── Section layouts ── */
+  .section { @apply py-16 md:py-24; }
+  .container-narrow { @apply max-w-5xl mx-auto px-4 sm:px-6; }
+  .container-wide   { @apply max-w-7xl mx-auto px-4 sm:px-6; }
+
+  /* ── Divider ── */
+  .divider { @apply border-t border-border my-6; }
+
+  /* ── Page header ── */
+  .page-title {
+    @apply text-3xl sm:text-4xl md:text-5xl font-bold text-ink
+           tracking-tight leading-tight;
+  }
+  .page-subtitle {
+    @apply text-lg text-muted leading-relaxed;
+  }
+
+  /* ── Status dots ── */
+  .status-dot {
+    @apply w-2 h-2 rounded-full inline-block;
+  }
+
+  /* ── Loading shimmer ── */
+  .shimmer {
+    @apply relative overflow-hidden bg-slate-100 rounded-lg;
+  }
+  .shimmer::after {
+    content: '';
+    @apply absolute inset-0;
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.6), transparent);
+    animation: shimmer 1.5s infinite;
+  }
+
+  /* ── Scrollbar ── */
+  .scrollbar-thin::-webkit-scrollbar { width: 4px; height: 4px; }
+  .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { @apply bg-border rounded-full; }
+}
+
+@layer utilities {
+  .text-balance  { text-wrap: balance; }
+  .glass {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgb(248 250 249 / 0.85);
+  }
+}
+
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
