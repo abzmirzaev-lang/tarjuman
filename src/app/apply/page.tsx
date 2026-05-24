@@ -22,8 +22,8 @@ const EDUCATION_OPTIONS_RU = [
   { value: 'master',      label: 'Магистратура' },
 ]
 
-const REQUIRED_DOCS: DocumentType[]  = ['PASSPORT', 'PHOTO', 'DIPLOMA', 'TRANSCRIPT']
-const OPTIONAL_DOCS: DocumentType[]  = ['IELTS', 'ARABIC_CERT', 'RECOMMENDATION', 'MEDICAL', 'CRIMINAL_RECORD']
+const REQUIRED_DOCS: DocumentType[]  = ['PASSPORT', 'PHOTO', 'DIPLOMA', 'MEDICAL', 'CRIMINAL_RECORD']
+const OPTIONAL_DOCS: DocumentType[]  = ['IELTS', 'ARABIC_CERT', 'RECOMMENDATION', 'TRANSCRIPT']
 
 interface FormData {
   full_name:       string

@@ -183,8 +183,8 @@ export const STATUS_LABELS: Record<ApplicationStatus, { ru: string; en: string; 
 export const DOCUMENT_LABELS: Record<DocumentType, { ru: string; en: string }> = {
   PASSPORT:        { ru: 'Паспорт',          en: 'Passport' },
   PHOTO:           { ru: 'Фото 3×4',         en: 'Photo 3×4' },
-  DIPLOMA:         { ru: 'Диплом/Аттестат',  en: 'Diploma/Certificate' },
-  TRANSCRIPT:      { ru: 'Транскрипт',       en: 'Transcript' },
+  DIPLOMA:         { ru: 'Диплом/Аттестат + Транскрипт (оценки)',  en: 'Diploma/Certificate + Transcript' },
+  TRANSCRIPT:      { ru: 'Транскрипт (дополнительно)',       en: 'Transcript (additional)' },
   IELTS:           { ru: 'IELTS/TOEFL',      en: 'IELTS/TOEFL' },
   ARABIC_CERT:     { ru: 'Сертификат по арабскому', en: 'Arabic Certificate' },
   RECOMMENDATION:  { ru: 'Рекомендательное письмо', en: 'Recommendation Letter' },
