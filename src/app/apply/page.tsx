@@ -3,7 +3,7 @@ import { useState, useCallback, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useDropzone } from 'react-dropzone'
-import { CheckCircle2, Upload, X, FileText, AlertCircle, ChevronRight, ChevronLeft, ChevronDown, ChevronUp, GraduationCap } from 'lucide-react'
+import { CheckCircle2, Upload, X, FileText, AlertCircle, ChevronRight, ChevronLeft, ChevronDown, ChevronUp, GraduationCap, Plus, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase/client'
 import { Button, Input, Select } from '@/components/ui'
@@ -115,10 +115,14 @@ function ApplyContent() {
   const [appId, setAppId]   = useState<string | null>(null)
 
   // Universities state
-  const [universities, setUniversities]         = useState<UniversityRow[]>([])
+  const [universities, setUniversities]               = useState<UniversityRow[]>([])
   const [universitiesLoading, setUniversitiesLoading] = useState(false)
   const [expandedUniversity, setExpandedUniversity]   = useState<string | null>(null)
   const [selectedFaculties, setSelectedFaculties]     = useState<SelectedFaculty[]>([])
+
+  // Custom university input
+  const [customUniName, setCustomUniName]     = useState('')
+  const [customFaculty, setCustomFaculty]     = useState('')
 
   const [form, setForm] = useState<FormData>({
     full_name:       '',
@@ -187,6 +191,23 @@ function ApplyContent() {
 
   const isFacultySelected = (universityId: string, faculty: string) =>
     selectedFaculties.some(f => f.university_id === universityId && f.faculty === faculty)
+
+  const addCustomFaculty = () => {
+    if (!customUniName.trim() || !customFaculty.trim()) {
+      toast.error(lang === 'ru' ? 'Укажите название университета и факультет' : 'Enter university name and faculty')
+      return
+    }
+    if (selectedFaculties.length >= MAX_FACULTIES) {
+      toast.error(lang === 'ru' ? `Максимум ${MAX_FACULTIES} факультетов` : `Maximum ${MAX_FACULTIES} faculties`)
+      return
+    }
+    setSelectedFaculties(prev => [...prev, {
+      university_id:   `custom_${Date.now()}`,
+      university_name: customUniName.trim(),
+      faculty:         customFaculty.trim(),
+    }])
+    setCustomFaculty('')
+  }
 
   // Step handlers
   const handleStep1 = () => {
@@ -628,6 +649,56 @@ function ApplyContent() {
                   })}
                 </div>
               )}
+
+              {/* Блок дополнительных университетов */}
+              <div className="card p-5 border-2 border-dashed border-brand-200 bg-brand-50/30">
+                <div className="flex items-start gap-3 mb-4">
+                  <ExternalLink className="w-5 h-5 text-brand-500 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-semibold text-ink">
+                      {lang === 'ru' ? 'Хотите добавить другой университет?' : 'Want to add another university?'}
+                    </p>
+                    <p className="text-xs text-muted mt-0.5">
+                      {lang === 'ru' ? 'Выше показаны рекомендуемые нами университеты. Полный список смотрите на ' : 'Above are our recommended universities. See the full list at '}
+                      <a
+                        href="https://studyinsaudi.sa/ar/Institutions"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-brand-500 underline hover:text-brand-600"
+                      >
+                        studyinsaudi.sa
+                      </a>
+                      {lang === 'ru' ? ' и добавьте вручную:' : ' and add manually:'}
+                    </p>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <input
+                    type="text"
+                    value={customUniName}
+                    onChange={e => setCustomUniName(e.target.value)}
+                    placeholder={lang === 'ru' ? 'Название университета' : 'University name'}
+                    className="w-full px-3 py-2 text-sm border border-border rounded-lg focus:outline-none focus:border-brand-400 bg-white"
+                  />
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={customFaculty}
+                      onChange={e => setCustomFaculty(e.target.value)}
+                      onKeyDown={e => e.key === 'Enter' && addCustomFaculty()}
+                      placeholder={lang === 'ru' ? 'Факультет / направление' : 'Faculty / program'}
+                      className="flex-1 px-3 py-2 text-sm border border-border rounded-lg focus:outline-none focus:border-brand-400 bg-white"
+                    />
+                    <button
+                      onClick={addCustomFaculty}
+                      className="flex items-center gap-1.5 px-3 py-2 bg-brand-400 text-white text-sm font-medium rounded-lg hover:bg-brand-500 transition-colors"
+                    >
+                      <Plus className="w-4 h-4" />
+                      {lang === 'ru' ? 'Добавить' : 'Add'}
+                    </button>
+                  </div>
+                </div>
+              </div>
 
               {/* Selected faculties summary */}
               {selectedFaculties.length > 0 && (
