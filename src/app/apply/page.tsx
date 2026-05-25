@@ -145,6 +145,10 @@ function ApplyContent() {
     (searchParams.get('package') as ServicePackage) || 'STANDARD'
   )
 
+  // Comment modal
+  const [commentModal, setCommentModal] = useState(false)
+  const [comment, setComment] = useState('')
+
   const universityId = searchParams.get('university') || undefined
   const countryParam = searchParams.get('country') as 'SA' | 'AE' || 'SA'
 
@@ -236,7 +240,7 @@ function ApplyContent() {
       toast.error(lang === 'ru' ? 'Выберите хотя бы один факультет' : 'Please select at least one faculty')
       return
     }
-    setStep(4)
+    setCommentModal(true)
   }
 
   const handleStep4 = () => setStep(5)
@@ -268,6 +272,7 @@ function ApplyContent() {
           guardian_phone:     form.guardian_phone || null,
           guardian_email:     form.guardian_email || null,
           selected_faculties: selectedFaculties,
+          notes:              comment || null,
         })
         .select()
         .single()
@@ -863,6 +868,49 @@ function ApplyContent() {
 
         </AnimatePresence>
       </div>
+
+      {/* ── Comment Modal ── */}
+      {commentModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6"
+          >
+            <h3 className="text-lg font-bold text-ink mb-1">
+              {lang === 'ru' ? 'Дополнительный комментарий' : lang === 'uz' ? 'Qo\'shimcha izoh' : 'Additional Comment'}
+            </h3>
+            <p className="text-sm text-muted mb-4">
+              {lang === 'ru'
+                ? 'Напишите любые пожелания или дополнительную информацию для нашего менеджера'
+                : lang === 'uz'
+                ? 'Menejerimiz uchun istalgan tilak yoki qo\'shimcha ma\'lumot yozing'
+                : 'Write any wishes or additional information for our manager'}
+            </p>
+            <textarea
+              className="w-full border border-border rounded-xl p-3 text-sm resize-none focus:outline-none focus:border-brand-400 h-32"
+              placeholder={lang === 'ru' ? 'Например: хочу общежитие, нужна стипендия, есть особые требования...' : 'E.g. need dormitory, scholarship, special requirements...'}
+              value={comment}
+              onChange={e => setComment(e.target.value)}
+              autoFocus
+            />
+            <div className="flex gap-3 mt-4">
+              <button
+                onClick={() => { setCommentModal(false); setStep(4) }}
+                className="flex-1 py-2.5 rounded-xl border border-border text-sm text-muted hover:bg-surface transition-colors"
+              >
+                {lang === 'ru' ? 'Пропустить' : 'Skip'}
+              </button>
+              <button
+                onClick={() => { setCommentModal(false); setStep(4) }}
+                className="flex-1 py-2.5 rounded-xl bg-brand-400 text-white text-sm font-semibold hover:bg-brand-500 transition-colors"
+              >
+                {lang === 'ru' ? 'Продолжить' : 'Continue'}
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   )
 }
