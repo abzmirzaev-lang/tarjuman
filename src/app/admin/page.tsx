@@ -275,6 +275,29 @@ export default function AdminPage() {
                 <h1 className="text-2xl font-bold text-ink">Заявки ({apps.length})</h1>
               </div>
 
+              {/* Package tabs */}
+              <div className="flex gap-2 flex-wrap">
+                {([
+                  { key: '',           label: 'Все',            count: apps.length,                                        color: 'bg-surface border border-border text-ink' },
+                  { key: 'VIP',        label: '👑 VIP — $99',   count: apps.filter(a => a.service_package === 'VIP').length,        color: 'bg-amber-50 border border-amber-200 text-amber-700' },
+                  { key: 'STANDARD',   label: '⭐ Стандарт — $69', count: apps.filter(a => a.service_package === 'STANDARD').length, color: 'bg-brand-50 border border-brand-200 text-brand-700' },
+                  { key: 'SUBMISSION', label: '📄 Базовый — $29',  count: apps.filter(a => a.service_package === 'SUBMISSION').length, color: 'bg-gray-50 border border-gray-200 text-gray-700' },
+                ] as const).map(pkg => (
+                  <button
+                    key={pkg.key}
+                    onClick={() => setStatusFlt(prev => prev)}
+                    className={cn(
+                      'flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all',
+                      pkg.color
+                    )}
+                    style={{ cursor: 'default' }}
+                  >
+                    {pkg.label}
+                    <span className="bg-white/60 px-1.5 py-0.5 rounded-full text-xs font-bold">{pkg.count}</span>
+                  </button>
+                ))}
+              </div>
+
               {/* Filters */}
               <div className="flex gap-3 flex-wrap">
                 <div className="relative">
@@ -286,62 +309,90 @@ export default function AdminPage() {
                   <option value="">Все статусы</option>
                   {ALL_STATUSES.map(s => <option key={s} value={s}>{STATUS_RU[s]}</option>)}
                 </select>
+                <select className="input w-48" onChange={e => {
+                  const val = e.target.value as 'VIP' | 'STANDARD' | 'SUBMISSION' | ''
+                  setSearch(prev => prev)
+                  // filter by package using search workaround via pkg state
+                  ;(window as any).__pkgFilter = val
+                  setSearch(s => s + '') // trigger re-render
+                }}>
+                  <option value="">Все пакеты</option>
+                  <option value="VIP">👑 VIP — $99</option>
+                  <option value="STANDARD">⭐ Стандарт — $69</option>
+                  <option value="SUBMISSION">📄 Базовый — $29</option>
+                </select>
               </div>
 
-              {/* Table */}
-              <div className="card overflow-hidden">
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead className="bg-surface border-b border-border">
-                      <tr>
-                        {['Имя', 'Страна', 'Пакет', 'Статус', 'Дата', 'Действия'].map(h => (
-                          <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-muted">{h}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-border">
-                      {filteredApps.map(app => (
-                        <tr key={app.id} className="hover:bg-surface transition-colors">
-                          <td className="px-4 py-3">
-                            <div className="flex items-center gap-2">
-                              <div className="w-7 h-7 bg-brand-100 rounded-full flex items-center justify-center text-xs font-bold text-brand-600 shrink-0">
-                                {getInitials(app.full_name)}
-                              </div>
-                              <div>
-                                <p className="text-sm font-medium text-ink">{app.full_name}</p>
-                                <p className="text-xs text-muted">{app.citizenship}</p>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-4 py-3 text-sm text-muted">{app.country === 'SA' ? '🇸🇦' : '🇦🇪'}</td>
-                          <td className="px-4 py-3">
-                            <span className="text-xs font-medium text-muted">{PACKAGES[app.service_package].name_ru}</span>
-                          </td>
-                          <td className="px-4 py-3">
-                            <Badge status={app.status} label={STATUS_RU[app.status]} />
-                          </td>
-                          <td className="px-4 py-3 text-xs text-muted">{formatDate(app.created_at)}</td>
-                          <td className="px-4 py-3">
-                            <div className="flex gap-1">
-                              <button onClick={() => openDetail(app)} className="btn-ghost btn-sm p-1.5 rounded-lg">
-                                <Eye className="w-4 h-4" />
-                              </button>
-                              {STATUS_NEXT[app.status] && (
-                                <button
-                                  onClick={() => changeStatus(app.id, STATUS_NEXT[app.status]!)}
-                                  className="btn btn-primary btn-sm px-2.5 py-1 text-xs"
-                                >
-                                  → {STATUS_RU[STATUS_NEXT[app.status]!]}
-                                </button>
-                              )}
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              {/* Tables by package */}
+              {(['VIP', 'STANDARD', 'SUBMISSION'] as const).map(pkg => {
+                const pkgApps = filteredApps.filter(a => a.service_package === pkg)
+                if (pkgApps.length === 0) return null
+                const pkgMeta = {
+                  VIP:        { label: '👑 VIP — $99',      color: 'bg-amber-50 border-amber-200 text-amber-700' },
+                  STANDARD:   { label: '⭐ Стандарт — $69', color: 'bg-brand-50 border-brand-200 text-brand-700' },
+                  SUBMISSION: { label: '📄 Базовый — $29',  color: 'bg-gray-50 border-gray-200 text-gray-700' },
+                }[pkg]
+                return (
+                  <div key={pkg} className="card overflow-hidden">
+                    <div className={cn('px-5 py-3 border-b border-border flex items-center gap-2', pkgMeta.color)}>
+                      <span className="text-sm font-bold">{pkgMeta.label}</span>
+                      <span className="text-xs font-semibold px-2 py-0.5 bg-white/50 rounded-full">{pkgApps.length} заявок</span>
+                    </div>
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead className="bg-surface border-b border-border">
+                          <tr>
+                            {['Имя', 'Страна', 'Статус', 'Дата', 'Действия'].map(h => (
+                              <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-muted">{h}</th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-border">
+                          {pkgApps.map(app => (
+                            <tr key={app.id} className="hover:bg-surface transition-colors">
+                              <td className="px-4 py-3">
+                                <div className="flex items-center gap-2">
+                                  <div className="w-7 h-7 bg-brand-100 rounded-full flex items-center justify-center text-xs font-bold text-brand-600 shrink-0">
+                                    {getInitials(app.full_name)}
+                                  </div>
+                                  <div>
+                                    <p className="text-sm font-medium text-ink">{app.full_name}</p>
+                                    <p className="text-xs text-muted">{app.citizenship}</p>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="px-4 py-3 text-sm text-muted">{app.country === 'SA' ? '🇸🇦' : '🇦🇪'}</td>
+                              <td className="px-4 py-3">
+                                <Badge status={app.status} label={STATUS_RU[app.status]} />
+                              </td>
+                              <td className="px-4 py-3 text-xs text-muted">{formatDate(app.created_at)}</td>
+                              <td className="px-4 py-3">
+                                <div className="flex gap-1">
+                                  <button onClick={() => openDetail(app)} className="btn-ghost btn-sm p-1.5 rounded-lg">
+                                    <Eye className="w-4 h-4" />
+                                  </button>
+                                  {STATUS_NEXT[app.status] && (
+                                    <button
+                                      onClick={() => changeStatus(app.id, STATUS_NEXT[app.status]!)}
+                                      className="btn btn-primary btn-sm px-2.5 py-1 text-xs"
+                                    >
+                                      → {STATUS_RU[STATUS_NEXT[app.status]!]}
+                                    </button>
+                                  )}
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )
+              })}
+
+              {filteredApps.length === 0 && (
+                <div className="card p-12 text-center text-muted">Нет заявок</div>
+              )}
             </div>
           )}
 
