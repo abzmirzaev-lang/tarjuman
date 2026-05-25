@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
 
 const BOT_TOKEN = process.env.TELEGRAM_SUPPORT_BOT_TOKEN!
 const ADMIN_CHAT_ID = process.env.TELEGRAM_ADMIN_CHAT_ID!
 const API = `https://api.telegram.org/bot${BOT_TOKEN}`
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
 
 // ── Helpers ──────────────────────────────────────────────
 async function sendMessage(chat_id: number | string, text: string, reply_markup?: any) {
@@ -121,15 +127,39 @@ export async function POST(req: NextRequest) {
       const text = msg.text || ''
       const firstName = msg.from?.first_name || 'Пользователь'
 
-      if (text === '/start') {
-        await sendMessage(
-          chatId,
-          `👋 Привет, <b>${firstName}</b>!\n\n` +
-          `Я бот агентства <b>TARJUMAN</b> 🕌\n` +
-          `Помогаю студентам из СНГ поступить в университеты Саудовской Аравии и ОАЭ.\n\n` +
-          `Выберите вопрос или напишите свой:`,
-          mainMenu
-        )
+      if (text?.startsWith('/start')) {
+        const param = text.split(' ')[1] // app ID если есть
+
+        if (param) {
+          // Клиент пришёл по deep link после подачи заявки
+          await supabase
+            .from('applications')
+            .update({ telegram_chat_id: chatId })
+            .eq('id', param)
+
+          await sendMessage(
+            chatId,
+            `✅ <b>Заявка подтверждена!</b>\n\n` +
+            `Привет, <b>${firstName}</b>! 👋\n\n` +
+            `Ваша заявка в TARJUMAN принята. Мы уже начали работу.\n\n` +
+            `📋 <b>Что дальше:</b>\n` +
+            `1. Наш менеджер проверит ваши документы\n` +
+            `2. Свяжется с вами для уточнения деталей\n` +
+            `3. Подаст заявку в выбранный университет\n\n` +
+            `⏱ Обычно это занимает <b>1–3 рабочих дня</b>.\n\n` +
+            `Если есть вопросы — напишите сюда, мы ответим!`,
+            mainMenu
+          )
+        } else {
+          await sendMessage(
+            chatId,
+            `👋 Привет, <b>${firstName}</b>!\n\n` +
+            `Я бот агентства <b>TARJUMAN</b> 🕌\n` +
+            `Помогаю студентам из СНГ поступить в университеты Саудовской Аравии и ОАЭ.\n\n` +
+            `Выберите вопрос или напишите свой:`,
+            mainMenu
+          )
+        }
       } else {
         // Если написал произвольный текст — показываем меню
         await sendMessage(

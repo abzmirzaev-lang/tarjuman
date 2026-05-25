@@ -1000,16 +1000,30 @@ function ApplyContent() {
             <h3 className="text-xl font-bold text-ink mb-2">
               {lang === 'ru' ? 'Заявка принята!' : lang === 'uz' ? 'Ariza qabul qilindi!' : 'Application Accepted!'}
             </h3>
-            <p className="text-muted text-sm leading-relaxed mb-6">
+            <p className="text-muted text-sm leading-relaxed mb-4">
               {lang === 'ru'
-                ? 'Наш менеджер скоро свяжется с вами для получения оплаты. Вы также можете оплатить самостоятельно в личном кабинете.'
+                ? 'Заявка принята! Подключите Telegram-уведомления — бот сразу напишет вам и будет держать в курсе.'
                 : lang === 'uz'
-                ? 'Menejerimiz tez orada to\'lov uchun siz bilan bog\'lanadi. Shuningdek, shaxsiy kabinetda o\'zingiz to\'lashingiz mumkin.'
-                : 'Our manager will contact you soon for payment. You can also pay yourself in your dashboard.'}
+                ? 'Ariza qabul qilindi! Telegram bildirishnomalarini ulang — bot darhol yozadi.'
+                : 'Application accepted! Connect Telegram notifications — the bot will write to you right away.'}
             </p>
+
+            {/* Кнопка Telegram */}
+            <a
+              href={`https://t.me/tarjuman_help_bot?start=${appId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#229ED9] text-white font-semibold hover:bg-[#1a8fc4] transition-colors mb-3"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.37l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.978.189z"/>
+              </svg>
+              {lang === 'ru' ? 'Получить уведомление в Telegram' : 'Get Telegram notification'}
+            </a>
+
             <button
               onClick={() => router.push(`/dashboard?app=${appId}`)}
-              className="w-full py-3 rounded-xl bg-brand-400 text-white font-semibold hover:bg-brand-500 transition-colors"
+              className="w-full py-3 rounded-xl border border-border text-muted text-sm font-medium hover:bg-surface transition-colors"
             >
               {lang === 'ru' ? 'Перейти в личный кабинет' : lang === 'uz' ? 'Shaxsiy kabinetga o\'tish' : 'Go to Dashboard'}
             </button>
