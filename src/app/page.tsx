@@ -151,34 +151,101 @@ export default function HomePage() {
       {/* ── HOW IT WORKS ── */}
       <section className="section bg-white">
         <div className="container-narrow">
-          <div className="text-center mb-12">
+          <div className="text-center mb-16">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-50 border border-brand-200 rounded-full text-brand-700 text-sm font-medium mb-4">
+              {lang === 'ru' ? '3 простых шага' : lang === 'uz' ? '3 ta oddiy qadam' : '3 simple steps'}
+            </span>
             <h2 className="text-3xl font-bold text-ink mb-3">
               {lang === 'ru' ? 'Как это работает' : lang === 'uz' ? 'Bu qanday ishlaydi' : 'How It Works'}
             </h2>
+            <p className="text-muted max-w-md mx-auto">
+              {lang === 'ru'
+                ? 'От заявки до поступления — всё под ключ'
+                : lang === 'uz'
+                ? 'Arizadan qabulga qadar — kalit ostida'
+                : 'From application to enrollment — turnkey'}
+            </p>
           </div>
-          <div className="grid sm:grid-cols-4 gap-6">
-            {[
-              { n: '01', icon: Globe2,       title: lang === 'ru' ? 'Выберите страну' : lang === 'uz' ? 'Mamlakatni tanlang' : 'Choose Country' },
-              { n: '02', icon: FileText,     title: lang === 'ru' ? 'Заполните заявку' : lang === 'uz' ? 'Ariza to\'ldiring' : 'Fill Application' },
-              { n: '03', icon: Award,        title: lang === 'ru' ? 'Оплатите пакет' : lang === 'uz' ? 'Paketni to\'lang' : 'Pay Package' },
-              { n: '04', icon: CheckCircle2, title: lang === 'ru' ? 'Получите зачисление' : lang === 'uz' ? 'Qabul oling' : 'Get Enrolled' },
-            ].map((step, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="text-center"
-              >
-                <div className="w-12 h-12 bg-brand-400 rounded-2xl flex items-center justify-center mx-auto mb-4 text-white">
-                  <step.icon className="w-5 h-5" />
-                </div>
-                <div className="text-xs font-bold text-brand-400 mb-1">{step.n}</div>
-                <div className="font-medium text-ink text-sm">{step.title}</div>
-              </motion.div>
-            ))}
+
+          <div className="relative">
+            {/* Connecting line (desktop) */}
+            <div className="hidden sm:block absolute top-10 left-[calc(16.66%+1rem)] right-[calc(16.66%+1rem)] h-px bg-gradient-to-r from-brand-200 via-brand-400 to-brand-200 z-0" />
+
+            <div className="grid sm:grid-cols-3 gap-8 relative z-10">
+              {([
+                {
+                  n: '01',
+                  icon: FileText,
+                  gradient: 'from-blue-500 to-brand-500',
+                  title: lang === 'ru' ? 'Заполни анкету' : lang === 'uz' ? 'Anketani to\'ldiring' : 'Fill the Form',
+                  desc: lang === 'ru'
+                    ? 'Укажите свои данные, выберите страну и университет. Займёт не больше 10 минут'
+                    : lang === 'uz'
+                    ? 'Ma\'lumotlaringizni kiriting, mamlakat va universitetni tanlang. 10 daqiqadan ko\'p vaqt ketmaydi'
+                    : 'Enter your details, choose country and university. Takes less than 10 minutes',
+                },
+                {
+                  n: '02',
+                  icon: Zap,
+                  gradient: 'from-brand-500 to-purple-500',
+                  title: lang === 'ru' ? 'Оплати пакет' : lang === 'uz' ? 'Paketni to\'lang' : 'Pay for Package',
+                  desc: lang === 'ru'
+                    ? 'Выберите удобный тариф и оплатите онлайн. Принимаем карты и переводы'
+                    : lang === 'uz'
+                    ? 'Qulay tarifni tanlang va onlayn to\'lang. Kartalar va o\'tkazmalarni qabul qilamiz'
+                    : 'Choose a plan and pay online. We accept cards and transfers',
+                },
+                {
+                  n: '03',
+                  icon: CheckCircle2,
+                  gradient: 'from-purple-500 to-emerald-500',
+                  title: lang === 'ru' ? 'Получи документы и поступление' : lang === 'uz' ? 'Hujjatlar va qabulni oling' : 'Get Docs & Enrollment',
+                  desc: lang === 'ru'
+                    ? 'Мы переведём все документы и подадим заявку в университет — вы получите зачисление'
+                    : lang === 'uz'
+                    ? 'Biz barcha hujjatlarni tarjimon qilamiz va universitetga ariza topshiramiz — siz qabul olasiz'
+                    : 'We translate all documents and submit to university — you get enrolled',
+                },
+              ] as const).map((step, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.15 }}
+                  className="flex flex-col items-center text-center group"
+                >
+                  {/* Icon circle */}
+                  <div className="relative mb-6">
+                    <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${step.gradient} flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300`}>
+                      <step.icon className="w-9 h-9 text-white" />
+                    </div>
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-white border-2 border-brand-400 rounded-full flex items-center justify-center">
+                      <span className="text-[10px] font-bold text-brand-600">{step.n}</span>
+                    </div>
+                  </div>
+
+                  <h3 className="text-lg font-bold text-ink mb-3">{step.title}</h3>
+                  <p className="text-sm text-muted leading-relaxed max-w-xs">{step.desc}</p>
+                </motion.div>
+              ))}
+            </div>
           </div>
+
+          {/* CTA under steps */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+            className="mt-14 text-center"
+          >
+            <Link href="/apply">
+              <Button variant="primary" size="xl" iconRight={<ArrowRight className="w-5 h-5" />}>
+                {t.hero.cta}
+              </Button>
+            </Link>
+          </motion.div>
         </div>
       </section>
 
