@@ -242,7 +242,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="p-6 md:p-8">
+          <div className="p-4 md:p-8">
             {/* No application state */}
             {!app && (
               <div className="flex flex-col items-center justify-center py-20 text-center">
@@ -271,43 +271,56 @@ export default function DashboardPage() {
                     </div>
 
                     {/* Status pipeline */}
-                    <div className="card p-6">
-                      <h3 className="text-sm font-semibold text-ink mb-5">{t.dashboard.status}</h3>
-                      <div className="flex items-center gap-0">
+                    <div className="card p-4 md:p-6">
+                      <h3 className="text-sm font-semibold text-ink mb-4">{t.dashboard.status}</h3>
+                      {/* Mobile: vertical list */}
+                      <div className="flex flex-col gap-3 sm:hidden">
                         {STATUS_ORDER.map((s, i) => {
                           const done    = i < statusIdx
                           const current = i === statusIdx
-                          const future  = i > statusIdx
+                          return (
+                            <div key={s} className="flex items-center gap-3">
+                              <div className={cn(
+                                'w-8 h-8 rounded-full flex items-center justify-center shrink-0',
+                                done    ? 'bg-brand-400 text-white' :
+                                current ? 'bg-brand-400 text-white ring-4 ring-brand-100' :
+                                          'bg-border text-muted'
+                              )}>
+                                {done ? <CheckCircle2 className="w-4 h-4" /> : <span className="text-xs font-bold">{i + 1}</span>}
+                              </div>
+                              <span className={cn(
+                                'text-sm',
+                                current ? 'text-brand-600 font-semibold' : done ? 'text-brand-400' : 'text-muted'
+                              )}>
+                                {statusLabel(s)}
+                              </span>
+                              {current && <span className="ml-auto text-xs bg-brand-50 text-brand-600 px-2 py-0.5 rounded-full font-medium">Текущий</span>}
+                            </div>
+                          )
+                        })}
+                      </div>
+                      {/* Desktop: horizontal */}
+                      <div className="hidden sm:flex items-center gap-0">
+                        {STATUS_ORDER.map((s, i) => {
+                          const done    = i < statusIdx
+                          const current = i === statusIdx
                           return (
                             <div key={s} className="flex-1 flex flex-col items-center relative">
-                              {/* Connector line */}
                               {i > 0 && (
-                                <div className={cn(
-                                  'absolute left-0 top-3.5 h-0.5 w-1/2 -translate-x-full',
-                                  done || current ? 'bg-brand-400' : 'bg-border'
-                                )} />
+                                <div className={cn('absolute left-0 top-3.5 h-0.5 w-1/2 -translate-x-full', done || current ? 'bg-brand-400' : 'bg-border')} />
                               )}
                               {i < STATUS_ORDER.length - 1 && (
-                                <div className={cn(
-                                  'absolute right-0 top-3.5 h-0.5 w-1/2 translate-x-full',
-                                  done ? 'bg-brand-400' : 'bg-border'
-                                )} />
+                                <div className={cn('absolute right-0 top-3.5 h-0.5 w-1/2 translate-x-full', done ? 'bg-brand-400' : 'bg-border')} />
                               )}
-                              {/* Dot */}
                               <div className={cn(
                                 'w-7 h-7 rounded-full flex items-center justify-center z-10',
                                 done    ? 'bg-brand-400 text-white' :
                                 current ? 'bg-brand-400 text-white ring-4 ring-brand-100' :
                                           'bg-border text-muted'
                               )}>
-                                {done ? <CheckCircle2 className="w-4 h-4" /> : (
-                                  <span className="text-xs font-bold">{i + 1}</span>
-                                )}
+                                {done ? <CheckCircle2 className="w-4 h-4" /> : <span className="text-xs font-bold">{i + 1}</span>}
                               </div>
-                              <span className={cn(
-                                'text-[10px] mt-2 text-center px-1 leading-tight',
-                                current ? 'text-brand-600 font-semibold' : done ? 'text-brand-400' : 'text-muted'
-                              )}>
+                              <span className={cn('text-[10px] mt-2 text-center px-1 leading-tight', current ? 'text-brand-600 font-semibold' : done ? 'text-brand-400' : 'text-muted')}>
                                 {statusLabel(s)}
                               </span>
                             </div>
@@ -318,26 +331,25 @@ export default function DashboardPage() {
 
                     {/* Pay now banner — shown when REGISTERED */}
                     {app.status === 'REGISTERED' && (
-                      <div className="card p-5 border-2 border-emerald-200 bg-emerald-50">
-                        <div className="flex items-center gap-3 mb-3">
+                      <div className="card p-4 border-2 border-emerald-200 bg-emerald-50">
+                        <div className="flex items-start gap-3 mb-3">
                           <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center shrink-0">
                             <CreditCard className="w-5 h-5 text-emerald-600" />
                           </div>
-                          <div>
-                            <p className="font-semibold text-ink text-sm">
-                              {lang === 'ru' ? 'Ожидает оплаты' : lang === 'uz' ? 'To\'lov kutilmoqda' : 'Awaiting Payment'}
-                            </p>
-                            <p className="text-xs text-muted">
-                              {lang === 'ru' ? 'Менеджер скоро свяжется с вами или оплатите сейчас' : 'Manager will contact you or pay now'}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between gap-2">
+                              <p className="font-semibold text-ink text-sm">
+                                {lang === 'ru' ? 'Ожидает оплаты' : 'Awaiting Payment'}
+                              </p>
+                              <span className="text-lg font-bold text-ink shrink-0">${PACKAGES[app.service_package].priceUSD}</span>
+                            </div>
+                            <p className="text-xs text-muted mt-0.5">
+                              {lang === 'ru' ? 'Менеджер свяжется с вами в ближайшее время' : 'Manager will contact you soon'}
                             </p>
                           </div>
-                          <div className="ml-auto text-xl font-bold text-ink">${PACKAGES[app.service_package].priceUSD}</div>
                         </div>
-                        <button
-                          disabled
-                          className="w-full py-2.5 rounded-xl bg-emerald-400 text-white text-sm font-semibold opacity-50 cursor-not-allowed"
-                        >
-                          {lang === 'ru' ? '💳 Оплатить сейчас (скоро)' : '💳 Pay Now (coming soon)'}
+                        <button disabled className="w-full py-2.5 rounded-xl bg-emerald-400 text-white text-sm font-semibold opacity-50 cursor-not-allowed">
+                          {lang === 'ru' ? '💳 Оплатить онлайн (скоро)' : '💳 Pay Online (coming soon)'}
                         </button>
                       </div>
                     )}
@@ -435,7 +447,7 @@ export default function DashboardPage() {
 
                 {/* ── MESSAGES TAB ── */}
                 {tab === 'messages' && (
-                  <div className="flex flex-col h-[calc(100vh-220px)]">
+                  <div className="flex flex-col h-[calc(100vh-180px)] md:h-[calc(100vh-220px)]">
                     <h1 className="text-2xl font-bold text-ink mb-4">{t.dashboard.messages}</h1>
                     <div className="card flex-1 flex flex-col overflow-hidden">
                       {/* Chat messages */}
