@@ -1,17 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import Stripe from 'stripe'
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { PACKAGES } from '@/types'
 import type { ServicePackage } from '@/types'
+import { notifyAdmin } from '@/lib/telegram'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2024-06-20' })
-
-const PRICE_IDS: Record<ServicePackage, string | undefined> = {
-  SUBMISSION: process.env.NEXT_PUBLIC_STRIPE_PRICE_BASIC,
-  STANDARD:   process.env.NEXT_PUBLIC_STRIPE_PRICE_STANDARD,
-  VIP:        process.env.NEXT_PUBLIC_STRIPE_PRICE_VIP,
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -30,7 +23,7 @@ export async function POST(request: NextRequest) {
     // Verify application belongs to user
     const { data: app, error: appErr } = await supabase
       .from('applications')
-      .select('id, status')
+      .select('id, status, full_name, phone, telegram, citizenship')
       .eq('id', applicationId)
       .eq('user_id', session.user.id)
       .single()
@@ -40,7 +33,29 @@ export async function POST(request: NextRequest) {
     }
 
     const packageInfo = PACKAGES[pkg]
-    const priceId     = PRICE_IDS[pkg]
+
+    // ── РУЧНАЯ ОПЛАТА (если Stripe не настроен) ──
+    if (!process.env.STRIPE_SECRET_KEY) {
+      await notifyAdmin(
+        `🆕 *Новая заявка!*\n\n` +
+        `👤 *Имя:* ${app.full_name}\n` +
+        `📱 *Телефон:* ${app.phone}\n` +
+        `✈️ *Гражданство:* ${app.citizenship}\n` +
+        `📦 *Пакет:* ${packageInfo.name_ru} — $${packageInfo.priceUSD}\n` +
+        `🆔 *ID заявки:* ${applicationId}\n\n` +
+        `💳 Ожидает ручной оплаты`
+      )
+      return NextResponse.json({ url: null, manual: true })
+    }
+
+    // ── STRIPE ──
+    const Stripe = (await import('stripe')).default
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2024-06-20' })
+    const priceId = {
+      SUBMISSION: process.env.NEXT_PUBLIC_STRIPE_PRICE_BASIC,
+      STANDARD:   process.env.NEXT_PUBLIC_STRIPE_PRICE_STANDARD,
+      VIP:        process.env.NEXT_PUBLIC_STRIPE_PRICE_VIP,
+    }[pkg]
 
     // Create Stripe checkout session
     const checkoutSession = await stripe.checkout.sessions.create({
