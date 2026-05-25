@@ -355,22 +355,28 @@ export default function DashboardPage() {
                     )}
 
                     {/* Details card */}
-                    <div className="card p-6">
+                    <div className="card p-4 md:p-6">
                       <h3 className="text-sm font-semibold text-ink mb-4">
                         {lang === 'ru' ? 'Детали заявки' : 'Application Details'}
                       </h3>
-                      <div className="grid grid-cols-2 gap-y-3 text-sm">
-                        <span className="text-muted">{lang === 'ru' ? 'Страна' : 'Country'}</span>
-                        <span className="text-ink font-medium">{app.country === 'SA' ? '🇸🇦 Саудовская Аравия' : '🇦🇪 ОАЭ'}</span>
-                        <span className="text-muted">{lang === 'ru' ? 'Пакет' : 'Package'}</span>
-                        <span className="text-ink font-medium">{lang === 'ru' ? PACKAGES[app.service_package].name_ru : PACKAGES[app.service_package].name_en}</span>
-                        <span className="text-muted">{lang === 'ru' ? 'Дата заявки' : 'Date'}</span>
-                        <span className="text-ink">{formatDate(app.created_at)}</span>
+                      <div className="space-y-3 text-sm">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-4">
+                          <span className="text-muted shrink-0">{lang === 'ru' ? 'Страна' : 'Country'}</span>
+                          <span className="text-ink font-medium">{app.country === 'SA' ? '🇸🇦 Саудовская Аравия' : '🇦🇪 ОАЭ'}</span>
+                        </div>
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-4">
+                          <span className="text-muted shrink-0">{lang === 'ru' ? 'Пакет' : 'Package'}</span>
+                          <span className="text-ink font-medium">{lang === 'ru' ? PACKAGES[app.service_package].name_ru : PACKAGES[app.service_package].name_en}</span>
+                        </div>
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-4">
+                          <span className="text-muted shrink-0">{lang === 'ru' ? 'Дата заявки' : 'Date'}</span>
+                          <span className="text-ink">{formatDate(app.created_at)}</span>
+                        </div>
                         {app.university_name && (
-                          <>
-                            <span className="text-muted">{lang === 'ru' ? 'Университет' : 'University'}</span>
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-4">
+                            <span className="text-muted shrink-0">{lang === 'ru' ? 'Университет' : 'University'}</span>
                             <span className="text-ink">{app.university_name}</span>
-                          </>
+                          </div>
                         )}
                       </div>
                     </div>

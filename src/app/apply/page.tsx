@@ -596,12 +596,12 @@ function ApplyContent() {
           {step === 2 && (
             <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
               <h1 className="text-2xl font-bold text-ink mb-6">{t.apply.uploadTitle}</h1>
-              <div className="card p-6">
+              <div className="card p-4 md:p-6 overflow-hidden">
                 <h3 className="text-sm font-semibold text-ink mb-3 flex items-center gap-1">
                   <AlertCircle className="w-4 h-4 text-red-400" />
                   {t.apply.required}
                 </h3>
-                <div className="grid sm:grid-cols-2 gap-3">
+                <div className="grid gap-2">
                   {REQUIRED_DOCS.map(dtype => (
                     <DropZone
                       key={dtype}
@@ -613,9 +613,9 @@ function ApplyContent() {
                     />
                   ))}
                 </div>
-                <div className="divider my-5" />
+                <div className="divider my-4" />
                 <h3 className="text-sm font-semibold text-ink mb-3">{t.apply.optional}</h3>
-                <div className="grid sm:grid-cols-2 gap-3">
+                <div className="grid gap-2">
                   {OPTIONAL_DOCS.map(dtype => (
                     <DropZone
                       key={dtype}
