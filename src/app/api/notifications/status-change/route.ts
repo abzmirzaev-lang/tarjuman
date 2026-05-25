@@ -1,83 +1,77 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
-import { supabaseAdmin } from '@/lib/supabase/admin'
-import { sendEmail }    from '@/lib/email'
-import { sendTelegram } from '@/lib/telegram'
-import { STATUS_LABELS } from '@/types'
-import type { ApplicationStatus } from '@/types'
+import { createClient } from '@supabase/supabase-js'
 
-const STATUS_MSG_RU: Record<ApplicationStatus, string> = {
-  REGISTERED:   'Ваша заявка зарегистрирована',
-  PAID:         'Оплата подтверждена. Обработка начнётся в ближайшее время',
-  IN_PROGRESS:  'Ваши документы находятся в обработке',
-  UNDER_REVIEW: 'Ваша заявка находится на проверке в университете',
-  SUBMITTED:    '🎉 Документы успешно поданы в университет!',
-  COMPLETED:    '✅ Процесс поступления завершён. Поздравляем!',
-  REJECTED:     'К сожалению, ваша заявка была отклонена. Свяжитесь с нами.',
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
+
+const SUPPORT_BOT = process.env.TELEGRAM_SUPPORT_BOT_TOKEN!
+const API = `https://api.telegram.org/bot${SUPPORT_BOT}`
+
+async function sendTelegram(chat_id: number, text: string) {
+  await fetch(`${API}/sendMessage`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ chat_id, text, parse_mode: 'HTML' }),
+  })
 }
 
-export async function POST(request: NextRequest) {
+const STATUS_MESSAGES: Record<string, { emoji: string; ru: string }> = {
+  PAID: {
+    emoji: '💳',
+    ru: 'Ваша оплата подтверждена! Мы начинаем работу над вашей заявкой.',
+  },
+  IN_PROGRESS: {
+    emoji: '⚙️',
+    ru: 'Ваши документы приняты в работу. Мы переводим и проверяем их.',
+  },
+  UNDER_REVIEW: {
+    emoji: '🔍',
+    ru: 'Ваши документы проходят финальную проверку перед отправкой в университет.',
+  },
+  SUBMITTED: {
+    emoji: '📬',
+    ru: 'Ваша заявка отправлена в университет! Ожидайте ответ в течение 2–4 недель.',
+  },
+  COMPLETED: {
+    emoji: '🎉',
+    ru: 'Поздравляем! Ваша заявка успешно завершена. Добро пожаловать в университет!',
+  },
+  REJECTED: {
+    emoji: '❌',
+    ru: 'К сожалению, по вашей заявке пришёл отказ. Свяжитесь с нашим менеджером для обсуждения дальнейших шагов.',
+  },
+}
+
+export async function POST(req: NextRequest) {
   try {
-    const supabase = createRouteHandlerClient({ cookies })
-    const { data: { session } } = await supabase.auth.getSession()
+    const { applicationId, newStatus } = await req.json()
 
-    // Admin check
-    const { data: adminUser } = await supabaseAdmin
-      .from('users')
-      .select('is_admin')
-      .eq('id', session?.user.id ?? '')
-      .single()
-
-    if (!adminUser?.is_admin) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-    }
-
-    const { applicationId, newStatus } = await request.json()
-
-    // Get application + user
-    const { data: app } = await supabaseAdmin
+    const { data: app } = await supabase
       .from('applications')
-      .select('*, users(email, telegram, full_name)')
+      .select('id, full_name, telegram_chat_id, service_package')
       .eq('id', applicationId)
       .single()
 
-    if (!app) return NextResponse.json({ error: 'Not found' }, { status: 404 })
-
-    const user    = (app as any).users
-    const msg     = STATUS_MSG_RU[newStatus as ApplicationStatus]
-    const label   = STATUS_LABELS[newStatus as ApplicationStatus]?.ru ?? newStatus
-
-    // Email
-    if (user?.email) {
-      await sendEmail({
-        to:      user.email,
-        subject: `Обновление статуса заявки — ${label}`,
-        html: `
-          <div style="font-family:Inter,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px;">
-            <div style="background:#fff;border-radius:16px;padding:32px;border:1px solid #E2E8F0;">
-              <h1 style="color:#0F172A;font-size:20px;">Статус изменён: <span style="color:#6FAF9B;">${label}</span></h1>
-              <p style="color:#64748B;">${msg}</p>
-              <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard"
-                 style="display:inline-block;background:#6FAF9B;color:#fff;padding:12px 24px;border-radius:10px;text-decoration:none;font-weight:600;margin-top:16px;">
-                Открыть кабинет →
-              </a>
-            </div>
-          </div>
-        `,
-      }).catch(console.error)
+    if (!app?.telegram_chat_id) {
+      return NextResponse.json({ ok: false, reason: 'no telegram_chat_id' })
     }
 
-    // Telegram
-    if (user?.telegram) {
-      await sendTelegram(
-        `📋 *Статус заявки обновлён*\n\nНовый статус: *${label}*\n${msg}\n\n[Открыть кабинет](${process.env.NEXT_PUBLIC_APP_URL}/dashboard)`,
-        user.telegram
-      ).catch(console.error)
-    }
+    const msg = STATUS_MESSAGES[newStatus]
+    if (!msg) return NextResponse.json({ ok: false, reason: 'unknown status' })
+
+    await sendTelegram(
+      app.telegram_chat_id,
+      `${msg.emoji} <b>Статус заявки обновлён</b>\n\n` +
+      `👤 ${app.full_name}\n\n` +
+      `${msg.ru}\n\n` +
+      `Если есть вопросы — напишите нам здесь.`
+    )
 
     return NextResponse.json({ ok: true })
   } catch (err: any) {
+    console.error('Status notification error:', err)
     return NextResponse.json({ error: err.message }, { status: 500 })
   }
 }
