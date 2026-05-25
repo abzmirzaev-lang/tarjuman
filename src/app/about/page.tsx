@@ -38,7 +38,7 @@ export default function AboutPage() {
           <div className="container-narrow">
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { icon: Users,  n: '0',    l: lang === 'ru' ? 'Студентов подали документы' : 'Students submitted' },
+                { icon: Users,  n: '28',   l: lang === 'ru' ? 'Студентов подали документы' : 'Students submitted' },
                 { icon: Clock,  n: '6ч',   l: lang === 'ru' ? 'Минимальное время подачи' : 'Min. submission time' },
                 { icon: Shield, n: '100%', l: lang === 'ru' ? 'Правильно с первого раза' : 'Correct first time' },
               ].map((item, i) => (

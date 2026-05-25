@@ -19,7 +19,7 @@ export const en: Translation = {
     subtitle: 'Professional assistance with applications, document translation, and visa support. We\'ve helped hundreds of CIS students achieve their dreams.',
     cta:      'Start Application',
     ctaSecondary: 'Learn More',
-    stat1:    '0',
+    stat1:    '28',
     stat1l:   'Submitted Applications',
     stat2:    '6h',
     stat2l:   'Min. Submission Time',
