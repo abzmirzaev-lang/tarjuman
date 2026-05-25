@@ -213,6 +213,9 @@ function ApplyContent() {
     setCustomFaculty('')
   }
 
+  // Success modal state
+  const [successModal, setSuccessModal] = useState(false)
+
   // Step handlers
   const handleStep1 = () => {
     if (!form.full_name || !form.citizenship || !form.phone || !form.gender || !form.marital_status || !form.arabic_level || !form.english_level) {
@@ -322,6 +325,80 @@ function ApplyContent() {
       else router.push(`/dashboard?app=${app.id}`)
     } catch (err: any) {
       toast.error(err.message || t.common.error)
+      setLoading(false)
+    }
+  }
+
+  // Manual payment submit
+  const handleSubmitManual = async () => {
+    if (!user) return
+    setLoading(true)
+    try {
+      const { data: app, error: appErr } = await supabase
+        .from('applications')
+        .insert({
+          user_id:            user.id,
+          university_id:      null,
+          country:            countryParam,
+          service_package:    pkg,
+          status:             'REGISTERED',
+          full_name:          form.full_name,
+          citizenship:        form.citizenship,
+          date_of_birth:      form.date_of_birth || null,
+          phone:              form.phone,
+          telegram:           form.telegram || null,
+          education_level:    form.education_level || null,
+          gender:             form.gender || null,
+          marital_status:     form.marital_status || null,
+          arabic_level:       form.arabic_level || null,
+          english_level:      form.english_level || null,
+          guardian_name:      form.guardian_name || null,
+          guardian_phone:     form.guardian_phone || null,
+          guardian_email:     form.guardian_email || null,
+          selected_faculties: selectedFaculties,
+          notes:              comment || null,
+        })
+        .select()
+        .single()
+
+      if (appErr) throw appErr
+
+      // Upload documents
+      const uploadPromises = Object.entries(docs)
+        .filter(([, d]) => d != null)
+        .map(async ([type, doc]) => {
+          const docData = doc!
+          const ext  = docData.file.name.split('.').pop()
+          const path = `${user.id}/${app.id}/${type}_${Date.now()}.${ext}`
+          await supabase.storage.from('documents').upload(path, docData.file, { upsert: true })
+          await supabase.from('documents').insert({
+            application_id: app.id,
+            user_id:        user.id,
+            type:           type as DocumentType,
+            file_name:      docData.file.name,
+            file_path:      path,
+            file_size:      docData.file.size,
+            mime_type:      docData.file.type,
+          })
+        })
+      await Promise.all(uploadPromises)
+
+      // Notify admin via Telegram
+      const { data: { session: currentSession } } = await supabase.auth.getSession()
+      await fetch('/api/payments/create-checkout', {
+        method:  'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${currentSession?.access_token ?? ''}`,
+        },
+        body: JSON.stringify({ applicationId: app.id, package: pkg }),
+      })
+
+      setAppId(app.id)
+      setSuccessModal(true)
+    } catch (err: any) {
+      toast.error(err.message || t.common.error)
+    } finally {
       setLoading(false)
     }
   }
@@ -857,17 +934,88 @@ function ApplyContent() {
                 </div>
               </div>
 
-              <div className="flex justify-between">
+              <div className="flex justify-start mb-4">
                 <Button variant="secondary" onClick={() => setStep(4)} icon={<ChevronLeft className="w-4 h-4" />}>{t.apply.back}</Button>
-                <Button size="lg" loading={loading} onClick={handleSubmit} iconRight={<ChevronRight className="w-5 h-5" />}>
-                  {t.apply.submit} — ${PACKAGES[pkg].priceUSD}
-                </Button>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-3">
+                {/* Кнопка 1 — Оплатить сейчас */}
+                <button
+                  disabled
+                  className="relative flex flex-col items-center gap-2 p-5 rounded-2xl border-2 border-dashed border-brand-200 bg-brand-50/50 opacity-60 cursor-not-allowed"
+                >
+                  <div className="w-10 h-10 bg-brand-100 rounded-xl flex items-center justify-center">
+                    <Zap className="w-5 h-5 text-brand-500" />
+                  </div>
+                  <div className="text-center">
+                    <p className="font-semibold text-ink text-sm">
+                      {lang === 'ru' ? 'Оплатить сейчас' : lang === 'uz' ? 'Hozir to\'lash' : 'Pay Now'}
+                    </p>
+                    <p className="text-xs text-muted mt-0.5">
+                      {lang === 'ru' ? 'Карта / USDT' : 'Card / USDT'}
+                    </p>
+                  </div>
+                  <span className="absolute top-2 right-2 text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">
+                    {lang === 'ru' ? 'Скоро' : 'Soon'}
+                  </span>
+                </button>
+
+                {/* Кнопка 2 — Оплата через перевод */}
+                <button
+                  onClick={() => handleSubmitManual()}
+                  disabled={loading}
+                  className="flex flex-col items-center gap-2 p-5 rounded-2xl border-2 border-emerald-200 bg-emerald-50 hover:bg-emerald-100 transition-all cursor-pointer"
+                >
+                  <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
+                    <Send className="w-5 h-5 text-emerald-600" />
+                  </div>
+                  <div className="text-center">
+                    <p className="font-semibold text-ink text-sm">
+                      {lang === 'ru' ? 'Оплата через перевод' : lang === 'uz' ? 'O\'tkazma orqali to\'lash' : 'Pay via Transfer'}
+                    </p>
+                    <p className="text-xs text-muted mt-0.5">
+                      {lang === 'ru' ? 'Менеджер свяжется с вами' : 'Manager will contact you'}
+                    </p>
+                  </div>
+                  {loading && <div className="w-4 h-4 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin" />}
+                </button>
               </div>
             </motion.div>
           )}
 
         </AnimatePresence>
       </div>
+
+      {/* ── Success Modal ── */}
+      {successModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8 text-center"
+          >
+            <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <CheckCircle2 className="w-8 h-8 text-emerald-500" />
+            </div>
+            <h3 className="text-xl font-bold text-ink mb-2">
+              {lang === 'ru' ? 'Заявка принята!' : lang === 'uz' ? 'Ariza qabul qilindi!' : 'Application Accepted!'}
+            </h3>
+            <p className="text-muted text-sm leading-relaxed mb-6">
+              {lang === 'ru'
+                ? 'Наш менеджер скоро свяжется с вами для получения оплаты. Вы также можете оплатить самостоятельно в личном кабинете.'
+                : lang === 'uz'
+                ? 'Menejerimiz tez orada to\'lov uchun siz bilan bog\'lanadi. Shuningdek, shaxsiy kabinetda o\'zingiz to\'lashingiz mumkin.'
+                : 'Our manager will contact you soon for payment. You can also pay yourself in your dashboard.'}
+            </p>
+            <button
+              onClick={() => router.push(`/dashboard?app=${appId}`)}
+              className="w-full py-3 rounded-xl bg-brand-400 text-white font-semibold hover:bg-brand-500 transition-colors"
+            >
+              {lang === 'ru' ? 'Перейти в личный кабинет' : lang === 'uz' ? 'Shaxsiy kabinetga o\'tish' : 'Go to Dashboard'}
+            </button>
+          </motion.div>
+        </div>
+      )}
 
       {/* ── Comment Modal ── */}
       {commentModal && (

@@ -316,6 +316,32 @@ export default function DashboardPage() {
                       </div>
                     </div>
 
+                    {/* Pay now banner — shown when REGISTERED */}
+                    {app.status === 'REGISTERED' && (
+                      <div className="card p-5 border-2 border-emerald-200 bg-emerald-50">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center shrink-0">
+                            <CreditCard className="w-5 h-5 text-emerald-600" />
+                          </div>
+                          <div>
+                            <p className="font-semibold text-ink text-sm">
+                              {lang === 'ru' ? 'Ожидает оплаты' : lang === 'uz' ? 'To\'lov kutilmoqda' : 'Awaiting Payment'}
+                            </p>
+                            <p className="text-xs text-muted">
+                              {lang === 'ru' ? 'Менеджер скоро свяжется с вами или оплатите сейчас' : 'Manager will contact you or pay now'}
+                            </p>
+                          </div>
+                          <div className="ml-auto text-xl font-bold text-ink">${PACKAGES[app.service_package].priceUSD}</div>
+                        </div>
+                        <button
+                          disabled
+                          className="w-full py-2.5 rounded-xl bg-emerald-400 text-white text-sm font-semibold opacity-50 cursor-not-allowed"
+                        >
+                          {lang === 'ru' ? '💳 Оплатить сейчас (скоро)' : '💳 Pay Now (coming soon)'}
+                        </button>
+                      </div>
+                    )}
+
                     {/* Details card */}
                     <div className="card p-6">
                       <h3 className="text-sm font-semibold text-ink mb-4">
