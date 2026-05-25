@@ -249,6 +249,86 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── TESTIMONIALS ── */}
+      <section className="section bg-surface">
+        <div className="container-narrow">
+          <div className="text-center mb-12">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-50 border border-brand-200 rounded-full text-brand-700 text-sm font-medium mb-4">
+              {lang === 'ru' ? 'Отзывы студентов' : lang === 'uz' ? 'Talabalar fikrlari' : 'Student Reviews'}
+            </span>
+            <h2 className="text-3xl font-bold text-ink mb-3">
+              {lang === 'ru' ? 'Что говорят наши студенты' : lang === 'uz' ? 'Talabalarimiz nima deydi' : 'What Our Students Say'}
+            </h2>
+            <p className="text-muted">
+              {lang === 'ru' ? 'Реальные истории поступления в арабские университеты' : lang === 'uz' ? 'Arab universitetlariga qabul bo\'lishning haqiqiy hikoyalari' : 'Real stories of admission to Arab universities'}
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-3 gap-6">
+            {[
+              {
+                name: 'Алишер Н.',
+                country: '🇺🇿 Ташкент',
+                university: lang === 'ru' ? 'Университет Имама Мухаммада, Эр-Рияд' : 'Imam Muhammad University, Riyadh',
+                text: lang === 'ru'
+                  ? 'Думал, что поступить в саудовский университет невозможно. TARJUMAN сделал всё — перевёл документы, подал заявку. Через 2 месяца я уже был в Эр-Рияде!'
+                  : 'I thought it was impossible to get into a Saudi university. TARJUMAN did everything — translated documents, submitted application. 2 months later I was in Riyadh!',
+                stars: 5,
+              },
+              {
+                name: 'Зарина М.',
+                country: '🇰🇿 Алматы',
+                university: lang === 'ru' ? 'Университет Короля Абдулазиза, Джидда' : 'King Abdulaziz University, Jeddah',
+                text: lang === 'ru'
+                  ? 'Очень профессиональная команда. Помогли с визой, общежитием и всеми документами. Отвечали на вопросы даже ночью. Рекомендую всем!'
+                  : 'Very professional team. They helped with visa, dormitory and all documents. They answered questions even at night. I recommend to everyone!',
+                stars: 5,
+              },
+              {
+                name: 'Муслим Р.',
+                country: '🇹🇯 Душанбе',
+                university: lang === 'ru' ? 'Исламский Университет, Медина' : 'Islamic University, Medina',
+                text: lang === 'ru'
+                  ? 'Мечтал учиться в Медине с детства. Благодаря TARJUMAN моя мечта стала реальностью. Процесс был простым и понятным на каждом шаге.'
+                  : 'I dreamed of studying in Medina since childhood. Thanks to TARJUMAN my dream became reality. The process was simple and clear at every step.',
+                stars: 5,
+              },
+            ].map((r, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="card p-6 flex flex-col gap-4"
+              >
+                {/* Stars */}
+                <div className="flex gap-1">
+                  {Array.from({ length: r.stars }).map((_, si) => (
+                    <Star key={si} className="w-4 h-4 text-amber-400 fill-amber-400" />
+                  ))}
+                </div>
+
+                {/* Text */}
+                <p className="text-sm text-muted leading-relaxed flex-1">«{r.text}»</p>
+
+                {/* Author */}
+                <div className="flex items-center gap-3 pt-3 border-t border-border">
+                  <div className="w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 font-bold text-sm shrink-0">
+                    {r.name[0]}
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-ink">{r.name}</p>
+                    <p className="text-xs text-muted">{r.country}</p>
+                    <p className="text-xs text-brand-500 mt-0.5">{r.university}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── CTA BANNER ── */}
       <section className="section bg-ink">
         <div className="container-narrow text-center">
