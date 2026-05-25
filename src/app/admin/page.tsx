@@ -180,8 +180,8 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-surface flex">
-      {/* Admin Sidebar */}
-      <aside className="w-60 bg-ink text-white min-h-screen fixed left-0 top-0 flex flex-col">
+      {/* Admin Sidebar — только desktop */}
+      <aside className="hidden md:flex w-60 bg-ink text-white min-h-screen fixed left-0 top-0 flex-col">
         <div className="h-14 flex items-center px-5 border-b border-white/10">
           <span className="font-bold text-white">TARJUMAN Admin</span>
         </div>
@@ -215,8 +215,16 @@ export default function AdminPage() {
         </div>
       </aside>
 
+      {/* Mobile header */}
+      <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-ink text-white h-14 flex items-center justify-between px-4">
+        <span className="font-bold text-sm">TARJUMAN Admin</span>
+        <button onClick={() => supabase.auth.signOut().then(() => router.push('/'))}>
+          <LogOut className="w-5 h-5 text-white/60" />
+        </button>
+      </div>
+
       {/* Main */}
-      <main className="flex-1 ml-60 p-8">
+      <main className="flex-1 md:ml-60 p-4 md:p-8 pt-16 md:pt-8 pb-24 md:pb-8">
         <motion.div key={tab} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
 
           {/* ── OVERVIEW ── */}
@@ -338,7 +346,8 @@ export default function AdminPage() {
                       <span className="text-sm font-bold">{pkgMeta.label}</span>
                       <span className="text-xs font-semibold px-2 py-0.5 bg-white/50 rounded-full">{pkgApps.length} заявок</span>
                     </div>
-                    <div className="overflow-x-auto">
+                    {/* Desktop table */}
+                    <div className="hidden md:block overflow-x-auto">
                       <table className="w-full">
                         <thead className="bg-surface border-b border-border">
                           <tr>
@@ -362,9 +371,7 @@ export default function AdminPage() {
                                 </div>
                               </td>
                               <td className="px-4 py-3 text-sm text-muted">{app.country === 'SA' ? '🇸🇦' : '🇦🇪'}</td>
-                              <td className="px-4 py-3">
-                                <Badge status={app.status} label={STATUS_RU[app.status]} />
-                              </td>
+                              <td className="px-4 py-3"><Badge status={app.status} label={STATUS_RU[app.status]} /></td>
                               <td className="px-4 py-3 text-xs text-muted">{formatDate(app.created_at)}</td>
                               <td className="px-4 py-3">
                                 <div className="flex gap-1">
@@ -372,10 +379,7 @@ export default function AdminPage() {
                                     <Eye className="w-4 h-4" />
                                   </button>
                                   {STATUS_NEXT[app.status] && (
-                                    <button
-                                      onClick={() => changeStatus(app.id, STATUS_NEXT[app.status]!)}
-                                      className="btn btn-primary btn-sm px-2.5 py-1 text-xs"
-                                    >
+                                    <button onClick={() => changeStatus(app.id, STATUS_NEXT[app.status]!)} className="btn btn-primary btn-sm px-2.5 py-1 text-xs">
                                       → {STATUS_RU[STATUS_NEXT[app.status]!]}
                                     </button>
                                   )}
@@ -385,6 +389,34 @@ export default function AdminPage() {
                           ))}
                         </tbody>
                       </table>
+                    </div>
+
+                    {/* Mobile cards */}
+                    <div className="md:hidden divide-y divide-border">
+                      {pkgApps.map(app => (
+                        <div key={app.id} className="p-4 flex items-center gap-3">
+                          <div className="w-10 h-10 bg-brand-100 rounded-full flex items-center justify-center text-xs font-bold text-brand-600 shrink-0">
+                            {getInitials(app.full_name)}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-semibold text-ink truncate">{app.full_name}</p>
+                            <p className="text-xs text-muted">{app.country === 'SA' ? '🇸🇦' : '🇦🇪'} · {formatDate(app.created_at)}</p>
+                            <div className="mt-1">
+                              <Badge status={app.status} label={STATUS_RU[app.status]} />
+                            </div>
+                          </div>
+                          <div className="flex flex-col gap-1.5 shrink-0">
+                            <button onClick={() => openDetail(app)} className="p-2 rounded-xl bg-surface hover:bg-border transition-colors">
+                              <Eye className="w-4 h-4 text-muted" />
+                            </button>
+                            {STATUS_NEXT[app.status] && (
+                              <button onClick={() => changeStatus(app.id, STATUS_NEXT[app.status]!)} className="px-2 py-1 rounded-lg bg-brand-400 text-white text-[10px] font-bold">
+                                →
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 )
@@ -401,7 +433,8 @@ export default function AdminPage() {
             <div className="space-y-5">
               <h1 className="text-2xl font-bold text-ink">Пользователи ({users.length})</h1>
               <div className="card overflow-hidden">
-                <div className="overflow-x-auto">
+                {/* Desktop table */}
+                <div className="hidden md:block overflow-x-auto">
                   <table className="w-full">
                     <thead className="bg-surface border-b border-border">
                       <tr>
@@ -438,6 +471,26 @@ export default function AdminPage() {
                     </tbody>
                   </table>
                 </div>
+                {/* Mobile cards */}
+                <div className="md:hidden divide-y divide-border">
+                  {users.map(user => {
+                    const userApps = apps.filter(a => a.user_id === user.id)
+                    return (
+                      <div key={user.id} className="p-4 flex items-center gap-3">
+                        <div className="w-10 h-10 bg-brand-100 rounded-full flex items-center justify-center text-xs font-bold text-brand-600 shrink-0">
+                          {getInitials(user.full_name)}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-ink truncate">{user.full_name ?? 'N/A'}</p>
+                          <p className="text-xs text-muted truncate">{user.email}</p>
+                          <p className="text-xs text-muted mt-0.5">{user.citizenship ?? '—'} · {formatDate(user.created_at)}</p>
+                          {user.telegram && <p className="text-xs text-muted">@{user.telegram}</p>}
+                        </div>
+                        <span className="badge badge-blue text-xs shrink-0">{userApps.length} заявок</span>
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
             </div>
           )}
@@ -447,37 +500,84 @@ export default function AdminPage() {
             <div className="space-y-5">
               <h1 className="text-2xl font-bold text-ink">Платежи</h1>
               <div className="card overflow-hidden">
-                <table className="w-full">
-                  <thead className="bg-surface border-b border-border">
-                    <tr>
-                      {['ID', 'Сумма', 'Метод', 'Статус', 'Пакет', 'Дата'].map(h => (
-                        <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-muted">{h}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-border">
-                    {payments.map(p => (
-                      <tr key={p.id} className="hover:bg-surface transition-colors">
-                        <td className="px-4 py-3 text-xs text-muted font-mono">{p.id.slice(0, 8)}…</td>
-                        <td className="px-4 py-3 text-sm font-semibold text-ink">{formatCurrency(p.amount)}</td>
-                        <td className="px-4 py-3 text-xs text-muted">{p.method}</td>
-                        <td className="px-4 py-3">
-                          <Badge
-                            label={p.status}
-                            color={p.status === 'PAID' ? 'green' : p.status === 'FAILED' ? 'red' : 'yellow'}
-                          />
-                        </td>
-                        <td className="px-4 py-3 text-xs text-muted">{PACKAGES[p.package].name_ru}</td>
-                        <td className="px-4 py-3 text-xs text-muted">{formatDate(p.created_at)}</td>
+                {/* Desktop table */}
+                <div className="hidden md:block overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-surface border-b border-border">
+                      <tr>
+                        {['ID', 'Сумма', 'Метод', 'Статус', 'Пакет', 'Дата'].map(h => (
+                          <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-muted">{h}</th>
+                        ))}
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="divide-y divide-border">
+                      {payments.map(p => (
+                        <tr key={p.id} className="hover:bg-surface transition-colors">
+                          <td className="px-4 py-3 text-xs text-muted font-mono">{p.id.slice(0, 8)}…</td>
+                          <td className="px-4 py-3 text-sm font-semibold text-ink">{formatCurrency(p.amount)}</td>
+                          <td className="px-4 py-3 text-xs text-muted">{p.method}</td>
+                          <td className="px-4 py-3">
+                            <Badge
+                              label={p.status}
+                              color={p.status === 'PAID' ? 'green' : p.status === 'FAILED' ? 'red' : 'yellow'}
+                            />
+                          </td>
+                          <td className="px-4 py-3 text-xs text-muted">{PACKAGES[p.package].name_ru}</td>
+                          <td className="px-4 py-3 text-xs text-muted">{formatDate(p.created_at)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                {/* Mobile cards */}
+                <div className="md:hidden divide-y divide-border">
+                  {payments.map(p => (
+                    <div key={p.id} className="p-4 flex items-center gap-3">
+                      <div className={cn(
+                        'w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-sm font-bold',
+                        p.status === 'PAID' ? 'bg-brand-100 text-brand-600' :
+                        p.status === 'FAILED' ? 'bg-red-50 text-red-500' :
+                        'bg-yellow-50 text-yellow-600'
+                      )}>
+                        $
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-bold text-ink">{formatCurrency(p.amount)}</p>
+                        <p className="text-xs text-muted">{PACKAGES[p.package].name_ru} · {p.method}</p>
+                        <p className="text-xs text-muted">{formatDate(p.created_at)}</p>
+                      </div>
+                      <Badge
+                        label={p.status}
+                        color={p.status === 'PAID' ? 'green' : p.status === 'FAILED' ? 'red' : 'yellow'}
+                      />
+                    </div>
+                  ))}
+                  {payments.length === 0 && (
+                    <div className="p-8 text-center text-muted text-sm">Нет платежей</div>
+                  )}
+                </div>
               </div>
             </div>
           )}
         </motion.div>
       </main>
+
+      {/* Mobile Bottom Navigation */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-border flex items-stretch h-16">
+        {NAV.map(n => (
+          <button
+            key={n.key}
+            onClick={() => setTab(n.key as AdminTab)}
+            className={cn(
+              'flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-medium transition-all',
+              tab === n.key ? 'text-brand-500' : 'text-muted'
+            )}
+          >
+            <n.icon className={cn('w-5 h-5', tab === n.key ? 'text-brand-500' : 'text-muted')} />
+            <span className="truncate w-full text-center px-0.5">{n.label}</span>
+          </button>
+        ))}
+      </nav>
 
       {/* ── Application Detail Modal ── */}
       <Modal open={detailOpen} onClose={() => setDetailOpen(false)} title={selected?.full_name} size="xl">
@@ -516,116 +616,4 @@ export default function AdminPage() {
                   ['Гражданство', selected.citizenship],
                   ['Телефон', selected.phone],
                   ['Telegram', selected.telegram],
-                  ['Пол', (selected as any).gender === 'male' ? 'Мужчина' : (selected as any).gender === 'female' ? 'Женщина' : null],
-                  ['Семейное положение', (selected as any).marital_status === 'single' ? 'Не в браке' : (selected as any).marital_status === 'married' ? 'В браке' : (selected as any).marital_status === 'divorced' ? 'Разведён(а)' : (selected as any).marital_status === 'widowed' ? 'Вдовец/Вдова' : null],
-                  ['Арабский язык', (selected as any).arabic_level],
-                  ['Английский язык', (selected as any).english_level],
-                  ['Образование', selected.education_level],
-                  ['Контакт близкого', (selected as any).guardian_name],
-                  ['Тел. близкого', (selected as any).guardian_phone],
-                ].map(([label, val]) => val ? (
-                  <div key={label} className="flex justify-between gap-2">
-                    <span className="text-muted shrink-0">{label}</span>
-                    <span className="text-ink font-medium text-right">{val}</span>
-                  </div>
-                ) : null)}
-              </div>
-
-              {/* Selected faculties */}
-              {(selected as any).selected_faculties?.length > 0 && (
-                <div>
-                  <p className="text-xs text-muted font-semibold uppercase tracking-wide mb-2">
-                    Университеты ({(selected as any).selected_faculties.length})
-                  </p>
-                  <div className="space-y-1">
-                    {(selected as any).selected_faculties.map((f: any, i: number) => (
-                      <div key={i} className="text-xs bg-brand-50 border border-brand-100 rounded-lg px-2 py-1.5">
-                        <p className="font-medium text-ink">{f.university_name}</p>
-                        <p className="text-muted">{f.faculty}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Note */}
-              <div>
-                <p className="text-xs text-muted font-semibold uppercase tracking-wide mb-2">Заметки</p>
-                <textarea
-                  className="input text-xs h-20 resize-none"
-                  value={noteText}
-                  onChange={e => setNoteText(e.target.value)}
-                  placeholder="Внутренние заметки..."
-                />
-                <button onClick={saveNote} className="btn btn-secondary btn-sm mt-1 w-full text-xs">Сохранить</button>
-              </div>
-
-              {/* Documents */}
-              <div>
-                <p className="text-xs text-muted font-semibold uppercase tracking-wide mb-2">
-                  Документы ({appDocs.length})
-                </p>
-                <div className="space-y-1.5">
-                  {appDocs.map(doc => (
-                    <button
-                      key={doc.id}
-                      onClick={() => downloadDoc(doc)}
-                      className="w-full flex items-center gap-2 p-2 rounded-lg hover:bg-surface transition-colors text-left"
-                    >
-                      <FileText className="w-3.5 h-3.5 text-brand-400 shrink-0" />
-                      <span className="text-xs text-ink flex-1 truncate">{DOCUMENT_LABELS[doc.type].ru}</span>
-                      <Download className="w-3 h-3 text-muted" />
-                    </button>
-                  ))}
-                  {appDocs.length === 0 && <p className="text-xs text-muted">Нет документов</p>}
-                </div>
-              </div>
-            </div>
-
-            {/* Right: chat */}
-            <div className="flex-1 flex flex-col">
-              <div className="px-5 py-3 border-b border-border">
-                <p className="text-sm font-semibold text-ink">Сообщения</p>
-              </div>
-              <div className="flex-1 overflow-y-auto p-4 space-y-3 scrollbar-thin">
-                {appMsgs.map(msg => (
-                  <div key={msg.id} className={cn('flex', msg.sender === 'ADMIN' ? 'justify-end' : 'justify-start')}>
-                    <div className={cn(
-                      'max-w-[75%] rounded-2xl px-4 py-2.5 text-sm',
-                      msg.sender === 'ADMIN'
-                        ? 'bg-brand-400 text-white rounded-br-sm'
-                        : 'bg-surface border border-border text-ink rounded-bl-sm'
-                    )}>
-                      <p className={cn('text-[10px] font-semibold mb-0.5', msg.sender === 'ADMIN' ? 'text-white/70' : 'text-brand-500')}>
-                        {msg.sender === 'ADMIN' ? 'Admin' : selected.full_name}
-                      </p>
-                      <p>{msg.content}</p>
-                      <p className={cn('text-[10px] mt-1', msg.sender === 'ADMIN' ? 'text-white/60' : 'text-muted')}>
-                        {formatDate(msg.created_at)}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-                {appMsgs.length === 0 && (
-                  <div className="text-center text-muted text-sm py-6">Нет сообщений</div>
-                )}
-              </div>
-              <div className="p-3 border-t border-border flex gap-2">
-                <input
-                  className="input flex-1 text-sm"
-                  placeholder="Написать пользователю..."
-                  value={msgText}
-                  onChange={e => setMsgText(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && sendAdminMessage()}
-                />
-                <Button size="sm" onClick={sendAdminMessage} loading={sending}>
-                  <Send className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
-      </Modal>
-    </div>
-  )
-}
+                  ['Пол', (selected as any).gender === 'male' ? 'Мужчина' : (selected as any).gender === 'f
