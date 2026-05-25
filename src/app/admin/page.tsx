@@ -511,19 +511,42 @@ export default function AdminPage() {
               <div className="text-xs space-y-2">
                 <p className="text-muted font-semibold uppercase tracking-wide mb-2">Данные</p>
                 {[
+                  ['Страна', selected.country === 'SA' ? '🇸🇦 Саудовская Аравия' : '🇦🇪 ОАЭ'],
+                  ['Пакет', PACKAGES[selected.service_package].name_ru],
                   ['Гражданство', selected.citizenship],
                   ['Телефон', selected.phone],
                   ['Telegram', selected.telegram],
+                  ['Пол', (selected as any).gender === 'male' ? 'Мужчина' : (selected as any).gender === 'female' ? 'Женщина' : null],
+                  ['Семейное положение', (selected as any).marital_status === 'single' ? 'Не в браке' : (selected as any).marital_status === 'married' ? 'В браке' : (selected as any).marital_status === 'divorced' ? 'Разведён(а)' : (selected as any).marital_status === 'widowed' ? 'Вдовец/Вдова' : null],
+                  ['Арабский язык', (selected as any).arabic_level],
+                  ['Английский язык', (selected as any).english_level],
                   ['Образование', selected.education_level],
-                  ['Страна', selected.country === 'SA' ? 'Саудовская Аравия' : 'ОАЭ'],
-                  ['Пакет', PACKAGES[selected.service_package].name_ru],
+                  ['Контакт близкого', (selected as any).guardian_name],
+                  ['Тел. близкого', (selected as any).guardian_phone],
                 ].map(([label, val]) => val ? (
                   <div key={label} className="flex justify-between gap-2">
-                    <span className="text-muted">{label}</span>
+                    <span className="text-muted shrink-0">{label}</span>
                     <span className="text-ink font-medium text-right">{val}</span>
                   </div>
                 ) : null)}
               </div>
+
+              {/* Selected faculties */}
+              {(selected as any).selected_faculties?.length > 0 && (
+                <div>
+                  <p className="text-xs text-muted font-semibold uppercase tracking-wide mb-2">
+                    Университеты ({(selected as any).selected_faculties.length})
+                  </p>
+                  <div className="space-y-1">
+                    {(selected as any).selected_faculties.map((f: any, i: number) => (
+                      <div key={i} className="text-xs bg-brand-50 border border-brand-100 rounded-lg px-2 py-1.5">
+                        <p className="font-medium text-ink">{f.university_name}</p>
+                        <p className="text-muted">{f.faculty}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Note */}
               <div>
