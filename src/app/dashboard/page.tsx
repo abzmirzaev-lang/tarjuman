@@ -212,37 +212,27 @@ export default function DashboardPage() {
         {/* Main */}
         <main className="flex-1 md:ml-64 min-h-screen">
           {/* Mobile header */}
-          <div className="md:hidden bg-white border-b border-border h-14 flex items-center justify-between px-4">
+          <div className="md:hidden bg-white border-b border-border h-14 flex items-center justify-between px-4 sticky top-0 z-30">
             <Link href="/" className="flex items-center gap-2 font-bold text-ink text-sm">
               <span className="w-7 h-7 bg-brand-400 rounded-lg flex items-center justify-center text-white text-xs font-bold">T</span>
               TARJUMAN
             </Link>
-            <button onClick={() => supabase.auth.signOut().then(() => router.push('/'))}>
-              <LogOut className="w-5 h-5 text-muted" />
-            </button>
-          </div>
-
-          {/* Mobile tabs */}
-          <div className="md:hidden bg-white border-b border-border overflow-x-auto">
-            <div className="flex px-4 gap-1 py-2">
-              {TABS.map(item => (
-                <button
-                  key={item.key}
-                  onClick={() => setTab(item.key)}
-                  className={cn(
-                    'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap relative',
-                    tab === item.key ? 'bg-brand-50 text-brand-600' : 'text-muted'
-                  )}
-                >
-                  <item.icon className="w-3.5 h-3.5" />
-                  {item.label}
-                  {item.badge ? <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-brand-400 rounded-full text-[9px] text-white flex items-center justify-center">{item.badge}</span> : null}
-                </button>
-              ))}
+            <div className="flex items-center gap-2">
+              <div className="flex gap-1 bg-surface rounded-lg p-0.5">
+                {(['ru', 'uz', 'en'] as AppLanguage[]).map(l => (
+                  <button key={l} onClick={() => setLang(l)}
+                    className={cn('px-2 py-0.5 text-xs font-medium rounded-md transition-colors',
+                      lang === l ? 'bg-white text-brand-600 shadow-sm' : 'text-muted')}
+                  >{l.toUpperCase()}</button>
+                ))}
+              </div>
+              <button onClick={() => supabase.auth.signOut().then(() => router.push('/'))}>
+                <LogOut className="w-4 h-4 text-muted" />
+              </button>
             </div>
           </div>
 
-          <div className="p-4 md:p-8">
+          <div className="p-4 md:p-8 pb-24 md:pb-8">
             {/* No application state */}
             {!app && (
               <div className="flex flex-col items-center justify-center py-20 text-center">
@@ -532,6 +522,40 @@ export default function DashboardPage() {
             )}
           </div>
         </main>
+      </div>
+
+      {/* ── Mobile bottom navigation ── */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-border safe-area-pb">
+        <div className="flex items-center justify-around px-2 py-2">
+          {TABS.map(item => (
+            <button
+              key={item.key}
+              onClick={() => { setTab(item.key); if (item.key === 'messages') setUnread(0) }}
+              className="relative flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all"
+            >
+              <div className={cn(
+                'w-10 h-8 flex items-center justify-center rounded-xl transition-all',
+                tab === item.key ? 'bg-brand-50' : ''
+              )}>
+                <item.icon className={cn(
+                  'w-5 h-5 transition-colors',
+                  tab === item.key ? 'text-brand-500' : 'text-muted'
+                )} />
+                {item.badge ? (
+                  <span className="absolute top-1 right-2 w-4 h-4 bg-brand-400 rounded-full text-[9px] text-white flex items-center justify-center font-bold">
+                    {item.badge}
+                  </span>
+                ) : null}
+              </div>
+              <span className={cn(
+                'text-[10px] font-medium transition-colors',
+                tab === item.key ? 'text-brand-500' : 'text-muted'
+              )}>
+                {item.label}
+              </span>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   )
