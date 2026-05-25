@@ -31,9 +31,9 @@ export default function TelegramButton() {
         .tg-float-btn .tg-label {
           display: inline;
         }
-        @media (max-width: 480px) {
+        @media (max-width: 768px) {
           .tg-float-btn {
-            bottom: 16px;
+            bottom: 80px;
             right: 12px;
             padding: 12px;
             border-radius: 50%;
