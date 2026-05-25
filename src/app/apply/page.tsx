@@ -303,9 +303,13 @@ function ApplyContent() {
       await Promise.all(uploadPromises)
 
       // Redirect to payment
+      const { data: { session: currentSession } } = await supabase.auth.getSession()
       const res = await fetch('/api/payments/create-checkout', {
         method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${currentSession?.access_token ?? ''}`,
+        },
         body:    JSON.stringify({ applicationId: app.id, package: pkg }),
       })
       const { url } = await res.json()

@@ -8,8 +8,26 @@ import { notifyAdmin } from '@/lib/telegram'
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createRouteHandlerClient({ cookies })
-    const { data: { session } } = await supabase.auth.getSession()
+    const { createClient } = await import('@supabase/supabase-js')
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
+
+    const authHeader = request.headers.get('Authorization')
+    const token = authHeader?.replace('Bearer ', '')
+
+    let session = null
+    if (token) {
+      const { data } = await supabase.auth.getUser(token)
+      if (data.user) session = { user: data.user }
+    }
+
+    if (!session) {
+      const routeClient = createRouteHandlerClient({ cookies })
+      const { data } = await routeClient.auth.getSession()
+      if (data.session) session = data.session
+    }
 
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
