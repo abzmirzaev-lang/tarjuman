@@ -1084,4 +1084,3 @@ export default function ApplyPage() {
     </Suspense>
   )
 }
-       

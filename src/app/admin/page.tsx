@@ -616,4 +616,116 @@ export default function AdminPage() {
                   ['Гражданство', selected.citizenship],
                   ['Телефон', selected.phone],
                   ['Telegram', selected.telegram],
-                  ['Пол', (selected as any).gender === 'male' ? 'Мужчина' : (selected as any).gender === 'f
+                  ['Пол', (selected as any).gender === 'male' ? 'Мужчина' : (selected as any).gender === 'female' ? 'Женщина' : null],
+                  ['Семейное положение', (selected as any).marital_status === 'single' ? 'Не в браке' : (selected as any).marital_status === 'married' ? 'В браке' : (selected as any).marital_status === 'divorced' ? 'Разведён(а)' : (selected as any).marital_status === 'widowed' ? 'Вдовец/Вдова' : null],
+                  ['Арабский язык', (selected as any).arabic_level],
+                  ['Английский язык', (selected as any).english_level],
+                  ['Образование', selected.education_level],
+                  ['Контакт близкого', (selected as any).guardian_name],
+                  ['Тел. близкого', (selected as any).guardian_phone],
+                ].map(([label, val]) => val ? (
+                  <div key={label} className="flex justify-between gap-2">
+                    <span className="text-muted shrink-0">{label}</span>
+                    <span className="text-ink font-medium text-right">{val}</span>
+                  </div>
+                ) : null)}
+              </div>
+
+              {/* Selected faculties */}
+              {(selected as any).selected_faculties?.length > 0 && (
+                <div>
+                  <p className="text-xs text-muted font-semibold uppercase tracking-wide mb-2">
+                    Университеты ({(selected as any).selected_faculties.length})
+                  </p>
+                  <div className="space-y-1">
+                    {(selected as any).selected_faculties.map((f: any, i: number) => (
+                      <div key={i} className="text-xs bg-brand-50 border border-brand-100 rounded-lg px-2 py-1.5">
+                        <p className="font-medium text-ink">{f.university_name}</p>
+                        <p className="text-muted">{f.faculty}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Note */}
+              <div>
+                <p className="text-xs text-muted font-semibold uppercase tracking-wide mb-2">Заметки</p>
+                <textarea
+                  className="input text-xs h-20 resize-none"
+                  value={noteText}
+                  onChange={e => setNoteText(e.target.value)}
+                  placeholder="Внутренние заметки..."
+                />
+                <button onClick={saveNote} className="btn btn-secondary btn-sm mt-1 w-full text-xs">Сохранить</button>
+              </div>
+
+              {/* Documents */}
+              <div>
+                <p className="text-xs text-muted font-semibold uppercase tracking-wide mb-2">
+                  Документы ({appDocs.length})
+                </p>
+                <div className="space-y-1.5">
+                  {appDocs.map(doc => (
+                    <button
+                      key={doc.id}
+                      onClick={() => downloadDoc(doc)}
+                      className="w-full flex items-center gap-2 p-2 rounded-lg hover:bg-surface transition-colors text-left"
+                    >
+                      <FileText className="w-3.5 h-3.5 text-brand-400 shrink-0" />
+                      <span className="text-xs text-ink flex-1 truncate">{DOCUMENT_LABELS[doc.type].ru}</span>
+                      <Download className="w-3 h-3 text-muted" />
+                    </button>
+                  ))}
+                  {appDocs.length === 0 && <p className="text-xs text-muted">Нет документов</p>}
+                </div>
+              </div>
+            </div>
+
+            {/* Right: chat */}
+            <div className="flex-1 flex flex-col">
+              <div className="px-5 py-3 border-b border-border">
+                <p className="text-sm font-semibold text-ink">Сообщения</p>
+              </div>
+              <div className="flex-1 overflow-y-auto p-4 space-y-3 scrollbar-thin">
+                {appMsgs.map(msg => (
+                  <div key={msg.id} className={cn('flex', msg.sender === 'ADMIN' ? 'justify-end' : 'justify-start')}>
+                    <div className={cn(
+                      'max-w-[75%] rounded-2xl px-4 py-2.5 text-sm',
+                      msg.sender === 'ADMIN'
+                        ? 'bg-brand-400 text-white rounded-br-sm'
+                        : 'bg-surface border border-border text-ink rounded-bl-sm'
+                    )}>
+                      <p className={cn('text-[10px] font-semibold mb-0.5', msg.sender === 'ADMIN' ? 'text-white/70' : 'text-brand-500')}>
+                        {msg.sender === 'ADMIN' ? 'Admin' : selected.full_name}
+                      </p>
+                      <p>{msg.content}</p>
+                      <p className={cn('text-[10px] mt-1', msg.sender === 'ADMIN' ? 'text-white/60' : 'text-muted')}>
+                        {formatDate(msg.created_at)}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+                {appMsgs.length === 0 && (
+                  <div className="text-center text-muted text-sm py-6">Нет сообщений</div>
+                )}
+              </div>
+              <div className="p-3 border-t border-border flex gap-2">
+                <input
+                  className="input flex-1 text-sm"
+                  placeholder="Написать пользователю..."
+                  value={msgText}
+                  onChange={e => setMsgText(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && sendAdminMessage()}
+                />
+                <Button size="sm" onClick={sendAdminMessage} loading={sending}>
+                  <Send className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+      </Modal>
+    </div>
+  )
+}
