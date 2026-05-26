@@ -1,7 +1,7 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   ArrowRight, CheckCircle2, Star, Globe2, FileText,
   Send, Zap, Shield, Clock, Award, ChevronRight
@@ -18,39 +18,103 @@ const fadeUp = {
   visible: { opacity: 1, y: 0 },
 }
 
+const HERO_SLIDES = [
+  {
+    photo: 'https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?w=1800&q=90',
+    label: 'Мечеть Пророка — Медина',
+    city: 'Медина, Саудовская Аравия 🇸🇦',
+  },
+  {
+    photo: 'https://images.unsplash.com/photo-1586724237569-f3d0c1dee8c6?w=1800&q=90',
+    label: 'Эр-Рияд',
+    city: 'Эр-Рияд, Саудовская Аравия 🇸🇦',
+  },
+  {
+    photo: 'https://images.unsplash.com/photo-1580537659466-0a9bfa916a54?w=1800&q=90',
+    label: 'Исламский Университет Медины',
+    city: 'Медина, Саудовская Аравия 🇸🇦',
+  },
+  {
+    photo: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1800&q=90',
+    label: 'Дубай',
+    city: 'Дубай, ОАЭ 🇦🇪',
+  },
+]
+
 export default function HomePage() {
   const [lang, setLang] = useState<AppLanguage>('ru')
+  const [slide, setSlide] = useState(0)
   const t = translations[lang]
+
+  // Auto-advance slides
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSlide(s => (s + 1) % HERO_SLIDES.length)
+    }, 6000)
+    return () => clearInterval(timer)
+  }, [])
 
   return (
     <>
       <Navbar lang={lang} onLangChange={setLang} />
 
       {/* ── HERO ── */}
-      <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-surface pt-16">
-        {/* Gradient blobs */}
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-100 rounded-full blur-[120px] opacity-40 -translate-y-1/4 translate-x-1/4 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-brand-200 rounded-full blur-[100px] opacity-30 translate-y-1/4 -translate-x-1/4 pointer-events-none" />
+      <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden">
 
-        <div className="container-narrow relative z-10 text-center py-20">
-          <motion.div
-            initial="hidden" animate="visible" transition={{ staggerChildren: 0.1 }}
-          >
+        {/* ── Slideshow background ── */}
+        <div className="absolute inset-0 z-0">
+          <AnimatePresence mode="sync">
+            {HERO_SLIDES.map((s, i) => i === slide && (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1.5, ease: 'easeInOut' }}
+                className="absolute inset-0"
+              >
+                {/* Ken Burns zoom effect */}
+                <motion.div
+                  className="absolute inset-0"
+                  initial={{ scale: 1 }}
+                  animate={{ scale: 1.08 }}
+                  transition={{ duration: 7, ease: 'easeInOut' }}
+                >
+                  <img
+                    src={s.photo}
+                    alt={s.label}
+                    className="w-full h-full object-cover"
+                  />
+                </motion.div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+
+          {/* Dark gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/75 z-10" />
+          {/* Bottom fade to white for transition to next section */}
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-surface to-transparent z-10" />
+        </div>
+
+        {/* ── Content ── */}
+        <div className="container-narrow relative z-20 text-center py-28 pt-36">
+          <motion.div initial="hidden" animate="visible" transition={{ staggerChildren: 0.12 }}>
+
             <motion.div variants={fadeUp} className="mb-6">
-              <span className="inline-flex items-center gap-2 px-4 py-2 bg-brand-50 border border-brand-200 rounded-full text-brand-700 text-sm font-medium">
+              <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-white text-sm font-medium">
                 {t.hero.badge}
               </span>
             </motion.div>
 
             <motion.h1
               variants={fadeUp}
-              className="page-title text-ink mb-6 text-balance"
-              style={{ whiteSpace: 'pre-line' }}
+              className="text-4xl sm:text-6xl md:text-7xl font-bold text-white mb-6 leading-tight tracking-tight text-balance"
+              style={{ whiteSpace: 'pre-line', textShadow: '0 2px 20px rgba(0,0,0,0.4)' }}
             >
               {t.hero.title}
             </motion.h1>
 
-            <motion.p variants={fadeUp} className="page-subtitle max-w-2xl mx-auto mb-10 text-balance">
+            <motion.p variants={fadeUp} className="text-lg sm:text-xl text-white/80 max-w-2xl mx-auto mb-10 leading-relaxed text-balance">
               {t.hero.subtitle}
             </motion.p>
 
@@ -61,9 +125,9 @@ export default function HomePage() {
                 </Button>
               </Link>
               <Link href="/universities">
-                <Button variant="secondary" size="xl">
+                <button className="btn btn-xl bg-white/10 backdrop-blur-sm border border-white/30 text-white hover:bg-white/20">
                   {t.hero.ctaSecondary}
-                </Button>
+                </button>
               </Link>
             </motion.div>
 
@@ -75,12 +139,51 @@ export default function HomePage() {
                 [t.hero.stat3, t.hero.stat3l],
               ].map(([val, label], i) => (
                 <div key={i} className="text-center">
-                  <div className="text-2xl font-bold text-ink">{val}</div>
-                  <div className="text-xs text-muted mt-1">{label}</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-white" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.3)' }}>{val}</div>
+                  <div className="text-xs text-white/60 mt-1">{label}</div>
                 </div>
               ))}
             </motion.div>
           </motion.div>
+        </div>
+
+        {/* ── Slide indicators + location ── */}
+        <div className="absolute bottom-10 left-0 right-0 z-20 flex flex-col items-center gap-3">
+          {/* Location label */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={slide}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.4 }}
+              className="flex items-center gap-2 text-white/70 text-xs font-medium bg-black/30 backdrop-blur-sm px-3 py-1.5 rounded-full"
+            >
+              <span className="w-1.5 h-1.5 bg-brand-400 rounded-full animate-pulse" />
+              {HERO_SLIDES[slide].city}
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Dots */}
+          <div className="flex gap-2">
+            {HERO_SLIDES.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setSlide(i)}
+                className="relative h-1 rounded-full transition-all duration-500 overflow-hidden"
+                style={{ width: i === slide ? 32 : 16, background: 'rgba(255,255,255,0.3)' }}
+              >
+                {i === slide && (
+                  <motion.div
+                    className="absolute inset-0 bg-white rounded-full"
+                    initial={{ scaleX: 0, originX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: 6, ease: 'linear' }}
+                  />
+                )}
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
