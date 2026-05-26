@@ -37,7 +37,7 @@ export function Footer({ lang = 'ru' }: { lang?: AppLanguage }) {
 
         {/* Quick links */}
         <div>
-          <h4 className="text-white font-semibold mb-3 text-sm">Навигация</h4>
+          <h4 className="text-white font-semibold mb-3 text-sm">{t.footer.navTitle}</h4>
           <ul className="space-y-2">
             {[
               ['/universities', t.nav.universities],
@@ -57,11 +57,10 @@ export function Footer({ lang = 'ru' }: { lang?: AppLanguage }) {
 
         {/* Contact */}
         <div>
-          <h4 className="text-white font-semibold mb-3 text-sm">Контакты</h4>
+          <h4 className="text-white font-semibold mb-3 text-sm">{t.footer.contactTitle}</h4>
           <ul className="space-y-2 text-sm text-white/60">
-            <li><a href="mailto:info@tarjuman.com" className="hover:text-white transition-colors">info@tarjuman.com</a></li>
-            <li><a href="https://t.me/tarjumanuz" className="hover:text-white transition-colors">@tarjumanuz</a></li>
-            <li><a href="tel:+998901234567" className="hover:text-white transition-colors">+998 90 123 45 67</a></li>
+            <li><a href="mailto:tarjuman777@gmail.com" className="hover:text-white transition-colors">tarjuman777@gmail.com</a></li>
+            <li><a href="https://t.me/TARJUMAN_KSA" className="hover:text-white transition-colors">@TARJUMAN_KSA</a></li>
           </ul>
         </div>
       </div>

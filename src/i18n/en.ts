@@ -101,10 +101,13 @@ export const en: Translation = {
     termsLink:   'terms of service',
   },
   footer: {
-    tagline: 'Your trusted partner in Arab education',
-    copy:    '© 2024 TARJUMAN. All rights reserved.',
-    privacy: 'Privacy Policy',
-    terms:   'Terms of Service',
+    tagline:      'Your trusted partner in Arab education',
+    copy:         '© 2024 TARJUMAN. All rights reserved.',
+    privacy:      'Privacy Policy',
+    terms:        'Terms of Service',
+    navTitle:     'Navigation',
+    contactTitle: 'Contacts',
+    writeTg:      'Write to us',
   },
   common: {
     loading:  'Loading...',

@@ -230,7 +230,7 @@ export default function HomePage() {
         <div className="container-narrow">
           <div className="text-center mb-14">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-50 border border-brand-200 rounded-full text-brand-700 text-xs font-semibold uppercase tracking-widest mb-4">
-              {lang === 'ru' ? 'Что мы делаем' : 'What we do'}
+              {lang === 'ru' ? 'Что мы делаем' : lang === 'uz' ? 'Biz nima qilamiz' : 'What we do'}
             </span>
             <h2 className="text-3xl sm:text-4xl font-bold text-ink mb-3">{t.services.title}</h2>
             <p className="text-muted max-w-md mx-auto">{t.services.subtitle}</p>
@@ -247,6 +247,8 @@ export default function HomePage() {
                 desc: t.services.s1desc,
                 points: lang === 'ru'
                   ? ['Профессиональный перевод', 'Арабский и английский', 'Срок 1–3 дня']
+                  : lang === 'uz'
+                  ? ['Professional tarjima', 'Arab va ingliz tili', 'Muddat 1–3 kun']
                   : ['Professional translation', 'Arabic & English', '1–3 days'],
               },
               {
@@ -258,6 +260,8 @@ export default function HomePage() {
                 desc: t.services.s2desc,
                 points: lang === 'ru'
                   ? ['Все подходящие университеты', 'Отслеживание онлайн', 'Уведомления в Telegram']
+                  : lang === 'uz'
+                  ? ['Barcha mos universitetlar', 'Onlayn kuzatuv', 'Telegram xabarnomalar']
                   : ['All eligible universities', 'Online tracking', 'Telegram notifications'],
               },
               {
@@ -269,6 +273,8 @@ export default function HomePage() {
                 desc: t.services.s3desc,
                 points: lang === 'ru'
                   ? ['Личный менеджер', 'Поддержка 24/7', 'От заявки до визы']
+                  : lang === 'uz'
+                  ? ['Shaxsiy menejer', '24/7 qo\'llab-quvvatlash', 'Arizadan vizagacha']
                   : ['Personal manager', '24/7 support', 'From application to visa'],
               },
               {
@@ -280,6 +286,8 @@ export default function HomePage() {
                 desc: t.services.s4desc,
                 points: lang === 'ru'
                   ? ['Приоритетная обработка', 'Ответ за 1–3 дня', 'VIP сопровождение']
+                  : lang === 'uz'
+                  ? ['Ustuvor qayta ishlash', '1–3 kun ichida javob', 'VIP hamrohlik']
                   : ['Priority processing', 'Response in 1–3 days', 'VIP support'],
               },
             ].map((s, i) => (

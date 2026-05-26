@@ -101,10 +101,13 @@ export const uz: Translation = {
     termsLink:   'foydalanish shartlariga rozilik bildirasiz',
   },
   footer: {
-    tagline: 'Arab ta\'limidagi ishonchli sherikingiz',
-    copy:    '© 2024 TARJUMAN. Barcha huquqlar himoyalangan.',
-    privacy: 'Maxfiylik siyosati',
-    terms:   'Foydalanish shartlari',
+    tagline:      'Arab ta\'limidagi ishonchli sherikingiz',
+    copy:         '© 2024 TARJUMAN. Barcha huquqlar himoyalangan.',
+    privacy:      'Maxfiylik siyosati',
+    terms:        'Foydalanish shartlari',
+    navTitle:     'Navigatsiya',
+    contactTitle: 'Aloqa',
+    writeTg:      'Bizga yozing',
   },
   common: {
     loading:  'Yuklanmoqda...',
