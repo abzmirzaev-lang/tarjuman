@@ -142,9 +142,13 @@ export default function DashboardPage() {
         <aside className="hidden md:flex flex-col w-64 bg-white border-r border-border min-h-screen fixed left-0 top-0">
           {/* Logo */}
           <div className="h-16 flex items-center px-6 border-b border-border">
-            <Link href="/" className="flex items-center gap-2 font-bold text-ink">
-              <span className="w-7 h-7 bg-brand-400 rounded-lg flex items-center justify-center text-white text-xs font-bold">T</span>
-              TARJUMAN
+            <Link href="/" className="flex items-center">
+              <svg viewBox="0 0 156 36" width="140" height="32" aria-label="TARJUMAN">
+                <path d="M 2,36 L 2,22 L 8,10 L 16,4 L 24,10 L 30,22 L 30,36" fill="none" stroke="#1B4332" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round"/>
+                <line x1="9" y1="13" x2="23" y2="13" stroke="#C9922A" strokeWidth="2" strokeLinecap="round"/>
+                <line x1="16" y1="13" x2="16" y2="31" stroke="#C9922A" strokeWidth="2" strokeLinecap="round"/>
+                <text x="40" y="24" fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif" fontSize="15" fontWeight="700" fill="#1B4332" style={{ letterSpacing: '4px' }}>TARJUMAN</text>
+              </svg>
             </Link>
           </div>
 
@@ -213,9 +217,13 @@ export default function DashboardPage() {
         <main className="flex-1 md:ml-64 min-h-screen">
           {/* Mobile header */}
           <div className="md:hidden bg-white border-b border-border h-14 flex items-center justify-between px-4 sticky top-0 z-30">
-            <Link href="/" className="flex items-center gap-2 font-bold text-ink text-sm">
-              <span className="w-7 h-7 bg-brand-400 rounded-lg flex items-center justify-center text-white text-xs font-bold">T</span>
-              TARJUMAN
+            <Link href="/" className="flex items-center">
+              <svg viewBox="0 0 156 36" width="140" height="32" aria-label="TARJUMAN">
+                <path d="M 2,36 L 2,22 L 8,10 L 16,4 L 24,10 L 30,22 L 30,36" fill="none" stroke="#1B4332" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round"/>
+                <line x1="9" y1="13" x2="23" y2="13" stroke="#C9922A" strokeWidth="2" strokeLinecap="round"/>
+                <line x1="16" y1="13" x2="16" y2="31" stroke="#C9922A" strokeWidth="2" strokeLinecap="round"/>
+                <text x="40" y="24" fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif" fontSize="15" fontWeight="700" fill="#1B4332" style={{ letterSpacing: '4px' }}>TARJUMAN</text>
+              </svg>
             </Link>
             <div className="flex items-center gap-2">
               <div className="flex gap-1 bg-surface rounded-lg p-0.5">

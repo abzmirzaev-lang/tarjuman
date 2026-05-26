@@ -38,9 +38,21 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-surface flex flex-col items-center justify-center px-4">
       {/* Logo */}
-      <Link href="/" className="flex items-center gap-2 mb-10">
-        <span className="w-10 h-10 bg-brand-400 rounded-xl flex items-center justify-center text-white font-bold text-lg">T</span>
-        <span className="font-bold text-xl text-ink">TARJUMAN</span>
+      <Link href="/" className="flex items-center mb-10">
+        <svg viewBox="0 0 156 36" width="156" height="36" aria-label="TARJUMAN">
+          <path
+            d="M 2,36 L 2,22 L 8,10 L 16,4 L 24,10 L 30,22 L 30,36"
+            fill="none" stroke="#1B4332" strokeWidth="1.5"
+            strokeLinejoin="round" strokeLinecap="round"
+          />
+          <line x1="9" y1="13" x2="23" y2="13" stroke="#C9922A" strokeWidth="2" strokeLinecap="round"/>
+          <line x1="16" y1="13" x2="16" y2="31" stroke="#C9922A" strokeWidth="2" strokeLinecap="round"/>
+          <text x="40" y="24"
+            fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif"
+            fontSize="15" fontWeight="700"
+            fill="#1B4332" style={{ letterSpacing: '4px' }}
+          >TARJUMAN</text>
+        </svg>
       </Link>
 
       <motion.div
