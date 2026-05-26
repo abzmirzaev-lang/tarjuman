@@ -25,10 +25,10 @@ export default function AboutPage() {
             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
               className="page-subtitle max-w-2xl mx-auto">
               {lang === 'ru'
-                ? 'Мы помогаем студентам из СНГ быстро и правильно подать документы в университеты Саудовской Аравии.'
+                ? 'Мы помогаем студентам со всего мира быстро и правильно подать документы в университеты Саудовской Аравии и ОАЭ.'
                 : lang === 'uz'
-                ? 'Biz MDH talabalariga Saudiya Arabistoni universitetlariga hujjatlarni tez va to\'g\'ri topshirishda yordam beramiz.'
-                : 'We help CIS students submit documents to Saudi universities — fast and correctly.'}
+                ? 'Biz dunyo bo\'ylab talabalariga Saudiya Arabistoni va BAA universitetlariga hujjatlarni tez va to\'g\'ri topshirishda yordam beramiz.'
+                : 'We help students worldwide submit documents to Saudi and UAE universities — fast and correctly.'}
             </motion.p>
           </div>
         </div>

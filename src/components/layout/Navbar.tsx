@@ -49,10 +49,14 @@ export function Navbar({ lang = 'ru', onLangChange }: NavbarProps) {
     { href: '/contact',      label: t.nav.contact      },
   ]
 
+  const isHome = pathname === '/'
+  // On non-home pages always show green logo; on home show white until scrolled/menu open
+  const useDark = !isHome || scrolled || open
+
   return (
     <header className={cn(
       'fixed top-0 inset-x-0 z-40 transition-all duration-300',
-      scrolled ? 'glass border-b border-border shadow-sm' : 'bg-transparent'
+      (scrolled || !isHome) ? 'glass border-b border-border shadow-sm' : 'bg-transparent'
     )}>
       <nav className="container-wide h-16 flex items-center justify-between">
         {/* Logo */}
@@ -61,7 +65,7 @@ export function Navbar({ lang = 'ru', onLangChange }: NavbarProps) {
             <path
               d="M 2,36 L 2,22 L 8,10 L 16,4 L 24,10 L 30,22 L 30,36"
               fill="none"
-              stroke={scrolled || open ? '#1B4332' : '#ffffff'}
+              stroke={useDark ? '#1B4332' : '#ffffff'}
               strokeWidth="1.5"
               strokeLinejoin="round"
               strokeLinecap="round"
@@ -74,7 +78,7 @@ export function Navbar({ lang = 'ru', onLangChange }: NavbarProps) {
               fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif"
               fontSize="15"
               fontWeight="700"
-              fill={scrolled || open ? '#1B4332' : '#ffffff'}
+              fill={useDark ? '#1B4332' : '#ffffff'}
               style={{ letterSpacing: '4px' }}
             >TARJUMAN</text>
           </svg>
@@ -90,7 +94,9 @@ export function Navbar({ lang = 'ru', onLangChange }: NavbarProps) {
                 'px-3 py-2 rounded-lg text-sm font-medium transition-colors',
                 pathname === l.href
                   ? 'text-brand-600 bg-brand-50'
-                  : 'text-muted hover:text-ink hover:bg-ink/5'
+                  : useDark
+                    ? 'text-muted hover:text-ink hover:bg-ink/5'
+                    : 'text-white/80 hover:text-white hover:bg-white/10'
               )}
             >
               {l.label}
