@@ -4,7 +4,8 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ArrowRight, CheckCircle2, Star, Globe2, FileText,
-  Send, Zap, Shield, Clock, Award, ChevronRight
+  Send, Zap, Shield, Clock, Award, ChevronRight,
+  Languages, Plane, HeartHandshake, Gauge, Check
 } from 'lucide-react'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
@@ -225,32 +226,93 @@ export default function HomePage() {
       </section>
 
       {/* ── SERVICES ── */}
-      <section className="section bg-surface">
+      <section className="section bg-white">
         <div className="container-narrow">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-ink mb-3">{t.services.title}</h2>
-            <p className="text-muted">{t.services.subtitle}</p>
+          <div className="text-center mb-14">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-50 border border-brand-200 rounded-full text-brand-700 text-xs font-semibold uppercase tracking-widest mb-4">
+              {lang === 'ru' ? 'Что мы делаем' : 'What we do'}
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold text-ink mb-3">{t.services.title}</h2>
+            <p className="text-muted max-w-md mx-auto">{t.services.subtitle}</p>
           </div>
-          <div className="grid sm:grid-cols-2 gap-6">
+
+          <div className="grid sm:grid-cols-2 gap-5">
             {[
-              { icon: FileText, title: t.services.s1title, desc: t.services.s1desc,  color: 'bg-blue-50 text-blue-600'   },
-              { icon: Send,     title: t.services.s2title, desc: t.services.s2desc,  color: 'bg-brand-50 text-brand-600' },
-              { icon: Shield,   title: t.services.s3title, desc: t.services.s3desc,  color: 'bg-purple-50 text-purple-600' },
-              { icon: Zap,      title: t.services.s4title, desc: t.services.s4desc,  color: 'bg-amber-50 text-amber-600' },
+              {
+                icon: Languages,
+                gradient: 'from-blue-500 to-cyan-400',
+                shadow: 'shadow-blue-200',
+                bg: 'bg-blue-50',
+                title: t.services.s1title,
+                desc: t.services.s1desc,
+                points: lang === 'ru'
+                  ? ['Нотариальное заверение', 'Арабский и английский', 'Срок 2–5 дней']
+                  : ['Notarized translation', 'Arabic & English', '2–5 days'],
+              },
+              {
+                icon: Plane,
+                gradient: 'from-brand-500 to-emerald-400',
+                shadow: 'shadow-brand-200',
+                bg: 'bg-brand-50',
+                title: t.services.s2title,
+                desc: t.services.s2desc,
+                points: lang === 'ru'
+                  ? ['До 5 университетов', 'Отслеживание онлайн', 'Уведомления в Telegram']
+                  : ['Up to 5 universities', 'Online tracking', 'Telegram notifications'],
+              },
+              {
+                icon: HeartHandshake,
+                gradient: 'from-violet-500 to-purple-400',
+                shadow: 'shadow-violet-200',
+                bg: 'bg-violet-50',
+                title: t.services.s3title,
+                desc: t.services.s3desc,
+                points: lang === 'ru'
+                  ? ['Личный менеджер', 'Поддержка 24/7', 'От заявки до визы']
+                  : ['Personal manager', '24/7 support', 'From application to visa'],
+              },
+              {
+                icon: Gauge,
+                gradient: 'from-amber-500 to-orange-400',
+                shadow: 'shadow-amber-200',
+                bg: 'bg-amber-50',
+                title: t.services.s4title,
+                desc: t.services.s4desc,
+                points: lang === 'ru'
+                  ? ['Приоритетная обработка', 'Ответ за 1–3 дня', 'VIP сопровождение']
+                  : ['Priority processing', 'Response in 1–3 days', 'VIP support'],
+              },
             ].map((s, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="card p-6"
+                transition={{ delay: i * 0.08 }}
+                className="group relative bg-white rounded-2xl border border-border p-7 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
               >
-                <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-4 ${s.color}`}>
-                  <s.icon className="w-5 h-5" />
+                {/* Subtle bg glow */}
+                <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-10 transition-opacity duration-500 bg-gradient-to-br ${s.gradient}`} />
+
+                {/* Icon */}
+                <div className={`relative w-14 h-14 rounded-2xl bg-gradient-to-br ${s.gradient} flex items-center justify-center mb-5 shadow-lg ${s.shadow}`}>
+                  <s.icon className="w-7 h-7 text-white" strokeWidth={1.5} />
                 </div>
-                <h3 className="font-semibold text-ink mb-2">{s.title}</h3>
-                <p className="text-sm text-muted leading-relaxed">{s.desc}</p>
+
+                <h3 className="text-lg font-bold text-ink mb-2">{s.title}</h3>
+                <p className="text-sm text-muted leading-relaxed mb-5">{s.desc}</p>
+
+                {/* Feature points */}
+                <ul className="space-y-2">
+                  {s.points.map((p, j) => (
+                    <li key={j} className="flex items-center gap-2.5 text-sm text-ink/80">
+                      <div className={`w-4 h-4 rounded-full bg-gradient-to-br ${s.gradient} flex items-center justify-center shrink-0`}>
+                        <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />
+                      </div>
+                      {p}
+                    </li>
+                  ))}
+                </ul>
               </motion.div>
             ))}
           </div>
