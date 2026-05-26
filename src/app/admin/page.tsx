@@ -307,7 +307,33 @@ export default function AdminPage() {
               </div>
 
               {/* Filters */}
-              <div className="flex gap-3 flex-wrap">
+              {/* Mobile search — full width */}
+              <div className="relative md:hidden">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
+                <input
+                  className="input pl-9 w-full"
+                  placeholder="Поиск по имени..."
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                />
+                {search && (
+                  <button
+                    onClick={() => setSearch('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-ink"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+              {/* Mobile status filter */}
+              <div className="md:hidden">
+                <select className="input w-full" value={statusFlt} onChange={e => setStatusFlt(e.target.value as any)}>
+                  <option value="">Все статусы</option>
+                  {ALL_STATUSES.map(s => <option key={s} value={s}>{STATUS_RU[s]}</option>)}
+                </select>
+              </div>
+              {/* Desktop filters */}
+              <div className="hidden md:flex gap-3 flex-wrap">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
                   <input className="input pl-9 w-64" placeholder="Поиск по имени или ID..."
@@ -320,9 +346,8 @@ export default function AdminPage() {
                 <select className="input w-48" onChange={e => {
                   const val = e.target.value as 'VIP' | 'STANDARD' | 'SUBMISSION' | ''
                   setSearch(prev => prev)
-                  // filter by package using search workaround via pkg state
                   ;(window as any).__pkgFilter = val
-                  setSearch(s => s + '') // trigger re-render
+                  setSearch(s => s + '')
                 }}>
                   <option value="">Все пакеты</option>
                   <option value="VIP">👑 VIP — $99</option>
