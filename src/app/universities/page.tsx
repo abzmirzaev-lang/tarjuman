@@ -166,10 +166,9 @@ function UniversitiesContent() {
   return (
     <>
       <Navbar lang={lang} onLangChange={setLang} />
-      <div className="pt-16 min-h-screen bg-surface">
-
-        {/* Header */}
-        <div className="bg-ink text-white py-14 px-4">
+      {/* Dark header */}
+      <div className="bg-ink pt-16">
+        <div className="text-white py-14 px-4">
           <div className="max-w-4xl mx-auto text-center">
             <p className="text-brand-400 text-xs font-semibold uppercase tracking-widest mb-3">Университеты</p>
             <h1 className="text-3xl sm:text-5xl font-bold mb-3">{t.universities.title}</h1>
@@ -192,9 +191,13 @@ function UniversitiesContent() {
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Filters */}
-        <div className="bg-white border-b border-border sticky top-16 z-20 shadow-sm">
+      {/* Filters — sticky directly below navbar */}
+      <div
+        className="sticky top-16 z-30 bg-white border-b border-border shadow-sm"
+        style={{ WebkitTransform: 'translateZ(0)', transform: 'translateZ(0)' }}
+      >
           <div className="container-wide py-3 flex flex-col md:flex-row gap-3">
             <div className="flex gap-1 bg-surface rounded-xl p-1">
               {(['ALL', 'SA', 'AE'] as const).map(c => (
@@ -218,9 +221,10 @@ function UniversitiesContent() {
               ))}
             </select>
           </div>
-        </div>
+      </div>
 
-        {/* Grid */}
+      {/* Cards */}
+      <div className="bg-surface">
         <div className="container-wide py-10">
           {filtered.length === 0 ? (
             <div className="text-center py-20 text-muted">Университеты не найдены</div>
@@ -315,8 +319,8 @@ function UniversitiesContent() {
             </div>
           )}
         </div>
+        <Footer lang={lang} />
       </div>
-      <Footer lang={lang} />
 
       {/* ── University Detail Modal ── */}
       <AnimatePresence>
