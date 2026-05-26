@@ -4,7 +4,14 @@ import { cookies } from 'next/headers'
 import { PACKAGES } from '@/types'
 import type { ServicePackage } from '@/types'
 import { notifyAdmin } from '@/lib/telegram'
+import { createHash } from 'crypto'
 
+const md5 = (str: string) => createHash('md5').update(str).digest('hex')
+
+function cryptomusSign(body: object, apiKey: string): string {
+  const json = JSON.stringify(body).replace(/\//mg, '\\/')
+  return md5(Buffer.from(json).toString('base64') + apiKey)
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -52,76 +59,123 @@ export async function POST(request: NextRequest) {
 
     const packageInfo = PACKAGES[pkg]
 
-    // ── РУЧНАЯ ОПЛАТА (если Stripe не настроен) ──
-    if (!process.env.STRIPE_SECRET_KEY) {
-      await notifyAdmin(
-        `🆕 *Новая заявка!*\n\n` +
-        `👤 *Имя:* ${app.full_name}\n` +
-        `📱 *Телефон:* ${app.phone}\n` +
-        `✈️ *Гражданство:* ${app.citizenship}\n` +
-        `📦 *Пакет:* ${packageInfo.name_ru} — $${packageInfo.priceUSD}\n` +
-        `🆔 *ID заявки:* ${applicationId}\n\n` +
-        `💳 Ожидает ручной оплаты`
-      )
-      return NextResponse.json({ url: null, manual: true })
+    // ── CRYPTOMUS ──────────────────────────────────────────────────────────
+    if (process.env.CRYPTOMUS_MERCHANT_ID && process.env.CRYPTOMUS_PAYMENT_API_KEY) {
+      const merchantId = process.env.CRYPTOMUS_MERCHANT_ID
+      const apiKey     = process.env.CRYPTOMUS_PAYMENT_API_KEY
+
+      // order_id must be unique alpha_dash string — use applicationId (UUID has dashes, valid)
+      const body = {
+        amount:          String(packageInfo.priceUSD),
+        currency:        'USD',
+        order_id:        applicationId,
+        url_success:     `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?payment=success&app=${applicationId}`,
+        url_return:      `${process.env.NEXT_PUBLIC_APP_URL}/apply?cancelled=1`,
+        url_callback:    `${process.env.NEXT_PUBLIC_APP_URL}/api/payments/cryptomus-webhook`,
+        additional_data: `${session.user.id}|${pkg}`,
+        lifetime:        7200, // 2 hours
+        is_payment_multiple: false,
+      }
+
+      const sign = cryptomusSign(body, apiKey)
+
+      const res = await fetch('https://api.cryptomus.com/v1/payment', {
+        method:  'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'merchant':     merchantId,
+          'sign':         sign,
+        },
+        body: JSON.stringify(body),
+      })
+
+      const result = await res.json()
+
+      if (result.state !== 0) {
+        console.error('Cryptomus error:', result)
+        return NextResponse.json({ error: result.message || 'Payment error' }, { status: 400 })
+      }
+
+      // Save pending payment record
+      await supabase.from('payments').insert({
+        application_id:    applicationId,
+        user_id:           session.user.id,
+        stripe_session_id: result.result.uuid,   // reusing column for cryptomus uuid
+        amount:            packageInfo.priceUSD,
+        currency:          'USD',
+        method:            'CRYPTOMUS',
+        status:            'PENDING',
+        package:           pkg,
+      })
+
+      return NextResponse.json({ url: result.result.url })
     }
 
-    // ── STRIPE ──
-    const Stripe = (await import('stripe')).default
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2024-06-20' })
-    const priceId = {
-      SUBMISSION: process.env.NEXT_PUBLIC_STRIPE_PRICE_BASIC,
-      STANDARD:   process.env.NEXT_PUBLIC_STRIPE_PRICE_STANDARD,
-      VIP:        process.env.NEXT_PUBLIC_STRIPE_PRICE_VIP,
-    }[pkg]
+    // ── STRIPE ──────────────────────────────────────────────────────────────
+    if (process.env.STRIPE_SECRET_KEY) {
+      const Stripe = (await import('stripe')).default
+      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2024-06-20' })
+      const priceId = {
+        SUBMISSION: process.env.NEXT_PUBLIC_STRIPE_PRICE_BASIC,
+        STANDARD:   process.env.NEXT_PUBLIC_STRIPE_PRICE_STANDARD,
+        VIP:        process.env.NEXT_PUBLIC_STRIPE_PRICE_VIP,
+      }[pkg]
 
-    // Create Stripe checkout session
-    const checkoutSession = await stripe.checkout.sessions.create({
-      mode: 'payment',
-      payment_method_types: ['card'],
-      ...(priceId
-        ? { line_items: [{ price: priceId, quantity: 1 }] }
-        : {
-            line_items: [{
-              price_data: {
-                currency: 'usd',
-                unit_amount: packageInfo.priceUSD * 100,
-                product_data: {
-                  name: `TARJUMAN — ${packageInfo.name_en}`,
-                  description: packageInfo.features_en.join(', '),
+      const checkoutSession = await stripe.checkout.sessions.create({
+        mode: 'payment',
+        payment_method_types: ['card'],
+        ...(priceId
+          ? { line_items: [{ price: priceId, quantity: 1 }] }
+          : {
+              line_items: [{
+                price_data: {
+                  currency: 'usd',
+                  unit_amount: packageInfo.priceUSD * 100,
+                  product_data: {
+                    name: `TARJUMAN — ${packageInfo.name_en}`,
+                    description: packageInfo.features_en.join(', '),
+                  },
                 },
-              },
-              quantity: 1,
-            }]
-          }
-      ),
-      customer_email: session.user.email!,
-      metadata: {
-        applicationId,
-        userId:  session.user.id,
-        package: pkg,
-      },
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?payment=success&app=${applicationId}`,
-      cancel_url:  `${process.env.NEXT_PUBLIC_APP_URL}/apply?cancelled=1`,
-      locale: 'ru',
-      payment_intent_data: {
+                quantity: 1,
+              }]
+            }
+        ),
+        customer_email: session.user.email!,
         metadata: { applicationId, userId: session.user.id, package: pkg },
-      },
-    })
+        success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?payment=success&app=${applicationId}`,
+        cancel_url:  `${process.env.NEXT_PUBLIC_APP_URL}/apply?cancelled=1`,
+        locale: 'ru',
+        payment_intent_data: {
+          metadata: { applicationId, userId: session.user.id, package: pkg },
+        },
+      })
 
-    // Create pending payment record
-    await supabase.from('payments').insert({
-      application_id:    applicationId,
-      user_id:           session.user.id,
-      stripe_session_id: checkoutSession.id,
-      amount:            packageInfo.priceUSD,
-      currency:          'USD',
-      method:            'STRIPE_CARD',
-      status:            'PENDING',
-      package:           pkg,
-    })
+      await supabase.from('payments').insert({
+        application_id:    applicationId,
+        user_id:           session.user.id,
+        stripe_session_id: checkoutSession.id,
+        amount:            packageInfo.priceUSD,
+        currency:          'USD',
+        method:            'STRIPE_CARD',
+        status:            'PENDING',
+        package:           pkg,
+      })
 
-    return NextResponse.json({ url: checkoutSession.url })
+      return NextResponse.json({ url: checkoutSession.url })
+    }
+
+    // ── РУЧНАЯ ОПЛАТА (fallback) ──────────────────────────────────────────
+    await notifyAdmin(
+      `🆕 *Новая заявка!*\n\n` +
+      `👤 *Имя:* ${app.full_name}\n` +
+      `📱 *Телефон:* ${app.phone}\n` +
+      `✈️ *Гражданство:* ${app.citizenship}\n` +
+      `📦 *Пакет:* ${packageInfo.name_ru} — $${packageInfo.priceUSD}\n` +
+      `🆔 *ID заявки:* ${applicationId}\n\n` +
+      `💳 Ожидает ручной оплаты`
+    )
+    return NextResponse.json({ url: null, manual: true })
+
   } catch (err: any) {
     console.error('Checkout error:', err)
     return NextResponse.json({ error: err.message }, { status: 500 })
