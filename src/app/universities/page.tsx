@@ -13,29 +13,92 @@ import { translations } from '@/i18n'
 import { cn } from '@/lib/utils'
 
 // Static extra info per university (keyed by name_en)
+// Photos: real Unsplash photos matching each university's city/location
 const UNI_EXTRA: Record<string, {
   founded: number
   students: string
   photo: string
   color: string
+  desc_ru: string
 }> = {
-  'King Abdulaziz University':            { founded: 1967, students: '100,000+', photo: 'https://images.unsplash.com/photo-1562774053-701939374585?w=800&q=80', color: 'from-green-900 to-green-700' },
-  'King Fahd University of Petroleum':    { founded: 1963, students: '12,000+',  photo: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&q=80', color: 'from-blue-900 to-blue-700' },
-  'Imam Muhammad ibn Saud University':    { founded: 1953, students: '50,000+',  photo: 'https://images.unsplash.com/photo-1580537659466-0a9bfa916a54?w=800&q=80', color: 'from-emerald-900 to-teal-700' },
-  'Islamic University of Madinah':        { founded: 1961, students: '7,000+',   photo: 'https://images.unsplash.com/photo-1564769625392-651b89c25c40?w=800&q=80', color: 'from-amber-900 to-yellow-700' },
-  'King Saud University':                 { founded: 1957, students: '70,000+',  photo: 'https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?w=800&q=80', color: 'from-green-800 to-teal-600' },
-  'Umm Al-Qura University':               { founded: 1949, students: '55,000+',  photo: 'https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?w=800&q=80', color: 'from-stone-800 to-stone-600' },
-  'UAE University':                       { founded: 1976, students: '14,000+',  photo: 'https://images.unsplash.com/photo-1526778548025-fa2f459cd5ce?w=800&q=80', color: 'from-sky-900 to-blue-700' },
-  'American University of Sharjah':       { founded: 1997, students: '7,000+',   photo: 'https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=800&q=80', color: 'from-red-900 to-rose-700' },
-  'Khalifa University':                   { founded: 2007, students: '3,000+',   photo: 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=800&q=80', color: 'from-slate-900 to-slate-700' },
-  'Zayed University':                     { founded: 1998, students: '9,000+',   photo: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80', color: 'from-violet-900 to-purple-700' },
+  'King Abdulaziz University': {
+    founded: 1967,
+    students: '117,000+',
+    photo: 'https://images.unsplash.com/photo-1586715065342-98d1f6016fd1?w=1200&q=85',
+    color: 'from-green-900 to-green-700',
+    desc_ru: 'Крупнейший университет Саудовской Аравии в Джидде. Основан в 1967 году, в 1974 стал государственным. Предлагает уникальные программы по морским наукам, метеорологии и астрономии. 33 факультета, 177 программ.',
+  },
+  'King Fahd University of Petroleum': {
+    founded: 1963,
+    students: '8,000+',
+    photo: 'https://images.unsplash.com/photo-1694018359679-49465b4c0d61?w=1200&q=85',
+    color: 'from-blue-900 to-blue-700',
+    desc_ru: 'Ведущий технический университет Ближнего Востока, #1 в регионе MENA (Times Higher Education 2025). Основан в 1963 году в Дахране. Специализируется на инженерии и нефтяной промышленности. С 2021 года принимает женщин.',
+  },
+  'Imam Muhammad ibn Saud University': {
+    founded: 1953,
+    students: '81,000+',
+    photo: 'https://images.unsplash.com/photo-1663900108404-a05e8bf82cda?w=1200&q=85',
+    color: 'from-emerald-900 to-teal-700',
+    desc_ru: 'Один из крупнейших исламских университетов мира в Эр-Рияде. Основан в 1953 году. Включает 14 факультетов, 70 институтов в Саудовской Аравии и 5 институтов за рубежом — в Индонезии и Джибути.',
+  },
+  'Islamic University of Madinah': {
+    founded: 1961,
+    students: '16,000+',
+    photo: 'https://images.unsplash.com/photo-1692977579997-948328cdb7d2?w=1200&q=85',
+    color: 'from-amber-900 to-yellow-700',
+    desc_ru: 'Международный исламский университет в Медине, основан в 1961 году. Принимает студентов из 170+ стран. Предоставляет полную стипендию иностранным студентам, включая проживание и питание.',
+  },
+  'King Saud University': {
+    founded: 1957,
+    students: '40,000+',
+    photo: 'https://images.unsplash.com/photo-1770685798053-c7b282cc3188?w=1200&q=85',
+    color: 'from-green-800 to-teal-600',
+    desc_ru: 'Первый университет Саудовской Аравии, основан королём Саудом в 1957 году в Эр-Рияде. Предлагает программы по естественным и гуманитарным наукам. В 2023 году стал независимым некоммерческим учреждением.',
+  },
+  'Umm Al-Qura University': {
+    founded: 1949,
+    students: '55,000+',
+    photo: 'https://images.unsplash.com/photo-1724191078796-8a997b989f43?w=1200&q=85',
+    color: 'from-stone-800 to-amber-700',
+    desc_ru: 'Старейший университет Саудовской Аравии, расположен в Мекке. Основан в 1949 году. Специализируется на исламских науках, шариате, арабском языке и гуманитарных дисциплинах.',
+  },
+  'UAE University': {
+    founded: 1976,
+    students: '14,900+',
+    photo: 'https://images.unsplash.com/photo-1699954669485-812988f5c2db?w=1200&q=85',
+    color: 'from-sky-900 to-blue-700',
+    desc_ru: 'Старейший университет ОАЭ, основан шейхом Зайедом в 1976 году в Аль-Айне. Занимает 1-е место в ССЗ по исследовательской деятельности. Принимает студентов из 82 стран. 9 факультетов, PhD программы.',
+  },
+  'American University of Sharjah': {
+    founded: 1997,
+    students: '7,000+',
+    photo: 'https://images.unsplash.com/photo-1585085952480-811ff8859fa1?w=1200&q=85',
+    color: 'from-red-900 to-rose-700',
+    desc_ru: 'Ведущий частный университет ОАЭ американской модели образования, основан в 1997 году в Шардже. Аккредитован в США, программы на английском языке по инженерии, бизнесу, архитектуре и искусству.',
+  },
+  'Khalifa University': {
+    founded: 2007,
+    students: '3,000+',
+    photo: 'https://images.unsplash.com/photo-1669529250752-9f5b54b30491?w=1200&q=85',
+    color: 'from-slate-900 to-slate-700',
+    desc_ru: 'Исследовательский университет мирового класса в Абу-Даби, основан в 2007 году. Специализируется на инженерии, науке и технологиях. Входит в топ-50 молодых университетов мира по версии QS.',
+  },
+  'Zayed University': {
+    founded: 1998,
+    students: '9,000+',
+    photo: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=85',
+    color: 'from-violet-900 to-purple-700',
+    desc_ru: 'Государственный университет ОАЭ, основан в 1998 году в честь шейха Зайеда. Кампусы в Абу-Даби и Дубае. Программы на английском языке по бизнесу, коммуникациям, искусству и образованию.',
+  },
 }
 
 const DEFAULT_EXTRA = {
   founded: 1970,
   students: '10,000+',
-  photo: 'https://images.unsplash.com/photo-1562774053-701939374585?w=800&q=80',
+  photo: 'https://images.unsplash.com/photo-1663900108404-a05e8bf82cda?w=1200&q=85',
   color: 'from-brand-700 to-brand-500',
+  desc_ru: '',
 }
 
 const PROGRAMS_RU: Record<string, string> = {
@@ -259,7 +322,7 @@ function UniversitiesContent() {
       <AnimatePresence>
         {selected && (() => {
           const extra = getExtra(selected)
-          const desc = selected[descKey] ?? selected.description_ru ?? selected.description_en
+          const desc = selected[descKey] ?? selected.description_ru ?? selected.description_en ?? extra.desc_ru
           return (
             <motion.div
               initial={{ opacity: 0 }}
