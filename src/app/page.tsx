@@ -20,19 +20,24 @@ const fadeUp = {
 
 const HERO_SLIDES = [
   {
-    photo: 'https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?w=1800&q=90',
+    photo: 'https://images.unsplash.com/photo-1692977579997-948328cdb7d2?w=1800&q=90',
     label: 'Мечеть Пророка — Медина',
     city: 'Медина, Саудовская Аравия 🇸🇦',
   },
   {
-    photo: 'https://images.unsplash.com/photo-1586724237569-f3d0c1dee8c6?w=1800&q=90',
-    label: 'Эр-Рияд',
+    photo: 'https://images.unsplash.com/photo-1724191078796-8a997b989f43?w=1800&q=90',
+    label: 'Зелёный купол Мечети Пророка',
+    city: 'Медина, Саудовская Аравия 🇸🇦',
+  },
+  {
+    photo: 'https://images.unsplash.com/photo-1663900108404-a05e8bf82cda?w=1800&q=90',
+    label: 'Эр-Рияд ночью',
     city: 'Эр-Рияд, Саудовская Аравия 🇸🇦',
   },
   {
-    photo: 'https://images.unsplash.com/photo-1580537659466-0a9bfa916a54?w=1800&q=90',
-    label: 'Исламский Университет Медины',
-    city: 'Медина, Саудовская Аравия 🇸🇦',
+    photo: 'https://images.unsplash.com/photo-1770685798053-c7b282cc3188?w=1800&q=90',
+    label: 'Эр-Рияд на закате',
+    city: 'Эр-Рияд, Саудовская Аравия 🇸🇦',
   },
   {
     photo: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1800&q=90',
