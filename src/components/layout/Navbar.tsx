@@ -44,6 +44,7 @@ export function Navbar({ lang = 'ru', onLangChange }: NavbarProps) {
   const navLinks = [
     { href: '/universities', label: t.nav.universities },
     { href: '/pricing',      label: t.nav.pricing      },
+    { href: '/faq',          label: 'FAQ'              },
     { href: '/about',        label: t.nav.about        },
     { href: '/contact',      label: t.nav.contact      },
   ]
