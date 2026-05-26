@@ -14,9 +14,9 @@ export const en: Translation = {
     logout:       'Sign Out',
   },
   hero: {
-    badge:    '🎓 Your path to Islamic education',
+    badge:    'Your path to Islamic education',
     title:    'Study at Universities in\nSaudi Arabia & UAE',
-    subtitle: 'Professional assistance with applications, document translation, and visa support. We\'ve helped hundreds of CIS students achieve their dreams.',
+    subtitle: 'Professional assistance with applications, document translation, and visa support. We\'ve helped hundreds of students from around the world achieve their dreams.',
     cta:      'Start Application',
     ctaSecondary: 'Learn More',
     stat1:    '26',
@@ -42,7 +42,7 @@ export const en: Translation = {
     title:    'Choose Your Study Destination',
     sa:       'Saudi Arabia',
     ae:       'UAE',
-    saDesc:   'Leading Islamic and secular universities. Scholarships available for CIS students.',
+    saDesc:   'Leading Islamic and secular universities. Scholarships available for international students.',
     aeDesc:   'World-class modern education in the most dynamic region.',
   },
   universities: {

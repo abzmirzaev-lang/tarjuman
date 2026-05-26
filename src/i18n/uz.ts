@@ -14,9 +14,9 @@ export const uz: Translation = {
     logout:       'Chiqish',
   },
   hero: {
-    badge:    '🎓 Islom ta\'limiga yo\'lingiz',
+    badge:    'Islom ta\'limiga yo\'lingiz',
     title:    'Saudiya Arabistoni va BAA\nuniversitetlarida tahsil oling',
-    subtitle: 'Hujjatlar tarjimasi, ariza topshirish va viza olishda professional yordam. MDH talabalari uchun ishonchli sherik.',
+    subtitle: 'Hujjatlar tarjimasi, ariza topshirish va viza olishda professional yordam. Dunyo bo\'ylab talabalar uchun ishonchli sherik.',
     cta:      'Arizani boshlash',
     ctaSecondary: 'Ko\'proq bilish',
     stat1:    '26',
@@ -42,7 +42,7 @@ export const uz: Translation = {
     title:    'O\'qish mamlakatini tanlang',
     sa:       'Saudiya Arabistoni',
     ae:       'BAA',
-    saDesc:   'Yetakchi islomiy va dunyoviy universitetlar. MDH talabalari uchun stipendiyalar.',
+    saDesc:   'Yetakchi islomiy va dunyoviy universitetlar. Xorijiy talabalar uchun stipendiyalar.',
     aeDesc:   'Eng dinamik mintaqada jahon darajasidagi zamonaviy ta\'lim.',
   },
   universities: {
