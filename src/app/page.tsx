@@ -246,8 +246,8 @@ export default function HomePage() {
                 title: t.services.s1title,
                 desc: t.services.s1desc,
                 points: lang === 'ru'
-                  ? ['Нотариальное заверение', 'Арабский и английский', 'Срок 2–5 дней']
-                  : ['Notarized translation', 'Arabic & English', '2–5 days'],
+                  ? ['Профессиональный перевод', 'Арабский и английский', 'Срок 2–5 дней']
+                  : ['Professional translation', 'Arabic & English', '2–5 days'],
               },
               {
                 icon: Plane,
@@ -257,8 +257,8 @@ export default function HomePage() {
                 title: t.services.s2title,
                 desc: t.services.s2desc,
                 points: lang === 'ru'
-                  ? ['До 5 университетов', 'Отслеживание онлайн', 'Уведомления в Telegram']
-                  : ['Up to 5 universities', 'Online tracking', 'Telegram notifications'],
+                  ? ['Все подходящие университеты', 'Отслеживание онлайн', 'Уведомления в Telegram']
+                  : ['All eligible universities', 'Online tracking', 'Telegram notifications'],
               },
               {
                 icon: HeartHandshake,
