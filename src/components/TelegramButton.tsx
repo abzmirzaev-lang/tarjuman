@@ -1,6 +1,13 @@
 'use client'
 
+import { usePathname } from 'next/navigation'
+
 export default function TelegramButton() {
+  const pathname = usePathname()
+
+  // Hide on admin panel
+  if (pathname?.startsWith('/admin')) return null
+
   return (
     <>
       <style>{`
