@@ -54,10 +54,15 @@ export function Navbar({ lang = 'ru', onLangChange }: NavbarProps) {
   const useDark = !isHome || scrolled || open
 
   return (
-    <header className={cn(
-      'fixed top-0 inset-x-0 z-40 transition-all duration-300',
-      (scrolled || !isHome) ? 'glass border-b border-border shadow-sm' : 'bg-transparent'
-    )}>
+    <header
+      className={cn(
+        'fixed top-0 inset-x-0 z-50 transition-all duration-300',
+        (scrolled || !isHome)
+          ? 'bg-white/95 border-b border-border shadow-sm'
+          : 'bg-transparent'
+      )}
+      style={{ WebkitTransform: 'translateZ(0)', transform: 'translateZ(0)' }}
+    >
       <nav className="container-wide h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center">
@@ -168,7 +173,10 @@ export function Navbar({ lang = 'ru', onLangChange }: NavbarProps) {
 
         {/* Mobile menu button */}
         <button
-          className="md:hidden btn-ghost btn-sm p-2 rounded-lg"
+          className={cn(
+            'md:hidden btn-sm p-2 rounded-lg transition-colors',
+            useDark ? 'text-ink hover:bg-ink/5' : 'text-white hover:bg-white/10'
+          )}
           onClick={() => setOpen(!open)}
         >
           {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
