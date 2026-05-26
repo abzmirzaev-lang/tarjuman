@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- TARJUMAN — Icon mark only, White + Gold. Use on dark backgrounds. -->
+<svg viewBox="0 0 84 90" xmlns="http://www.w3.org/2000/svg">
+  <path d="M 4,90 L 4,52 L 18,18 L 42,4 L 66,18 L 80,52 L 80,90"
+    fill="none" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+  <line x1="22" y1="34" x2="62" y2="34" stroke="#D4A943" stroke-width="6" stroke-linecap="round"/>
+  <line x1="42" y1="34" x2="42" y2="74" stroke="#D4A943" stroke-width="6" stroke-linecap="round"/>
+</svg>
