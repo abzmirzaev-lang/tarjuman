@@ -34,7 +34,7 @@ const VALUES = [
     title_ru: 'Точность',
     body_ru: 'Документы переводятся и оформляются правильно с первого раза — знаем требования каждого университета.',
     title_en: 'Precision',
-    body_en: 'Documents translated and formatted correctly on the first try — we know every university's requirements.',
+    body_en: "Documents translated and formatted correctly on the first try — we know every university's requirements.",
   },
   {
     icon: Globe,
