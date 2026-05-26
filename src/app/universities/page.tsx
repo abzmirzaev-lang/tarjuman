@@ -166,8 +166,8 @@ function UniversitiesContent() {
   return (
     <>
       <Navbar lang={lang} onLangChange={setLang} />
-      {/* Dark header */}
-      <div className="bg-ink pt-16">
+      {/* Dark header — pt accounts for navbar (4rem) + filter bar (3.5rem) */}
+      <div className="bg-ink pt-[7.5rem]">
         <div className="text-white py-14 px-4">
           <div className="max-w-4xl mx-auto text-center">
             <p className="text-brand-400 text-xs font-semibold uppercase tracking-widest mb-3">Университеты</p>
@@ -193,34 +193,37 @@ function UniversitiesContent() {
         </div>
       </div>
 
-      {/* Filters — sticky directly below navbar */}
+      {/* Filters — FIXED below navbar, never moves */}
       <div
-        className="sticky top-16 z-30 bg-white border-b border-border shadow-sm"
+        className="fixed top-16 inset-x-0 h-14 z-40 bg-white border-b border-border shadow-sm flex items-center"
         style={{ WebkitTransform: 'translateZ(0)', transform: 'translateZ(0)' }}
       >
-          <div className="container-wide py-3 flex flex-col md:flex-row gap-3">
-            <div className="flex gap-1 bg-surface rounded-xl p-1">
-              {(['ALL', 'SA', 'AE'] as const).map(c => (
-                <button key={c} onClick={() => setFilter(c)}
-                  className={cn('px-4 py-1.5 rounded-lg text-sm font-medium transition-all',
-                    filter === c ? 'bg-brand-400 text-white shadow-sm' : 'text-muted hover:text-ink'
-                  )}>
-                  {c === 'ALL' ? '🌍 Все' : c === 'SA' ? '🇸🇦 Саудовская Аравия' : '🇦🇪 ОАЭ'}
-                </button>
-              ))}
-            </div>
-            <div className="relative flex-1 max-w-sm">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
-              <input className="input pl-9" placeholder="Поиск университета..."
-                value={search} onChange={e => setSearch(e.target.value)} />
-            </div>
-            <select className="input max-w-[200px]" value={prog} onChange={e => setProg(e.target.value)}>
-              <option value="">Все специальности</option>
-              {allPrograms.map(p => (
-                <option key={p} value={p}>{lang === 'ru' ? (PROGRAMS_RU[p] ?? p) : p}</option>
-              ))}
-            </select>
+        <div className="container-wide flex items-center gap-2">
+          {/* Country tabs */}
+          <div className="flex gap-1 bg-surface rounded-xl p-1 shrink-0">
+            {(['ALL', 'SA', 'AE'] as const).map(c => (
+              <button key={c} onClick={() => setFilter(c)}
+                className={cn('px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap',
+                  filter === c ? 'bg-brand-400 text-white shadow-sm' : 'text-muted hover:text-ink'
+                )}>
+                {c === 'ALL' ? '🌍 Все' : c === 'SA' ? '🇸🇦 КСА' : '🇦🇪 ОАЭ'}
+              </button>
+            ))}
           </div>
+          {/* Search */}
+          <div className="relative flex-1 min-w-0">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
+            <input className="input pl-9 py-2 text-sm" placeholder="Поиск университета..."
+              value={search} onChange={e => setSearch(e.target.value)} />
+          </div>
+          {/* Specialty — desktop only */}
+          <select className="input py-2 text-sm w-[180px] hidden md:block shrink-0" value={prog} onChange={e => setProg(e.target.value)}>
+            <option value="">Все специальности</option>
+            {allPrograms.map(p => (
+              <option key={p} value={p}>{lang === 'ru' ? (PROGRAMS_RU[p] ?? p) : p}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {/* Cards */}
