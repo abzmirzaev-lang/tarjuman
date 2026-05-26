@@ -206,7 +206,7 @@ function UniversitiesContent() {
                 className={cn('px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap',
                   filter === c ? 'bg-brand-400 text-white shadow-sm' : 'text-muted hover:text-ink'
                 )}>
-                {c === 'ALL' ? '🌍 Все' : c === 'SA' ? '🇸🇦 КСА' : '🇦🇪 ОАЭ'}
+                {c === 'ALL' ? 'Все' : c === 'SA' ? 'КСА' : 'ОАЭ'}
               </button>
             ))}
           </div>
