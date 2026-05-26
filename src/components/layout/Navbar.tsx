@@ -56,9 +56,28 @@ export function Navbar({ lang = 'ru', onLangChange }: NavbarProps) {
     )}>
       <nav className="container-wide h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 font-bold text-xl text-ink">
-          <span className="w-8 h-8 bg-brand-400 rounded-lg flex items-center justify-center text-white text-sm font-bold">T</span>
-          TARJUMAN
+        <Link href="/" className="flex items-center">
+          <svg viewBox="0 0 156 36" width="156" height="36" aria-label="TARJUMAN">
+            <path
+              d="M 2,36 L 2,22 L 8,10 L 16,4 L 24,10 L 30,22 L 30,36"
+              fill="none"
+              stroke={scrolled || open ? '#1B4332' : '#ffffff'}
+              strokeWidth="1.5"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+            />
+            <line x1="9" y1="13" x2="23" y2="13" stroke="#D4A943" strokeWidth="2" strokeLinecap="round"/>
+            <line x1="16" y1="13" x2="16" y2="31" stroke="#D4A943" strokeWidth="2" strokeLinecap="round"/>
+            <text
+              x="40"
+              y="24"
+              fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif"
+              fontSize="15"
+              fontWeight="700"
+              fill={scrolled || open ? '#1B4332' : '#ffffff'}
+              style={{ letterSpacing: '4px' }}
+            >TARJUMAN</text>
+          </svg>
         </Link>
 
         {/* Desktop nav */}
