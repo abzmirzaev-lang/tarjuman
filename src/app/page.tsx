@@ -246,8 +246,8 @@ export default function HomePage() {
                 title: t.services.s1title,
                 desc: t.services.s1desc,
                 points: lang === 'ru'
-                  ? ['Профессиональный перевод', 'Арабский и английский', 'Срок 2–5 дней']
-                  : ['Professional translation', 'Arabic & English', '2–5 days'],
+                  ? ['Профессиональный перевод', 'Арабский и английский', 'Срок 1–3 дня']
+                  : ['Professional translation', 'Arabic & English', '1–3 days'],
               },
               {
                 icon: Plane,
