@@ -6,7 +6,7 @@ export function Footer({ lang = 'ru' }: { lang?: AppLanguage }) {
   const t = translations[lang]
   return (
     <footer className="bg-ink text-white/80">
-      <div className="container-wide py-14 grid grid-cols-1 md:grid-cols-4 gap-10">
+      <div className="container-wide py-14 grid grid-cols-1 md:grid-cols-5 gap-10">
         {/* Brand */}
         <div className="md:col-span-2">
           <div className="flex items-center mb-3">
@@ -63,16 +63,29 @@ export function Footer({ lang = 'ru' }: { lang?: AppLanguage }) {
             <li><a href="https://t.me/TARJUMAN_KSA" className="hover:text-white transition-colors">@TARJUMAN_KSA</a></li>
           </ul>
         </div>
+
+        {/* Legal */}
+        <div>
+          <h4 className="text-white font-semibold mb-3 text-sm">Документы</h4>
+          <ul className="space-y-2">
+            {[
+              ['/terms',   'Условия использования' ],
+              ['/privacy', 'Конфиденциальность'    ],
+              ['/refund',  'Политика возврата'      ],
+            ].map(([href, label]) => (
+              <li key={href}>
+                <Link href={href} className="text-sm text-white/60 hover:text-white transition-colors">
+                  {label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
       <div className="border-t border-white/10">
-        <div className="container-wide py-5 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-white/40">
+        <div className="container-wide py-5 flex items-center justify-center text-xs text-white/40">
           <p>{t.footer.copy}</p>
-          <div className="flex gap-4">
-            <Link href="/privacy" className="hover:text-white/70 transition-colors">{t.footer.privacy}</Link>
-            <Link href="/terms"   className="hover:text-white/70 transition-colors">{t.footer.terms}</Link>
-            <Link href="/refund"  className="hover:text-white/70 transition-colors">Политика возврата</Link>
-          </div>
         </div>
       </div>
     </footer>
