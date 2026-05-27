@@ -1,5 +1,6 @@
 'use client'
-import { useState, useCallback, useEffect, Suspense } from 'react'
+import { useLanguage } from '@/hooks/useLanguage'
+import { useState, useEffect, useCallback, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useDropzone } from 'react-dropzone'
@@ -106,7 +107,7 @@ function DropZone({ docType, label, onUpload, uploaded, onRemove }: {
 function ApplyContent() {
   const router       = useRouter()
   const searchParams = useSearchParams()
-  const [lang, setLang] = useState<AppLanguage>('ru')
+  const [lang, setLang] = useLanguage()
   const t = translations[lang]
 
   const [step, setStep]     = useState(1)
@@ -1070,21 +1071,4 @@ function ApplyContent() {
               <button
                 onClick={() => { setCommentModal(false); setStep(4) }}
                 className="flex-1 py-2.5 rounded-xl bg-brand-400 text-white text-sm font-semibold hover:bg-brand-500 transition-colors"
-              >
-                {lang === 'ru' ? 'Продолжить' : 'Continue'}
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      )}
-    </div>
-  )
-}
-
-export default function ApplyPage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen bg-surface flex items-center justify-center"><div className="w-8 h-8 border-2 border-brand-400 border-t-transparent rounded-full animate-spin" /></div>}>
-      <ApplyContent />
-    </Suspense>
-  )
-}
+  

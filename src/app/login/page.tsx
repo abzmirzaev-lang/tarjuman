@@ -1,4 +1,5 @@
 'use client'
+import { useLanguage } from '@/hooks/useLanguage'
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
@@ -9,7 +10,7 @@ import type { AppLanguage } from '@/types'
 import { translations } from '@/i18n'
 
 export default function LoginPage() {
-  const [lang, setLang] = useState<AppLanguage>('ru')
+  const [lang, setLang] = useLanguage()
   const [loading, setLoading] = useState(false)
   const router  = useRouter()
   const t = translations[lang]
@@ -83,22 +84,4 @@ export default function LoginPage() {
 
         <p className="text-xs text-muted text-center mt-6">
           {t.auth.terms}{' '}
-          <Link href="/terms" className="text-brand-500 hover:underline">{t.auth.termsLink}</Link>
-        </p>
-      </motion.div>
-
-      {/* Language switcher */}
-      <div className="flex gap-3 mt-6">
-        {(['ru', 'uz', 'en'] as AppLanguage[]).map(l => (
-          <button
-            key={l}
-            onClick={() => setLang(l)}
-            className={`text-xs font-medium px-2 py-1 rounded-md transition-colors ${lang === l ? 'text-brand-600 bg-brand-50' : 'text-muted hover:text-ink'}`}
-          >
-            {l.toUpperCase()}
-          </button>
-        ))}
-      </div>
-    </div>
-  )
-}
+          <Link href="/terms" className="text-brand-500 hove

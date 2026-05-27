@@ -1,133 +1,88 @@
 'use client'
-import { useState } from 'react'
+import { useLanguage } from '@/hooks/useLanguage'
+import Link from 'next/link'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
-import type { AppLanguage } from '@/types'
 
-const SECTIONS = [
-  {
-    title: '1. Общие положения',
-    content: `Настоящие Условия использования (далее — «Условия») регулируют отношения между сервисом TARJUMAN (далее — «Сервис», «мы») и пользователями (далее — «Пользователь», «вы»), использующими сайт tarjuman.pro и связанные услуги.
+type Lang = 'ru' | 'uz' | 'en'
 
-Используя наш сайт и оформляя заказ, вы подтверждаете, что ознакомились с настоящими Условиями, понимаете их и соглашаетесь с ними в полном объёме.
-
-Если вы не согласны с какими-либо положениями настоящих Условий, пожалуйста, воздержитесь от использования Сервиса.`,
+const CONTENT: Record<Lang, { hero: { badge: string; title: string; updated: string }; note: { title: string; body: string }; sections: { title: string; content: string }[] }> = {
+  ru: {
+    hero: { badge: 'Правовые документы', title: 'Условия использования', updated: 'Последнее обновление: 1 мая 2025 г.' },
+    note: { title: 'Пожалуйста, ознакомьтесь внимательно', body: 'Используя сервис TARJUMAN, вы соглашаетесь соблюдать изложенные ниже условия. Вопросы — на tarjuman777@gmail.com' },
+    sections: [
+      { title: '1. Общие положения', content: `Настоящие Условия использования регулируют отношения между сервисом TARJUMAN и пользователями, использующими сайт tarjuman.pro и связанные услуги.\n\nИспользуя наш сайт и оформляя заказ, вы подтверждаете, что ознакомились с настоящими Условиями и соглашаетесь с ними в полном объёме.` },
+      { title: '2. Описание услуг', content: `TARJUMAN предоставляет информационные и консультационные услуги по сопровождению студентов при поступлении в университеты Саудовской Аравии и ОАЭ:\n\n— Консультации по выбору университета и программы;\n— Перевод документов на арабский язык;\n— Помощь в заполнении заявочных форм и подача документов;\n— Отслеживание статуса заявки и уведомления;\n— Поддержка на каждом этапе поступления.\n\nОбъём услуг определяется выбранным пакетом (Базовый, Стандарт или VIP).` },
+      { title: '3. Регистрация и учётная запись', content: `3.1. Пользователь обязан зарегистрироваться, указав достоверные данные.\n\n3.2. Пользователь несёт ответственность за сохранность учётных данных. Все действия, совершённые с использованием аккаунта, считаются совершёнными самим Пользователем.\n\n3.3. При обнаружении несанкционированного доступа немедленно уведомите: tarjuman777@gmail.com\n\n3.4. Мы вправе заблокировать аккаунт при нарушении Условий.` },
+      { title: '4. Оплата', content: `4.1. Стоимость услуг указана на странице «Тарифы».\n\n4.2. Оплата производится до начала оказания услуг. Доступ открывается после подтверждения платежа.\n\n4.3. Мы не храним данные платёжных карт или криптокошельков.\n\n4.4. Цены могут изменяться. Изменения не затрагивают уже оплаченные заказы.` },
+      { title: '5. Права и обязанности сторон', content: `Обязанности Пользователя:\n— Предоставлять достоверные документы;\n— Своевременно отвечать на запросы менеджеров;\n— Использовать Сервис только в законных целях.\n\nОбязанности Сервиса:\n— Прилагать все усилия для качественного оказания услуг;\n— Мы не гарантируем положительное решение университета — окончательное решение остаётся за учебным заведением.` },
+      { title: '6. Ограничение ответственности', content: `6.1. Мы не несём ответственности за решения университетов, государственных органов и визовых служб.\n\n6.2. Мы не несём ответственности за задержки из-за неполных или некорректных документов Пользователя.\n\n6.3. Совокупная ответственность не превышает стоимость оплаченного пакета.` },
+      { title: '7. Конфиденциальность', content: `Обработка персональных данных осуществляется в соответствии с Политикой конфиденциальности (/privacy).` },
+      { title: '8. Изменение условий', content: `Мы вправе изменять Условия в любое время. Актуальная версия — на странице /terms. Продолжение использования Сервиса означает согласие с изменениями.` },
+      { title: '9. Контакты', content: `По всем вопросам: tarjuman777@gmail.com\nTelegram: @TARJUMAN_KSA` },
+    ],
   },
-  {
-    title: '2. Описание услуг',
-    content: `TARJUMAN предоставляет информационные и консультационные услуги по сопровождению студентов при поступлении в университеты Саудовской Аравии и Объединённых Арабских Эмиратов. В рамках услуг мы оказываем:
-
-— Консультации по выбору университета и программы обучения;
-— Перевод документов на арабский язык;
-— Помощь в заполнении заявочных форм и подачу документов;
-— Отслеживание статуса заявки и уведомление Пользователя;
-— Поддержку на каждом этапе процесса поступления.
-
-Объём и состав конкретных услуг определяются выбранным пакетом («Базовый», «Стандарт» или «VIP») и описаны на странице тарифов.`,
+  uz: {
+    hero: { badge: 'Huquqiy hujjatlar', title: 'Foydalanish shartlari', updated: 'Oxirgi yangilanish: 1 may 2025 y.' },
+    note: { title: 'Iltimos, diqqat bilan o\'qing', body: 'TARJUMAN xizmatidan foydalanib, siz quyidagi shartlarga roziligingizni bildirасиз. Savollar uchun: tarjuman777@gmail.com' },
+    sections: [
+      { title: '1. Umumiy qoidalar', content: `Ushbu Foydalanish shartlari TARJUMAN xizmati va tarjuman.pro saytidan foydalanuvchilar o'rtasidagi munosabatlarni tartibga soladi.\n\nSaytimizdan foydalanib va buyurtma rasmiylashtirish orqali siz ushbu Shartlar bilan to'liq tanishganingizni va ularga roziligingizni tasdiqlaysiz.` },
+      { title: '2. Xizmatlar tavsifi', content: `TARJUMAN Saudiya Arabistoni va BAA universitetlariga qabul bo'lishda talabalarni qo'llab-quvvatlash bo'yicha axborot va maslahat xizmatlarini ko'rsatadi:\n\n— Universitet va ta'lim dasturini tanlash bo'yicha maslahat;\n— Hujjatlarni arab tiliga tarjima qilish;\n— Ariza shakllari to'ldirishda yordam va hujjatlarni topshirish;\n— Ariza holati monitoringi va bildirishnomalar;\n— Qabul jarayonining har bir bosqichida yordam.\n\nXizmatlar hajmi tanlangan paketga (Asosiy, Standart yoki VIP) qarab belgilanadi.` },
+      { title: '3. Ro\'yxatdan o\'tish', content: `3.1. Foydalanuvchi to'g'ri ma'lumotlar ko'rsatib ro'yxatdan o'tishi shart.\n\n3.2. Foydalanuvchi o'z kirish ma'lumotlari xavfsizligi uchun javobgardir.\n\n3.3. Ruxsatsiz kirishni aniqlaganda darhol xabar bering: tarjuman777@gmail.com` },
+      { title: '4. To\'lov', content: `4.1. Xizmatlar narxi «Narxlar» sahifasida ko'rsatilgan.\n\n4.2. To'lov xizmat ko'rsatilishidan oldin amalga oshiriladi.\n\n4.3. Biz to'lov karta ma'lumotlarini saqlamaymiz.\n\n4.4. Narxlar o'zgarishi mumkin, ammo allaqachon to'langan buyurtmalarga ta'sir qilmaydi.` },
+      { title: '5. Tomonlarning huquq va majburiyatlari', content: `Foydalanuvchi majburiyatlari:\n— To'g'ri va to'liq hujjatlar taqdim etish;\n— Menejerlar so'rovlariga o'z vaqtida javob berish;\n— Xizmatdan faqat qonuniy maqsadlarda foydalanish.\n\nXizmat majburiyatlari:\n— Sifatli xizmat ko'rsatishga harakat qilish;\n— Biz universitetning qabul qarorini kafolatlay olmaymiz — yakuniy qaror o'quv yurtiga tegishli.` },
+      { title: '6. Javobgarlikni cheklash', content: `6.1. Biz universitetlar, davlat organlari va viza xizmatlarining qarorlari uchun javobgar emasmiz.\n\n6.2. Foydalanuvchi to'liq bo'lmagan hujjatlar tufayli yuzaga kelgan kechikishlar uchun javobgar emas.\n\n6.3. Umumiy javobgarlik to'langan paket qiymatidan oshmaydi.` },
+      { title: '7. Maxfiylik', content: `Shaxsiy ma'lumotlarni qayta ishlash Maxfiylik siyosatiga (/privacy) muvofiq amalga oshiriladi.` },
+      { title: '8. Shartlarni o\'zgartirish', content: `Biz istalgan vaqtda Shartlarni o'zgartirish huquqiga egamiz. Joriy versiya /terms sahifasida mavjud.` },
+      { title: '9. Aloqa', content: `Barcha savollar uchun: tarjuman777@gmail.com\nTelegram: @TARJUMAN_KSA` },
+    ],
   },
-  {
-    title: '3. Регистрация и учётная запись',
-    content: `3.1. Для получения услуг Пользователь обязан зарегистрироваться, указав достоверные и актуальные данные.
-
-3.2. Пользователь несёт ответственность за сохранность своих учётных данных (логина и пароля). Все действия, совершённые с использованием учётной записи Пользователя, считаются совершёнными самим Пользователем.
-
-3.3. При обнаружении несанкционированного доступа к учётной записи Пользователь обязан незамедлительно уведомить нас по адресу tarjuman777@gmail.com.
-
-3.4. Мы оставляем за собой право заблокировать или удалить учётную запись, если действия Пользователя нарушают настоящие Условия или действующее законодательство.`,
+  en: {
+    hero: { badge: 'Legal Documents', title: 'Terms of Use', updated: 'Last updated: May 1, 2025' },
+    note: { title: 'Please read carefully', body: 'By using the TARJUMAN service, you agree to comply with the terms below. Questions? Contact us at tarjuman777@gmail.com' },
+    sections: [
+      { title: '1. General Provisions', content: `These Terms of Use govern the relationship between the TARJUMAN service and users of the tarjuman.pro website and related services.\n\nBy using our website and placing an order, you confirm that you have read these Terms and agree to them in full.` },
+      { title: '2. Description of Services', content: `TARJUMAN provides information and consulting services to support students in applying to universities in Saudi Arabia and the UAE:\n\n— Advice on choosing a university and program;\n— Translation of documents into Arabic;\n— Assistance with application forms and document submission;\n— Application status tracking and notifications;\n— Support at every stage of the admission process.\n\nThe scope of services is determined by the selected package (Basic, Standard, or VIP).` },
+      { title: '3. Registration', content: `3.1. Users must register with accurate and current information.\n\n3.2. Users are responsible for keeping their credentials secure. All actions taken using the account are considered to be taken by the User.\n\n3.3. If you discover unauthorized access, notify us immediately at tarjuman777@gmail.com` },
+      { title: '4. Payment', content: `4.1. Service prices are listed on the Pricing page.\n\n4.2. Payment is made before services begin. Access opens after payment confirmation.\n\n4.3. We do not store payment card or crypto wallet data.\n\n4.4. Prices may change. Changes do not affect already paid orders.` },
+      { title: '5. Rights and Obligations', content: `User obligations:\n— Provide accurate and complete documents;\n— Respond promptly to manager requests;\n— Use the Service for lawful purposes only.\n\nService obligations:\n— Make every effort to provide quality services;\n— We do not guarantee a positive admission decision — the final decision rests with the university.` },
+      { title: '6. Limitation of Liability', content: `6.1. We are not responsible for decisions made by universities, government agencies, or visa services.\n\n6.2. We are not responsible for delays caused by incomplete or incorrect documents provided by the User.\n\n6.3. Total liability shall not exceed the cost of the paid package.` },
+      { title: '7. Privacy', content: `Personal data processing is carried out in accordance with our Privacy Policy (/privacy).` },
+      { title: '8. Changes to Terms', content: `We reserve the right to modify these Terms at any time. The current version is always available at /terms.` },
+      { title: '9. Contact', content: `For all inquiries: tarjuman777@gmail.com\nTelegram: @TARJUMAN_KSA` },
+    ],
   },
-  {
-    title: '4. Оплата',
-    content: `4.1. Стоимость услуг определяется согласно действующим тарифам, указанным на странице «Тарифы».
-
-4.2. Оплата производится до начала оказания услуг. Доступ к сервису и обработка заявки начинаются после подтверждения платежа.
-
-4.3. Мы принимаем оплату через одобренные платёжные системы. Все транзакции обрабатываются сторонними провайдерами; мы не храним данные ваших платёжных карт или криптокошельков.
-
-4.4. Цены на услуги могут изменяться. Изменения не затрагивают уже оплаченные заказы.`,
-  },
-  {
-    title: '5. Права и обязанности сторон',
-    content: `5.1. Обязанности Пользователя:
-— Предоставлять достоверные и полные документы, необходимые для оказания услуг;
-— Своевременно отвечать на запросы специалистов Сервиса;
-— Не передавать третьим лицам доступ к своей учётной записи;
-— Использовать Сервис только в законных целях.
-
-5.2. Права и обязанности Сервиса:
-— Мы прилагаем все разумные усилия для качественного оказания услуг в согласованные сроки;
-— Мы вправе отказать в оказании услуг, если Пользователь предоставил заведомо ложные сведения или нарушил настоящие Условия;
-— Мы не гарантируем положительное решение университета о зачислении, так как окончательное решение остаётся за принимающим учебным заведением.`,
-  },
-  {
-    title: '6. Ограничение ответственности',
-    content: `6.1. Сервис TARJUMAN выступает в роли посредника и консультанта. Мы не несём ответственности за решения, принимаемые университетами, государственными органами или визовыми службами.
-
-6.2. Мы не несём ответственности за задержки, вызванные предоставлением Пользователем неполных или некорректных документов.
-
-6.3. Совокупная ответственность Сервиса перед Пользователем ни при каких обстоятельствах не превышает стоимость оплаченного пакета услуг.
-
-6.4. Мы не несём ответственности за косвенные, случайные или вытекающие убытки.`,
-  },
-  {
-    title: '7. Конфиденциальность',
-    content: `Обработка персональных данных осуществляется в соответствии с нашей Политикой конфиденциальности, доступной по адресу /privacy. Используя Сервис, вы соглашаетесь с условиями обработки ваших персональных данных.`,
-  },
-  {
-    title: '8. Интеллектуальная собственность',
-    content: `Все материалы сайта tarjuman.pro — тексты, изображения, логотипы, программный код — являются интеллектуальной собственностью TARJUMAN. Копирование, воспроизведение или распространение любых материалов без предварительного письменного согласия запрещено.`,
-  },
-  {
-    title: '9. Изменение условий',
-    content: `Мы оставляем за собой право изменять настоящие Условия в любое время. Актуальная версия всегда доступна по адресу /terms. Продолжение использования Сервиса после публикации изменений означает ваше согласие с новой редакцией Условий.`,
-  },
-  {
-    title: '10. Применимое право и разрешение споров',
-    content: `Настоящие Условия регулируются действующим законодательством. В случае возникновения споров стороны стремятся урегулировать их путём переговоров. При недостижении соглашения спор передаётся на рассмотрение в компетентный суд.
-
-По всем вопросам обращайтесь: tarjuman777@gmail.com`,
-  },
-]
+}
 
 export default function TermsPage() {
-  const [lang, setLang] = useState<AppLanguage>('ru')
+  const [lang, setLang] = useLanguage()
+  const c = CONTENT[lang]
 
   return (
     <>
       <Navbar lang={lang} onLangChange={setLang} />
       <div className="pt-16 min-h-screen bg-surface">
-        {/* Hero */}
         <div className="bg-ink text-white py-14 px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <p className="text-brand-400 text-xs font-semibold uppercase tracking-widest mb-3">Правовые документы</p>
-            <h1 className="text-3xl sm:text-5xl font-bold mb-3">Условия использования</h1>
-            <p className="text-white/60 text-base sm:text-lg">
-              Последнее обновление: 1 мая 2025 г.
-            </p>
+            <p className="text-brand-400 text-xs font-semibold uppercase tracking-widest mb-3">{c.hero.badge}</p>
+            <h1 className="text-3xl sm:text-5xl font-bold mb-3">{c.hero.title}</h1>
+            <p className="text-white/60 text-base sm:text-lg">{c.hero.updated}</p>
           </div>
         </div>
-
-        {/* Content */}
-        <div className="max-w-3xl mx-auto px-4 py-12 space-y-8">
+        <div className="max-w-3xl mx-auto px-4 py-12 space-y-6">
           <div className="card p-6 sm:p-8 text-sm text-muted leading-relaxed bg-amber-50 border border-amber-200 rounded-2xl">
-            <p className="font-semibold text-ink mb-1">Пожалуйста, ознакомьтесь внимательно</p>
-            <p>Используя сервис TARJUMAN, вы соглашаетесь соблюдать изложенные ниже условия. Если у вас есть вопросы, напишите нам на <a href="mailto:tarjuman777@gmail.com" className="underline hover:text-ink transition-colors">tarjuman777@gmail.com</a>.</p>
+            <p className="font-semibold text-ink mb-1">{c.note.title}</p>
+            <p>{c.note.body}</p>
           </div>
-
-          {SECTIONS.map((section) => (
-            <div key={section.title} className="card p-6 sm:p-8">
-              <h2 className="text-base font-bold text-ink mb-4">{section.title}</h2>
-              <div className="text-sm text-muted leading-relaxed whitespace-pre-line">
-                {section.content}
-              </div>
+          {c.sections.map(s => (
+            <div key={s.title} className="card p-6 sm:p-8">
+              <h2 className="text-base font-bold text-ink mb-4">{s.title}</h2>
+              <div className="text-sm text-muted leading-relaxed whitespace-pre-line">{s.content}</div>
             </div>
           ))}
-
-          <div className="text-center py-6">
+          <div className="text-center py-4">
             <p className="text-xs text-muted">
-              Есть вопросы?{' '}
-              <a href="mailto:tarjuman777@gmail.com" className="text-ink underline hover:opacity-70 transition-opacity">
-                Напишите нам
-              </a>
+              <a href="mailto:tarjuman777@gmail.com" className="text-ink underline hover:opacity-70">tarjuman777@gmail.com</a>
             </p>
           </div>
         </div>

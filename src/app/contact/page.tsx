@@ -1,5 +1,6 @@
 'use client'
-import { useState } from 'react'
+import { useLanguage } from '@/hooks/useLanguage'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Mail, MessageSquare, Send, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
@@ -35,7 +36,7 @@ const CHANNELS = [
 ]
 
 export default function ContactPage() {
-  const [lang, setLang] = useState<AppLanguage>('ru')
+  const [lang, setLang] = useLanguage()
   const [form, setForm] = useState({ name: '', email: '', message: '' })
   const [loading, setLoading] = useState(false)
   const isRu = lang === 'ru'
@@ -98,114 +99,4 @@ export default function ContactPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   {...fadeUp(0.08 + i * 0.08)}
-                  className="group flex items-center gap-5 bg-white border border-border rounded-2xl p-5 hover:border-[#1B4332]/40 hover:shadow-md transition-all duration-300"
-                >
-                  <div className="w-12 h-12 rounded-xl bg-[#1B4332]/8 flex items-center justify-center shrink-0">
-                    <c.icon className="w-5 h-5 text-[#1B4332]" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs text-muted mb-0.5">{c.label}</p>
-                    <p className="font-semibold text-ink truncate group-hover:text-[#1B4332] transition-colors">{c.value}</p>
-                    <p className="text-xs text-muted mt-0.5">{isRu ? c.desc_ru : c.desc_en}</p>
-                  </div>
-                  <ArrowRight className="w-4 h-4 text-muted group-hover:text-[#1B4332] group-hover:translate-x-1 transition-all shrink-0" />
-                </motion.a>
-              ))}
-
-              {/* FAQ link */}
-              <motion.div {...fadeUp(0.24)} className="bg-[#1B4332]/5 border border-[#1B4332]/15 rounded-2xl p-5">
-                <p className="font-semibold text-ink text-sm mb-1">
-                  {isRu ? 'Уже есть вопрос?' : 'Already have a question?'}
-                </p>
-                <p className="text-muted text-sm mb-3">
-                  {isRu ? 'Возможно, ответ уже есть в разделе FAQ.' : 'The answer might already be in our FAQ section.'}
-                </p>
-                <Link
-                  href="/faq"
-                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#1B4332] hover:text-[#C9922A] transition-colors"
-                >
-                  {isRu ? 'Перейти в FAQ' : 'Go to FAQ'}
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </motion.div>
-            </div>
-
-            {/* Right — form */}
-            <motion.div {...fadeUp(0.1)}>
-              <div className="bg-white border border-border rounded-2xl p-7 shadow-sm">
-                <h3 className="font-bold text-ink text-lg mb-1">
-                  {isRu ? 'Написать нам' : 'Send us a message'}
-                </h3>
-                <p className="text-muted text-sm mb-6">
-                  {isRu ? 'Ответим в течение 24 часов' : 'We\'ll reply within 24 hours'}
-                </p>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <Input
-                    label={isRu ? 'Ваше имя' : 'Your name'}
-                    value={form.name}
-                    onChange={e => setForm({ ...form, name: e.target.value })}
-                    required
-                  />
-                  <Input
-                    label="Email"
-                    type="email"
-                    value={form.email}
-                    onChange={e => setForm({ ...form, email: e.target.value })}
-                    required
-                  />
-                  <div className="space-y-1.5">
-                    <label className="label">{isRu ? 'Сообщение' : 'Message'}</label>
-                    <textarea
-                      className="input h-32 resize-none"
-                      placeholder={isRu ? 'Опишите ваш вопрос...' : 'Describe your question...'}
-                      value={form.message}
-                      onChange={e => setForm({ ...form, message: e.target.value })}
-                      required
-                    />
-                  </div>
-                  <Button
-                    type="submit"
-                    loading={loading}
-                    size="lg"
-                    className="w-full"
-                    iconRight={<Send className="w-4 h-4" />}
-                  >
-                    {isRu ? 'Отправить сообщение' : 'Send Message'}
-                  </Button>
-                </form>
-              </div>
-            </motion.div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA STRIP ─────────────────────────────────────── */}
-      <section className="bg-[#1B4332] py-16">
-        <div className="max-w-3xl mx-auto px-4 text-center">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            className="text-2xl sm:text-3xl font-bold text-white mb-4"
-          >
-            {isRu ? 'Готовы начать поступление?' : 'Ready to start your application?'}
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.08 }}
-            className="text-white/60 text-sm mb-8"
-          >
-            {isRu ? 'Подайте заявку сейчас — мы возьмём всё на себя.' : 'Apply now — we\'ll handle everything.'}
-          </motion.p>
-          <Link
-            href="/apply"
-            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#D4A943] text-[#1B4332] font-semibold text-sm hover:bg-[#C9922A] transition-colors"
-          >
-            {isRu ? 'Подать заявку' : 'Apply now'}
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-      </section>
-
-      <Footer lang={lang} />
-    </>
-  )
-}
+                  className="group flex items-center gap-5 bg-white border border-border rounded-2xl p

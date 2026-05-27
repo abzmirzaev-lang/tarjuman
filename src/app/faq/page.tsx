@@ -1,5 +1,6 @@
 'use client'
-import { useState } from 'react'
+import { useLanguage } from '@/hooks/useLanguage'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 import Link from 'next/link'
@@ -123,7 +124,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 }
 
 export default function FAQPage() {
-  const [lang, setLang] = useState<AppLanguage>('ru')
+  const [lang, setLang] = useLanguage()
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -178,20 +179,4 @@ export default function FAQPage() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a
                 href="https://t.me/tarjuman_help_bot"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-primary btn-lg"
-              >
-                Написать в Telegram
-              </a>
-              <Link href="/apply" className="btn btn-lg bg-white/10 border border-white/20 text-white hover:bg-white/20">
-                Подать заявку
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-      <Footer lang={lang} />
-    </>
-  )
-}
+                target="_blan

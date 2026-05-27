@@ -1,4 +1,5 @@
 'use client'
+import { useLanguage } from '@/hooks/useLanguage'
 import { useState, useEffect, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, ExternalLink, GraduationCap, MapPin, X, Users, Calendar, Star, BookOpen } from 'lucide-react'
@@ -122,7 +123,7 @@ const PROGRAMS_RU: Record<string, string> = {
 
 function UniversitiesContent() {
   const searchParams = useSearchParams()
-  const [lang,     setLang]     = useState<AppLanguage>('ru')
+  const [lang, setLang] = useLanguage()
   const [unis,     setUnis]     = useState<UniversityRow[]>([])
   const [filter,   setFilter]   = useState<'ALL' | 'SA' | 'AE'>((searchParams.get('country') as any) || 'ALL')
   const [search,   setSearch]   = useState('')
@@ -371,97 +372,4 @@ function UniversitiesContent() {
 
                   {/* Rank */}
                   {selected.rank <= 5 && (
-                    <div className="absolute top-4 left-4 flex items-center gap-1 bg-yellow-400 text-yellow-900 text-xs font-bold px-2.5 py-1 rounded-full">
-                      <Star className="w-3 h-3" /> Топ {selected.rank}
-                    </div>
-                  )}
-
-                  {/* Name */}
-                  <div className="absolute bottom-4 left-5 right-5">
-                    <div className="text-2xl mb-1">{selected.country === 'SA' ? '🇸🇦' : '🇦🇪'}</div>
-                    <h2 className="text-xl sm:text-2xl font-bold text-white leading-tight drop-shadow">
-                      {selected[nameKey]}
-                    </h2>
-                    {selected.city && (
-                      <div className="flex items-center gap-1 text-white/80 text-sm mt-1">
-                        <MapPin className="w-3.5 h-3.5" />
-                        {selected.city}, {selected.country === 'SA' ? 'Саудовская Аравия' : 'ОАЭ'}
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="overflow-y-auto flex-1 p-5 sm:p-6 space-y-5">
-                  {/* Key stats */}
-                  <div className="grid grid-cols-3 gap-3">
-                    {[
-                      { icon: Calendar, label: 'Основан', value: extra.founded.toString() },
-                      { icon: Users,    label: 'Студентов', value: extra.students },
-                      { icon: BookOpen, label: 'Программ', value: selected.programs.length.toString() },
-                    ].map(s => (
-                      <div key={s.label} className="bg-surface rounded-xl p-3 text-center">
-                        <s.icon className="w-4 h-4 text-brand-400 mx-auto mb-1" />
-                        <div className="text-base font-bold text-ink">{s.value}</div>
-                        <div className="text-[10px] text-muted">{s.label}</div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Description */}
-                  {desc && (
-                    <div>
-                      <p className="text-xs text-muted font-semibold uppercase tracking-wide mb-2">О университете</p>
-                      <p className="text-sm text-muted leading-relaxed">{desc}</p>
-                    </div>
-                  )}
-
-                  {/* Programs */}
-                  <div>
-                    <p className="text-xs text-muted font-semibold uppercase tracking-wide mb-2">Специальности</p>
-                    <div className="flex flex-wrap gap-2">
-                      {selected.programs.map(p => (
-                        <span key={p} className="badge badge-green text-xs py-1">
-                          {lang === 'ru' ? (PROGRAMS_RU[p] ?? p) : p}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Actions */}
-                <div className="p-4 sm:p-5 border-t border-border flex gap-3 shrink-0 bg-white">
-                  <Link
-                    href={`/apply?university=${selected.id}&country=${selected.country}`}
-                    className="flex-1 btn btn-primary btn-lg justify-center"
-                  >
-                    <GraduationCap className="w-5 h-5" />
-                    Подать заявку
-                  </Link>
-                  {selected.website_url && (
-                    <a href={selected.website_url} target="_blank" rel="noopener noreferrer"
-                      className="btn btn-secondary btn-lg px-4">
-                      <ExternalLink className="w-5 h-5" />
-                    </a>
-                  )}
-                </div>
-              </motion.div>
-            </motion.div>
-          )
-        })()}
-      </AnimatePresence>
-    </>
-  )
-}
-
-export default function UniversitiesPage() {
-  return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-surface flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-brand-400 border-t-transparent rounded-full animate-spin" />
-      </div>
-    }>
-      <UniversitiesContent />
-    </Suspense>
-  )
-}
+                    <div className="absolute top-4 left-4 flex items-center gap-1 bg-yellow-400 text-yellow-900 text-xs font-b
