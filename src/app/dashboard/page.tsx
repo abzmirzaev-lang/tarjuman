@@ -7,7 +7,7 @@ import {
   FileText, CreditCard, MessageSquare, Clock, LogOut,
   Download, CheckCircle2, AlertCircle, Plus,
   ChevronRight, Layers, ArrowRight, Calendar,
-  GraduationCap
+  GraduationCap, Trash2
 } from 'lucide-react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase/client'
@@ -64,8 +64,8 @@ function AppSelector({ apps, selectedId, onSelect, lang }: {
               : 'bg-white border border-border text-muted hover:text-ink hover:border-gray-300'
           )}
         >
-          <span>{a.country === 'SA' ? '🇸🇦' : '🇦🇪'}</span>
-          <span>{lang === 'ru' ? `Заявка ${i + 1}` : `App ${i + 1}`}</span>
+          <span className="text-xs font-bold">{a.country === 'SA' ? 'SA' : 'AE'}</span>
+          <span>{lang === 'ru' ? `Заявка ${i + 1}` : lang === 'uz' ? `Ariza ${i + 1}` : `App ${i + 1}`}</span>
         </button>
       ))}
     </div>
@@ -157,6 +157,31 @@ export default function DashboardPage() {
   async function switchApp(appId: string) {
     setSelectedAppId(appId)
     await loadAppData(appId)
+  }
+
+  async function deleteApp(appId: string) {
+    const confirmed = window.confirm(
+      lang === 'ru'
+        ? 'Удалить заявку? Это действие нельзя отменить.'
+        : lang === 'uz'
+          ? 'Arizani o\'chirish? Bu amalni bekor qilib bo\'lmaydi.'
+          : 'Delete this application? This cannot be undone.'
+    )
+    if (!confirmed) return
+    const { error } = await supabase.from('applications').delete().eq('id', appId)
+    if (error) { toast.error(t.common.error); return }
+    const remaining = apps.filter(a => a.id !== appId)
+    setApps(remaining)
+    if (selectedAppId === appId) {
+      if (remaining.length > 0) {
+        setSelectedAppId(remaining[0].id)
+        await loadAppData(remaining[0].id)
+      } else {
+        setSelectedAppId(null)
+        setDocs([]); setMessages([]); setHistory([])
+      }
+    }
+    toast.success(lang === 'ru' ? 'Заявка удалена' : lang === 'uz' ? 'Ariza o\'chirildi' : 'Application deleted')
   }
 
   const handleSendMessage = async () => {
@@ -424,22 +449,22 @@ export default function DashboardPage() {
                           >
                             {/* Card header */}
                             <div className="p-5">
-                              <div className="flex items-start justify-between gap-4 mb-4">
-                                <div className="flex items-center gap-3">
+                              <div className="flex items-start justify-between gap-3 mb-4">
+                                <div className="flex items-center gap-3 min-w-0">
                                   <div className={cn(
-                                    'w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0',
-                                    isSelected ? 'bg-ink' : 'bg-gray-100'
+                                    'w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-xs font-bold',
+                                    isSelected ? 'bg-ink text-white' : 'bg-gray-100 text-gray-500'
                                   )}>
-                                    {application.country === 'SA' ? '🇸🇦' : '🇦🇪'}
+                                    {application.country === 'SA' ? 'SA' : 'AE'}
                                   </div>
-                                  <div>
-                                    <p className="font-semibold text-ink text-sm">
+                                  <div className="min-w-0">
+                                    <p className="font-semibold text-ink text-sm truncate">
                                       {application.country === 'SA'
-                                        ? (lang === 'ru' ? 'Саудовская Аравия' : 'Saudi Arabia')
-                                        : (lang === 'ru' ? 'ОАЭ' : 'UAE')
+                                        ? (lang === 'ru' ? 'Саудовская Аравия' : lang === 'uz' ? 'Saudiya Arabistoni' : 'Saudi Arabia')
+                                        : (lang === 'ru' ? 'ОАЭ' : lang === 'uz' ? 'BAA' : 'UAE')
                                       }
                                     </p>
-                                    <p className="text-xs text-muted">
+                                    <p className="text-xs text-muted truncate">
                                       {lang === 'ru'
                                         ? PACKAGES[application.service_package]?.name_ru
                                         : PACKAGES[application.service_package]?.name_en
@@ -447,17 +472,21 @@ export default function DashboardPage() {
                                     </p>
                                   </div>
                                 </div>
-                                <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
+                                <div className="flex items-center gap-2 shrink-0">
                                   <span className={cn(
-                                    'text-xs font-semibold px-2.5 py-1 rounded-full border',
+                                    'text-xs font-semibold px-2.5 py-1 rounded-full border whitespace-nowrap',
                                     STATUS_COLORS[application.status] ?? 'bg-gray-100 text-gray-600 border-gray-200'
                                   )}>
                                     {statusLabel(application.status)}
                                   </span>
-                                  {isSelected && (
-                                    <span className="text-[10px] font-semibold px-2 py-1 bg-ink text-white rounded-full">
-                                      {lang === 'ru' ? 'Активна' : 'Active'}
-                                    </span>
+                                  {application.status === 'REGISTERED' && (
+                                    <button
+                                      onClick={(e) => { e.stopPropagation(); deleteApp(application.id) }}
+                                      className="w-8 h-8 flex items-center justify-center rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                                      title={lang === 'ru' ? 'Удалить заявку' : 'Delete'}
+                                    >
+                                      <Trash2 className="w-3.5 h-3.5" />
+                                    </button>
                                   )}
                                 </div>
                               </div>

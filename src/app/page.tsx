@@ -24,27 +24,27 @@ const HERO_SLIDES = [
   {
     photo: 'https://images.unsplash.com/photo-1692977579997-948328cdb7d2?w=1800&q=90',
     label: 'Мечеть Пророка — Медина',
-    city: 'Медина, Саудовская Аравия 🇸🇦',
+    city: 'Медина, Саудовская Аравия',
   },
   {
     photo: 'https://images.unsplash.com/photo-1724191078796-8a997b989f43?w=1800&q=90',
     label: 'Зелёный купол Мечети Пророка',
-    city: 'Медина, Саудовская Аравия 🇸🇦',
+    city: 'Медина, Саудовская Аравия',
   },
   {
     photo: 'https://images.unsplash.com/photo-1663900108404-a05e8bf82cda?w=1800&q=90',
     label: 'Эр-Рияд ночью',
-    city: 'Эр-Рияд, Саудовская Аравия 🇸🇦',
+    city: 'Эр-Рияд, Саудовская Аравия',
   },
   {
     photo: 'https://images.unsplash.com/photo-1770685798053-c7b282cc3188?w=1800&q=90',
     label: 'Эр-Рияд на закате',
-    city: 'Эр-Рияд, Саудовская Аравия 🇸🇦',
+    city: 'Эр-Рияд, Саудовская Аравия',
   },
   {
     photo: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1800&q=90',
     label: 'Дубай',
-    city: 'Дубай, ОАЭ 🇦🇪',
+    city: 'Дубай, ОАЭ',
   },
 ]
 
@@ -202,15 +202,17 @@ export default function HomePage() {
           </div>
           <div className="grid sm:grid-cols-2 gap-6">
             {([
-              { code: 'SA', emoji: '🇸🇦', name: t.countries.sa, desc: t.countries.saDesc, href: '/universities?country=SA' },
-              { code: 'AE', emoji: '🇦🇪', name: t.countries.ae, desc: t.countries.aeDesc, href: '/universities?country=AE' },
+              { code: 'SA', name: t.countries.sa, desc: t.countries.saDesc, href: '/universities?country=SA' },
+              { code: 'AE', name: t.countries.ae, desc: t.countries.aeDesc, href: '/universities?country=AE' },
             ] as const).map((c) => (
               <Link key={c.code} href={c.href}>
                 <motion.div
                   whileHover={{ y: -4 }}
                   className="card-hover p-8 flex flex-col gap-4"
                 >
-                  <span className="text-4xl">{c.emoji}</span>
+                  <div className="w-12 h-12 bg-brand-50 rounded-2xl flex items-center justify-center">
+                    <span className="text-sm font-bold text-brand-600">{c.code}</span>
+                  </div>
                   <div>
                     <h3 className="text-xl font-semibold text-ink mb-2">{c.name}</h3>
                     <p className="text-muted text-sm leading-relaxed">{c.desc}</p>
@@ -299,6 +301,3 @@ export default function HomePage() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08 }}
                 className="group relative bg-white rounded-2xl border border-border p-7 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
-              >
-                {/* Subtle bg glow */}
-                <div className={`absolute top-0 right-0 w-3
