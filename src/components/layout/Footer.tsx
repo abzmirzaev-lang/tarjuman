@@ -71,6 +71,7 @@ export function Footer({ lang = 'ru' }: { lang?: AppLanguage }) {
           <div className="flex gap-4">
             <Link href="/privacy" className="hover:text-white/70 transition-colors">{t.footer.privacy}</Link>
             <Link href="/terms"   className="hover:text-white/70 transition-colors">{t.footer.terms}</Link>
+            <Link href="/refund"  className="hover:text-white/70 transition-colors">Политика возврата</Link>
           </div>
         </div>
       </div>
