@@ -110,4 +110,83 @@ export default function AboutPage() {
 
       {/* ── STATS ─────────────────────────────────────────── */}
       <section className="bg-white border-b border-border">
-       
+        <div className="max-w-5xl mx-auto px-4 py-12">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+            {STATS.map((s, i) => (
+              <motion.div key={i} {...fadeUp(i * 0.08)} className="text-center">
+                <p className="text-3xl sm:text-4xl font-bold text-ink mb-1">{s.n}</p>
+                <p className="text-xs text-muted">{isRu ? s.label_ru : s.label_en}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── VALUES ────────────────────────────────────────── */}
+      <section className="section bg-surface">
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <motion.h2 {...fadeUp(0)} className="text-3xl sm:text-4xl font-bold text-ink mb-3">
+              {isRu ? 'Наши ценности' : 'Our values'}
+            </motion.h2>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {VALUES.map((v, i) => (
+              <motion.div key={i} {...fadeUp(i * 0.08)} className="card p-6">
+                <div className="w-10 h-10 bg-brand-50 rounded-xl flex items-center justify-center mb-4">
+                  <v.icon className="w-5 h-5 text-brand-600" />
+                </div>
+                <h3 className="font-semibold text-ink mb-2">{isRu ? v.title_ru : v.title_en}</h3>
+                <p className="text-sm text-muted leading-relaxed">{isRu ? v.body_ru : v.body_en}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── WHY US ────────────────────────────────────────── */}
+      <section className="section bg-white">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <motion.h2 {...fadeUp(0)} className="text-3xl sm:text-4xl font-bold text-ink mb-3">
+              {isRu ? 'Почему мы?' : 'Why us?'}
+            </motion.h2>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-6">
+            {STEPS.map((s, i) => (
+              <motion.div key={i} {...fadeUp(i * 0.1)} className="card p-6">
+                <span className="text-3xl font-bold text-brand-400 mb-4 block">{s.num}</span>
+                <h3 className="font-semibold text-ink mb-2">{s.title_ru}</h3>
+                <p className="text-sm text-muted leading-relaxed">{s.body_ru}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA ───────────────────────────────────────────── */}
+      <section className="section bg-ink text-white">
+        <div className="max-w-3xl mx-auto px-4 text-center">
+          <motion.h2 {...fadeUp(0)} className="text-3xl sm:text-5xl font-bold mb-4">
+            {isRu ? 'Готовы начать?' : 'Ready to start?'}
+          </motion.h2>
+          <motion.p {...fadeUp(0.08)} className="text-white/60 text-lg mb-8">
+            {isRu
+              ? 'Подайте заявку сегодня — мы возьмём всё в свои руки.'
+              : 'Apply today — we\'ll take care of everything.'}
+          </motion.p>
+          <motion.div {...fadeUp(0.16)}>
+            <Link href="/apply">
+              <button className="inline-flex items-center gap-2 px-8 py-4 bg-brand-400 text-ink font-bold rounded-2xl text-base hover:bg-brand-300 transition-colors">
+                {isRu ? 'Подать заявку' : 'Apply now'}
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      <Footer lang={lang} />
+    </>
+  )
+}

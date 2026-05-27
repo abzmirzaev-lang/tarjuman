@@ -50,7 +50,6 @@ export function Navbar({ lang = 'ru', onLangChange }: NavbarProps) {
   ]
 
   const isHome = pathname === '/'
-  // On non-home pages always show green logo; on home show white until scrolled/menu open
   const useDark = !isHome || scrolled || open
 
   return (
@@ -78,11 +77,9 @@ export function Navbar({ lang = 'ru', onLangChange }: NavbarProps) {
             <line x1="9" y1="13" x2="23" y2="13" stroke="#D4A943" strokeWidth="2" strokeLinecap="round"/>
             <line x1="16" y1="13" x2="16" y2="31" stroke="#D4A943" strokeWidth="2" strokeLinecap="round"/>
             <text
-              x="40"
-              y="24"
+              x="40" y="24"
               fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif"
-              fontSize="15"
-              fontWeight="700"
+              fontSize="15" fontWeight="700"
               fill={useDark ? '#1B4332' : '#ffffff'}
               style={{ letterSpacing: '4px' }}
             >TARJUMAN</text>

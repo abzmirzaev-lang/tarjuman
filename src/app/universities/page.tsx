@@ -13,8 +13,6 @@ import type { UniversityRow, AppLanguage } from '@/types'
 import { translations } from '@/i18n'
 import { cn } from '@/lib/utils'
 
-// Static extra info per university (keyed by name_en)
-// Photos: real Unsplash photos matching each university's city/location
 const UNI_EXTRA: Record<string, {
   founded: number
   students: string
@@ -141,7 +139,6 @@ function UniversitiesContent() {
       .then(({ data }) => setUnis(data ?? []))
   }, [])
 
-  // Close modal on Escape
   useEffect(() => {
     const fn = (e: KeyboardEvent) => { if (e.key === 'Escape') setSelected(null) }
     window.addEventListener('keydown', fn)
@@ -164,62 +161,73 @@ function UniversitiesContent() {
   const getExtra = (uni: UniversityRow) =>
     UNI_EXTRA[uni.name_en] ?? UNI_EXTRA[Object.keys(UNI_EXTRA).find(k => uni.name_en.includes(k.split(' ')[0])) ?? ''] ?? DEFAULT_EXTRA
 
+  const applyLabel  = lang === 'ru' ? 'Подать заявку' : lang === 'uz' ? 'Ariza berish' : 'Apply'
+  const detailLabel = lang === 'ru' ? 'Подробнее' : lang === 'uz' ? 'Batafsil' : 'Details'
+  const foundedLabel = lang === 'ru' ? 'Осн.' : lang === 'uz' ? 'Asos.' : 'Est.'
+  const studentsLabel = lang === 'ru' ? 'студентов' : lang === 'uz' ? 'talaba' : 'students'
+  const notFoundLabel = lang === 'ru' ? 'Университеты не найдены' : lang === 'uz' ? 'Universitetlar topilmadi' : 'No universities found'
+
   return (
     <>
       <Navbar lang={lang} onLangChange={setLang} />
-      {/* Dark header — pt accounts for navbar (4rem) + filter bar (3.5rem) */}
       <div className="bg-ink pt-[7.5rem]">
         <div className="text-white py-14 px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <p className="text-brand-400 text-xs font-semibold uppercase tracking-widest mb-3">Университеты</p>
+            <p className="text-brand-400 text-xs font-semibold uppercase tracking-widest mb-3">
+              {lang === 'ru' ? 'Университеты' : lang === 'uz' ? 'Universitetlar' : 'Universities'}
+            </p>
             <h1 className="text-3xl sm:text-5xl font-bold mb-3">{t.universities.title}</h1>
             <p className="text-white/60 text-base sm:text-lg">{t.universities.subtitle}</p>
             <div className="flex justify-center gap-6 mt-8 text-sm">
               <div className="text-center">
                 <div className="text-2xl font-bold text-brand-400">{unis.filter(u => u.country === 'SA').length}+</div>
-                <div className="text-white/50 text-xs mt-0.5">Университетов в 🇸🇦</div>
+                <div className="text-white/50 text-xs mt-0.5">{lang === 'ru' ? 'Университетов в КСА' : lang === 'uz' ? 'KSA universitetlari' : 'Universities in KSA'}</div>
               </div>
               <div className="w-px bg-white/10" />
               <div className="text-center">
                 <div className="text-2xl font-bold text-brand-400">{unis.filter(u => u.country === 'AE').length}+</div>
-                <div className="text-white/50 text-xs mt-0.5">Университетов в 🇦🇪</div>
+                <div className="text-white/50 text-xs mt-0.5">{lang === 'ru' ? 'Университетов в ОАЭ' : lang === 'uz' ? 'BAA universitetlari' : 'Universities in UAE'}</div>
               </div>
               <div className="w-px bg-white/10" />
               <div className="text-center">
                 <div className="text-2xl font-bold text-brand-400">{allPrograms.length}+</div>
-                <div className="text-white/50 text-xs mt-0.5">Специальностей</div>
+                <div className="text-white/50 text-xs mt-0.5">{lang === 'ru' ? 'Специальностей' : lang === 'uz' ? 'Mutaxassisliklar' : 'Specializations'}</div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Filters — FIXED below navbar, never moves */}
       <div
         className="fixed top-16 inset-x-0 h-14 z-40 bg-white border-b border-border shadow-sm flex items-center"
         style={{ WebkitTransform: 'translateZ(0)', transform: 'translateZ(0)' }}
       >
         <div className="container-wide flex items-center gap-2">
-          {/* Country tabs */}
           <div className="flex gap-1 bg-surface rounded-xl p-1 shrink-0">
             {(['ALL', 'SA', 'AE'] as const).map(c => (
               <button key={c} onClick={() => setFilter(c)}
                 className={cn('px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap',
                   filter === c ? 'bg-brand-400 text-white shadow-sm' : 'text-muted hover:text-ink'
                 )}>
-                {c === 'ALL' ? 'Все' : c === 'SA' ? 'КСА' : 'ОАЭ'}
+                {c === 'ALL'
+                  ? (lang === 'ru' ? 'Все' : lang === 'uz' ? 'Barchasi' : 'All')
+                  : c === 'SA'
+                  ? 'КСА'
+                  : 'ОАЭ'}
               </button>
             ))}
           </div>
-          {/* Search */}
           <div className="relative flex-1 min-w-0">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
-            <input className="input pl-9 py-2 text-sm" placeholder="Поиск университета..."
-              value={search} onChange={e => setSearch(e.target.value)} />
+            <input
+              className="input pl-9 py-2 text-sm"
+              placeholder={lang === 'ru' ? 'Поиск университета...' : lang === 'uz' ? 'Universitetni qidirish...' : 'Search university...'}
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
           </div>
-          {/* Specialty — desktop only */}
           <select className="input py-2 text-sm w-[180px] hidden md:block shrink-0" value={prog} onChange={e => setProg(e.target.value)}>
-            <option value="">Все специальности</option>
+            <option value="">{lang === 'ru' ? 'Все специальности' : lang === 'uz' ? 'Barcha mutaxassisliklar' : 'All specializations'}</option>
             {allPrograms.map(p => (
               <option key={p} value={p}>{lang === 'ru' ? (PROGRAMS_RU[p] ?? p) : p}</option>
             ))}
@@ -227,11 +235,10 @@ function UniversitiesContent() {
         </div>
       </div>
 
-      {/* Cards */}
       <div className="bg-surface">
         <div className="container-wide py-10">
           {filtered.length === 0 ? (
-            <div className="text-center py-20 text-muted">Университеты не найдены</div>
+            <div className="text-center py-20 text-muted">{notFoundLabel}</div>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filtered.map((uni, i) => {
@@ -245,7 +252,6 @@ function UniversitiesContent() {
                     onClick={() => setSelected(uni)}
                     className="card overflow-hidden cursor-pointer group hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                   >
-                    {/* Photo */}
                     <div className="relative h-44 overflow-hidden">
                       <div className={cn('absolute inset-0 bg-gradient-to-br', extra.color, 'opacity-80 z-10')} />
                       <img
@@ -254,17 +260,14 @@ function UniversitiesContent() {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         onError={e => { (e.target as HTMLImageElement).style.display = 'none' }}
                       />
-                      {/* Rank badge */}
                       {uni.rank <= 5 && (
                         <div className="absolute top-3 left-3 z-20 flex items-center gap-1 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full">
                           <Star className="w-3 h-3" /> Топ {uni.rank}
                         </div>
                       )}
-                      {/* Country */}
                       <div className="absolute top-3 right-3 z-20 text-2xl">
                         {uni.country === 'SA' ? '🇸🇦' : '🇦🇪'}
                       </div>
-                      {/* Name overlay */}
                       <div className="absolute bottom-0 left-0 right-0 z-20 p-4">
                         <h3 className="font-bold text-white text-base leading-tight drop-shadow">
                           {uni[nameKey]}
@@ -277,21 +280,18 @@ function UniversitiesContent() {
                       </div>
                     </div>
 
-                    {/* Body */}
                     <div className="p-4 space-y-3">
-                      {/* Stats */}
                       <div className="flex items-center gap-4 text-xs text-muted">
                         <div className="flex items-center gap-1">
                           <Calendar className="w-3.5 h-3.5" />
-                          <span>Осн. {extra.founded}</span>
+                          <span>{foundedLabel} {extra.founded}</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <Users className="w-3.5 h-3.5" />
-                          <span>{extra.students} студентов</span>
+                          <span>{extra.students} {studentsLabel}</span>
                         </div>
                       </div>
 
-                      {/* Programs */}
                       <div className="flex flex-wrap gap-1.5">
                         {uni.programs.slice(0, 3).map(p => (
                           <span key={p} className="badge badge-green text-[10px]">
@@ -303,17 +303,16 @@ function UniversitiesContent() {
                         )}
                       </div>
 
-                      {/* CTA */}
                       <div className="flex items-center justify-between pt-1">
                         <span className="text-xs text-brand-500 font-medium group-hover:underline">
-                          Подробнее →
+                          {detailLabel} →
                         </span>
                         <Link
                           href={`/apply?university=${uni.id}&country=${uni.country}`}
                           onClick={e => e.stopPropagation()}
                           className="btn btn-primary btn-sm px-3 py-1.5 text-xs"
                         >
-                          Подать заявку
+                          {applyLabel}
                         </Link>
                       </div>
                     </div>
@@ -326,7 +325,7 @@ function UniversitiesContent() {
         <Footer lang={lang} />
       </div>
 
-      {/* ── University Detail Modal ── */}
+      {/* University Detail Modal */}
       <AnimatePresence>
         {selected && (() => {
           const extra = getExtra(selected)
@@ -339,10 +338,8 @@ function UniversitiesContent() {
               className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
               onClick={() => setSelected(null)}
             >
-              {/* Backdrop */}
               <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
 
-              {/* Modal */}
               <motion.div
                 initial={{ opacity: 0, y: 60 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -362,7 +359,6 @@ function UniversitiesContent() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
 
-                  {/* Close button */}
                   <button
                     onClick={() => setSelected(null)}
                     className="absolute top-4 right-4 w-8 h-8 bg-black/40 hover:bg-black/60 rounded-full flex items-center justify-center transition-colors"
@@ -370,6 +366,108 @@ function UniversitiesContent() {
                     <X className="w-4 h-4 text-white" />
                   </button>
 
-                  {/* Rank */}
                   {selected.rank <= 5 && (
-                    <div className="absolute top-4 left-4 flex items-center gap-1 bg-yellow-400 text-yellow-900 text-xs font-b
+                    <div className="absolute top-4 left-4 flex items-center gap-1 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full">
+                      <Star className="w-3 h-3" /> Топ {selected.rank}
+                    </div>
+                  )}
+
+                  <div className="absolute bottom-0 left-0 right-0 p-5">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-xl">{selected.country === 'SA' ? '🇸🇦' : '🇦🇪'}</span>
+                      {selected.city && (
+                        <span className="flex items-center gap-1 text-white/70 text-xs">
+                          <MapPin className="w-3 h-3" /> {selected.city}
+                        </span>
+                      )}
+                    </div>
+                    <h2 className="text-xl sm:text-2xl font-bold text-white drop-shadow">
+                      {selected[nameKey]}
+                    </h2>
+                  </div>
+                </div>
+
+                {/* Body */}
+                <div className="overflow-y-auto flex-1 p-5 sm:p-6 space-y-5">
+                  {/* Stats row */}
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="bg-surface rounded-xl p-3 text-center">
+                      <Calendar className="w-4 h-4 text-brand-500 mx-auto mb-1" />
+                      <div className="text-sm font-bold text-ink">{extra.founded}</div>
+                      <div className="text-[10px] text-muted">{foundedLabel}</div>
+                    </div>
+                    <div className="bg-surface rounded-xl p-3 text-center">
+                      <Users className="w-4 h-4 text-brand-500 mx-auto mb-1" />
+                      <div className="text-sm font-bold text-ink">{extra.students}</div>
+                      <div className="text-[10px] text-muted">{studentsLabel}</div>
+                    </div>
+                    <div className="bg-surface rounded-xl p-3 text-center">
+                      <BookOpen className="w-4 h-4 text-brand-500 mx-auto mb-1" />
+                      <div className="text-sm font-bold text-ink">{selected.programs.length}</div>
+                      <div className="text-[10px] text-muted">{lang === 'ru' ? 'программ' : lang === 'uz' ? 'dasturlar' : 'programs'}</div>
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  {desc && (
+                    <p className="text-sm text-muted leading-relaxed">{desc}</p>
+                  )}
+
+                  {/* Programs */}
+                  {selected.programs.length > 0 && (
+                    <div>
+                      <p className="text-xs font-semibold text-ink uppercase tracking-wider mb-2">
+                        {lang === 'ru' ? 'Специальности' : lang === 'uz' ? 'Mutaxassisliklar' : 'Programs'}
+                      </p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {selected.programs.map(p => (
+                          <span key={p} className="badge badge-green text-xs">
+                            {lang === 'ru' ? (PROGRAMS_RU[p] ?? p) : p}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Footer actions */}
+                <div className="border-t border-border p-4 sm:p-5 flex gap-3 shrink-0">
+                  {selected.website_url && (
+                    <a
+                      href={selected.website_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-3 border border-border rounded-xl text-sm font-medium text-ink hover:bg-surface transition-colors"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      {lang === 'ru' ? 'Сайт' : lang === 'uz' ? 'Veb-sayt' : 'Website'}
+                    </a>
+                  )}
+                  <Link
+                    href={`/apply?university=${selected.id}&country=${selected.country}`}
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-ink text-white rounded-xl text-sm font-semibold hover:bg-ink/80 transition-colors"
+                  >
+                    <GraduationCap className="w-4 h-4" />
+                    {applyLabel}
+                  </Link>
+                </div>
+              </motion.div>
+            </motion.div>
+          )
+        })()}
+      </AnimatePresence>
+    </>
+  )
+}
+
+export default function UniversitiesPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-surface flex items-center justify-center">
+        <div className="text-muted">Загрузка...</div>
+      </div>
+    }>
+      <UniversitiesContent />
+    </Suspense>
+  )
+}

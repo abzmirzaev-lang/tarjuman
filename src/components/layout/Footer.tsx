@@ -13,21 +13,14 @@ export function Footer({ lang = 'ru' }: { lang?: AppLanguage }) {
             <svg viewBox="0 0 156 36" width="148" height="34" aria-label="TARJUMAN">
               <path
                 d="M 2,36 L 2,22 L 8,10 L 16,4 L 24,10 L 30,22 L 30,36"
-                fill="none"
-                stroke="#ffffff"
-                strokeWidth="1.5"
-                strokeLinejoin="round"
-                strokeLinecap="round"
+                fill="none" stroke="#ffffff" strokeWidth="1.5"
+                strokeLinejoin="round" strokeLinecap="round"
               />
               <line x1="9" y1="13" x2="23" y2="13" stroke="#D4A943" strokeWidth="2" strokeLinecap="round"/>
               <line x1="16" y1="13" x2="16" y2="31" stroke="#D4A943" strokeWidth="2" strokeLinecap="round"/>
-              <text
-                x="40"
-                y="24"
+              <text x="40" y="24"
                 fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif"
-                fontSize="15"
-                fontWeight="700"
-                fill="#ffffff"
+                fontSize="15" fontWeight="700" fill="#ffffff"
                 style={{ letterSpacing: '4px' }}
               >TARJUMAN</text>
             </svg>
@@ -69,9 +62,9 @@ export function Footer({ lang = 'ru' }: { lang?: AppLanguage }) {
           <h4 className="text-white font-semibold mb-3 text-sm">Документы</h4>
           <ul className="space-y-2">
             {[
-              ['/terms',   'Условия использования' ],
-              ['/privacy', 'Конфиденциальность'    ],
-              ['/refund',  'Политика возврата'      ],
+              ['/terms',   'Условия использования'],
+              ['/privacy', 'Конфиденциальность'   ],
+              ['/refund',  'Политика возврата'     ],
             ].map(([href, label]) => (
               <li key={href}>
                 <Link href={href} className="text-sm text-white/60 hover:text-white transition-colors">

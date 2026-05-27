@@ -99,4 +99,82 @@ export default function ContactPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   {...fadeUp(0.08 + i * 0.08)}
-                  className="group flex items-center gap-5 bg-white border border-border rounded-2xl p
+                  className="group flex items-center gap-5 bg-white border border-border rounded-2xl p-5 hover:border-brand-300 hover:shadow-md transition-all"
+                >
+                  <div className="w-12 h-12 bg-brand-50 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-brand-100 transition-colors">
+                    <c.icon className="w-5 h-5 text-brand-600" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-semibold text-muted mb-0.5">{c.label}</p>
+                    <p className="font-semibold text-ink text-sm">{c.value}</p>
+                    <p className="text-xs text-muted mt-0.5">{isRu ? c.desc_ru : c.desc_en}</p>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-muted group-hover:text-brand-500 group-hover:translate-x-1 transition-all shrink-0" />
+                </motion.a>
+              ))}
+            </div>
+
+            {/* Right — contact form */}
+            <motion.div {...fadeUp(0.1)}>
+              <div className="bg-white rounded-3xl border border-border p-6 sm:p-8">
+                <h2 className="text-xl font-bold text-ink mb-6">
+                  {isRu ? 'Написать нам' : 'Send us a message'}
+                </h2>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-muted mb-1.5">
+                      {isRu ? 'Ваше имя' : 'Your name'}
+                    </label>
+                    <Input
+                      value={form.name}
+                      onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+                      placeholder={isRu ? 'Имя Фамилия' : 'Full Name'}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-muted mb-1.5">Email</label>
+                    <Input
+                      type="email"
+                      value={form.email}
+                      onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                      placeholder="you@example.com"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-muted mb-1.5">
+                      {isRu ? 'Сообщение' : 'Message'}
+                    </label>
+                    <textarea
+                      value={form.message}
+                      onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
+                      placeholder={isRu ? 'Ваш вопрос...' : 'Your question...'}
+                      required
+                      rows={5}
+                      className="w-full px-4 py-3 rounded-xl border border-border bg-surface text-sm text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-brand-300 resize-none transition-all"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full flex items-center justify-center gap-2 py-3 bg-ink text-white rounded-xl font-semibold text-sm hover:bg-ink/90 disabled:opacity-60 transition-all"
+                  >
+                    {loading
+                      ? (isRu ? 'Отправляем...' : 'Sending...')
+                      : (isRu ? 'Отправить сообщение' : 'Send message')
+                    }
+                    {!loading && <Send className="w-4 h-4" />}
+                  </button>
+                </form>
+              </div>
+            </motion.div>
+
+          </div>
+        </div>
+      </section>
+
+      <Footer lang={lang} />
+    </>
+  )
+}

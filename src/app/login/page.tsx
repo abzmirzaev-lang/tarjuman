@@ -84,4 +84,9 @@ export default function LoginPage() {
 
         <p className="text-xs text-muted text-center mt-6">
           {t.auth.terms}{' '}
-          <Link href="/terms" className="text-brand-500 hove
+          <Link href="/terms" className="text-brand-500 hover:underline">{t.auth.termsLink}</Link>
+        </p>
+      </motion.div>
+    </div>
+  )
+}

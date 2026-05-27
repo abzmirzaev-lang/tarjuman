@@ -32,9 +32,9 @@ const CONTENT: Record<Lang, {
   uz: {
     hero: { badge: 'Huquqiy hujjatlar', title: 'Qaytarish siyosati', updated: 'Oxirgi yangilanish: 1 may 2025 y.' },
     stats: [
-      { val: '24 soat', label: 'Bekor qilish bilan to\'liq qaytarish' },
+      { val: '24 soat', label: "Bekor qilish bilan to'liq qaytarish" },
       { val: '3 kun', label: 'Arizaga javob' },
-      { val: '5–10 kun', label: 'Mablag\' o\'tkazish muddati' },
+      { val: '5–10 kun', label: "Mablag' o'tkazish muddati" },
     ],
     sections: [
       { title: '1. Umumiy qoidalar', content: `Ushbu Qaytarish siyosati TARJUMAN tomonidan mablag' qaytarish shartlarini tavsiflaydi.\n\nBuyurtma rasmiylashtirish orqali siz ushbu Siyosat bilan tanishganligingizni va uning shartlarini qabul qilganligingizni tasdiqlaysiz.\n\nAloqa: tarjuman777@gmail.com | @TARJUMAN_KSA` },
@@ -42,7 +42,7 @@ const CONTENT: Record<Lang, {
       { title: '3. Qisman qaytarish', content: `Agar xizmatning bir qismi bajarilgan bo'lsa (masalan, hujjatlar tarjima qilingan, lekin ariza topshirilmagan), bajarilmagan qism uchun qisman qaytarish mumkin.\n\nQisman qaytarish miqdori tomonlar o'rtasida kelishiladi.` },
       { title: '4. Murojaat tartibi', content: `1-qadam. tarjuman777@gmail.com manziliga «Qaytarish — [buyurtma raqami]» mavzusi bilan yozing.\n\n2-qadam. Quyidagilarni ko'rsating:\n— Ro'yxatdan o'tishda ko'rsatilgan ism va email;\n— Buyurtma raqami yoki to'lov sanasi;\n— Qaytarish so'rovining sababi.\n\n3-qadam. Biz murojaatni ko'rib chiqib, 3 ish kuni ichida javob beramiz.` },
       { title: '5. Muddatlar va qaytarish usuli', content: `5.1. Ariza tasdiqlangandan so'ng 5–10 ish kuni ichida qaytariladi.\n\n5.2. Mablag' to'lov bilan bir xil usulda qaytariladi.\n\n5.3. To'lov tizimlari komissiyalari va kriptovalyuta qaytarishda konvertatsiya yo'qotishlari summadan ayiriladi.` },
-      { title: '6. Siyosatga o\'zgartirishlar', content: `Joriy versiya /refund sahifasida mavjud. O'zgartirishlar kuchga kirgunga qadar rasmiylashtirилган buyurtmalarga tatbiq etilmaydi.` },
+      { title: "6. Siyosatga o'zgartirishlar", content: `Joriy versiya /refund sahifasida mavjud. O'zgartirishlar kuchga kirgunga qadar rasmiylashtirilgan buyurtmalarga tatbiq etilmaydi.` },
     ],
     cta: { title: 'Qaytarish kerakmi?', sub: 'Bizga yozing — tez va halol hal qilamiz', email: 'tarjuman777@gmail.com', tg: 'Telegram @TARJUMAN_KSA' },
   },
@@ -61,7 +61,7 @@ const CONTENT: Record<Lang, {
       { title: '5. Timeline and Method', content: `5.1. Once approved, the refund is processed within 5–10 business days.\n\n5.2. Funds are returned via the same payment method used.\n\n5.3. Payment system fees and crypto conversion losses are deducted from the refund amount.` },
       { title: '6. Policy Changes', content: `The current version is available at /refund. Changes do not apply to orders placed before they take effect.` },
     ],
-    cta: { title: 'Need a refund?', sub: 'Contact us — we\'ll resolve it quickly and fairly', email: 'tarjuman777@gmail.com', tg: 'Telegram @TARJUMAN_KSA' },
+    cta: { title: 'Need a refund?', sub: "Contact us — we'll resolve it quickly and fairly", email: 'tarjuman777@gmail.com', tg: 'Telegram @TARJUMAN_KSA' },
   },
 }
 

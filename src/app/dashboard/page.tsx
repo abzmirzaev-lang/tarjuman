@@ -547,4 +547,219 @@ export default function DashboardPage() {
                                               'w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-[10px] font-bold',
                                               done    ? 'bg-emerald-500 text-white' :
                                               current ? 'bg-ink text-white ring-4 ring-ink/10' :
-                      
+                                                        'bg-gray-100 text-gray-400'
+                                            )}>
+                                              {done ? '✓' : i + 1}
+                                            </div>
+                                            <span className={cn(
+                                              'text-xs',
+                                              done    ? 'text-emerald-600 font-medium' :
+                                              current ? 'text-ink font-semibold' :
+                                                        'text-muted'
+                                            )}>
+                                              {statusLabel(s)}
+                                            </span>
+                                          </div>
+                                        )
+                                      })}
+                                    </div>
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        </motion.div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* ═══════════════════════════════════════
+                  TAB: ДОКУМЕНТЫ
+              ═══════════════════════════════════════ */}
+              {tab === 'documents' && (
+                <div className="space-y-4">
+                  <h2 className="text-base font-semibold text-ink">{t.dashboard.documents}</h2>
+                  {!selectedApp ? (
+                    <div className="bg-white rounded-2xl border border-border p-10 text-center text-muted text-sm">
+                      {lang === 'ru' ? 'Выберите заявку' : 'Select an application'}
+                    </div>
+                  ) : appLoading ? (
+                    <Spinner />
+                  ) : docs.length === 0 ? (
+                    <div className="bg-white rounded-2xl border border-border p-10 text-center">
+                      <FileText className="w-10 h-10 text-muted mx-auto mb-3" />
+                      <p className="text-sm text-muted">{t.dashboard.noDocs}</p>
+                    </div>
+                  ) : (
+                    <div className="grid sm:grid-cols-2 gap-3">
+                      {docs.map(doc => (
+                        <div key={doc.id} className="bg-white rounded-2xl border border-border p-4 flex items-center gap-3">
+                          <div className="w-10 h-10 bg-brand-50 rounded-xl flex items-center justify-center shrink-0">
+                            <FileText className="w-5 h-5 text-brand-500" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-ink truncate">{DOCUMENT_LABELS[doc.type]?.[lang] ?? doc.type}</p>
+                            <p className="text-xs text-muted">{formatDate(doc.created_at)}</p>
+                          </div>
+                          <button
+                            onClick={() => handleDownloadDoc(doc)}
+                            className="p-2 rounded-xl hover:bg-surface transition-colors"
+                          >
+                            <Download className="w-4 h-4 text-muted" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* ═══════════════════════════════════════
+                  TAB: ОПЛАТА
+              ═══════════════════════════════════════ */}
+              {tab === 'payment' && (
+                <div className="space-y-4">
+                  <h2 className="text-base font-semibold text-ink">{t.dashboard.payment}</h2>
+                  {payment ? (
+                    <div className="bg-white rounded-2xl border border-border p-6">
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center">
+                          <CheckCircle2 className="w-6 h-6 text-emerald-600" />
+                        </div>
+                        <div>
+                          <p className="font-semibold text-ink">{lang === 'ru' ? 'Оплачено' : 'Paid'}</p>
+                          <p className="text-sm text-muted">{formatDate(payment.created_at)}</p>
+                        </div>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between py-2 border-b border-border">
+                          <span className="text-muted">{lang === 'ru' ? 'Сумма' : 'Amount'}</span>
+                          <span className="font-semibold text-ink">{formatCurrency(payment.amount)}</span>
+                        </div>
+                        <div className="flex justify-between py-2 border-b border-border">
+                          <span className="text-muted">{lang === 'ru' ? 'Метод' : 'Method'}</span>
+                          <span className="font-medium text-ink">{payment.method}</span>
+                        </div>
+                        <div className="flex justify-between py-2">
+                          <span className="text-muted">{lang === 'ru' ? 'Пакет' : 'Package'}</span>
+                          <span className="font-medium text-ink">{PACKAGES[payment.package]?.name_ru ?? payment.package}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="bg-white rounded-2xl border border-border p-10 text-center">
+                      <CreditCard className="w-10 h-10 text-muted mx-auto mb-3" />
+                      <p className="text-sm text-muted mb-4">{t.dashboard.noPayment}</p>
+                      {selectedApp && (
+                        <a href="/apply" className="btn btn-primary btn-sm">
+                          {lang === 'ru' ? 'Оплатить заявку' : 'Pay for application'}
+                        </a>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* ═══════════════════════════════════════
+                  TAB: СООБЩЕНИЯ
+              ═══════════════════════════════════════ */}
+              {tab === 'messages' && (
+                <div className="flex flex-col h-[calc(100vh-220px)] min-h-[400px]">
+                  <h2 className="text-base font-semibold text-ink mb-4">{t.dashboard.messages}</h2>
+                  {!selectedApp ? (
+                    <div className="bg-white rounded-2xl border border-border p-10 text-center text-muted text-sm flex-1">
+                      {lang === 'ru' ? 'Выберите заявку' : 'Select an application'}
+                    </div>
+                  ) : (
+                    <div className="bg-white rounded-2xl border border-border flex-1 flex flex-col overflow-hidden">
+                      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                        {messages.length === 0 ? (
+                          <div className="text-center text-muted text-sm py-10">
+                            {lang === 'ru' ? 'Нет сообщений' : 'No messages yet'}
+                          </div>
+                        ) : (
+                          messages.map(msg => (
+                            <div key={msg.id} className={cn('flex', msg.sender === 'USER' ? 'justify-end' : 'justify-start')}>
+                              <div className={cn(
+                                'max-w-[75%] rounded-2xl px-4 py-2.5 text-sm',
+                                msg.sender === 'USER'
+                                  ? 'bg-ink text-white rounded-br-sm'
+                                  : 'bg-surface border border-border text-ink rounded-bl-sm'
+                              )}>
+                                <p className={cn('text-[10px] font-semibold mb-0.5',
+                                  msg.sender === 'USER' ? 'text-white/70' : 'text-brand-500'
+                                )}>
+                                  {msg.sender === 'USER'
+                                    ? (lang === 'ru' ? 'Вы' : 'You')
+                                    : 'TARJUMAN'}
+                                </p>
+                                <p>{msg.content}</p>
+                                <p className={cn('text-[10px] mt-1', msg.sender === 'USER' ? 'text-white/60' : 'text-muted')}>
+                                  {formatDate(msg.created_at)}
+                                </p>
+                              </div>
+                            </div>
+                          ))
+                        )}
+                        <div ref={chatEndRef} />
+                      </div>
+                      <div className="p-3 border-t border-border flex gap-2">
+                        <input
+                          className="flex-1 px-4 py-2.5 rounded-xl border border-border bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-brand-300"
+                          placeholder={lang === 'ru' ? 'Написать сообщение...' : 'Write a message...'}
+                          value={msgText}
+                          onChange={e => setMsgText(e.target.value)}
+                          onKeyDown={e => e.key === 'Enter' && !e.shiftKey && handleSendMessage()}
+                        />
+                        <Button size="sm" onClick={handleSendMessage} loading={sending}>
+                          <ArrowRight className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* ═══════════════════════════════════════
+                  TAB: ИСТОРИЯ
+              ═══════════════════════════════════════ */}
+              {tab === 'timeline' && (
+                <div className="space-y-4">
+                  <h2 className="text-base font-semibold text-ink">{t.dashboard.timeline}</h2>
+                  {!selectedApp ? (
+                    <div className="bg-white rounded-2xl border border-border p-10 text-center text-muted text-sm">
+                      {lang === 'ru' ? 'Выберите заявку' : 'Select an application'}
+                    </div>
+                  ) : appLoading ? (
+                    <Spinner />
+                  ) : history.length === 0 ? (
+                    <div className="bg-white rounded-2xl border border-border p-10 text-center text-muted text-sm">
+                      {lang === 'ru' ? 'История пуста' : 'No history yet'}
+                    </div>
+                  ) : (
+                    <div className="bg-white rounded-2xl border border-border divide-y divide-border">
+                      {history.map((h, i) => (
+                        <div key={h.id} className="p-4 flex items-start gap-3">
+                          <div className="w-8 h-8 bg-brand-50 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                            <CheckCircle2 className="w-4 h-4 text-brand-500" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-ink">{statusLabel(h.new_status)}</p>
+                            <p className="text-xs text-muted">{formatDate(h.created_at)}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+            </motion.div>
+          </div>
+        </main>
+      </div>
+    </div>
+  )
+}

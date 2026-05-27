@@ -1,6 +1,6 @@
 'use client'
 import { useLanguage } from '@/hooks/useLanguage'
-import { useState, useEffect, useCallback, useEffect, Suspense } from 'react'
+import { useState, useEffect, useCallback, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useDropzone } from 'react-dropzone'
@@ -1071,4 +1071,13 @@ function ApplyContent() {
               <button
                 onClick={() => { setCommentModal(false); setStep(4) }}
                 className="flex-1 py-2.5 rounded-xl bg-brand-400 text-white text-sm font-semibold hover:bg-brand-500 transition-colors"
-  
+                >
+                  {lang === 'ru' ? 'Продолжить' : lang === 'uz' ? 'Davom etish' : 'Continue'}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+    </div>
+  )
+}

@@ -179,4 +179,23 @@ export default function FAQPage() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a
                 href="https://t.me/tarjuman_help_bot"
-                target="_blan
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-400 text-ink font-semibold rounded-xl text-sm hover:bg-brand-300 transition-colors"
+              >
+                Telegram
+              </a>
+              <a
+                href="mailto:tarjuman777@gmail.com"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/10 text-white font-semibold rounded-xl text-sm hover:bg-white/20 transition-colors"
+              >
+                tarjuman777@gmail.com
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <Footer lang={lang} />
+    </>
+  )
+}

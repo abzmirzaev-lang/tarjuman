@@ -92,6 +92,8 @@ export const en: Translation = {
     noApp:       'You have no applications yet',
     startApp:    'Submit your first application',
     sendMessage: 'Send a Message',
+    noDocs:      'No documents uploaded',
+    noPayment:   'No payment information',
   },
   auth: {
     loginTitle:  'Sign in to TARJUMAN',

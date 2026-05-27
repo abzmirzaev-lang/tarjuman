@@ -53,7 +53,6 @@ export default function HomePage() {
   const [slide, setSlide] = useState(0)
   const t = translations[lang]
 
-  // Auto-advance slides
   useEffect(() => {
     const timer = setInterval(() => {
       setSlide(s => (s + 1) % HERO_SLIDES.length)
@@ -61,14 +60,29 @@ export default function HomePage() {
     return () => clearInterval(timer)
   }, [])
 
+  const steps = lang === 'ru' ? [
+    { n: '01', icon: FileText,    title: 'Подайте заявку',       desc: 'Заполните форму за 5 минут' },
+    { n: '02', icon: Send,        title: 'Оплатите тариф',       desc: 'Карта, крипта или Telegram' },
+    { n: '03', icon: Zap,         title: 'Мы делаем всё',        desc: 'Перевод, подача, отслеживание' },
+    { n: '04', icon: Award,       title: 'Получите зачисление',  desc: 'Официальное письмо от вуза' },
+  ] : lang === 'uz' ? [
+    { n: '01', icon: FileText,    title: 'Ariza bering',          desc: '5 daqiqada shaklni to\'ldiring' },
+    { n: '02', icon: Send,        title: 'Tarifni to\'lang',       desc: 'Karta, kripto yoki Telegram' },
+    { n: '03', icon: Zap,         title: 'Biz hamma narsani qilamiz', desc: 'Tarjima, topshirish, kuzatuv' },
+    { n: '04', icon: Award,       title: 'Qabul xatini oling',    desc: 'Universitetdan rasmiy xat' },
+  ] : [
+    { n: '01', icon: FileText,    title: 'Submit application',   desc: 'Fill the form in 5 minutes' },
+    { n: '02', icon: Send,        title: 'Pay for the plan',     desc: 'Card, crypto or Telegram' },
+    { n: '03', icon: Zap,         title: 'We do everything',     desc: 'Translation, filing, tracking' },
+    { n: '04', icon: Award,       title: 'Get your admission',   desc: 'Official letter from the university' },
+  ]
+
   return (
     <>
       <Navbar lang={lang} onLangChange={setLang} />
 
-      {/* ── HERO ── */}
+      {/* HERO */}
       <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden">
-
-        {/* ── Slideshow background ── */}
         <div className="absolute inset-0 z-0">
           <AnimatePresence mode="sync">
             {HERO_SLIDES.map((s, i) => i === slide && (
@@ -80,30 +94,21 @@ export default function HomePage() {
                 transition={{ duration: 1.5, ease: 'easeInOut' }}
                 className="absolute inset-0"
               >
-                {/* Ken Burns zoom effect */}
                 <motion.div
                   className="absolute inset-0"
                   initial={{ scale: 1 }}
                   animate={{ scale: 1.08 }}
                   transition={{ duration: 7, ease: 'easeInOut' }}
                 >
-                  <img
-                    src={s.photo}
-                    alt={s.label}
-                    className="w-full h-full object-cover"
-                  />
+                  <img src={s.photo} alt={s.label} className="w-full h-full object-cover" />
                 </motion.div>
               </motion.div>
             ))}
           </AnimatePresence>
-
-          {/* Dark gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/75 z-10" />
-          {/* Bottom fade to white for transition to next section */}
           <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-surface to-transparent z-10" />
         </div>
 
-        {/* ── Content ── */}
         <div className="container-narrow relative z-20 text-center py-28 pt-36">
           <motion.div initial="hidden" animate="visible" transition={{ staggerChildren: 0.12 }}>
 
@@ -138,7 +143,6 @@ export default function HomePage() {
               </Link>
             </motion.div>
 
-            {/* Stats */}
             <motion.div variants={fadeUp} className="mt-16 grid grid-cols-3 gap-6 max-w-lg mx-auto">
               {[
                 [t.hero.stat1, t.hero.stat1l],
@@ -154,9 +158,7 @@ export default function HomePage() {
           </motion.div>
         </div>
 
-        {/* ── Slide indicators + location ── */}
         <div className="absolute bottom-10 left-0 right-0 z-20 flex flex-col items-center gap-3">
-          {/* Location label */}
           <AnimatePresence mode="wait">
             <motion.div
               key={slide}
@@ -170,8 +172,6 @@ export default function HomePage() {
               {HERO_SLIDES[slide].city}
             </motion.div>
           </AnimatePresence>
-
-          {/* Dots */}
           <div className="flex gap-2">
             {HERO_SLIDES.map((_, i) => (
               <button
@@ -194,7 +194,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── COUNTRIES ── */}
+      {/* COUNTRIES */}
       <section className="section bg-white">
         <div className="container-narrow">
           <div className="text-center mb-12">
@@ -218,7 +218,7 @@ export default function HomePage() {
                     <p className="text-muted text-sm leading-relaxed">{c.desc}</p>
                   </div>
                   <div className="flex items-center gap-1 text-brand-500 text-sm font-medium mt-auto">
-                    {lang === 'ru' ? 'Смотреть университеты' : lang === 'uz' ? 'Universitetlarni ko\'rish' : 'View universities'}
+                    {lang === 'ru' ? 'Смотреть университеты' : lang === 'uz' ? "Universitetlarni ko'rish" : 'View universities'}
                     <ChevronRight className="w-4 h-4" />
                   </div>
                 </motion.div>
@@ -228,7 +228,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── SERVICES ── */}
+      {/* SERVICES */}
       <section className="section bg-white">
         <div className="container-narrow">
           <div className="text-center mb-14">
@@ -277,7 +277,7 @@ export default function HomePage() {
                 points: lang === 'ru'
                   ? ['Личный менеджер', 'Поддержка 24/7', 'От заявки до визы']
                   : lang === 'uz'
-                  ? ['Shaxsiy menejer', '24/7 qo\'llab-quvvatlash', 'Arizadan vizagacha']
+                  ? ['Shaxsiy menejer', "24/7 qo'llab-quvvatlash", 'Arizadan vizagacha']
                   : ['Personal manager', '24/7 support', 'From application to visa'],
               },
               {
@@ -301,3 +301,121 @@ export default function HomePage() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08 }}
                 className="group relative bg-white rounded-2xl border border-border p-7 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+              >
+                <div className={`absolute inset-0 bg-gradient-to-br ${s.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
+                <div className={`w-12 h-12 rounded-2xl ${s.bg} flex items-center justify-center mb-5 shadow-sm ${s.shadow}`}>
+                  <s.icon className="w-6 h-6 text-ink" />
+                </div>
+                <h3 className="text-lg font-bold text-ink mb-2">{s.title}</h3>
+                <p className="text-muted text-sm mb-4 leading-relaxed">{s.desc}</p>
+                <ul className="space-y-1.5">
+                  {s.points.map((p) => (
+                    <li key={p} className="flex items-center gap-2 text-xs text-muted">
+                      <Check className="w-3.5 h-3.5 text-brand-500 shrink-0" />
+                      {p}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section className="section bg-ink text-white">
+        <div className="container-narrow">
+          <div className="text-center mb-14">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 border border-white/20 rounded-full text-white/80 text-xs font-semibold uppercase tracking-widest mb-4">
+              {lang === 'ru' ? 'Процесс' : lang === 'uz' ? 'Jarayon' : 'Process'}
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-3">
+              {lang === 'ru' ? 'Как это работает' : lang === 'uz' ? 'Bu qanday ishlaydi' : 'How it works'}
+            </h2>
+            <p className="text-white/60 max-w-md mx-auto text-sm">
+              {lang === 'ru' ? '4 шага до вашего университета мечты' : lang === 'uz' ? "Orzu qilgan universitetingizgacha 4 qadam" : '4 steps to your dream university'}
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {steps.map((s, i) => (
+              <motion.div
+                key={s.n}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="relative p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
+              >
+                <div className="text-3xl font-black text-white/10 mb-4">{s.n}</div>
+                <div className="w-10 h-10 rounded-xl bg-brand-400/20 flex items-center justify-center mb-4">
+                  <s.icon className="w-5 h-5 text-brand-400" />
+                </div>
+                <h3 className="font-bold text-white mb-1">{s.title}</h3>
+                <p className="text-white/50 text-sm">{s.desc}</p>
+                {i < steps.length - 1 && (
+                  <div className="hidden lg:block absolute top-1/2 -right-3 w-6 text-white/20 text-lg">→</div>
+                )}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* REVIEWS */}
+      <ReviewsSection lang={lang} />
+
+      {/* PRICING PREVIEW */}
+      <section className="section bg-surface">
+        <div className="container-narrow text-center">
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-50 border border-brand-200 rounded-full text-brand-700 text-xs font-semibold uppercase tracking-widest mb-4">
+            {lang === 'ru' ? 'Тарифы' : lang === 'uz' ? 'Tariflar' : 'Pricing'}
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-bold text-ink mb-3">
+            {lang === 'ru' ? 'Простые и прозрачные цены' : lang === 'uz' ? "Oddiy va shaffof narxlar" : 'Simple, transparent pricing'}
+          </h2>
+          <p className="text-muted mb-10 max-w-md mx-auto text-sm">
+            {lang === 'ru' ? 'Без скрытых платежей. Платите один раз — мы делаем всё остальное.'
+              : lang === 'uz' ? "Yashirin to'lovlarsiz. Bir marta to'lang — biz qolganini qilamiz."
+              : 'No hidden fees. Pay once — we handle everything.'}
+          </p>
+          <Link href="/pricing">
+            <Button variant="primary" size="lg" iconRight={<ArrowRight className="w-4 h-4" />}>
+              {lang === 'ru' ? 'Смотреть тарифы' : lang === 'uz' ? 'Tariflarni ko\'rish' : 'View pricing'}
+            </Button>
+          </Link>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="section bg-white">
+        <div className="container-narrow">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="rounded-3xl bg-ink text-white p-10 sm:p-14 text-center relative overflow-hidden"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-brand-900/30 to-transparent pointer-events-none" />
+            <div className="relative z-10">
+              <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+                {lang === 'ru' ? 'Готовы начать?' : lang === 'uz' ? "Boshlashga tayyormisiz?" : 'Ready to start?'}
+              </h2>
+              <p className="text-white/60 mb-8 text-base max-w-md mx-auto">
+                {lang === 'ru' ? 'Подайте заявку прямо сейчас — это займёт всего 5 минут'
+                  : lang === 'uz' ? "Hoziroq ariza bering — bu atigi 5 daqiqa oladi"
+                  : 'Apply right now — it takes just 5 minutes'}
+              </p>
+              <Link href="/apply">
+                <Button variant="primary" size="xl" iconRight={<ArrowRight className="w-5 h-5" />}>
+                  {t.hero.cta}
+                </Button>
+              </Link>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <Footer lang={lang} />
+    </>
+  )
+}

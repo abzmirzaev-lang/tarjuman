@@ -263,7 +263,7 @@ export default function AdminPage() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-ink truncate">{app.full_name}</p>
-                        <p className="text-xs text-muted">{app.country === 'SA' ? '🇸🇦 Саудовская Аравия' : '🇦🇪 ОАЭ'} · {formatDate(app.created_at)}</p>
+                        <p className="text-xs text-muted">{app.country === 'SA' ? 'SA' : 'AE'} · {formatDate(app.created_at)}</p>
                       </div>
                       <Badge status={app.status} label={STATUS_RU[app.status]} />
                       <button onClick={() => openDetail(app)} className="btn-ghost btn-sm p-1.5 rounded-lg">
@@ -287,13 +287,12 @@ export default function AdminPage() {
               <div className="flex gap-2 flex-wrap">
                 {([
                   { key: '',           label: 'Все',            count: apps.length,                                        color: 'bg-surface border border-border text-ink' },
-                  { key: 'VIP',        label: '👑 VIP — $99',   count: apps.filter(a => a.service_package === 'VIP').length,        color: 'bg-amber-50 border border-amber-200 text-amber-700' },
-                  { key: 'STANDARD',   label: '⭐ Стандарт — $69', count: apps.filter(a => a.service_package === 'STANDARD').length, color: 'bg-brand-50 border border-brand-200 text-brand-700' },
-                  { key: 'SUBMISSION', label: '📄 Базовый — $29',  count: apps.filter(a => a.service_package === 'SUBMISSION').length, color: 'bg-gray-50 border border-gray-200 text-gray-700' },
+                  { key: 'VIP',        label: 'VIP — $99',      count: apps.filter(a => a.service_package === 'VIP').length,        color: 'bg-amber-50 border border-amber-200 text-amber-700' },
+                  { key: 'STANDARD',   label: 'Стандарт — $69', count: apps.filter(a => a.service_package === 'STANDARD').length, color: 'bg-brand-50 border border-brand-200 text-brand-700' },
+                  { key: 'SUBMISSION', label: 'Базовый — $29',  count: apps.filter(a => a.service_package === 'SUBMISSION').length, color: 'bg-gray-50 border border-gray-200 text-gray-700' },
                 ] as const).map(pkg => (
                   <button
                     key={pkg.key}
-                    onClick={() => setStatusFlt(prev => prev)}
                     className={cn(
                       'flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all',
                       pkg.color
@@ -307,7 +306,6 @@ export default function AdminPage() {
               </div>
 
               {/* Filters */}
-              {/* Mobile search — full width */}
               <div className="relative md:hidden">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
                 <input
@@ -317,22 +315,17 @@ export default function AdminPage() {
                   onChange={e => setSearch(e.target.value)}
                 />
                 {search && (
-                  <button
-                    onClick={() => setSearch('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-ink"
-                  >
+                  <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-ink">
                     <X className="w-4 h-4" />
                   </button>
                 )}
               </div>
-              {/* Mobile status filter */}
               <div className="md:hidden">
                 <select className="input w-full" value={statusFlt} onChange={e => setStatusFlt(e.target.value as any)}>
                   <option value="">Все статусы</option>
                   {ALL_STATUSES.map(s => <option key={s} value={s}>{STATUS_RU[s]}</option>)}
                 </select>
               </div>
-              {/* Desktop filters */}
               <div className="hidden md:flex gap-3 flex-wrap">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
@@ -343,17 +336,6 @@ export default function AdminPage() {
                   <option value="">Все статусы</option>
                   {ALL_STATUSES.map(s => <option key={s} value={s}>{STATUS_RU[s]}</option>)}
                 </select>
-                <select className="input w-48" onChange={e => {
-                  const val = e.target.value as 'VIP' | 'STANDARD' | 'SUBMISSION' | ''
-                  setSearch(prev => prev)
-                  ;(window as any).__pkgFilter = val
-                  setSearch(s => s + '')
-                }}>
-                  <option value="">Все пакеты</option>
-                  <option value="VIP">👑 VIP — $99</option>
-                  <option value="STANDARD">⭐ Стандарт — $69</option>
-                  <option value="SUBMISSION">📄 Базовый — $29</option>
-                </select>
               </div>
 
               {/* Tables by package */}
@@ -361,9 +343,9 @@ export default function AdminPage() {
                 const pkgApps = filteredApps.filter(a => a.service_package === pkg)
                 if (pkgApps.length === 0) return null
                 const pkgMeta = {
-                  VIP:        { label: '👑 VIP — $99',      color: 'bg-amber-50 border-amber-200 text-amber-700' },
-                  STANDARD:   { label: '⭐ Стандарт — $69', color: 'bg-brand-50 border-brand-200 text-brand-700' },
-                  SUBMISSION: { label: '📄 Базовый — $29',  color: 'bg-gray-50 border-gray-200 text-gray-700' },
+                  VIP:        { label: 'VIP — $99',      color: 'bg-amber-50 border-amber-200 text-amber-700' },
+                  STANDARD:   { label: 'Стандарт — $69', color: 'bg-brand-50 border-brand-200 text-brand-700' },
+                  SUBMISSION: { label: 'Базовый — $29',  color: 'bg-gray-50 border-gray-200 text-gray-700' },
                 }[pkg]
                 return (
                   <div key={pkg} className="card overflow-hidden">
@@ -395,7 +377,7 @@ export default function AdminPage() {
                                   </div>
                                 </div>
                               </td>
-                              <td className="px-4 py-3 text-sm text-muted">{app.country === 'SA' ? '🇸🇦' : '🇦🇪'}</td>
+                              <td className="px-4 py-3 text-sm text-muted">{app.country === 'SA' ? 'SA' : 'AE'}</td>
                               <td className="px-4 py-3"><Badge status={app.status} label={STATUS_RU[app.status]} /></td>
                               <td className="px-4 py-3 text-xs text-muted">{formatDate(app.created_at)}</td>
                               <td className="px-4 py-3">
@@ -425,7 +407,7 @@ export default function AdminPage() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-semibold text-ink truncate">{app.full_name}</p>
-                            <p className="text-xs text-muted">{app.country === 'SA' ? '🇸🇦' : '🇦🇪'} · {formatDate(app.created_at)}</p>
+                            <p className="text-xs text-muted">{app.country === 'SA' ? 'SA' : 'AE'} · {formatDate(app.created_at)}</p>
                             <div className="mt-1">
                               <Badge status={app.status} label={STATUS_RU[app.status]} />
                             </div>
@@ -458,7 +440,6 @@ export default function AdminPage() {
             <div className="space-y-5">
               <h1 className="text-2xl font-bold text-ink">Пользователи ({users.length})</h1>
               <div className="card overflow-hidden">
-                {/* Desktop table */}
                 <div className="hidden md:block overflow-x-auto">
                   <table className="w-full">
                     <thead className="bg-surface border-b border-border">
@@ -496,7 +477,6 @@ export default function AdminPage() {
                     </tbody>
                   </table>
                 </div>
-                {/* Mobile cards */}
                 <div className="md:hidden divide-y divide-border">
                   {users.map(user => {
                     const userApps = apps.filter(a => a.user_id === user.id)
@@ -525,7 +505,6 @@ export default function AdminPage() {
             <div className="space-y-5">
               <h1 className="text-2xl font-bold text-ink">Платежи</h1>
               <div className="card overflow-hidden">
-                {/* Desktop table */}
                 <div className="hidden md:block overflow-x-auto">
                   <table className="w-full">
                     <thead className="bg-surface border-b border-border">
@@ -554,7 +533,6 @@ export default function AdminPage() {
                     </tbody>
                   </table>
                 </div>
-                {/* Mobile cards */}
                 <div className="md:hidden divide-y divide-border">
                   {payments.map(p => (
                     <div key={p.id} className="p-4 flex items-center gap-3">
@@ -636,7 +614,7 @@ export default function AdminPage() {
               <div className="text-xs space-y-2">
                 <p className="text-muted font-semibold uppercase tracking-wide mb-2">Данные</p>
                 {[
-                  ['Страна', selected.country === 'SA' ? '🇸🇦 Саудовская Аравия' : '🇦🇪 ОАЭ'],
+                  ['Страна', selected.country === 'SA' ? 'Саудовская Аравия' : 'ОАЭ'],
                   ['Пакет', PACKAGES[selected.service_package].name_ru],
                   ['Гражданство', selected.citizenship],
                   ['Телефон', selected.phone],

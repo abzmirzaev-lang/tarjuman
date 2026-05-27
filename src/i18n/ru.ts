@@ -90,6 +90,8 @@ export const ru = {
     noApp:       'У вас пока нет заявок',
     startApp:    'Подать первую заявку',
     sendMessage: 'Написать сообщение',
+    noDocs:      'Нет загруженных документов',
+    noPayment:   'Нет информации об оплате',
   },
   auth: {
     loginTitle:  'Войдите в TARJUMAN',

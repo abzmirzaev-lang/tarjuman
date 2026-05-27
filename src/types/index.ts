@@ -145,7 +145,7 @@ export interface StatusHistoryRow {
 // ──────────────────────────────────────────
 export const PACKAGES: Record<ServicePackage, {
   priceUSD:    number
-  priceId?:    string          // Stripe price ID from env
+  priceId?:    string
   name_ru:     string
   name_en:     string
   name_uz:     string
@@ -179,24 +179,24 @@ export const PACKAGES: Record<ServicePackage, {
 }
 
 export const STATUS_LABELS: Record<ApplicationStatus, { ru: string; en: string; uz: string }> = {
-  REGISTERED:   { ru: 'Зарегистрировано',   en: 'Registered',    uz: 'Ro\'yxatdan o\'tdi' },
-  PAID:         { ru: 'Оплачено',            en: 'Paid',          uz: 'To\'landi' },
-  IN_PROGRESS:  { ru: 'В обработке',         en: 'In Progress',   uz: 'Jarayonda' },
-  UNDER_REVIEW: { ru: 'На проверке',         en: 'Under Review',  uz: 'Ko\'rib chiqilmoqda' },
-  SUBMITTED:    { ru: 'Подано',              en: 'Submitted',     uz: 'Topshirildi' },
-  COMPLETED:    { ru: 'Завершено',           en: 'Completed',     uz: 'Yakunlandi' },
-  REJECTED:     { ru: 'Отклонено',           en: 'Rejected',      uz: 'Rad etildi' },
+  REGISTERED:   { ru: 'Зарегистрировано', en: 'Registered',   uz: "Ro'yxatdan o'tdi" },
+  PAID:         { ru: 'Оплачено',         en: 'Paid',          uz: "To'landi" },
+  IN_PROGRESS:  { ru: 'В обработке',      en: 'In Progress',   uz: 'Jarayonda' },
+  UNDER_REVIEW: { ru: 'На проверке',      en: 'Under Review',  uz: "Ko'rib chiqilmoqda" },
+  SUBMITTED:    { ru: 'Подано',           en: 'Submitted',     uz: 'Topshirildi' },
+  COMPLETED:    { ru: 'Завершено',        en: 'Completed',     uz: 'Yakunlandi' },
+  REJECTED:     { ru: 'Отклонено',        en: 'Rejected',      uz: 'Rad etildi' },
 }
 
-export const DOCUMENT_LABELS: Record<DocumentType, { ru: string; en: string }> = {
-  PASSPORT:        { ru: 'Паспорт',          en: 'Passport' },
-  PHOTO:           { ru: 'Фото 3×4',         en: 'Photo 3×4' },
-  DIPLOMA:         { ru: 'Диплом/Аттестат + Транскрипт (оценки)',  en: 'Diploma/Certificate + Transcript' },
-  TRANSCRIPT:      { ru: 'Транскрипт (дополнительно)',       en: 'Transcript (additional)' },
-  IELTS:           { ru: 'IELTS/TOEFL',      en: 'IELTS/TOEFL' },
-  ARABIC_CERT:     { ru: 'Сертификат по арабскому', en: 'Arabic Certificate' },
-  RECOMMENDATION:  { ru: 'Рекомендательное письмо', en: 'Recommendation Letter' },
-  MEDICAL:         { ru: 'Медицинская справка', en: 'Medical Certificate' },
-  CRIMINAL_RECORD: { ru: 'Справка о несудимости', en: 'Criminal Record' },
-  OTHER:           { ru: 'Другое',            en: 'Other' },
+export const DOCUMENT_LABELS: Record<DocumentType, { ru: string; en: string; uz: string }> = {
+  PASSPORT:        { ru: 'Паспорт',                      en: 'Passport',                        uz: 'Pasport' },
+  PHOTO:           { ru: 'Фото 3x4',                     en: 'Photo 3x4',                       uz: 'Foto 3x4' },
+  DIPLOMA:         { ru: 'Диплом/Аттестат + Транскрипт', en: 'Diploma/Certificate + Transcript', uz: 'Diplom/Attestat + Transkript' },
+  TRANSCRIPT:      { ru: 'Транскрипт (дополнительно)',   en: 'Transcript (additional)',          uz: 'Transkript (qoshimcha)' },
+  IELTS:           { ru: 'IELTS/TOEFL',                  en: 'IELTS/TOEFL',                     uz: 'IELTS/TOEFL' },
+  ARABIC_CERT:     { ru: 'Сертификат по арабскому',      en: 'Arabic Certificate',               uz: 'Arab tili sertifikati' },
+  RECOMMENDATION:  { ru: 'Рекомендательное письмо',      en: 'Recommendation Letter',            uz: 'Tavsiya xati' },
+  MEDICAL:         { ru: 'Медицинская справка',          en: 'Medical Certificate',              uz: 'Tibbiy malumotnoma' },
+  CRIMINAL_RECORD: { ru: 'Справка о несудимости',        en: 'Criminal Record',                 uz: 'Jinoiy ish yoqligi' },
+  OTHER:           { ru: 'Другое',                       en: 'Other',                           uz: 'Boshqa' },
 }
