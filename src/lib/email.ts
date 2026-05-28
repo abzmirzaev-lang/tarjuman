@@ -1,5 +1,3 @@
-import sgMail from '@sendgrid/mail'
-
 interface EmailOptions {
   to:      string
   subject: string
@@ -8,19 +6,30 @@ interface EmailOptions {
 }
 
 export async function sendEmail({ to, subject, html, text }: EmailOptions) {
-  if (!process.env.SENDGRID_API_KEY) {
-    console.warn('SENDGRID_API_KEY not set, skipping email')
+  const apiKey = process.env.RESEND_API_KEY
+  if (!apiKey) {
+    console.warn('[email] RESEND_API_KEY not set — skipping email')
     return
   }
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-  await sgMail.send({
-    to,
-    from: {
-      email: process.env.SENDGRID_FROM_EMAIL ?? 'noreply@tarjuman.com',
-      name:  process.env.SENDGRID_FROM_NAME  ?? 'TARJUMAN',
+
+  const res = await fetch('https://api.resend.com/emails', {
+    method:  'POST',
+    headers: {
+      'Authorization': 'Bearer ' + apiKey,
+      'Content-Type':  'application/json',
     },
-    subject,
-    html,
-    text: text ?? html.replace(/<[^>]+>/g, ' '),
+    body: JSON.stringify({
+      from:    'TARJUMAN <onboarding@resend.dev>',
+      to:      [to],
+      subject,
+      html,
+      text:    text ?? html.replace(/<[^>]+>/g, ' '),
+      reply_to: 'tarjumanedu@gmail.com',
+    }),
   })
+
+  if (!res.ok) {
+    const err = await res.text()
+    throw new Error('[email] Resend error: ' + err)
+  }
 }
