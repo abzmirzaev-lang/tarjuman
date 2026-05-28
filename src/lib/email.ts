@@ -19,7 +19,7 @@ export async function sendEmail({ to, subject, html, text }: EmailOptions) {
       'Content-Type':  'application/json',
     },
     body: JSON.stringify({
-      from:    'TARJUMAN <onboarding@resend.dev>',
+      from:    'TARJUMAN <info@tarjumanedu.com>',
       to:      [to],
       subject,
       html,
