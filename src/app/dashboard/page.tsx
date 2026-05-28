@@ -1,22 +1,17 @@
 'use client'
 import { useLanguage } from '@/hooks/useLanguage'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  FileText, CreditCard, MessageSquare, Clock, LogOut,
-  Download, CheckCircle2, AlertCircle, Plus,
-  ChevronRight, Layers, ArrowRight, Calendar,
-  GraduationCap, Trash2
+  FileText, LogOut, Download, CheckCircle2, Plus,
+  ChevronRight, Layers, Calendar, GraduationCap, Trash2
 } from 'lucide-react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase/client'
-import { Button, Badge } from '@/components/ui'
+import { Button } from '@/components/ui'
 import { PACKAGES, STATUS_LABELS, DOCUMENT_LABELS } from '@/types'
-import type {
-  AppLanguage, ApplicationRow, DocumentRow,
-  PaymentRow, MessageRow, StatusHistoryRow
-} from '@/types'
+import type { AppLanguage, ApplicationRow, DocumentRow } from '@/types'
 import { translations } from '@/i18n'
 import { formatDate, formatCurrency, cn } from '@/lib/utils'
 import { toast } from 'sonner'
@@ -32,9 +27,7 @@ const STATUS_COLORS: Record<string, string> = {
   COMPLETED:    'bg-emerald-100 text-emerald-700 border-emerald-200',
 }
 
-type Tab = 'applications' | 'documents' | 'payment' | 'messages' | 'timeline'
-
-// ── Helper components ────────────────────────────────────────
+type Tab = 'applications' | 'documents'
 
 function Spinner() {
   return (
@@ -43,36 +36,6 @@ function Spinner() {
     </div>
   )
 }
-
-function AppSelector({ apps, selectedId, onSelect, lang }: {
-  apps: ApplicationRow[]
-  selectedId: string | null
-  onSelect: (id: string) => void
-  lang: AppLanguage
-}) {
-  if (apps.length <= 1) return null
-  return (
-    <div className="flex gap-2 mb-4 overflow-x-auto pb-1">
-      {apps.map((a, i) => (
-        <button
-          key={a.id}
-          onClick={() => onSelect(a.id)}
-          className={cn(
-            'flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-medium shrink-0 transition-all',
-            selectedId === a.id
-              ? 'bg-ink text-white'
-              : 'bg-white border border-border text-muted hover:text-ink hover:border-gray-300'
-          )}
-        >
-          <span className="text-xs font-bold">{a.country === 'SA' ? 'SA' : 'AE'}</span>
-          <span>{lang === 'ru' ? `Заявка ${i + 1}` : lang === 'uz' ? `Ariza ${i + 1}` : `App ${i + 1}`}</span>
-        </button>
-      ))}
-    </div>
-  )
-}
-
-// ── Main page ────────────────────────────────────────────────
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -84,19 +47,11 @@ export default function DashboardPage() {
   const [apps,          setApps]          = useState<ApplicationRow[]>([])
   const [selectedAppId, setSelectedAppId] = useState<string | null>(null)
   const [docs,          setDocs]          = useState<DocumentRow[]>([])
-  const [payment,       setPayment]       = useState<PaymentRow | null>(null)
-  const [messages,      setMessages]      = useState<MessageRow[]>([])
-  const [history,       setHistory]       = useState<StatusHistoryRow[]>([])
   const [tab,           setTab]           = useState<Tab>('applications')
-  const [msgText,       setMsgText]       = useState('')
-  const [sending,       setSending]       = useState(false)
-  const [unread,        setUnread]        = useState(0)
   const [appLoading,    setAppLoading]    = useState(false)
-  const chatEndRef = useRef<HTMLDivElement>(null)
 
   const selectedApp = apps.find(a => a.id === selectedAppId) ?? null
 
-  // ── Auth ──
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) {
@@ -109,31 +64,14 @@ export default function DashboardPage() {
     })
   }, [])
 
-  // ── Realtime messages ──
-  useEffect(() => {
-    if (!selectedAppId) return
-    const channel = supabase
-      .channel(`messages:${selectedAppId}`)
-      .on('postgres_changes', {
-        event: 'INSERT', schema: 'public', table: 'messages',
-        filter: `application_id=eq.${selectedAppId}`
-      }, (payload) => {
-        setMessages(prev => [...prev, payload.new as MessageRow])
-        if ((payload.new as MessageRow).sender === 'ADMIN') setUnread(u => u + 1)
-        chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-      })
-      .subscribe()
-    return () => { supabase.removeChannel(channel) }
-  }, [selectedAppId])
-
   async function loadAllApps(userId: string) {
-    const [{ data: appsData }, { data: paymentsData }] = await Promise.all([
-      supabase.from('applications').select('*').eq('user_id', userId).order('created_at', { ascending: false }),
-      supabase.from('payments').select('*').eq('user_id', userId).eq('status', 'PAID').limit(1),
-    ])
+    const { data: appsData } = await supabase
+      .from('applications')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
     const all = appsData ?? []
     setApps(all)
-    setPayment(paymentsData?.[0] ?? null)
     if (all.length > 0) {
       setSelectedAppId(all[0].id)
       await loadAppData(all[0].id)
@@ -142,15 +80,11 @@ export default function DashboardPage() {
 
   async function loadAppData(appId: string) {
     setAppLoading(true)
-    const [{ data: docsData }, { data: msgsData }, { data: histData }] = await Promise.all([
-      supabase.from('documents').select('*').eq('application_id', appId),
-      supabase.from('messages').select('*').eq('application_id', appId).order('created_at'),
-      supabase.from('status_history').select('*').eq('application_id', appId).order('created_at'),
-    ])
+    const { data: docsData } = await supabase
+      .from('documents')
+      .select('*')
+      .eq('application_id', appId)
     setDocs(docsData ?? [])
-    setMessages(msgsData ?? [])
-    setHistory(histData ?? [])
-    setUnread((msgsData ?? []).filter((m: MessageRow) => m.sender === 'ADMIN' && !m.is_read).length)
     setAppLoading(false)
   }
 
@@ -164,7 +98,7 @@ export default function DashboardPage() {
       lang === 'ru'
         ? 'Удалить заявку? Это действие нельзя отменить.'
         : lang === 'uz'
-          ? 'Arizani o\'chirish? Bu amalni bekor qilib bo\'lmaydi.'
+          ? "Arizani o'chirish? Bu amalni bekor qilib bo'lmaydi."
           : 'Delete this application? This cannot be undone.'
     )
     if (!confirmed) return
@@ -178,26 +112,10 @@ export default function DashboardPage() {
         await loadAppData(remaining[0].id)
       } else {
         setSelectedAppId(null)
-        setDocs([]); setMessages([]); setHistory([])
+        setDocs([])
       }
     }
-    toast.success(lang === 'ru' ? 'Заявка удалена' : lang === 'uz' ? 'Ariza o\'chirildi' : 'Application deleted')
-  }
-
-  const handleSendMessage = async () => {
-    if (!msgText.trim() || !selectedApp || !user) return
-    setSending(true)
-    const { error } = await supabase.from('messages').insert({
-      application_id: selectedApp.id,
-      user_id:        user.id,
-      sender:         'USER',
-      content:        msgText.trim(),
-    })
-    if (!error) {
-      setMsgText('')
-      chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-    } else toast.error(t.common.error)
-    setSending(false)
+    toast.success(lang === 'ru' ? 'Заявка удалена' : lang === 'uz' ? "Ariza o'chirildi" : 'Application deleted')
   }
 
   const handleDownloadDoc = async (doc: DocumentRow) => {
@@ -218,12 +136,9 @@ export default function DashboardPage() {
   )
   if (!user) return null
 
-  const TABS: { key: Tab; icon: typeof FileText; label: string; badge?: number }[] = [
-    { key: 'applications', icon: Layers,       label: lang === 'ru' ? 'Заявки' : 'Applications' },
-    { key: 'documents',    icon: FileText,      label: t.dashboard.documents },
-    { key: 'payment',      icon: CreditCard,    label: t.dashboard.payment },
-    { key: 'messages',     icon: MessageSquare, label: t.dashboard.messages, badge: unread },
-    { key: 'timeline',     icon: Clock,         label: t.dashboard.timeline },
+  const TABS: { key: Tab; icon: typeof FileText; label: string }[] = [
+    { key: 'applications', icon: Layers,   label: lang === 'ru' ? 'Заявки' : lang === 'uz' ? 'Arizalar' : 'Applications' },
+    { key: 'documents',    icon: FileText, label: lang === 'ru' ? 'Документы' : lang === 'uz' ? 'Hujjatlar' : 'Documents' },
   ]
 
   const userName = user?.user_metadata?.full_name?.split(' ')[0] ?? (lang === 'ru' ? 'Пользователь' : 'User')
@@ -232,12 +147,9 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-[#F7F8FA]">
       <div className="flex">
 
-        {/* ══════════════════════════════════════════
-            SIDEBAR
-        ══════════════════════════════════════════ */}
+        {/* SIDEBAR */}
         <aside className="hidden md:flex flex-col w-64 bg-white border-r border-border min-h-screen fixed left-0 top-0 shadow-sm">
 
-          {/* Logo */}
           <div className="h-16 flex items-center px-6 border-b border-border">
             <Link href="/">
               <svg viewBox="0 0 156 36" width="140" height="32" aria-label="TARJUMAN">
@@ -249,7 +161,6 @@ export default function DashboardPage() {
             </Link>
           </div>
 
-          {/* User card */}
           <div className="mx-3 my-3 p-3 bg-gradient-to-br from-brand-50 to-emerald-50 rounded-2xl border border-brand-100">
             <div className="flex items-center gap-3">
               {user?.user_metadata?.avatar_url ? (
@@ -266,12 +177,11 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Nav */}
           <nav className="flex-1 px-3 py-2 space-y-0.5">
             {TABS.map(item => (
               <button
                 key={item.key}
-                onClick={() => { setTab(item.key); if (item.key === 'messages') setUnread(0) }}
+                onClick={() => setTab(item.key)}
                 className={cn(
                   'w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-150',
                   tab === item.key
@@ -281,11 +191,6 @@ export default function DashboardPage() {
               >
                 <item.icon className="w-4 h-4 shrink-0" />
                 {item.label}
-                {item.badge ? (
-                  <span className="ml-auto bg-brand-400 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
-                    {item.badge}
-                  </span>
-                ) : null}
                 {item.key === 'applications' && apps.length > 0 && (
                   <span className={cn(
                     'ml-auto text-[11px] font-semibold px-1.5 py-0.5 rounded-full',
@@ -298,7 +203,6 @@ export default function DashboardPage() {
             ))}
           </nav>
 
-          {/* Language + Logout */}
           <div className="px-4 py-4 border-t border-border space-y-3">
             <div className="flex gap-1 bg-gray-100 rounded-xl p-1">
               {(['ru', 'uz', 'en'] as AppLanguage[]).map(l => (
@@ -318,9 +222,7 @@ export default function DashboardPage() {
           </div>
         </aside>
 
-        {/* ══════════════════════════════════════════
-            MAIN CONTENT
-        ══════════════════════════════════════════ */}
+        {/* MAIN CONTENT */}
         <main className="flex-1 md:ml-64 min-h-screen">
 
           {/* Mobile header */}
@@ -353,37 +255,29 @@ export default function DashboardPage() {
             {TABS.map(item => (
               <button
                 key={item.key}
-                onClick={() => { setTab(item.key); if (item.key === 'messages') setUnread(0) }}
+                onClick={() => setTab(item.key)}
                 className={cn(
-                  'flex-1 flex flex-col items-center py-2 gap-0.5 text-[10px] font-medium transition-colors relative',
+                  'flex-1 flex flex-col items-center py-2 gap-0.5 text-[10px] font-medium transition-colors',
                   tab === item.key ? 'text-brand-600' : 'text-muted'
                 )}
               >
                 <item.icon className="w-5 h-5" />
                 <span>{item.label}</span>
-                {item.badge ? (
-                  <span className="absolute top-1 right-1/4 bg-brand-400 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                    {item.badge}
-                  </span>
-                ) : null}
               </button>
             ))}
           </div>
 
           <div className="p-4 md:p-8 pb-24 md:pb-8">
 
-            {/* Welcome header */}
             <div className="mb-6">
               <h1 className="text-2xl font-bold text-ink">
-                {lang === 'ru' ? `Привет, ${userName} 👋` : `Hello, ${userName} 👋`}
+                {lang === 'ru' ? `Привет, ${userName} ` : lang === 'uz' ? `Salom, ${userName} ` : `Hello, ${userName} `}
               </h1>
               <p className="text-sm text-muted mt-0.5">
                 {lang === 'ru'
-                  ? apps.length === 0
-                    ? 'У вас нет заявок'
-                    : apps.length === 1
-                      ? '1 заявка'
-                      : `${apps.length} заявки`
+                  ? apps.length === 0 ? 'У вас нет заявок' : apps.length === 1 ? '1 заявка' : `${apps.length} заявки`
+                  : lang === 'uz'
+                  ? apps.length === 0 ? 'Sizda ariza yoq' : `${apps.length} ta ariza`
                   : `${apps.length} application${apps.length !== 1 ? 's' : ''}`
                 }
               </p>
@@ -391,24 +285,21 @@ export default function DashboardPage() {
 
             <motion.div key={tab} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}>
 
-              {/* ═══════════════════════════════════════
-                  TAB: ЗАЯВКИ
-              ═══════════════════════════════════════ */}
+              {/* TAB: ЗАЯВКИ */}
               {tab === 'applications' && (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <h2 className="text-base font-semibold text-ink">
-                      {lang === 'ru' ? 'Мои заявки' : 'My Applications'}
+                      {lang === 'ru' ? 'Мои заявки' : lang === 'uz' ? 'Mening arizalarim' : 'My Applications'}
                     </h2>
                     <Link href="/apply">
                       <button className="flex items-center gap-2 px-4 py-2 bg-ink text-white rounded-xl text-sm font-semibold hover:bg-ink/90 transition-colors">
                         <Plus className="w-4 h-4" />
-                        {lang === 'ru' ? 'Новая заявка' : 'New Application'}
+                        {lang === 'ru' ? 'Новая заявка' : lang === 'uz' ? 'Yangi ariza' : 'New Application'}
                       </button>
                     </Link>
                   </div>
 
-                  {/* Empty state */}
                   {apps.length === 0 && (
                     <div className="bg-white rounded-2xl border border-border p-12 text-center">
                       <div className="w-16 h-16 bg-brand-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -416,7 +307,11 @@ export default function DashboardPage() {
                       </div>
                       <h3 className="text-lg font-semibold text-ink mb-2">{t.dashboard.noApp}</h3>
                       <p className="text-sm text-muted mb-6 max-w-xs mx-auto">
-                        {lang === 'ru' ? 'Подайте первую заявку и начните путь к арабскому образованию' : 'Submit your first application to start your journey'}
+                        {lang === 'ru'
+                          ? 'Подайте первую заявку и начните путь к арабскому образованию'
+                          : lang === 'uz'
+                          ? "Birinchi arizangizni yuboring va arab ta'limiga yo'l boshlang"
+                          : 'Submit your first application and start your journey'}
                       </p>
                       <Link href="/apply">
                         <Button size="lg" iconRight={<ChevronRight className="w-4 h-4" />}>
@@ -426,7 +321,6 @@ export default function DashboardPage() {
                     </div>
                   )}
 
-                  {/* Application cards */}
                   <div className="space-y-3">
                     {apps.map((application, idx) => {
                       const isSelected = application.id === selectedAppId
@@ -447,7 +341,6 @@ export default function DashboardPage() {
                             )}
                             onClick={() => switchApp(application.id)}
                           >
-                            {/* Card header */}
                             <div className="p-5">
                               <div className="flex items-start justify-between gap-3 mb-4">
                                 <div className="flex items-center gap-3 min-w-0">
@@ -461,14 +354,12 @@ export default function DashboardPage() {
                                     <p className="font-semibold text-ink text-sm truncate">
                                       {application.country === 'SA'
                                         ? (lang === 'ru' ? 'Саудовская Аравия' : lang === 'uz' ? 'Saudiya Arabistoni' : 'Saudi Arabia')
-                                        : (lang === 'ru' ? 'ОАЭ' : lang === 'uz' ? 'BAA' : 'UAE')
-                                      }
+                                        : (lang === 'ru' ? 'ОАЭ' : lang === 'uz' ? 'BAA' : 'UAE')}
                                     </p>
                                     <p className="text-xs text-muted truncate">
                                       {lang === 'ru'
                                         ? PACKAGES[application.service_package]?.name_ru
-                                        : PACKAGES[application.service_package]?.name_en
-                                      }
+                                        : PACKAGES[application.service_package]?.name_en}
                                     </p>
                                   </div>
                                 </div>
@@ -491,10 +382,9 @@ export default function DashboardPage() {
                                 </div>
                               </div>
 
-                              {/* Progress bar */}
                               <div className="mb-3">
                                 <div className="flex items-center justify-between mb-1.5">
-                                  <span className="text-xs text-muted">{lang === 'ru' ? 'Прогресс' : 'Progress'}</span>
+                                  <span className="text-xs text-muted">{lang === 'ru' ? 'Прогресс' : lang === 'uz' ? 'Jarayon' : 'Progress'}</span>
                                   <span className="text-xs font-semibold text-ink">{progress}%</span>
                                 </div>
                                 <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
@@ -507,7 +397,6 @@ export default function DashboardPage() {
                                 </div>
                               </div>
 
-                              {/* Meta row */}
                               <div className="flex items-center gap-4 text-xs text-muted">
                                 <span className="flex items-center gap-1">
                                   <Calendar className="w-3 h-3" />
@@ -522,7 +411,6 @@ export default function DashboardPage() {
                               </div>
                             </div>
 
-                            {/* Expanded: status pipeline */}
                             <AnimatePresence>
                               {isSelected && (
                                 <motion.div
@@ -534,7 +422,7 @@ export default function DashboardPage() {
                                 >
                                   <div className="px-5 py-4">
                                     <p className="text-xs font-semibold text-muted uppercase tracking-wider mb-3">
-                                      {lang === 'ru' ? 'Этапы' : 'Stages'}
+                                      {lang === 'ru' ? 'Этапы' : lang === 'uz' ? 'Bosqichlar' : 'Stages'}
                                     </p>
                                     <div className="flex flex-col gap-2.5">
                                       {STATUS_ORDER.map((s, i) => {
@@ -575,15 +463,36 @@ export default function DashboardPage() {
                 </div>
               )}
 
-              {/* ═══════════════════════════════════════
-                  TAB: ДОКУМЕНТЫ
-              ═══════════════════════════════════════ */}
+              {/* TAB: ДОКУМЕНТЫ */}
               {tab === 'documents' && (
                 <div className="space-y-4">
-                  <h2 className="text-base font-semibold text-ink">{t.dashboard.documents}</h2>
+                  <h2 className="text-base font-semibold text-ink">
+                    {lang === 'ru' ? 'Документы' : lang === 'uz' ? 'Hujjatlar' : 'Documents'}
+                  </h2>
+
+                  {apps.length > 1 && (
+                    <div className="flex gap-2 overflow-x-auto pb-1">
+                      {apps.map((a, i) => (
+                        <button
+                          key={a.id}
+                          onClick={() => switchApp(a.id)}
+                          className={cn(
+                            'flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-medium shrink-0 transition-all',
+                            selectedAppId === a.id
+                              ? 'bg-ink text-white'
+                              : 'bg-white border border-border text-muted hover:text-ink'
+                          )}
+                        >
+                          <span className="text-xs font-bold">{a.country}</span>
+                          <span>{lang === 'ru' ? `Заявка ${i + 1}` : lang === 'uz' ? `Ariza ${i + 1}` : `App ${i + 1}`}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
                   {!selectedApp ? (
                     <div className="bg-white rounded-2xl border border-border p-10 text-center text-muted text-sm">
-                      {lang === 'ru' ? 'Выберите заявку' : 'Select an application'}
+                      {lang === 'ru' ? 'Выберите заявку' : lang === 'uz' ? 'Ariza tanlang' : 'Select an application'}
                     </div>
                   ) : appLoading ? (
                     <Spinner />
@@ -609,146 +518,6 @@ export default function DashboardPage() {
                           >
                             <Download className="w-4 h-4 text-muted" />
                           </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* ═══════════════════════════════════════
-                  TAB: ОПЛАТА
-              ═══════════════════════════════════════ */}
-              {tab === 'payment' && (
-                <div className="space-y-4">
-                  <h2 className="text-base font-semibold text-ink">{t.dashboard.payment}</h2>
-                  {payment ? (
-                    <div className="bg-white rounded-2xl border border-border p-6">
-                      <div className="flex items-center gap-4 mb-4">
-                        <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center">
-                          <CheckCircle2 className="w-6 h-6 text-emerald-600" />
-                        </div>
-                        <div>
-                          <p className="font-semibold text-ink">{lang === 'ru' ? 'Оплачено' : 'Paid'}</p>
-                          <p className="text-sm text-muted">{formatDate(payment.created_at)}</p>
-                        </div>
-                      </div>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between py-2 border-b border-border">
-                          <span className="text-muted">{lang === 'ru' ? 'Сумма' : 'Amount'}</span>
-                          <span className="font-semibold text-ink">{formatCurrency(payment.amount)}</span>
-                        </div>
-                        <div className="flex justify-between py-2 border-b border-border">
-                          <span className="text-muted">{lang === 'ru' ? 'Метод' : 'Method'}</span>
-                          <span className="font-medium text-ink">{payment.method}</span>
-                        </div>
-                        <div className="flex justify-between py-2">
-                          <span className="text-muted">{lang === 'ru' ? 'Пакет' : 'Package'}</span>
-                          <span className="font-medium text-ink">{PACKAGES[payment.package]?.name_ru ?? payment.package}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="bg-white rounded-2xl border border-border p-10 text-center">
-                      <CreditCard className="w-10 h-10 text-muted mx-auto mb-3" />
-                      <p className="text-sm text-muted mb-4">{t.dashboard.noPayment}</p>
-                      {selectedApp && (
-                        <a href="/apply" className="btn btn-primary btn-sm">
-                          {lang === 'ru' ? 'Оплатить заявку' : 'Pay for application'}
-                        </a>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* ═══════════════════════════════════════
-                  TAB: СООБЩЕНИЯ
-              ═══════════════════════════════════════ */}
-              {tab === 'messages' && (
-                <div className="flex flex-col h-[calc(100vh-220px)] min-h-[400px]">
-                  <h2 className="text-base font-semibold text-ink mb-4">{t.dashboard.messages}</h2>
-                  {!selectedApp ? (
-                    <div className="bg-white rounded-2xl border border-border p-10 text-center text-muted text-sm flex-1">
-                      {lang === 'ru' ? 'Выберите заявку' : 'Select an application'}
-                    </div>
-                  ) : (
-                    <div className="bg-white rounded-2xl border border-border flex-1 flex flex-col overflow-hidden">
-                      <div className="flex-1 overflow-y-auto p-4 space-y-3">
-                        {messages.length === 0 ? (
-                          <div className="text-center text-muted text-sm py-10">
-                            {lang === 'ru' ? 'Нет сообщений' : 'No messages yet'}
-                          </div>
-                        ) : (
-                          messages.map(msg => (
-                            <div key={msg.id} className={cn('flex', msg.sender === 'USER' ? 'justify-end' : 'justify-start')}>
-                              <div className={cn(
-                                'max-w-[75%] rounded-2xl px-4 py-2.5 text-sm',
-                                msg.sender === 'USER'
-                                  ? 'bg-ink text-white rounded-br-sm'
-                                  : 'bg-surface border border-border text-ink rounded-bl-sm'
-                              )}>
-                                <p className={cn('text-[10px] font-semibold mb-0.5',
-                                  msg.sender === 'USER' ? 'text-white/70' : 'text-brand-500'
-                                )}>
-                                  {msg.sender === 'USER'
-                                    ? (lang === 'ru' ? 'Вы' : 'You')
-                                    : 'TARJUMAN'}
-                                </p>
-                                <p>{msg.content}</p>
-                                <p className={cn('text-[10px] mt-1', msg.sender === 'USER' ? 'text-white/60' : 'text-muted')}>
-                                  {formatDate(msg.created_at)}
-                                </p>
-                              </div>
-                            </div>
-                          ))
-                        )}
-                        <div ref={chatEndRef} />
-                      </div>
-                      <div className="p-3 border-t border-border flex gap-2">
-                        <input
-                          className="flex-1 px-4 py-2.5 rounded-xl border border-border bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-brand-300"
-                          placeholder={lang === 'ru' ? 'Написать сообщение...' : 'Write a message...'}
-                          value={msgText}
-                          onChange={e => setMsgText(e.target.value)}
-                          onKeyDown={e => e.key === 'Enter' && !e.shiftKey && handleSendMessage()}
-                        />
-                        <Button size="sm" onClick={handleSendMessage} loading={sending}>
-                          <ArrowRight className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* ═══════════════════════════════════════
-                  TAB: ИСТОРИЯ
-              ═══════════════════════════════════════ */}
-              {tab === 'timeline' && (
-                <div className="space-y-4">
-                  <h2 className="text-base font-semibold text-ink">{t.dashboard.timeline}</h2>
-                  {!selectedApp ? (
-                    <div className="bg-white rounded-2xl border border-border p-10 text-center text-muted text-sm">
-                      {lang === 'ru' ? 'Выберите заявку' : 'Select an application'}
-                    </div>
-                  ) : appLoading ? (
-                    <Spinner />
-                  ) : history.length === 0 ? (
-                    <div className="bg-white rounded-2xl border border-border p-10 text-center text-muted text-sm">
-                      {lang === 'ru' ? 'История пуста' : 'No history yet'}
-                    </div>
-                  ) : (
-                    <div className="bg-white rounded-2xl border border-border divide-y divide-border">
-                      {history.map((h, i) => (
-                        <div key={h.id} className="p-4 flex items-start gap-3">
-                          <div className="w-8 h-8 bg-brand-50 rounded-full flex items-center justify-center shrink-0 mt-0.5">
-                            <CheckCircle2 className="w-4 h-4 text-brand-500" />
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium text-ink">{statusLabel(h.new_status)}</p>
-                            <p className="text-xs text-muted">{formatDate(h.created_at)}</p>
-                          </div>
                         </div>
                       ))}
                     </div>
