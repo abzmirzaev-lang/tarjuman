@@ -1,11 +1,11 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   Users, FileText, CreditCard, MessageSquare, Settings,
-  Search, Filter, Download, Eye, Edit2, Send, CheckCircle2,
-  Clock, TrendingUp, AlertCircle, LogOut, X, ChevronDown
+  Search, Download, Eye, Send, CheckCircle2,
+  TrendingUp, LogOut, X, Play, Flag, Upload, Loader2, Trash2
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase/client'
 import { Button, Badge, Modal, Input } from '@/components/ui'
@@ -23,11 +23,14 @@ const ALL_STATUSES: ApplicationStatus[] = [
   'REGISTERED', 'PAID', 'IN_PROGRESS', 'UNDER_REVIEW', 'SUBMITTED', 'COMPLETED', 'REJECTED'
 ]
 
-const STATUS_NEXT: Partial<Record<ApplicationStatus, ApplicationStatus>> = {
-  PAID:         'IN_PROGRESS',
-  IN_PROGRESS:  'UNDER_REVIEW',
-  UNDER_REVIEW: 'SUBMITTED',
-  SUBMITTED:    'COMPLETED',
+const STATUS_RU: Record<ApplicationStatus, string> = {
+  REGISTERED:   'Зарегистрировано',
+  PAID:         'Оплачено',
+  IN_PROGRESS:  'В обработке',
+  UNDER_REVIEW: 'На проверке',
+  SUBMITTED:    'Подано',
+  COMPLETED:    'Завершено',
+  REJECTED:     'Отклонено',
 }
 
 export default function AdminPage() {
@@ -44,17 +47,23 @@ export default function AdminPage() {
   const [search,    setSearch]    = useState('')
   const [statusFlt, setStatusFlt] = useState<ApplicationStatus | ''>('')
 
-  // Selected app for detail
-  const [selected, setSelected] = useState<ApplicationRow | null>(null)
-  const [appDocs,  setAppDocs]  = useState<DocumentRow[]>([])
-  const [appMsgs,  setAppMsgs]  = useState<MessageRow[]>([])
-  const [msgText,  setMsgText]  = useState('')
-  const [noteText, setNoteText] = useState('')
-  const [detailOpen, setDetailOpen] = useState(false)
-  const [sending, setSending] = useState(false)
+  // Selected app detail
+  const [selected,    setSelected]    = useState<ApplicationRow | null>(null)
+  const [appDocs,     setAppDocs]     = useState<DocumentRow[]>([])
+  const [appMsgs,     setAppMsgs]     = useState<MessageRow[]>([])
+  const [msgText,     setMsgText]     = useState('')
+  const [noteText,    setNoteText]    = useState('')
+  const [detailOpen,  setDetailOpen]  = useState(false)
+  const [sending,     setSending]     = useState(false)
+
+  // Processing actions
+  const [startingProcessing, setStartingProcessing] = useState(false)
+  const [completeModalOpen,  setCompleteModalOpen]  = useState(false)
+  const [completeFiles,      setCompleteFiles]      = useState<File[]>([])
+  const [completing,         setCompleting]         = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    // Check admin
     supabase.auth.getSession().then(({ data }) => {
       if (!data.session) { router.push('/login'); return }
       supabase.from('users').select('is_admin').eq('id', data.session.user.id).single()
@@ -95,24 +104,90 @@ export default function AdminPage() {
       .from('applications')
       .update({ status: newStatus })
       .eq('id', appId)
-
     if (!error) {
       setApps(prev => prev.map(a => a.id === appId ? { ...a, status: newStatus } : a))
       if (selected?.id === appId) setSelected(prev => prev ? { ...prev, status: newStatus } : null)
-      toast.success(`Status → ${newStatus}`)
-      // Notify via API
-      fetch('/api/notifications/status-change', {
+      toast.success(`Статус → ${STATUS_RU[newStatus]}`)
+    } else toast.error('Ошибка обновления статуса')
+  }
+
+  // ── Начать обработку (PAID → IN_PROGRESS + email) ──
+  async function startProcessing() {
+    if (!selected) return
+    setStartingProcessing(true)
+    try {
+      const res = await fetch('/api/admin/start-processing', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ applicationId: appId, newStatus }),
-      }).catch(() => {})
-    } else toast.error('Error updating status')
+        body: JSON.stringify({ applicationId: selected.id }),
+      })
+      if (!res.ok) throw new Error('Server error')
+      setApps(prev => prev.map(a => a.id === selected.id ? { ...a, status: 'IN_PROGRESS' } : a))
+      setSelected(prev => prev ? { ...prev, status: 'IN_PROGRESS' } : null)
+      toast.success('Обработка начата. Клиент получит email-уведомление.')
+    } catch {
+      toast.error('Ошибка при запуске обработки')
+    }
+    setStartingProcessing(false)
+  }
+
+  // ── Завершить обработку (загрузка файлов + COMPLETED + email) ──
+  async function completeProcessing() {
+    if (!selected) return
+    if (completeFiles.length === 0) {
+      toast.error('Загрузите хотя бы один переведённый документ')
+      return
+    }
+    setCompleting(true)
+    try {
+      const newDocs: DocumentRow[] = []
+
+      for (const file of completeFiles) {
+        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_')
+        const filePath = `${selected.user_id}/${selected.id}/translated/${Date.now()}_${safeName}`
+
+        const { error: uploadErr } = await supabase.storage
+          .from('documents')
+          .upload(filePath, file, { upsert: true })
+        if (uploadErr) throw new Error(`Ошибка загрузки ${file.name}: ${uploadErr.message}`)
+
+        const { data: doc, error: docErr } = await supabase.from('documents').insert({
+          application_id: selected.id,
+          user_id:        selected.user_id,
+          type:           'OTHER',
+          file_name:      file.name,
+          file_path:      filePath,
+          file_size:      file.size,
+          mime_type:      file.type,
+          is_verified:    true,
+        }).select().single()
+        if (docErr) throw new Error(`Ошибка записи в БД: ${docErr.message}`)
+        if (doc) newDocs.push(doc as DocumentRow)
+      }
+
+      // Изменить статус + отправить email
+      const res = await fetch('/api/admin/complete-processing', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ applicationId: selected.id }),
+      })
+      if (!res.ok) throw new Error('Ошибка завершения заявки')
+
+      setApps(prev => prev.map(a => a.id === selected.id ? { ...a, status: 'COMPLETED' } : a))
+      setSelected(prev => prev ? { ...prev, status: 'COMPLETED' } : null)
+      setAppDocs(prev => [...prev, ...newDocs])
+      setCompleteFiles([])
+      setCompleteModalOpen(false)
+      toast.success(`✅ Заявка завершена! Загружено ${newDocs.length} документ(ов). Клиент получил email.`)
+    } catch (e: any) {
+      toast.error(e.message ?? 'Ошибка завершения')
+    }
+    setCompleting(false)
   }
 
   async function sendAdminMessage() {
     if (!msgText.trim() || !selected) return
     setSending(true)
-    const user = await supabase.auth.getUser()
     const { error } = await supabase.from('messages').insert({
       application_id: selected.id,
       user_id:        selected.user_id,
@@ -126,7 +201,7 @@ export default function AdminPage() {
         content: msgText.trim(), is_read: false, created_at: new Date().toISOString(),
       }])
       setMsgText('')
-    } else toast.error('Error sending message')
+    } else toast.error('Ошибка отправки сообщения')
     setSending(false)
   }
 
@@ -135,13 +210,24 @@ export default function AdminPage() {
     const { error } = await supabase.from('applications').update({ notes: noteText }).eq('id', selected.id)
     if (!error) {
       setApps(prev => prev.map(a => a.id === selected.id ? { ...a, notes: noteText } : a))
-      toast.success('Note saved')
+      toast.success('Заметка сохранена')
     }
   }
 
   async function downloadDoc(doc: DocumentRow) {
     const { data } = await supabase.storage.from('documents').createSignedUrl(doc.file_path, 120)
     if (data?.signedUrl) window.open(data.signedUrl, '_blank')
+    else toast.error('Не удалось получить ссылку')
+  }
+
+  function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!e.target.files) return
+    const newFiles = Array.from(e.target.files)
+    setCompleteFiles(prev => {
+      const existing = prev.map(f => f.name)
+      return [...prev, ...newFiles.filter(f => !existing.includes(f.name))]
+    })
+    e.target.value = ''
   }
 
   const filteredApps = apps.filter(a => {
@@ -152,40 +238,28 @@ export default function AdminPage() {
     return matchSearch && matchStatus
   })
 
-  // Stats
   const stats = {
-    total:      apps.length,
-    paid:       apps.filter(a => a.status !== 'REGISTERED').length,
-    completed:  apps.filter(a => a.status === 'COMPLETED').length,
-    revenue:    payments.filter(p => p.status === 'PAID').reduce((s, p) => s + Number(p.amount), 0),
-  }
-
-  const STATUS_RU: Record<ApplicationStatus, string> = {
-    REGISTERED:   'Зарегистрировано',
-    PAID:         'Оплачено',
-    IN_PROGRESS:  'В обработке',
-    UNDER_REVIEW: 'На проверке',
-    SUBMITTED:    'Подано',
-    COMPLETED:    'Завершено',
-    REJECTED:     'Отклонено',
+    total:     apps.length,
+    paid:      apps.filter(a => a.status !== 'REGISTERED').length,
+    completed: apps.filter(a => a.status === 'COMPLETED').length,
+    revenue:   payments.filter(p => p.status === 'PAID').reduce((s, p) => s + Number(p.amount), 0),
   }
 
   const NAV = [
-    { key: 'overview',      icon: TrendingUp,    label: 'Обзор'      },
-    { key: 'applications',  icon: FileText,       label: 'Заявки'     },
-    { key: 'users',         icon: Users,          label: 'Пользователи'},
-    { key: 'payments',      icon: CreditCard,     label: 'Платежи'    },
-    { key: 'universities',  icon: Settings,       label: 'Университеты'},
+    { key: 'overview',     icon: TrendingUp, label: 'Обзор'       },
+    { key: 'applications', icon: FileText,   label: 'Заявки'      },
+    { key: 'users',        icon: Users,      label: 'Пользователи'},
+    { key: 'payments',     icon: CreditCard, label: 'Платежи'     },
+    { key: 'universities', icon: Settings,   label: 'Универ.'     },
   ] as const
 
   return (
     <div className="min-h-screen bg-surface flex">
-      {/* Admin Sidebar — только desktop */}
+      {/* Sidebar */}
       <aside className="hidden md:flex w-60 bg-ink text-white min-h-screen fixed left-0 top-0 flex-col">
         <div className="h-14 flex items-center px-5 border-b border-white/10">
           <span className="font-bold text-white">TARJUMAN Admin</span>
         </div>
-
         <nav className="flex-1 px-3 py-4 space-y-0.5">
           {NAV.map(n => (
             <button
@@ -193,9 +267,7 @@ export default function AdminPage() {
               onClick={() => setTab(n.key as AdminTab)}
               className={cn(
                 'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all',
-                tab === n.key
-                  ? 'bg-brand-400 text-white'
-                  : 'text-white/60 hover:text-white hover:bg-white/10'
+                tab === n.key ? 'bg-brand-400 text-white' : 'text-white/60 hover:text-white hover:bg-white/10'
               )}
             >
               <n.icon className="w-4 h-4 shrink-0" />
@@ -203,7 +275,6 @@ export default function AdminPage() {
             </button>
           ))}
         </nav>
-
         <div className="px-4 py-4 border-t border-white/10">
           <button
             onClick={() => supabase.auth.signOut().then(() => router.push('/'))}
@@ -231,13 +302,12 @@ export default function AdminPage() {
           {tab === 'overview' && (
             <div className="space-y-6">
               <h1 className="text-2xl font-bold text-ink">Панель управления</h1>
-
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 {[
-                  { icon: FileText, label: 'Всего заявок',  value: stats.total,                     color: 'bg-blue-50 text-blue-600' },
-                  { icon: CheckCircle2, label: 'Оплачено',  value: stats.paid,                      color: 'bg-brand-50 text-brand-600' },
-                  { icon: TrendingUp, label: 'Завершено',   value: stats.completed,                 color: 'bg-purple-50 text-purple-600' },
-                  { icon: CreditCard, label: 'Выручка',     value: formatCurrency(stats.revenue),   color: 'bg-amber-50 text-amber-600' },
+                  { icon: FileText,      label: 'Всего заявок', value: stats.total,                   color: 'bg-blue-50 text-blue-600' },
+                  { icon: CheckCircle2,  label: 'Оплачено',     value: stats.paid,                    color: 'bg-brand-50 text-brand-600' },
+                  { icon: TrendingUp,    label: 'Завершено',    value: stats.completed,               color: 'bg-purple-50 text-purple-600' },
+                  { icon: CreditCard,    label: 'Выручка',      value: formatCurrency(stats.revenue), color: 'bg-amber-50 text-amber-600' },
                 ].map((s, i) => (
                   <div key={i} className="card p-5">
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${s.color}`}>
@@ -248,8 +318,6 @@ export default function AdminPage() {
                   </div>
                 ))}
               </div>
-
-              {/* Recent applications */}
               <div className="card">
                 <div className="px-6 py-4 border-b border-border flex items-center justify-between">
                   <h2 className="font-semibold text-ink">Последние заявки</h2>
@@ -263,7 +331,7 @@ export default function AdminPage() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-ink truncate">{app.full_name}</p>
-                        <p className="text-xs text-muted">{app.country === 'SA' ? 'SA' : 'AE'} · {formatDate(app.created_at)}</p>
+                        <p className="text-xs text-muted">{app.country} · {formatDate(app.created_at)}</p>
                       </div>
                       <Badge status={app.status} label={STATUS_RU[app.status]} />
                       <button onClick={() => openDetail(app)} className="btn-ghost btn-sm p-1.5 rounded-lg">
@@ -283,56 +351,34 @@ export default function AdminPage() {
                 <h1 className="text-2xl font-bold text-ink">Заявки ({apps.length})</h1>
               </div>
 
-              {/* Package tabs */}
+              {/* Package counters */}
               <div className="flex gap-2 flex-wrap">
                 {([
-                  { key: '',           label: 'Все',            count: apps.length,                                        color: 'bg-surface border border-border text-ink' },
+                  { key: '',           label: 'Все',            count: apps.length,                                          color: 'bg-surface border border-border text-ink' },
                   { key: 'VIP',        label: 'VIP — $99',      count: apps.filter(a => a.service_package === 'VIP').length,        color: 'bg-amber-50 border border-amber-200 text-amber-700' },
-                  { key: 'STANDARD',   label: 'Стандарт — $69', count: apps.filter(a => a.service_package === 'STANDARD').length, color: 'bg-brand-50 border border-brand-200 text-brand-700' },
+                  { key: 'STANDARD',   label: 'Стандарт — $69', count: apps.filter(a => a.service_package === 'STANDARD').length,   color: 'bg-brand-50 border border-brand-200 text-brand-700' },
                   { key: 'SUBMISSION', label: 'Базовый — $29',  count: apps.filter(a => a.service_package === 'SUBMISSION').length, color: 'bg-gray-50 border border-gray-200 text-gray-700' },
                 ] as const).map(pkg => (
-                  <button
-                    key={pkg.key}
-                    className={cn(
-                      'flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all',
-                      pkg.color
-                    )}
-                    style={{ cursor: 'default' }}
-                  >
+                  <div key={pkg.key} className={cn('flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium', pkg.color)}>
                     {pkg.label}
                     <span className="bg-white/60 px-1.5 py-0.5 rounded-full text-xs font-bold">{pkg.count}</span>
-                  </button>
+                  </div>
                 ))}
               </div>
 
               {/* Filters */}
-              <div className="relative md:hidden">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
-                <input
-                  className="input pl-9 w-full"
-                  placeholder="Поиск по имени..."
-                  value={search}
-                  onChange={e => setSearch(e.target.value)}
-                />
-                {search && (
-                  <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-ink">
-                    <X className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-              <div className="md:hidden">
-                <select className="input w-full" value={statusFlt} onChange={e => setStatusFlt(e.target.value as any)}>
-                  <option value="">Все статусы</option>
-                  {ALL_STATUSES.map(s => <option key={s} value={s}>{STATUS_RU[s]}</option>)}
-                </select>
-              </div>
-              <div className="hidden md:flex gap-3 flex-wrap">
-                <div className="relative">
+              <div className="flex flex-col md:flex-row gap-3">
+                <div className="relative flex-1 md:max-w-xs">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
-                  <input className="input pl-9 w-64" placeholder="Поиск по имени или ID..."
+                  <input className="input pl-9 w-full" placeholder="Поиск по имени или ID..."
                     value={search} onChange={e => setSearch(e.target.value)} />
+                  {search && (
+                    <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-ink">
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
                 </div>
-                <select className="input w-48" value={statusFlt} onChange={e => setStatusFlt(e.target.value as any)}>
+                <select className="input w-full md:w-48" value={statusFlt} onChange={e => setStatusFlt(e.target.value as any)}>
                   <option value="">Все статусы</option>
                   {ALL_STATUSES.map(s => <option key={s} value={s}>{STATUS_RU[s]}</option>)}
                 </select>
@@ -353,15 +399,13 @@ export default function AdminPage() {
                       <span className="text-sm font-bold">{pkgMeta.label}</span>
                       <span className="text-xs font-semibold px-2 py-0.5 bg-white/50 rounded-full">{pkgApps.length} заявок</span>
                     </div>
-                    {/* Desktop table */}
+                    {/* Desktop */}
                     <div className="hidden md:block overflow-x-auto">
                       <table className="w-full">
                         <thead className="bg-surface border-b border-border">
-                          <tr>
-                            {['Имя', 'Страна', 'Статус', 'Дата', 'Действия'].map(h => (
-                              <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-muted">{h}</th>
-                            ))}
-                          </tr>
+                          <tr>{['Имя', 'Страна', 'Статус', 'Дата', 'Действия'].map(h => (
+                            <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-muted">{h}</th>
+                          ))}</tr>
                         </thead>
                         <tbody className="divide-y divide-border">
                           {pkgApps.map(app => (
@@ -377,17 +421,32 @@ export default function AdminPage() {
                                   </div>
                                 </div>
                               </td>
-                              <td className="px-4 py-3 text-sm text-muted">{app.country === 'SA' ? 'SA' : 'AE'}</td>
+                              <td className="px-4 py-3 text-sm text-muted">{app.country}</td>
                               <td className="px-4 py-3"><Badge status={app.status} label={STATUS_RU[app.status]} /></td>
                               <td className="px-4 py-3 text-xs text-muted">{formatDate(app.created_at)}</td>
                               <td className="px-4 py-3">
-                                <div className="flex gap-1">
-                                  <button onClick={() => openDetail(app)} className="btn-ghost btn-sm p-1.5 rounded-lg">
+                                <div className="flex gap-1.5 items-center">
+                                  <button onClick={() => openDetail(app)} className="btn-ghost btn-sm p-1.5 rounded-lg" title="Подробнее">
                                     <Eye className="w-4 h-4" />
                                   </button>
-                                  {STATUS_NEXT[app.status] && (
-                                    <button onClick={() => changeStatus(app.id, STATUS_NEXT[app.status]!)} className="btn btn-primary btn-sm px-2.5 py-1 text-xs">
-                                      → {STATUS_RU[STATUS_NEXT[app.status]!]}
+                                  {app.status === 'PAID' && (
+                                    <button
+                                      onClick={() => { setSelected(app); startProcessing() }}
+                                      className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-green-500 text-white text-xs font-bold hover:bg-green-600 transition-colors"
+                                      title="Начать обработку"
+                                    >
+                                      <Play className="w-3 h-3" />
+                                      Начать
+                                    </button>
+                                  )}
+                                  {app.status === 'IN_PROGRESS' && (
+                                    <button
+                                      onClick={() => openDetail(app)}
+                                      className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-blue-500 text-white text-xs font-bold hover:bg-blue-600 transition-colors"
+                                      title="Завершить обработку"
+                                    >
+                                      <Flag className="w-3 h-3" />
+                                      Завершить
                                     </button>
                                   )}
                                 </div>
@@ -397,8 +456,7 @@ export default function AdminPage() {
                         </tbody>
                       </table>
                     </div>
-
-                    {/* Mobile cards */}
+                    {/* Mobile */}
                     <div className="md:hidden divide-y divide-border">
                       {pkgApps.map(app => (
                         <div key={app.id} className="p-4 flex items-center gap-3">
@@ -407,21 +465,12 @@ export default function AdminPage() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-semibold text-ink truncate">{app.full_name}</p>
-                            <p className="text-xs text-muted">{app.country === 'SA' ? 'SA' : 'AE'} · {formatDate(app.created_at)}</p>
-                            <div className="mt-1">
-                              <Badge status={app.status} label={STATUS_RU[app.status]} />
-                            </div>
+                            <p className="text-xs text-muted">{app.country} · {formatDate(app.created_at)}</p>
+                            <div className="mt-1"><Badge status={app.status} label={STATUS_RU[app.status]} /></div>
                           </div>
-                          <div className="flex flex-col gap-1.5 shrink-0">
-                            <button onClick={() => openDetail(app)} className="p-2 rounded-xl bg-surface hover:bg-border transition-colors">
-                              <Eye className="w-4 h-4 text-muted" />
-                            </button>
-                            {STATUS_NEXT[app.status] && (
-                              <button onClick={() => changeStatus(app.id, STATUS_NEXT[app.status]!)} className="px-2 py-1 rounded-lg bg-brand-400 text-white text-[10px] font-bold">
-                                →
-                              </button>
-                            )}
-                          </div>
+                          <button onClick={() => openDetail(app)} className="p-2 rounded-xl bg-surface hover:bg-border transition-colors">
+                            <Eye className="w-4 h-4 text-muted" />
+                          </button>
                         </div>
                       ))}
                     </div>
@@ -443,11 +492,9 @@ export default function AdminPage() {
                 <div className="hidden md:block overflow-x-auto">
                   <table className="w-full">
                     <thead className="bg-surface border-b border-border">
-                      <tr>
-                        {['Пользователь', 'Telegram', 'Гражданство', 'Дата рег.', 'Заявок'].map(h => (
-                          <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-muted">{h}</th>
-                        ))}
-                      </tr>
+                      <tr>{['Пользователь', 'Telegram', 'Гражданство', 'Дата рег.', 'Заявок'].map(h => (
+                        <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-muted">{h}</th>
+                      ))}</tr>
                     </thead>
                     <tbody className="divide-y divide-border">
                       {users.map(user => {
@@ -489,7 +536,6 @@ export default function AdminPage() {
                           <p className="text-sm font-semibold text-ink truncate">{user.full_name ?? 'N/A'}</p>
                           <p className="text-xs text-muted truncate">{user.email}</p>
                           <p className="text-xs text-muted mt-0.5">{user.citizenship ?? '—'} · {formatDate(user.created_at)}</p>
-                          {user.telegram && <p className="text-xs text-muted">@{user.telegram}</p>}
                         </div>
                         <span className="badge badge-blue text-xs shrink-0">{userApps.length} заявок</span>
                       </div>
@@ -508,11 +554,9 @@ export default function AdminPage() {
                 <div className="hidden md:block overflow-x-auto">
                   <table className="w-full">
                     <thead className="bg-surface border-b border-border">
-                      <tr>
-                        {['ID', 'Сумма', 'Метод', 'Статус', 'Пакет', 'Дата'].map(h => (
-                          <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-muted">{h}</th>
-                        ))}
-                      </tr>
+                      <tr>{['ID', 'Сумма', 'Метод', 'Статус', 'Пакет', 'Дата'].map(h => (
+                        <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-muted">{h}</th>
+                      ))}</tr>
                     </thead>
                     <tbody className="divide-y divide-border">
                       {payments.map(p => (
@@ -539,33 +583,26 @@ export default function AdminPage() {
                       <div className={cn(
                         'w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-sm font-bold',
                         p.status === 'PAID' ? 'bg-brand-100 text-brand-600' :
-                        p.status === 'FAILED' ? 'bg-red-50 text-red-500' :
-                        'bg-yellow-50 text-yellow-600'
-                      )}>
-                        $
-                      </div>
+                        p.status === 'FAILED' ? 'bg-red-50 text-red-500' : 'bg-yellow-50 text-yellow-600'
+                      )}>$</div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-bold text-ink">{formatCurrency(p.amount)}</p>
                         <p className="text-xs text-muted">{PACKAGES[p.package].name_ru} · {p.method}</p>
                         <p className="text-xs text-muted">{formatDate(p.created_at)}</p>
                       </div>
-                      <Badge
-                        label={p.status}
-                        color={p.status === 'PAID' ? 'green' : p.status === 'FAILED' ? 'red' : 'yellow'}
-                      />
+                      <Badge label={p.status} color={p.status === 'PAID' ? 'green' : p.status === 'FAILED' ? 'red' : 'yellow'} />
                     </div>
                   ))}
-                  {payments.length === 0 && (
-                    <div className="p-8 text-center text-muted text-sm">Нет платежей</div>
-                  )}
+                  {payments.length === 0 && <div className="p-8 text-center text-muted text-sm">Нет платежей</div>}
                 </div>
               </div>
             </div>
           )}
+
         </motion.div>
       </main>
 
-      {/* Mobile Bottom Navigation */}
+      {/* Mobile Bottom Nav */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-border flex items-stretch h-16">
         {NAV.map(n => (
           <button
@@ -588,7 +625,44 @@ export default function AdminPage() {
           <div className="flex divide-x divide-border max-h-[80vh]">
             {/* Left: info */}
             <div className="w-80 p-5 space-y-5 overflow-y-auto scrollbar-thin">
-              {/* Status control */}
+
+              {/* ── ACTION BUTTONS ── */}
+              {selected.status === 'PAID' && (
+                <div className="rounded-xl bg-green-50 border border-green-200 p-4">
+                  <p className="text-xs font-semibold text-green-700 mb-2 uppercase tracking-wide">Действие</p>
+                  <p className="text-xs text-green-600 mb-3">
+                    Клиент оплатил заявку. Нажмите кнопку чтобы принять в работу — клиент получит email-уведомление.
+                  </p>
+                  <button
+                    onClick={startProcessing}
+                    disabled={startingProcessing}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-green-500 text-white text-sm font-bold hover:bg-green-600 transition-colors disabled:opacity-60"
+                  >
+                    {startingProcessing
+                      ? <><Loader2 className="w-4 h-4 animate-spin" /> Запускаю…</>
+                      : <><Play className="w-4 h-4" /> Начать обработку</>
+                    }
+                  </button>
+                </div>
+              )}
+
+              {selected.status === 'IN_PROGRESS' && (
+                <div className="rounded-xl bg-blue-50 border border-blue-200 p-4">
+                  <p className="text-xs font-semibold text-blue-700 mb-2 uppercase tracking-wide">Действие</p>
+                  <p className="text-xs text-blue-600 mb-3">
+                    Загрузите переведённые документы и завершите заявку — клиент получит email и сможет скачать файлы.
+                  </p>
+                  <button
+                    onClick={() => setCompleteModalOpen(true)}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-500 text-white text-sm font-bold hover:bg-blue-600 transition-colors"
+                  >
+                    <Flag className="w-4 h-4" />
+                    Завершить обработку
+                  </button>
+                </div>
+              )}
+
+              {/* Status buttons */}
               <div>
                 <p className="text-xs text-muted font-semibold mb-2 uppercase tracking-wide">Статус</p>
                 <div className="flex flex-col gap-1">
@@ -614,18 +688,17 @@ export default function AdminPage() {
               <div className="text-xs space-y-2">
                 <p className="text-muted font-semibold uppercase tracking-wide mb-2">Данные</p>
                 {[
-                  ['Страна', selected.country === 'SA' ? 'Саудовская Аравия' : 'ОАЭ'],
-                  ['Пакет', PACKAGES[selected.service_package].name_ru],
-                  ['Гражданство', selected.citizenship],
-                  ['Телефон', selected.phone],
-                  ['Telegram', selected.telegram],
-                  ['Пол', (selected as any).gender === 'male' ? 'Мужчина' : (selected as any).gender === 'female' ? 'Женщина' : null],
-                  ['Семейное положение', (selected as any).marital_status === 'single' ? 'Не в браке' : (selected as any).marital_status === 'married' ? 'В браке' : (selected as any).marital_status === 'divorced' ? 'Разведён(а)' : (selected as any).marital_status === 'widowed' ? 'Вдовец/Вдова' : null],
-                  ['Арабский язык', (selected as any).arabic_level],
-                  ['Английский язык', (selected as any).english_level],
-                  ['Образование', selected.education_level],
-                  ['Контакт близкого', (selected as any).guardian_name],
-                  ['Тел. близкого', (selected as any).guardian_phone],
+                  ['Страна',          selected.country === 'SA' ? 'Саудовская Аравия' : 'ОАЭ'],
+                  ['Пакет',           PACKAGES[selected.service_package].name_ru],
+                  ['Гражданство',     selected.citizenship],
+                  ['Телефон',         selected.phone],
+                  ['Telegram',        selected.telegram],
+                  ['Образование',     selected.education_level],
+                  ['Пол',             (selected as any).gender === 'male' ? 'Мужчина' : (selected as any).gender === 'female' ? 'Женщина' : null],
+                  ['Арабский',        (selected as any).arabic_level],
+                  ['Английский',      (selected as any).english_level],
+                  ['Контакт',         (selected as any).guardian_name],
+                  ['Тел. контакта',   (selected as any).guardian_phone],
                 ].map(([label, val]) => val ? (
                   <div key={label} className="flex justify-between gap-2">
                     <span className="text-muted shrink-0">{label}</span>
@@ -676,7 +749,7 @@ export default function AdminPage() {
                       className="w-full flex items-center gap-2 p-2 rounded-lg hover:bg-surface transition-colors text-left"
                     >
                       <FileText className="w-3.5 h-3.5 text-brand-400 shrink-0" />
-                      <span className="text-xs text-ink flex-1 truncate">{DOCUMENT_LABELS[doc.type].ru}</span>
+                      <span className="text-xs text-ink flex-1 truncate">{doc.file_name}</span>
                       <Download className="w-3 h-3 text-muted" />
                     </button>
                   ))}
@@ -686,7 +759,7 @@ export default function AdminPage() {
             </div>
 
             {/* Right: chat */}
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col min-w-0">
               <div className="px-5 py-3 border-b border-border">
                 <p className="text-sm font-semibold text-ink">Сообщения</p>
               </div>
@@ -728,6 +801,84 @@ export default function AdminPage() {
             </div>
           </div>
         )}
+      </Modal>
+
+      {/* ── Complete Processing Modal ── */}
+      <Modal
+        open={completeModalOpen}
+        onClose={() => { if (!completing) { setCompleteModalOpen(false); setCompleteFiles([]) } }}
+        title="Завершить обработку заявки"
+        size="md"
+      >
+        <div className="p-6 space-y-5">
+          <div className="rounded-xl bg-blue-50 border border-blue-100 p-4 text-sm text-blue-700">
+            Загрузите переведённые документы. После нажатия <strong>«Завершить»</strong> клиент
+            получит email-уведомление и сможет скачать файлы в личном кабинете.
+          </div>
+
+          {/* File drop zone */}
+          <div
+            onClick={() => fileInputRef.current?.click()}
+            className="border-2 border-dashed border-border rounded-xl p-8 text-center cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-all"
+          >
+            <Upload className="w-8 h-8 text-muted mx-auto mb-2" />
+            <p className="text-sm font-medium text-ink mb-1">Нажмите чтобы выбрать файлы</p>
+            <p className="text-xs text-muted">PDF, JPG, PNG, DOCX — любые форматы</p>
+            <input
+              ref={fileInputRef}
+              type="file"
+              multiple
+              className="hidden"
+              onChange={handleFileSelect}
+              accept=".pdf,.jpg,.jpeg,.png,.docx,.doc"
+            />
+          </div>
+
+          {/* File list */}
+          {completeFiles.length > 0 && (
+            <div className="space-y-2">
+              <p className="text-xs font-semibold text-muted uppercase tracking-wide">
+                Выбрано файлов: {completeFiles.length}
+              </p>
+              {completeFiles.map((file, i) => (
+                <div key={i} className="flex items-center gap-3 p-3 bg-surface rounded-xl border border-border">
+                  <FileText className="w-4 h-4 text-brand-400 shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-ink truncate">{file.name}</p>
+                    <p className="text-xs text-muted">{(file.size / 1024).toFixed(0)} KB</p>
+                  </div>
+                  <button
+                    onClick={() => setCompleteFiles(prev => prev.filter((_, j) => j !== i))}
+                    className="p-1 rounded-lg hover:bg-border transition-colors text-muted hover:text-red-500"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Actions */}
+          <div className="flex gap-3 pt-2">
+            <button
+              onClick={() => { setCompleteModalOpen(false); setCompleteFiles([]) }}
+              disabled={completing}
+              className="flex-1 px-4 py-2.5 rounded-xl border border-border text-sm font-medium text-muted hover:text-ink hover:bg-surface transition-colors disabled:opacity-50"
+            >
+              Отмена
+            </button>
+            <button
+              onClick={completeProcessing}
+              disabled={completing || completeFiles.length === 0}
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-500 text-white text-sm font-bold hover:bg-blue-600 transition-colors disabled:opacity-50"
+            >
+              {completing
+                ? <><Loader2 className="w-4 h-4 animate-spin" /> Завершаю…</>
+                : <><Flag className="w-4 h-4" /> Завершить заявку</>
+              }
+            </button>
+          </div>
+        </div>
       </Modal>
     </div>
   )
