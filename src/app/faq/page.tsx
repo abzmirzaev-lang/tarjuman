@@ -186,10 +186,10 @@ export default function FAQPage() {
                 Telegram
               </a>
               <a
-                href="mailto:tarjuman777@gmail.com"
+                href="mailto:tarjumanedu@gmail.com"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/10 text-white font-semibold rounded-xl text-sm hover:bg-white/20 transition-colors"
               >
-                tarjuman777@gmail.com
+                tarjumanedu@gmail.com
               </a>
             </div>
           </div>

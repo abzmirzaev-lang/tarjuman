@@ -52,7 +52,7 @@ export function Footer({ lang = 'ru' }: { lang?: AppLanguage }) {
         <div>
           <h4 className="text-white font-semibold mb-3 text-sm">{t.footer.contactTitle}</h4>
           <ul className="space-y-2 text-sm text-white/60">
-            <li><a href="mailto:tarjuman777@gmail.com" className="hover:text-white transition-colors">tarjuman777@gmail.com</a></li>
+            <li><a href="mailto:tarjumanedu@gmail.com" className="hover:text-white transition-colors">tarjumanedu@gmail.com</a></li>
             <li><a href="https://t.me/TARJUMAN_KSA" className="hover:text-white transition-colors">@TARJUMAN_KSA</a></li>
           </ul>
         </div>
