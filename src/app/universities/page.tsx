@@ -371,6 +371,7 @@ function UniversitiesContent() {
                     className="card overflow-hidden cursor-pointer group hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                   >
                     <div className="relative h-44 overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-br from-green-900 to-green-700 opacity-50 z-10" />
                       <img
                         src={extra.photo}
                         alt={uni.name_en}
@@ -467,6 +468,7 @@ function UniversitiesContent() {
               >
                 {/* Photo header */}
                 <div className="relative h-52 sm:h-64 shrink-0">
+                  <div className="absolute inset-0 bg-gradient-to-br from-green-900 to-green-700 opacity-50 z-10" />
                   <img
                     src={extra.photo}
                     alt={selected.name_en}
