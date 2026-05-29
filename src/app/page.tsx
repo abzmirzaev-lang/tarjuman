@@ -46,6 +46,16 @@ const HERO_SLIDES = [
     label: 'Дубай',
     city: 'Дубай, ОАЭ',
   },
+  {
+    photo: 'https://images.unsplash.com/photo-1607618819469-aba0f52adead?w=1800&q=90',
+    label: 'Исламский университет Медины',
+    city: 'Медина, Саудовская Аравия',
+  },
+  {
+    photo: 'https://images.unsplash.com/photo-1597534458220-9fb4969f2df5?w=1800&q=90',
+    label: 'Университет имама Мухаммада ибн Сауда',
+    city: 'Эр-Рияд, Саудовская Аравия',
+  },
 ]
 
 export default function HomePage() {
