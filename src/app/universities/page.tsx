@@ -128,7 +128,7 @@ const UNI_EXTRA: Record<string, {
   'Al-Baha University': {
     founded: 2006,
     students: '15,000+',
-    photo: 'https://images.unsplash.com/photo-1521587765099-8835e7201186?w=1200&q=85',
+    photo: 'https://image.free-apply.com/gallery/l/uni/gallery/lg/1068200001/4aaa21b04f33cb9d21de5992d903d61ce044aff3.jpg',
     color: 'from-fuchsia-900 to-purple-700',
     desc_ru: 'Государственный университет в живописном горном регионе Аль-Баха. Основан в 2006 году. 16 факультетов и 5 научно-исследовательских центров.',
   },
