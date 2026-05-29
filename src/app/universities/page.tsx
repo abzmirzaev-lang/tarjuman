@@ -72,7 +72,7 @@ const UNI_EXTRA: Record<string, {
   'King Faisal University': {
     founded: 1975,
     students: '41,500+',
-    photo: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&q=85',
+    photo: 'https://i.ibb.co/67FLp20T/4.jpg',
     color: 'from-indigo-900 to-indigo-700',
     desc_ru: 'Государственный университет в Аль-Хуфуфе (провинция Аль-Ахса). Основан в 1975 году. 15 факультетов, 125 образовательных программ. Площадь кампуса — 4 млн кв. м.',
   },
@@ -93,21 +93,21 @@ const UNI_EXTRA: Record<string, {
   'Qassim University': {
     founded: 2004,
     students: '50,000+',
-    photo: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&q=85',
+    photo: 'https://i.ibb.co/vxk05YjQ/6.jpg',
     color: 'from-orange-900 to-orange-700',
     desc_ru: 'Государственный университет в Бурайде. Основан в 2004 году. Более 38 факультетов — один из самых больших в КСА. 120+ программ бакалавриата, 70+ магистратуры, 30+ PhD.',
   },
   'University of Tabuk': {
     founded: 2006,
     students: '35,000+',
-    photo: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1200&q=85',
+    photo: 'https://i.ibb.co/b5CcT2xD/meta-tag.png',
     color: 'from-rose-900 to-pink-700',
     desc_ru: 'Государственный университет на севере Саудовской Аравии. Основан в 2006 году. 18 факультетов. Расположен вблизи ЮНЕСКО объекта Хегра (Мадаин-Салих) — одного из важнейших исторических мест Аравии.',
   },
   "University of Ha'il": {
     founded: 2005,
     students: '34,684',
-    photo: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1200&q=85',
+    photo: 'https://i.ibb.co/s97MJLZS/1.png',
     color: 'from-slate-900 to-slate-700',
     desc_ru: 'Государственный университет в Хаиле, северная Саудовская Аравия. Основан в 2005 году. 14 факультетов, 51 программа бакалавриата и 32 программы магистратуры.',
   },
@@ -128,7 +128,7 @@ const UNI_EXTRA: Record<string, {
   'Al-Baha University': {
     founded: 2006,
     students: '15,000+',
-    photo: 'https://image.free-apply.com/gallery/l/uni/gallery/lg/1068200001/4aaa21b04f33cb9d21de5992d903d61ce044aff3.jpg',
+    photo: 'https://i.ibb.co/xKbTHCsD/baha.jpg',
     color: 'from-fuchsia-900 to-purple-700',
     desc_ru: 'Государственный университет в живописном горном регионе Аль-Баха. Основан в 2006 году. 16 факультетов и 5 научно-исследовательских центров.',
   },
@@ -149,7 +149,7 @@ const UNI_EXTRA: Record<string, {
   'Northern Border University': {
     founded: 2007,
     students: '15,000+',
-    photo: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=1200&q=85',
+    photo: 'https://i.ibb.co/7NQZfDtv/5.jpg',
     color: 'from-blue-800 to-indigo-700',
     desc_ru: 'Государственный университет в Ararе, крайний север Саудовской Аравии. Основан в 2007 году. Обслуживает северные приграничные регионы королевства.',
   },
