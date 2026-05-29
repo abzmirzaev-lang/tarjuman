@@ -144,7 +144,7 @@ export default function DashboardPage() {
   const userName = user?.user_metadata?.full_name?.split(' ')[0] ?? (lang === 'ru' ? 'Пользователь' : 'User')
 
   return (
-    <div className="min-h-screen bg-[#F7F8FA]">
+    <div className="min-h-screen bg-[#F7F8FA] overflow-x-hidden">
       <div className="flex">
 
         {/* SIDEBAR */}
@@ -293,9 +293,10 @@ export default function DashboardPage() {
                       {lang === 'ru' ? 'Мои заявки' : lang === 'uz' ? 'Mening arizalarim' : 'My Applications'}
                     </h2>
                     <Link href="/apply">
-                      <button className="flex items-center gap-2 px-4 py-2 bg-ink text-white rounded-xl text-sm font-semibold hover:bg-ink/90 transition-colors">
-                        <Plus className="w-4 h-4" />
-                        {lang === 'ru' ? 'Новая заявка' : lang === 'uz' ? 'Yangi ariza' : 'New Application'}
+                      <button className="flex items-center gap-2 px-3 py-2 md:px-4 bg-ink text-white rounded-xl text-sm font-semibold hover:bg-ink/90 transition-colors">
+                        <Plus className="w-4 h-4 shrink-0" />
+                        <span className="hidden sm:inline">{lang === 'ru' ? 'Новая заявка' : lang === 'uz' ? 'Yangi ariza' : 'New Application'}</span>
+                        <span className="sm:hidden">{lang === 'ru' ? 'Новая' : lang === 'uz' ? 'Yangi' : 'New'}</span>
                       </button>
                     </Link>
                   </div>
