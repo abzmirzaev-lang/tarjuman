@@ -33,7 +33,7 @@ export default function AuthConfirmPage() {
 
       if (data.session) {
         setStatus(`Сессия создана! Пользователь: ${data.session.user.email}. Перехожу...`)
-        setTimeout(() => { window.location.href = '/dashboard' }, 1500)
+        setTimeout(() => { window.location.href = '/' }, 1500)
       } else {
         setError('setSession вернул пустую сессию')
       }
