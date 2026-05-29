@@ -65,7 +65,7 @@ const UNI_EXTRA: Record<string, {
   'King Khalid University': {
     founded: 1998,
     students: '60,000+',
-    photo: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1200&q=85',
+    photo: '/kku-abha.jpg',
     color: 'from-teal-900 to-cyan-700',
     desc_ru: 'Государственный университет в Абхе, регион Асир. Основан в 1998 году. 26 факультетов на 27 кампусах. Один из крупнейших университетов Аравийского полуострова.',
   },
@@ -79,7 +79,7 @@ const UNI_EXTRA: Record<string, {
   'Taibah University': {
     founded: 2003,
     students: '40,000+',
-    photo: 'https://images.unsplash.com/photo-1607363479820-43ecb73dd56?w=1200&q=85',
+    photo: '/taibah.jpg',
     color: 'from-violet-900 to-purple-700',
     desc_ru: 'Государственный университет в Медине. Основан в 2003 году. 28 факультетов. Единственный университет в Медине с полноценным медицинским факультетом.',
   },
@@ -121,7 +121,7 @@ const UNI_EXTRA: Record<string, {
   'Najran University': {
     founded: 2006,
     students: '20,000+',
-    photo: 'https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=1200&q=85',
+    photo: '/najran.jpg',
     color: 'from-lime-900 to-green-700',
     desc_ru: 'Государственный университет на юге Саудовской Аравии, вблизи границы с Йеменом. Основан в 2006 году. 14 факультетов, 70 специальностей.',
   },
@@ -135,14 +135,14 @@ const UNI_EXTRA: Record<string, {
   'Shaqra University': {
     founded: 2009,
     students: '20,000+',
-    photo: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1200&q=85',
+    photo: 'https://saudipedia.com/var/site/storage/images/3/7/6/4/4524673-1-eng-GB/b0ab6241c4bb-67118.jpg',
     color: 'from-yellow-900 to-amber-600',
     desc_ru: 'Государственный университет в провинции Эр-Рияд. Основан в 2009 году. 24 факультета — входит в топ-10 КСА по числу факультетов.',
   },
   'University of Jeddah': {
     founded: 2014,
     students: '25,000+',
-    photo: 'https://images.unsplash.com/photo-1627556704302-624286467c65?w=1200&q=85',
+    photo: 'https://cos.uj.edu.sa/sites/cos.uoj.com.sa/files/2024-10/%D8%AA%D8%B5%D9%85%D9%8A%D9%85%20%D8%A8%D8%AF%D9%88%D9%86%20%D8%B9%D9%86%D9%88%D8%A7%D9%86%20%281%29.webp',
     color: 'from-emerald-800 to-green-600',
     desc_ru: 'Молодой государственный университет в Джидде, основан в 2014 году. 16 факультетов. Современная инфраструктура, активное международное сотрудничество.',
   },
@@ -156,21 +156,21 @@ const UNI_EXTRA: Record<string, {
   'Jouf University': {
     founded: 2005,
     students: '20,000+',
-    photo: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1200&q=85',
+    photo: 'https://saudipedia.com/var/site/storage/images/3/8/1/8/4468183-1-eng-GB/f08ba8d6666d-67089.jpg',
     color: 'from-red-900 to-rose-700',
     desc_ru: 'Государственный университет в регионе аль-Джауф на севере Саудовской Аравии. Основан в 2005 году. Широкий спектр специальностей, динамично развивающийся центр образования.',
   },
   'Prince Sattam bin Abdulaziz University': {
     founded: 2009,
     students: '25,000+',
-    photo: 'https://images.unsplash.com/photo-1519671282429-b44660ead0a7?w=1200&q=85',
+    photo: 'https://saudipedia.com/var/site/storage/images/3/8/3/3/4463383-1-eng-GB/e53a629fcfa2-67085.jpg',
     color: 'from-purple-900 to-violet-700',
     desc_ru: 'Государственный университет в Аль-Хардже, провинция Эр-Рияд. Основан в 2009 году. Специализируется на медицинских и инженерных специальностях. Около 25 000 студентов.',
   },
   'Majmaah University': {
     founded: 2009,
     students: '30,000+',
-    photo: 'https://images.unsplash.com/photo-1497366412874-3415097a27e7?w=1200&q=85',
+    photo: 'https://saudipedia.com/var/site/storage/images/9/2/4/7/4477429-1-eng-GB/3b5012028464-66600.jpg',
     color: 'from-zinc-800 to-zinc-600',
     desc_ru: 'Государственный университет в Маджмаа, центральная Саудовская Аравия. Основан в 2009 году. 30 000 студентов. Кампусы в нескольких городах провинции Эр-Рияд.',
   },
