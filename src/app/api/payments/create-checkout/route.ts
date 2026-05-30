@@ -111,6 +111,79 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ url: result.result.url })
     }
 
+    // ── LEMON SQUEEZY ────────────────────────────────────────────────────────
+    if (process.env.LEMONSQUEEZY_API_KEY && process.env.LEMONSQUEEZY_STORE_ID) {
+      const variantId = {
+        SUBMISSION: process.env.LEMONSQUEEZY_VARIANT_SUBMISSION,
+        STANDARD:   process.env.LEMONSQUEEZY_VARIANT_STANDARD,
+        VIP:        process.env.LEMONSQUEEZY_VARIANT_VIP,
+      }[pkg]
+
+      if (!variantId) {
+        return NextResponse.json({ error: 'Variant not configured' }, { status: 500 })
+      }
+
+      const lsRes = await fetch('https://api.lemonsqueezy.com/v1/checkouts', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.LEMONSQUEEZY_API_KEY}`,
+          'Content-Type':  'application/vnd.api+json',
+          'Accept':        'application/vnd.api+json',
+        },
+        body: JSON.stringify({
+          data: {
+            type: 'checkouts',
+            attributes: {
+              checkout_data: {
+                email:  session.user.email,
+                custom: {
+                  applicationId: applicationId,
+                  userId:        session.user.id,
+                  package:       pkg,
+                },
+              },
+              product_options: {
+                redirect_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?payment=success&app=${applicationId}`,
+              },
+              checkout_options: {
+                embed: false,
+                media: false,
+                logo:  true,
+              },
+            },
+            relationships: {
+              store:   { data: { type: 'stores',   id: process.env.LEMONSQUEEZY_STORE_ID } },
+              variant: { data: { type: 'variants', id: variantId } },
+            },
+          },
+        }),
+      })
+
+      const lsData = await lsRes.json()
+
+      if (!lsRes.ok) {
+        console.error('LemonSqueezy error:', lsData)
+        return NextResponse.json({ error: 'Payment service error' }, { status: 400 })
+      }
+
+      const checkoutUrl = lsData.data?.attributes?.url
+      if (!checkoutUrl) {
+        return NextResponse.json({ error: 'No checkout URL returned' }, { status: 500 })
+      }
+
+      await supabase.from('payments').insert({
+        application_id: applicationId,
+        user_id:        session.user.id,
+        amount:         packageInfo.priceUSD,
+        currency:       'USD',
+        method:         'OTHER',
+        status:         'PENDING',
+        package:        pkg,
+      })
+
+      return NextResponse.json({ url: checkoutUrl })
+    }
+
     // ── STRIPE ──────────────────────────────────────────────────────────────
     if (process.env.STRIPE_SECRET_KEY) {
       const Stripe = (await import('stripe')).default
