@@ -179,13 +179,13 @@ export const PACKAGES: Record<ServicePackage, {
 }
 
 export const STATUS_LABELS: Record<ApplicationStatus, { ru: string; en: string; uz: string }> = {
-  REGISTERED:   { ru: 'Зарегистрировано', en: 'Registered',   uz: "Ro'yxatdan o'tdi" },
-  PAID:         { ru: 'Оплачено',         en: 'Paid',          uz: "To'landi" },
-  IN_PROGRESS:  { ru: 'В обработке',      en: 'In Progress',   uz: 'Jarayonda' },
-  UNDER_REVIEW: { ru: 'На проверке',      en: 'Under Review',  uz: "Ko'rib chiqilmoqda" },
-  SUBMITTED:    { ru: 'Подано',           en: 'Submitted',     uz: 'Topshirildi' },
-  COMPLETED:    { ru: 'Завершено',        en: 'Completed',     uz: 'Yakunlandi' },
-  REJECTED:     { ru: 'Отклонено',        en: 'Rejected',      uz: 'Rad etildi' },
+  REGISTERED:   { ru: 'Ожидает оплаты',  en: 'Pending Payment', uz: "To'lov kutilmoqda" },
+  PAID:         { ru: 'Оплачено',         en: 'Paid',            uz: "To'landi" },
+  IN_PROGRESS:  { ru: 'В обработке',      en: 'In Progress',     uz: 'Jarayonda' },
+  UNDER_REVIEW: { ru: 'В обработке',      en: 'In Progress',     uz: 'Jarayonda' },
+  SUBMITTED:    { ru: 'Подано',           en: 'Submitted',       uz: 'Topshirildi' },
+  COMPLETED:    { ru: 'Подано',           en: 'Submitted',       uz: 'Topshirildi' },
+  REJECTED:     { ru: 'Отклонено',        en: 'Rejected',        uz: 'Rad etildi' },
 }
 
 export const DOCUMENT_LABELS: Record<DocumentType, { ru: string; en: string; uz: string }> = {

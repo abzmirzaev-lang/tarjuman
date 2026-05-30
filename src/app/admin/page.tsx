@@ -20,25 +20,25 @@ import { toast } from 'sonner'
 type AdminTab = 'overview' | 'applications' | 'users' | 'payments'
 
 const ALL_STATUSES: ApplicationStatus[] = [
-  'REGISTERED', 'PAID', 'IN_PROGRESS', 'UNDER_REVIEW', 'SUBMITTED', 'COMPLETED', 'REJECTED'
+  'REGISTERED', 'PAID', 'IN_PROGRESS', 'SUBMITTED'
 ]
 
 const STATUS_RU: Record<ApplicationStatus, string> = {
-  REGISTERED:   'Зарегистрировано',
+  REGISTERED:   'Ожидает оплаты',
   PAID:         'Оплачено',
   IN_PROGRESS:  'В обработке',
-  UNDER_REVIEW: 'На проверке',
+  UNDER_REVIEW: 'В обработке',
   SUBMITTED:    'Подано',
-  COMPLETED:    'Завершено',
+  COMPLETED:    'Подано',
   REJECTED:     'Отклонено',
 }
 
 const STATUS_COLOR: Record<ApplicationStatus, string> = {
-  REGISTERED:   'bg-gray-500/20 text-gray-400',
+  REGISTERED:   'bg-amber-500/20 text-amber-400',
   PAID:         'bg-emerald-500/20 text-emerald-400',
   IN_PROGRESS:  'bg-blue-500/20 text-blue-400',
-  UNDER_REVIEW: 'bg-violet-500/20 text-violet-400',
-  SUBMITTED:    'bg-amber-500/20 text-amber-400',
+  UNDER_REVIEW: 'bg-blue-500/20 text-blue-400',
+  SUBMITTED:    'bg-brand-400/20 text-brand-400',
   COMPLETED:    'bg-brand-400/20 text-brand-400',
   REJECTED:     'bg-red-500/20 text-red-400',
 }
