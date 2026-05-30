@@ -223,7 +223,7 @@ export default function DashboardPage() {
         </aside>
 
         {/* MAIN CONTENT */}
-        <main className="flex-1 md:ml-64 min-h-screen">
+        <main className="flex-1 md:ml-64 min-h-screen w-0 md:w-auto overflow-x-hidden">
 
           {/* Mobile header */}
           <div className="md:hidden bg-white border-b border-border h-14 flex items-center justify-between px-3 sticky top-0 z-30">
@@ -267,7 +267,7 @@ export default function DashboardPage() {
             ))}
           </div>
 
-          <div className="p-4 md:p-8 pb-24 md:pb-8">
+          <div className="p-3 md:p-8 pb-24 md:pb-8 w-full max-w-full">
 
             <div className="mb-6">
               <h1 className="text-2xl font-bold text-ink">
@@ -341,31 +341,29 @@ export default function DashboardPage() {
                             )}
                             onClick={() => switchApp(application.id)}
                           >
-                            <div className="p-5">
-                              <div className="flex items-start justify-between gap-3 mb-4">
-                                <div className="flex items-center gap-3 min-w-0">
-                                  <div className={cn(
-                                    'w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-xs font-bold',
-                                    isSelected ? 'bg-ink text-white' : 'bg-gray-100 text-gray-500'
-                                  )}>
-                                    {application.country === 'SA' ? 'SA' : 'AE'}
-                                  </div>
-                                  <div className="min-w-0">
-                                    <p className="font-semibold text-ink text-sm truncate">
-                                      {application.country === 'SA'
-                                        ? (lang === 'ru' ? 'Саудовская Аравия' : lang === 'uz' ? 'Saudiya Arabistoni' : 'Saudi Arabia')
-                                        : (lang === 'ru' ? 'ОАЭ' : lang === 'uz' ? 'BAA' : 'UAE')}
-                                    </p>
-                                    <p className="text-xs text-muted truncate">
-                                      {lang === 'ru'
-                                        ? PACKAGES[application.service_package]?.name_ru
-                                        : PACKAGES[application.service_package]?.name_en}
-                                    </p>
-                                  </div>
+                            <div className="p-3 md:p-5">
+                              <div className="flex items-center gap-2 mb-3">
+                                <div className={cn(
+                                  'w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-xs font-bold',
+                                  isSelected ? 'bg-ink text-white' : 'bg-gray-100 text-gray-500'
+                                )}>
+                                  {application.country === 'SA' ? 'SA' : 'AE'}
                                 </div>
-                                <div className="flex items-center gap-2 shrink-0">
+                                <div className="min-w-0 flex-1">
+                                  <p className="font-semibold text-ink text-sm truncate">
+                                    {application.country === 'SA'
+                                      ? (lang === 'ru' ? 'Саудовская Аравия' : lang === 'uz' ? 'Saudiya Arabistoni' : 'Saudi Arabia')
+                                      : (lang === 'ru' ? 'ОАЭ' : lang === 'uz' ? 'BAA' : 'UAE')}
+                                  </p>
+                                  <p className="text-xs text-muted truncate">
+                                    {lang === 'ru'
+                                      ? PACKAGES[application.service_package]?.name_ru
+                                      : PACKAGES[application.service_package]?.name_en}
+                                  </p>
+                                </div>
+                                <div className="flex items-center gap-1.5 shrink-0">
                                   <span className={cn(
-                                    'text-xs font-semibold px-2.5 py-1 rounded-full border whitespace-nowrap',
+                                    'text-[11px] font-semibold px-2 py-0.5 rounded-full border whitespace-nowrap',
                                     STATUS_COLORS[application.status] ?? 'bg-gray-100 text-gray-600 border-gray-200'
                                   )}>
                                     {statusLabel(application.status)}
@@ -373,10 +371,10 @@ export default function DashboardPage() {
                                   {application.status === 'REGISTERED' && (
                                     <button
                                       onClick={(e) => { e.stopPropagation(); deleteApp(application.id) }}
-                                      className="w-8 h-8 flex items-center justify-center rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                                      className="w-7 h-7 flex items-center justify-center rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
                                       title={lang === 'ru' ? 'Удалить заявку' : 'Delete'}
                                     >
-                                      <Trash2 className="w-3.5 h-3.5" />
+                                      <Trash2 className="w-3 h-3" />
                                     </button>
                                   )}
                                 </div>
