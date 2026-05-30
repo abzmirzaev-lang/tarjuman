@@ -123,10 +123,12 @@ export default function AdminPage() {
   const [detailOpen, setDetailOpen] = useState(false)
   const [sending,    setSending]    = useState(false)
 
-  const [startingProcessing, setStartingProcessing] = useState(false)
-  const [completeModalOpen,  setCompleteModalOpen]  = useState(false)
-  const [completeFiles,      setCompleteFiles]      = useState<File[]>([])
-  const [completing,         setCompleting]         = useState(false)
+  const [startingProcessing,  setStartingProcessing]  = useState(false)
+  const [completeModalOpen,   setCompleteModalOpen]   = useState(false)
+  const [completeFiles,       setCompleteFiles]       = useState<File[]>([])
+  const [completing,          setCompleting]          = useState(false)
+  const [studysaudiLogin,     setStudysaudiLogin]     = useState('')
+  const [studysaudiPassword,  setStudysaudiPassword]  = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -207,14 +209,18 @@ export default function AdminPage() {
       }
       const res = await fetch('/api/admin/complete-processing', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ applicationId: selected.id }),
+        body: JSON.stringify({
+          applicationId: selected.id,
+          studysaudiLogin: studysaudiLogin.trim(),
+          studysaudiPassword: studysaudiPassword.trim(),
+        }),
       })
       if (!res.ok) throw new Error('Ошибка завершения')
-      setApps(prev => prev.map(a => a.id === selected.id ? { ...a, status: 'COMPLETED' } : a))
-      setSelected(prev => prev ? { ...prev, status: 'COMPLETED' } : null)
+      setApps(prev => prev.map(a => a.id === selected.id ? { ...a, status: 'SUBMITTED' } : a))
+      setSelected(prev => prev ? { ...prev, status: 'SUBMITTED' } : null)
       setAppDocs(prev => [...prev, ...newDocs])
-      setCompleteFiles([]); setCompleteModalOpen(false)
-      toast.success(`✅ Завершено! ${newDocs.length} документ(ов) загружено. Клиент уведомлён.`)
+      setCompleteFiles([]); setStudysaudiLogin(''); setStudysaudiPassword(''); setCompleteModalOpen(false)
+      toast.success(`✅ Подано! ${newDocs.length} документ(ов) загружено. Клиент уведомлён.`)
     } catch (e: any) { toast.error(e.message ?? 'Ошибка') }
     setCompleting(false)
   }
@@ -852,14 +858,40 @@ export default function AdminPage() {
       {/* ══ COMPLETE MODAL (dark) ══ */}
       <DarkModal
         open={completeModalOpen}
-        onClose={() => { if (!completing) { setCompleteModalOpen(false); setCompleteFiles([]) } }}
+        onClose={() => { if (!completing) { setCompleteModalOpen(false); setCompleteFiles([]); setStudysaudiLogin(''); setStudysaudiPassword('') } }}
         title="Завершить обработку"
         size="md"
       >
         <div className="p-6 space-y-5">
           <div className="rounded-xl bg-blue-500/10 border border-blue-500/20 p-4 text-sm text-blue-300">
-            Загрузите переведённые документы. Клиент получит email и сможет скачать их в личном кабинете.
+            Загрузите переведённые документы и укажите данные для входа на studyinsaudi.com. Клиент получит всё на почту.
           </div>
+
+          {/* StudyInSaudi credentials */}
+          <div className="space-y-3">
+            <p className="text-xs font-semibold text-white/40 uppercase tracking-wider">Данные studyinsaudi.com</p>
+            <div>
+              <label className="text-xs text-white/40 mb-1.5 block">Логин (Email)</label>
+              <input
+                type="text"
+                value={studysaudiLogin}
+                onChange={e => setStudysaudiLogin(e.target.value)}
+                placeholder="example@email.com"
+                className="w-full bg-white/[0.05] border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-brand-400/50"
+              />
+            </div>
+            <div>
+              <label className="text-xs text-white/40 mb-1.5 block">Пароль</label>
+              <input
+                type="text"
+                value={studysaudiPassword}
+                onChange={e => setStudysaudiPassword(e.target.value)}
+                placeholder="••••••••"
+                className="w-full bg-white/[0.05] border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-brand-400/50"
+              />
+            </div>
+          </div>
+
           <div onClick={() => fileInputRef.current?.click()}
             className="border-2 border-dashed border-white/[0.1] rounded-xl p-8 text-center cursor-pointer hover:border-brand-400/40 hover:bg-brand-400/5 transition-all">
             <Upload className="w-8 h-8 text-white/20 mx-auto mb-2"/>
