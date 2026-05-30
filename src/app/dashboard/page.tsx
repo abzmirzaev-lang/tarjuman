@@ -226,9 +226,9 @@ export default function DashboardPage() {
         <main className="flex-1 md:ml-64 min-h-screen">
 
           {/* Mobile header */}
-          <div className="md:hidden bg-white border-b border-border h-14 flex items-center justify-between px-4 sticky top-0 z-30">
+          <div className="md:hidden bg-white border-b border-border h-14 flex items-center justify-between px-3 sticky top-0 z-30">
             <Link href="/">
-              <svg viewBox="0 0 156 36" width="130" height="30" aria-label="TARJUMAN">
+              <svg viewBox="0 0 156 36" width="100" height="24" aria-label="TARJUMAN">
                 <path d="M 2,36 L 2,22 L 8,10 L 16,4 L 24,10 L 30,22 L 30,36" fill="none" stroke="#1B4332" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round"/>
                 <line x1="9" y1="13" x2="23" y2="13" stroke="#C9922A" strokeWidth="2" strokeLinecap="round"/>
                 <line x1="16" y1="13" x2="16" y2="31" stroke="#C9922A" strokeWidth="2" strokeLinecap="round"/>
@@ -293,10 +293,9 @@ export default function DashboardPage() {
                       {lang === 'ru' ? 'Мои заявки' : lang === 'uz' ? 'Mening arizalarim' : 'My Applications'}
                     </h2>
                     <Link href="/apply">
-                      <button className="flex items-center gap-2 px-3 py-2 md:px-4 bg-ink text-white rounded-xl text-sm font-semibold hover:bg-ink/90 transition-colors">
+                      <button className="flex items-center gap-1.5 px-3 py-2 bg-ink text-white rounded-xl text-sm font-semibold hover:bg-ink/90 transition-colors whitespace-nowrap">
                         <Plus className="w-4 h-4 shrink-0" />
-                        <span className="hidden sm:inline">{lang === 'ru' ? 'Новая заявка' : lang === 'uz' ? 'Yangi ariza' : 'New Application'}</span>
-                        <span className="sm:hidden">{lang === 'ru' ? 'Новая' : lang === 'uz' ? 'Yangi' : 'New'}</span>
+                        <span>{lang === 'ru' ? 'Новая' : lang === 'uz' ? 'Yangi' : 'New'}</span>
                       </button>
                     </Link>
                   </div>
