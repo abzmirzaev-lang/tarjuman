@@ -281,7 +281,7 @@ export default function AdminPage() {
   ] as const
 
   return (
-    <div className="min-h-screen bg-[#0f0f0f] flex">
+    <div className="min-h-screen bg-[#0f0f0f] flex overflow-x-hidden">
 
       {/* Sidebar */}
       <aside className="hidden md:flex w-64 bg-[#141414] border-r border-white/[0.06] min-h-screen fixed left-0 top-0 flex-col">
@@ -332,20 +332,37 @@ export default function AdminPage() {
         </button>
       </div>
 
+      {/* Mobile bottom nav */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-[#141414] border-t border-white/[0.06] z-30 flex">
+        {NAV.map(n => (
+          <button key={n.key} onClick={() => setTab(n.key as AdminTab)}
+            className={cn('flex-1 flex flex-col items-center py-2 gap-0.5 text-[10px] font-medium transition-colors relative',
+              tab === n.key ? 'text-brand-400' : 'text-white/30'
+            )}
+          >
+            <n.icon className="w-5 h-5" />
+            <span>{n.label}</span>
+            {n.key === 'applications' && stats.needAction > 0 && (
+              <span className="absolute top-1.5 right-[calc(50%-10px)] w-4 h-4 bg-emerald-500 rounded-full text-[9px] text-white font-bold flex items-center justify-center">{stats.needAction}</span>
+            )}
+          </button>
+        ))}
+      </div>
+
       {/* Main */}
-      <main className="flex-1 md:ml-64 p-4 md:p-8 pt-16 md:pt-8 pb-24 md:pb-8">
+      <main className="flex-1 md:ml-64 p-3 md:p-8 pt-16 md:pt-8 pb-24 md:pb-8 w-0 md:w-auto overflow-x-hidden">
         <motion.div key={tab} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}>
 
           {/* ── OVERVIEW ── */}
           {tab === 'overview' && (
             <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="text-2xl font-bold text-white">Панель управления</h1>
+              <div className="flex items-center justify-between gap-2">
+                <div className="min-w-0">
+                  <h1 className="text-xl md:text-2xl font-bold text-white truncate">Панель управления</h1>
                   <p className="text-white/40 text-sm mt-0.5">TARJUMAN Admin</p>
                 </div>
-                <button onClick={loadData} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.08] text-white/60 hover:text-white text-sm transition-all">
-                  <RefreshCw className="w-3.5 h-3.5" /> Обновить
+                <button onClick={loadData} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.08] text-white/60 hover:text-white text-sm transition-all shrink-0">
+                  <RefreshCw className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Обновить</span>
                 </button>
               </div>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -356,12 +373,12 @@ export default function AdminPage() {
                   { label: 'Выручка',        value: formatCurrency(stats.revenue), icon: CreditCard,  color: 'from-brand-400/20 to-brand-400/5',     iconC: 'text-brand-400' },
                 ].map((s, i) => (
                   <motion.div key={i} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i*0.05 }}
-                    className={`rounded-2xl bg-gradient-to-br ${s.color} border border-white/[0.06] p-5`}>
-                    <div className={cn('w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center mb-4', s.iconC)}>
+                    className={`rounded-2xl bg-gradient-to-br ${s.color} border border-white/[0.06] p-3 md:p-5`}>
+                    <div className={cn('w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center mb-3', s.iconC)}>
                       <s.icon className="w-4 h-4" />
                     </div>
-                    <div className="text-2xl font-bold text-white mb-0.5">{s.value}</div>
-                    <div className="text-xs text-white/40">{s.label}</div>
+                    <div className="text-xl md:text-2xl font-bold text-white mb-0.5">{s.value}</div>
+                    <div className="text-[11px] md:text-xs text-white/40">{s.label}</div>
                   </motion.div>
                 ))}
               </div>
@@ -375,7 +392,7 @@ export default function AdminPage() {
                     <p className="text-xs text-white/40">Клиенты оплатили — нужно начать работу</p>
                   </div>
                   <button onClick={() => setTab('applications')}
-                    className="px-4 py-2 rounded-xl bg-emerald-500 text-white text-sm font-bold hover:bg-emerald-400 transition-colors shrink-0">
+                    className="px-3 py-2 rounded-xl bg-emerald-500 text-white text-xs md:text-sm font-bold hover:bg-emerald-400 transition-colors shrink-0 whitespace-nowrap">
                     Обработать
                   </button>
                 </div>
@@ -406,12 +423,12 @@ export default function AdminPage() {
           {/* ── APPLICATIONS ── */}
           {tab === 'applications' && (
             <div className="space-y-5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="text-2xl font-bold text-white">Заявки</h1>
+              <div className="flex items-center justify-between gap-2">
+                <div className="min-w-0">
+                  <h1 className="text-xl md:text-2xl font-bold text-white">Заявки</h1>
                   <p className="text-white/40 text-sm mt-0.5">{filteredApps.length} из {apps.length}</p>
                 </div>
-                <button onClick={loadData} className="p-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.08] text-white/40 hover:text-white transition-all">
+                <button onClick={loadData} className="p-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.08] text-white/40 hover:text-white transition-all shrink-0">
                   <RefreshCw className="w-4 h-4" />
                 </button>
               </div>
