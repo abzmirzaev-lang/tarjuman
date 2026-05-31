@@ -104,6 +104,8 @@ function DropZone({ docType, label, onUpload, uploaded, onRemove }: {
   )
 }
 
+const DRAFT_KEY = 'tarjuman_apply_draft'
+
 function ApplyContent() {
   const router       = useRouter()
   const searchParams = useSearchParams()
@@ -152,6 +154,28 @@ function ApplyContent() {
 
   const universityId = searchParams.get('university') || undefined
   const countryParam = searchParams.get('country') as 'SA' | 'AE' || 'SA'
+
+  // Load draft from localStorage on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(DRAFT_KEY)
+      if (saved) {
+        const draft = JSON.parse(saved)
+        if (draft.form)             setForm(draft.form)
+        if (draft.step)             setStep(draft.step)
+        if (draft.selectedFaculties) setSelectedFaculties(draft.selectedFaculties)
+        if (draft.pkg)              setPkg(draft.pkg)
+        if (draft.comment)          setComment(draft.comment)
+      }
+    } catch {}
+  }, [])
+
+  // Save draft to localStorage whenever key state changes
+  useEffect(() => {
+    try {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify({ form, step, selectedFaculties, pkg, comment }))
+    } catch {}
+  }, [form, step, selectedFaculties, pkg, comment])
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -311,6 +335,9 @@ function ApplyContent() {
 
       await Promise.all(uploadPromises)
 
+      // Clear draft
+      try { localStorage.removeItem(DRAFT_KEY) } catch {}
+
       // Redirect to payment
       const { data: { session: currentSession } } = await supabase.auth.getSession()
       const res = await fetch('/api/payments/create-checkout', {
@@ -383,6 +410,9 @@ function ApplyContent() {
           })
         })
       await Promise.all(uploadPromises)
+
+      // Clear draft
+      try { localStorage.removeItem(DRAFT_KEY) } catch {}
 
       // Notify admin via Telegram
       const { data: { session: currentSession } } = await supabase.auth.getSession()
