@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   FileText, LogOut, Download, CheckCircle2, Plus,
   ChevronRight, Layers, Calendar, GraduationCap, Trash2,
-  Menu
+  Menu, Pencil
 } from 'lucide-react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase/client'
@@ -411,6 +411,15 @@ export default function DashboardPage() {
                                   )}>
                                     {statusLabel(application.status)}
                                   </span>
+                                  {['REGISTERED', 'PAID'].includes(application.status) && (
+                                    <button
+                                      onClick={(e) => { e.stopPropagation(); router.push(`/dashboard/edit/${application.id}`) }}
+                                      className="w-7 h-7 flex items-center justify-center rounded-xl text-gray-400 hover:text-brand-500 hover:bg-brand-50 transition-colors"
+                                      title={lang === 'ru' ? 'Редактировать' : 'Edit'}
+                                    >
+                                      <Pencil className="w-3 h-3" />
+                                    </button>
+                                  )}
                                   {application.status === 'REGISTERED' && (
                                     <button
                                       onClick={(e) => { e.stopPropagation(); deleteApp(application.id) }}
