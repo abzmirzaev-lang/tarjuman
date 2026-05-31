@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   FileText, LogOut, Download, CheckCircle2, Plus,
-  ChevronRight, Layers, Calendar, GraduationCap, Trash2
+  ChevronRight, Layers, Calendar, GraduationCap, Trash2,
+  Menu
 } from 'lucide-react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase/client'
@@ -50,6 +51,7 @@ export default function DashboardPage() {
   const [docs,          setDocs]          = useState<DocumentRow[]>([])
   const [tab,           setTab]           = useState<Tab>('applications')
   const [appLoading,    setAppLoading]    = useState(false)
+  const [sidebarOpen,   setSidebarOpen]   = useState(true)
 
   const selectedApp = apps.find(a => a.id === selectedAppId) ?? null
 
@@ -138,8 +140,8 @@ export default function DashboardPage() {
   if (!user) return null
 
   const TABS: { key: Tab; icon: typeof FileText; label: string }[] = [
-    { key: 'applications', icon: Layers,   label: lang === 'ru' ? 'Заявки' : lang === 'uz' ? 'Arizalar' : 'Applications' },
-    { key: 'documents',    icon: FileText, label: lang === 'ru' ? 'Документы' : lang === 'uz' ? 'Hujjatlar' : 'Documents' },
+    { key: 'applications', icon: Layers,   label: lang === 'ru' ? 'Заявки'    : lang === 'uz' ? 'Arizalar'  : 'Applications' },
+    { key: 'documents',    icon: FileText, label: lang === 'ru' ? 'Документы' : lang === 'uz' ? 'Hujjatlar' : 'Documents'     },
   ]
 
   const userName = user?.user_metadata?.full_name?.split(' ')[0] ?? (lang === 'ru' ? 'Пользователь' : 'User')
@@ -149,82 +151,122 @@ export default function DashboardPage() {
       <div className="flex">
 
         {/* SIDEBAR */}
-        <aside className="hidden md:flex flex-col w-64 bg-white border-r border-border min-h-screen fixed left-0 top-0 shadow-sm">
+        <aside className={cn(
+          'hidden md:flex flex-col bg-white border-r border-border min-h-screen fixed left-0 top-0 shadow-sm transition-all duration-300',
+          sidebarOpen ? 'w-64' : 'w-16'
+        )}>
 
-          <div className="h-16 flex items-center px-6 border-b border-border">
-            <Link href="/">
-              <svg viewBox="0 0 156 36" width="140" height="32" aria-label="TARJUMAN">
-                <path d="M 2,36 L 2,22 L 8,10 L 16,4 L 24,10 L 30,22 L 30,36" fill="none" stroke="#1B4332" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round"/>
-                <line x1="9" y1="13" x2="23" y2="13" stroke="#C9922A" strokeWidth="2" strokeLinecap="round"/>
-                <line x1="16" y1="13" x2="16" y2="31" stroke="#C9922A" strokeWidth="2" strokeLinecap="round"/>
-                <text x="40" y="24" fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif" fontSize="15" fontWeight="700" fill="#1B4332" style={{ letterSpacing: '4px' }}>TARJUMAN</text>
-              </svg>
-            </Link>
+          <div className="h-16 flex items-center border-b border-border px-3 justify-between">
+            {sidebarOpen && (
+              <Link href="/">
+                <svg viewBox="0 0 156 36" width="120" height="28" aria-label="TARJUMAN">
+                  <path d="M 2,36 L 2,22 L 8,10 L 16,4 L 24,10 L 30,22 L 30,36" fill="none" stroke="#1B4332" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round"/>
+                  <line x1="9" y1="13" x2="23" y2="13" stroke="#C9922A" strokeWidth="2" strokeLinecap="round"/>
+                  <line x1="16" y1="13" x2="16" y2="31" stroke="#C9922A" strokeWidth="2" strokeLinecap="round"/>
+                  <text x="40" y="24" fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif" fontSize="15" fontWeight="700" fill="#1B4332" style={{ letterSpacing: '4px' }}>TARJUMAN</text>
+                </svg>
+              </Link>
+            )}
+            <button
+              onClick={() => setSidebarOpen(o => !o)}
+              className={cn(
+                'w-9 h-9 flex items-center justify-center rounded-xl text-muted hover:text-ink hover:bg-gray-100 transition-colors shrink-0',
+                !sidebarOpen && 'mx-auto'
+              )}
+            >
+              <Menu className="w-5 h-5" />
+            </button>
           </div>
 
-          <div className="mx-3 my-3 p-3 bg-gradient-to-br from-brand-50 to-emerald-50 rounded-2xl border border-brand-100">
-            <div className="flex items-center gap-3">
+          {sidebarOpen && (
+            <div className="mx-3 my-3 p-3 bg-gradient-to-br from-brand-50 to-emerald-50 rounded-2xl border border-brand-100">
+              <div className="flex items-center gap-3">
+                {user?.user_metadata?.avatar_url ? (
+                  <img src={user.user_metadata.avatar_url} className="w-10 h-10 rounded-full object-cover ring-2 ring-white" alt="" />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand-400 to-emerald-600 flex items-center justify-center text-white font-bold text-sm ring-2 ring-white">
+                    {user?.user_metadata?.full_name?.[0]?.toUpperCase() ?? '?'}
+                  </div>
+                )}
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-ink truncate">{user?.user_metadata?.full_name ?? 'User'}</p>
+                  <p className="text-[11px] text-muted truncate">{user?.email}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {!sidebarOpen && (
+            <div className="flex justify-center my-3">
               {user?.user_metadata?.avatar_url ? (
-                <img src={user.user_metadata.avatar_url} className="w-10 h-10 rounded-full object-cover ring-2 ring-white" alt="" />
+                <img src={user.user_metadata.avatar_url} className="w-9 h-9 rounded-full object-cover ring-2 ring-white" alt="" />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand-400 to-emerald-600 flex items-center justify-center text-white font-bold text-sm ring-2 ring-white">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-brand-400 to-emerald-600 flex items-center justify-center text-white font-bold text-sm ring-2 ring-white">
                   {user?.user_metadata?.full_name?.[0]?.toUpperCase() ?? '?'}
                 </div>
               )}
-              <div className="min-w-0">
-                <p className="text-sm font-semibold text-ink truncate">{user?.user_metadata?.full_name ?? 'User'}</p>
-                <p className="text-[11px] text-muted truncate">{user?.email}</p>
-              </div>
             </div>
-          </div>
+          )}
 
-          <nav className="flex-1 px-3 py-2 space-y-0.5">
+          <nav className="flex-1 px-2 py-2 space-y-0.5">
             {TABS.map(item => (
               <button
                 key={item.key}
                 onClick={() => setTab(item.key)}
+                title={!sidebarOpen ? item.label : undefined}
                 className={cn(
-                  'w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-150',
+                  'w-full flex items-center rounded-xl text-sm font-medium transition-all duration-150',
+                  sidebarOpen ? 'gap-3 px-3.5 py-2.5' : 'justify-center py-2.5',
                   tab === item.key
                     ? 'bg-ink text-white shadow-sm'
                     : 'text-muted hover:text-ink hover:bg-gray-100'
                 )}
               >
                 <item.icon className="w-4 h-4 shrink-0" />
-                {item.label}
-                {item.key === 'applications' && apps.length > 0 && (
-                  <span className={cn(
-                    'ml-auto text-[11px] font-semibold px-1.5 py-0.5 rounded-full',
-                    tab === item.key ? 'bg-white/20 text-white' : 'bg-gray-100 text-muted'
-                  )}>
-                    {apps.length}
-                  </span>
+                {sidebarOpen && (
+                  <>
+                    {item.label}
+                    {item.key === 'applications' && apps.length > 0 && (
+                      <span className={cn(
+                        'ml-auto text-[11px] font-semibold px-1.5 py-0.5 rounded-full',
+                        tab === item.key ? 'bg-white/20 text-white' : 'bg-gray-100 text-muted'
+                      )}>
+                        {apps.length}
+                      </span>
+                    )}
+                  </>
                 )}
               </button>
             ))}
           </nav>
 
-          <div className="px-4 py-4 border-t border-border space-y-3">
-            <div className="flex gap-1 bg-gray-100 rounded-xl p-1">
-              {(['ru', 'uz', 'en'] as AppLanguage[]).map(l => (
-                <button key={l} onClick={() => setLang(l)}
-                  className={cn('flex-1 py-1 text-xs font-semibold rounded-lg transition-all',
-                    lang === l ? 'bg-white text-ink shadow-sm' : 'text-muted hover:text-ink')}
-                >{l.toUpperCase()}</button>
-              ))}
-            </div>
+          <div className={cn('py-4 border-t border-border', sidebarOpen ? 'px-4 space-y-3' : 'px-2 flex flex-col items-center gap-2')}>
+            {sidebarOpen && (
+              <div className="flex gap-1 bg-gray-100 rounded-xl p-1">
+                {(['ru', 'uz', 'en'] as AppLanguage[]).map(l => (
+                  <button key={l} onClick={() => setLang(l)}
+                    className={cn('flex-1 py-1 text-xs font-semibold rounded-lg transition-all',
+                      lang === l ? 'bg-white text-ink shadow-sm' : 'text-muted hover:text-ink')}
+                  >{l.toUpperCase()}</button>
+                ))}
+              </div>
+            )}
             <button
               onClick={() => supabase.auth.signOut().then(() => router.push('/'))}
-              className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-sm text-muted hover:text-red-500 hover:bg-red-50 transition-colors"
+              title={!sidebarOpen ? t.nav.logout : undefined}
+              className={cn(
+                'flex items-center rounded-xl text-sm text-muted hover:text-red-500 hover:bg-red-50 transition-colors',
+                sidebarOpen ? 'w-full gap-2 px-3 py-2' : 'p-2'
+              )}
             >
               <LogOut className="w-4 h-4" />
-              {t.nav.logout}
+              {sidebarOpen && t.nav.logout}
             </button>
           </div>
         </aside>
 
         {/* MAIN CONTENT */}
-        <main className="flex-1 md:ml-64 min-h-screen w-0 md:w-auto overflow-x-hidden">
+        <main className={cn('flex-1 min-h-screen w-0 md:w-auto overflow-x-hidden transition-all duration-300', sidebarOpen ? 'md:ml-64' : 'md:ml-16')}>
 
           {/* Mobile header */}
           <div className="md:hidden bg-white border-b border-border h-14 flex items-center justify-between px-3 sticky top-0 z-30">
