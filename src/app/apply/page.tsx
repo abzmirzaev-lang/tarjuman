@@ -524,20 +524,23 @@ function ApplyContent() {
 
               <div className="grid grid-cols-1 gap-3 mb-10">
                 {([
-                  { code: 'SA', iso: 'sa', nameRu: 'Саудовская Аравия', nameEn: 'Saudi Arabia',       descRu: 'Ведущие исламские университеты мира',          descEn: "World's top Islamic universities" },
+                  { code: 'SA', iso: 'sa', nameRu: 'Саудовская Аравия', nameEn: 'Saudi Arabia',       descRu: 'Ведущие исламские университеты мира',          descEn: "World's top Islamic universities", closed: true },
                   { code: 'AE', iso: 'ae', nameRu: 'ОАЭ',               nameEn: 'UAE',                 descRu: 'Современное образование в Дубае и Абу-Даби',    descEn: 'Modern education in Dubai & Abu Dhabi' },
                   { code: 'QA', iso: 'qa', nameRu: 'Катар',             nameEn: 'Qatar',               descRu: 'Образование мирового класса на Ближнем Востоке', descEn: 'World-class education in the Middle East' },
                   { code: 'KW', iso: 'kw', nameRu: 'Кувейт',            nameEn: 'Kuwait',              descRu: 'Стипендии и бесплатное обучение',               descEn: 'Scholarships & free education programs' },
                   { code: 'TR', iso: 'tr', nameRu: 'Турция',            nameEn: 'Turkey',              descRu: 'Доступное образование европейского уровня',      descEn: 'Affordable European-level education' },
-                ] as { code: string; iso: string; nameRu: string; nameEn: string; descRu: string; descEn: string }[]).map(country => {
+                ] as { code: string; iso: string; nameRu: string; nameEn: string; descRu: string; descEn: string; closed?: boolean }[]).map(country => {
                   const isSelected = selectedCountry === country.code
                   return (
                     <button
                       key={country.code}
-                      onClick={() => setSelectedCountry(country.code)}
+                      onClick={() => !country.closed && setSelectedCountry(country.code)}
+                      disabled={country.closed}
                       className={cn(
                         'group relative flex items-center gap-4 p-4 rounded-2xl border-2 text-left transition-all duration-200 overflow-hidden',
-                        isSelected
+                        country.closed
+                          ? 'border-gray-100 bg-gray-50 opacity-60 cursor-not-allowed'
+                          : isSelected
                           ? 'border-[#1B4332] bg-white shadow-lg shadow-[#1B4332]/10'
                           : 'border-gray-100 bg-white hover:border-gray-200 hover:shadow-md'
                       )}
@@ -562,9 +565,16 @@ function ApplyContent() {
 
                       {/* Text */}
                       <div className="flex-1 min-w-0 pl-1">
-                        <p className={cn('font-bold text-base leading-tight mb-0.5 transition-colors', isSelected ? 'text-[#1B4332]' : 'text-ink')}>
-                          {lang === 'ru' ? country.nameRu : country.nameEn}
-                        </p>
+                        <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                          <p className={cn('font-bold text-base leading-tight transition-colors', isSelected ? 'text-[#1B4332]' : 'text-ink')}>
+                            {lang === 'ru' ? country.nameRu : country.nameEn}
+                          </p>
+                          {country.closed && (
+                            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-red-100 text-red-600">
+                              {lang === 'ru' ? 'Приём закрыт' : 'Closed'}
+                            </span>
+                          )}
+                        </div>
                         <p className="text-xs text-muted leading-relaxed">
                           {lang === 'ru' ? country.descRu : country.descEn}
                         </p>
