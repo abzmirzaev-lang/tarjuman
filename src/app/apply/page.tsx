@@ -112,7 +112,9 @@ function ApplyContent() {
   const [lang, setLang] = useLanguage()
   const t = translations[lang]
 
-  const [step, setStep]     = useState(1)
+  const [step, setStep]     = useState(0)
+  const [selectedCountry, setSelectedCountry] = useState<string>('')
+
   const [user, setUser]     = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [appId, setAppId]   = useState<string | null>(null)
@@ -153,7 +155,6 @@ function ApplyContent() {
   const [comment, setComment] = useState('')
 
   const universityId = searchParams.get('university') || undefined
-  const countryParam = searchParams.get('country') as 'SA' | 'AE' || 'SA'
 
   // Load draft from localStorage on mount
   useEffect(() => {
@@ -162,7 +163,7 @@ function ApplyContent() {
       if (saved) {
         const draft = JSON.parse(saved)
         if (draft.form)             setForm(draft.form)
-        if (draft.step)             setStep(draft.step)
+        if (draft.selectedCountry)  { setSelectedCountry(draft.selectedCountry); if (draft.step) setStep(draft.step) }
         if (draft.selectedFaculties) setSelectedFaculties(draft.selectedFaculties)
         if (draft.pkg)              setPkg(draft.pkg)
         if (draft.comment)          setComment(draft.comment)
@@ -173,7 +174,7 @@ function ApplyContent() {
   // Save draft to localStorage whenever key state changes
   useEffect(() => {
     try {
-      localStorage.setItem(DRAFT_KEY, JSON.stringify({ form, step, selectedFaculties, pkg, comment }))
+      localStorage.setItem(DRAFT_KEY, JSON.stringify({ form, step, selectedCountry, selectedFaculties, pkg, comment }))
     } catch {}
   }, [form, step, selectedFaculties, pkg, comment])
 
@@ -283,7 +284,7 @@ function ApplyContent() {
         .insert({
           user_id:            user.id,
           university_id:      universityId || null,
-          country:            countryParam,
+          country:            selectedCountry,
           service_package:    pkg,
           status:             'REGISTERED',
           full_name:          form.full_name,
@@ -367,7 +368,7 @@ function ApplyContent() {
         .insert({
           user_id:            user.id,
           university_id:      null,
-          country:            countryParam,
+          country:            selectedCountry,
           service_package:    pkg,
           status:             'REGISTERED',
           full_name:          form.full_name,
@@ -444,7 +445,7 @@ function ApplyContent() {
 
   if (!user) return null
 
-  const progressPct = ((step - 1) / (STEPS.length - 1)) * 100
+  const progressPct = step === 0 ? 0 : ((step - 1) / (STEPS.length - 1)) * 100
 
   return (
     <div className="min-h-screen bg-[#F7F8FA]">
@@ -462,7 +463,7 @@ function ApplyContent() {
           </Link>
 
           {/* Steps — desktop */}
-          <div className="hidden md:flex items-center gap-0">
+          <div className={cn("hidden md:flex items-center gap-0", step === 0 && "invisible")}>
             {STEPS.map((s, i) => {
               const done    = i + 1 < step
               const current = i + 1 === step
@@ -491,10 +492,12 @@ function ApplyContent() {
           </div>
 
           {/* Step counter — mobile */}
-          <div className="md:hidden flex items-center gap-2">
-            <span className="text-sm font-semibold text-ink">{step}/{STEPS.length}</span>
-            <span className="text-sm text-muted">{STEPS[step - 1]}</span>
-          </div>
+          {step > 0 && (
+            <div className="md:hidden flex items-center gap-2">
+              <span className="text-sm font-semibold text-ink">{step}/{STEPS.length}</span>
+              <span className="text-sm text-muted">{STEPS[step - 1]}</span>
+            </div>
+          )}
         </div>
 
         {/* Progress bar */}
@@ -509,6 +512,62 @@ function ApplyContent() {
 
       <div className="max-w-2xl mx-auto px-4 py-8 pb-16">
         <AnimatePresence mode="wait">
+
+          {/* ── STEP 0 — Выбор страны ── */}
+          {step === 0 && (
+            <motion.div key="step0" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
+              <div className="mb-10 text-center">
+                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-2">{lang === 'ru' ? 'Начало' : 'Start'}</p>
+                <h1 className="text-3xl font-bold text-ink mb-2">{lang === 'ru' ? 'Выберите страну' : 'Select Country'}</h1>
+                <p className="text-muted text-sm">{lang === 'ru' ? 'В какую страну вы хотите подать заявку?' : 'Which country do you want to apply to?'}</p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+                {[
+                  { code: 'SA', flag: '🇸🇦', nameRu: 'Саудовская Аравия', nameEn: 'Saudi Arabia' },
+                  { code: 'AE', flag: '🇦🇪', nameRu: 'ОАЭ', nameEn: 'UAE' },
+                  { code: 'QA', flag: '🇶🇦', nameRu: 'Катар', nameEn: 'Qatar' },
+                  { code: 'KW', flag: '🇰🇼', nameRu: 'Кувейт', nameEn: 'Kuwait' },
+                  { code: 'TR', flag: '🇹🇷', nameRu: 'Турция', nameEn: 'Turkey' },
+                ].map(country => (
+                  <button
+                    key={country.code}
+                    onClick={() => setSelectedCountry(country.code)}
+                    className={cn(
+                      'flex items-center gap-4 p-5 rounded-2xl border-2 text-left transition-all shadow-sm',
+                      selectedCountry === country.code
+                        ? 'border-[#1B4332] bg-[#1B4332]/5 shadow-md'
+                        : 'border-gray-100 bg-white hover:border-gray-300 hover:shadow-md'
+                    )}
+                  >
+                    <span className="text-4xl">{country.flag}</span>
+                    <div className="flex-1">
+                      <p className="font-bold text-ink text-base">{lang === 'ru' ? country.nameRu : country.nameEn}</p>
+                    </div>
+                    <div className={cn(
+                      'w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all shrink-0',
+                      selectedCountry === country.code ? 'border-[#1B4332] bg-[#1B4332]' : 'border-gray-300'
+                    )}>
+                      {selectedCountry === country.code && <div className="w-2 h-2 rounded-full bg-white" />}
+                    </div>
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex justify-end">
+                <button
+                  onClick={() => { if (selectedCountry) setStep(1) }}
+                  disabled={!selectedCountry}
+                  className={cn(
+                    'flex items-center gap-2 px-8 py-3.5 text-white text-sm font-semibold rounded-xl transition-all shadow-sm',
+                    selectedCountry ? 'bg-[#1B4332] hover:bg-[#1B4332]/90' : 'bg-gray-300 cursor-not-allowed'
+                  )}
+                >
+                  {lang === 'ru' ? 'Далее' : 'Next'} <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </motion.div>
+          )}
 
           {/* ── STEP 1 — Личные данные ── */}
           {step === 1 && (
@@ -656,7 +715,10 @@ function ApplyContent() {
                 </div>
               </div>
 
-              <div className="flex justify-end">
+              <div className="flex justify-between">
+                <button onClick={() => setStep(0)} className="flex items-center gap-2 px-5 py-3 bg-white border border-gray-200 text-ink text-sm font-medium rounded-xl hover:bg-gray-50 transition-all">
+                  <ChevronLeft className="w-4 h-4" /> {t.apply.back}
+                </button>
                 <button onClick={handleStep1} className="flex items-center gap-2 px-8 py-3.5 bg-[#1B4332] text-white text-sm font-semibold rounded-xl hover:bg-[#1B4332]/90 transition-all shadow-sm">
                   {t.apply.next} <ChevronRight className="w-4 h-4" />
                 </button>
