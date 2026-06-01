@@ -463,3 +463,16 @@ export default function HomePage() {
                   : 'Apply right now — it takes just 5 minutes'}
               </p>
               <Link href="/apply">
+                <Button variant="primary" size="xl" iconRight={<ArrowRight className="w-5 h-5" />}>
+                  {lang === 'ru' ? 'Подать заявку' : lang === 'uz' ? "Ariza topshirish" : 'Apply now'}
+                </Button>
+              </Link>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <Footer lang={lang} />
+    </>
+  )
+}
