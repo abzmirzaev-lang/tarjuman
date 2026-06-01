@@ -2,7 +2,7 @@
 import { useLanguage } from '@/hooks/useLanguage'
 import { useState, useEffect, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, ExternalLink, GraduationCap, MapPin, X, Users, Calendar, Star, BookOpen } from 'lucide-react'
+import { Search, ExternalLink, GraduationCap, MapPin, X, Users, Calendar, Star, BookOpen, Globe2 } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Navbar } from '@/components/layout/Navbar'
@@ -295,66 +295,70 @@ function UniversitiesContent() {
               {lang === 'ru' ? 'Университеты' : lang === 'uz' ? 'Universitetlar' : 'Universities'}
             </p>
             <h1 className="text-3xl sm:text-5xl font-bold mb-3">{t.universities.title}</h1>
-            <p className="text-white/60 text-base sm:text-lg mb-8">{t.universities.subtitle}</p>
-
-            {/* Country filter — inline below subtitle */}
-            <div className="flex flex-wrap justify-center gap-2">
-              {([
-                { code: 'ALL', iso: null,  labelRu: 'Все',               labelEn: 'All',          labelUz: 'Barchasi' },
-                { code: 'SA',  iso: 'sa',  labelRu: 'Саудовская Аравия', labelEn: 'Saudi Arabia', labelUz: 'Saudiya' },
-                { code: 'AE',  iso: 'ae',  labelRu: 'ОАЭ',               labelEn: 'UAE',          labelUz: 'BAA' },
-                { code: 'QA',  iso: 'qa',  labelRu: 'Катар',             labelEn: 'Qatar',        labelUz: 'Qatar' },
-                { code: 'KW',  iso: 'kw',  labelRu: 'Кувейт',            labelEn: 'Kuwait',       labelUz: 'Quvayt' },
-                { code: 'TR',  iso: 'tr',  labelRu: 'Турция',            labelEn: 'Turkey',       labelUz: 'Turkiya' },
-              ] as { code: string; iso: string | null; labelRu: string; labelEn: string; labelUz: string }[]).map(c => {
-                const isActive = filter === c.code
-                const label = lang === 'ru' ? c.labelRu : lang === 'uz' ? c.labelUz : c.labelEn
-                return (
-                  <button
-                    key={c.code}
-                    onClick={() => setFilter(c.code as any)}
-                    className={cn(
-                      'flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 border',
-                      isActive
-                        ? 'bg-[#C9922A] text-white border-[#C9922A] shadow-lg shadow-[#C9922A]/30'
-                        : 'bg-white/10 text-white/80 border-white/10 hover:bg-white/20 hover:text-white'
-                    )}
-                  >
-                    {c.iso && (
-                      <span className="w-5 h-3.5 rounded overflow-hidden shrink-0 shadow-sm inline-flex">
-                        <img src={`https://flagcdn.com/w40/${c.iso}.png`} alt={label} className="w-full h-full object-cover" />
-                      </span>
-                    )}
-                    {label}
-                  </button>
-                )
-              })}
-            </div>
+            <p className="text-white/60 text-base sm:text-lg">{t.universities.subtitle}</p>
           </div>
         </div>
       </div>
 
-      {/* Search + specialization bar — sticky below navbar */}
-      <div
-        className="bg-white border-b border-border shadow-sm"
-        style={{ WebkitTransform: 'translateZ(0)', transform: 'translateZ(0)' }}
-      >
-        <div className="container-wide flex items-center gap-2 h-14">
-          <div className="relative flex-1 min-w-0">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
-            <input
-              className="input pl-9 py-2 text-sm"
-              placeholder={lang === 'ru' ? 'Поиск университета...' : lang === 'uz' ? 'Universitetni qidirish...' : 'Search university...'}
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-            />
+      {/* Search + filter block — static */}
+      <div className="bg-white border-b border-border shadow-sm">
+        <div className="max-w-4xl mx-auto px-4 py-5 space-y-4">
+
+          {/* Search row */}
+          <div className="flex items-center gap-2">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
+              <input
+                className="input pl-9 py-2.5 text-sm w-full"
+                placeholder={lang === 'ru' ? 'Поиск университета...' : lang === 'uz' ? 'Universitetni qidirish...' : 'Search university...'}
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+              />
+            </div>
+            <select className="input py-2.5 text-sm w-[180px] hidden md:block shrink-0" value={prog} onChange={e => setProg(e.target.value)}>
+              <option value="">{lang === 'ru' ? 'Все специальности' : lang === 'uz' ? 'Barcha mutaxassisliklar' : 'All specializations'}</option>
+              {allPrograms.map(p => (
+                <option key={p} value={p}>{lang === 'ru' ? (PROGRAMS_RU[p] ?? p) : p}</option>
+              ))}
+            </select>
           </div>
-          <select className="input py-2 text-sm w-[180px] hidden md:block shrink-0" value={prog} onChange={e => setProg(e.target.value)}>
-            <option value="">{lang === 'ru' ? 'Все специальности' : lang === 'uz' ? 'Barcha mutaxassisliklar' : 'All specializations'}</option>
-            {allPrograms.map(p => (
-              <option key={p} value={p}>{lang === 'ru' ? (PROGRAMS_RU[p] ?? p) : p}</option>
-            ))}
-          </select>
+
+          {/* Country filter row */}
+          <div className="flex flex-wrap gap-2">
+            {([
+              { code: 'ALL', iso: null,  labelRu: 'Все страны',          labelEn: 'All',          labelUz: 'Barchasi' },
+              { code: 'SA',  iso: 'sa',  labelRu: 'Саудовская Аравия',   labelEn: 'Saudi Arabia', labelUz: 'Saudiya' },
+              { code: 'AE',  iso: 'ae',  labelRu: 'ОАЭ',                 labelEn: 'UAE',          labelUz: 'BAA' },
+              { code: 'QA',  iso: 'qa',  labelRu: 'Катар',               labelEn: 'Qatar',        labelUz: 'Qatar' },
+              { code: 'KW',  iso: 'kw',  labelRu: 'Кувейт',              labelEn: 'Kuwait',       labelUz: 'Quvayt' },
+              { code: 'TR',  iso: 'tr',  labelRu: 'Турция',              labelEn: 'Turkey',       labelUz: 'Turkiya' },
+            ] as { code: string; iso: string | null; labelRu: string; labelEn: string; labelUz: string }[]).map(c => {
+              const isActive = filter === c.code
+              const label = lang === 'ru' ? c.labelRu : lang === 'uz' ? c.labelUz : c.labelEn
+              return (
+                <button
+                  key={c.code}
+                  onClick={() => setFilter(c.code as any)}
+                  className={cn(
+                    'flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 border',
+                    isActive
+                      ? 'bg-[#1B4332] text-white border-[#1B4332] shadow-md'
+                      : 'bg-white text-gray-600 border-gray-200 hover:border-[#1B4332]/40 hover:text-[#1B4332] hover:bg-[#1B4332]/5'
+                  )}
+                >
+                  {c.iso ? (
+                    <span className="w-5 h-3.5 rounded overflow-hidden shrink-0 shadow-sm inline-flex ring-1 ring-black/10">
+                      <img src={`https://flagcdn.com/w40/${c.iso}.png`} alt={label} className="w-full h-full object-cover" />
+                    </span>
+                  ) : (
+                    <Globe2 className="w-3.5 h-3.5 shrink-0" />
+                  )}
+                  {label}
+                </button>
+              )
+            })}
+          </div>
+
         </div>
       </div>
 
