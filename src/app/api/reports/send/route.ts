@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
     `✅ Завершено: <b>${completed}</b>\n` +
     `⏳ Ожидают обработки: <b>${pending}</b>\n` +
     `💵 Общий доход: <b>$${revenue}</b>\n\n` +
-    `🔗 <a href="https://tarjuman.vercel.app/admin">Открыть панель</a>`
+    `🔗 <a href="https://tarjumanedu.com/admin">Открыть панель</a>`
 
   await fetch(`${API}/sendMessage`, {
     method: 'POST',

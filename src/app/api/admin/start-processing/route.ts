@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
           </p>
           <!-- CTA -->
           <p style="margin:28px 0 0;text-align:center;">
-            <a href="${process.env.NEXT_PUBLIC_APP_URL ?? 'https://tarjuman.vercel.app'}/dashboard"
+            <a href="${process.env.NEXT_PUBLIC_APP_URL ?? 'https://tarjumanedu.com'}/dashboard"
                style="display:inline-block;background:#D4A943;color:#0a0a0a;font-weight:800;font-size:15px;padding:14px 32px;border-radius:12px;text-decoration:none;">
               Открыть личный кабинет
             </a>
@@ -107,5 +107,3 @@ export async function POST(req: NextRequest) {
   } catch (err: any) {
     console.error('start-processing error:', err)
     return NextResponse.json({ error: err.message }, { status: 500 })
-  }
-}

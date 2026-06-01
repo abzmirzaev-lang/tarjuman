@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 
-const APP_URL = 'https://tarjuman.vercel.app'
+const APP_URL = 'https://tarjumanedu.com'
 
 export default function robots(): MetadataRoute.Robots {
   return {

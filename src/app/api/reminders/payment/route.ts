@@ -46,7 +46,7 @@ export async function GET(req: NextRequest) {
       `Привет, <b>${app.full_name}</b>!\n\n` +
       `Ваша заявка в TARJUMAN ожидает оплаты уже более 24 часов.\n\n` +
       `💳 Для завершения оформления перейдите в личный кабинет и выберите удобный способ оплаты.\n\n` +
-      `🔗 <a href="https://tarjuman.vercel.app/dashboard">Перейти к оплате</a>\n\n` +
+      `🔗 <a href="https://tarjumanedu.com/dashboard">Перейти к оплате</a>\n\n` +
       `Если у вас есть вопросы — напишите нам здесь, мы поможем! 🕌`
     )
 
