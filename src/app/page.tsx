@@ -205,26 +205,40 @@ export default function HomePage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-ink mb-3">{t.countries.title}</h2>
           </div>
-          <div className="grid sm:grid-cols-2 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {([
-              { code: 'SA', name: t.countries.sa, desc: t.countries.saDesc, href: '/universities?country=SA' },
-              { code: 'AE', name: t.countries.ae, desc: t.countries.aeDesc, href: '/universities?country=AE' },
-            ] as const).map((c) => (
+              { iso: 'sa', code: 'SA', name: t.countries.sa, desc: t.countries.saDesc, href: '/universities?country=SA' },
+              { iso: 'ae', code: 'AE', name: t.countries.ae, desc: t.countries.aeDesc, href: '/universities?country=AE' },
+              { iso: 'qa', code: 'QA', name: t.countries.qa, desc: t.countries.qaDesc, href: '/apply' },
+              { iso: 'kw', code: 'KW', name: t.countries.kw, desc: t.countries.kwDesc, href: '/apply' },
+              { iso: 'tr', code: 'TR', name: t.countries.tr, desc: t.countries.trDesc, href: '/apply' },
+            ] as { iso: string; code: string; name: string; desc: string; href: string }[]).map((c) => (
               <Link key={c.code} href={c.href}>
                 <motion.div
                   whileHover={{ y: -4 }}
-                  className="card-hover p-8 flex flex-col gap-4"
+                  className="group relative bg-white rounded-2xl border border-gray-100 p-6 flex flex-col gap-4 hover:shadow-xl hover:border-[#1B4332]/20 transition-all duration-300 overflow-hidden cursor-pointer h-full"
                 >
-                  <div className="w-12 h-12 bg-brand-50 rounded-2xl flex items-center justify-center">
-                    <span className="text-sm font-bold text-brand-600">{c.code}</span>
+                  {/* Subtle gradient on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#1B4332]/0 to-[#1B4332]/0 group-hover:from-[#1B4332]/3 group-hover:to-transparent transition-all duration-300 pointer-events-none rounded-2xl" />
+
+                  {/* Flag */}
+                  <div className="relative w-full h-24 rounded-xl overflow-hidden shadow-sm">
+                    <img
+                      src={`https://flagcdn.com/w320/${c.iso}.png`}
+                      alt={c.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                   </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-ink mb-2">{c.name}</h3>
-                    <p className="text-muted text-sm leading-relaxed">{c.desc}</p>
+
+                  <div className="flex-1">
+                    <h3 className="text-base font-bold text-ink mb-1 group-hover:text-[#1B4332] transition-colors">{c.name}</h3>
+                    <p className="text-muted text-xs leading-relaxed">{c.desc}</p>
                   </div>
-                  <div className="flex items-center gap-1 text-brand-500 text-sm font-medium mt-auto">
-                    {lang === 'ru' ? 'Смотреть университеты' : lang === 'uz' ? "Universitetlarni ko'rish" : 'View universities'}
-                    <ChevronRight className="w-4 h-4" />
+
+                  <div className="flex items-center gap-1 text-[#1B4332] text-xs font-semibold mt-auto">
+                    {lang === 'ru' ? 'Подать заявку' : lang === 'uz' ? "Ariza berish" : 'Apply now'}
+                    <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                   </div>
                 </motion.div>
               </Link>
