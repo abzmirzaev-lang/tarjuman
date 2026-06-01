@@ -241,7 +241,7 @@ function UniversitiesContent() {
   const searchParams = useSearchParams()
   const [lang, setLang] = useLanguage()
   const [unis,     setUnis]     = useState<UniversityRow[]>([])
-  const [filter,   setFilter]   = useState<'ALL' | 'SA' | 'AE'>((searchParams.get('country') as any) || 'ALL')
+  const [filter,   setFilter]   = useState<'ALL' | 'SA' | 'AE' | 'QA' | 'KW' | 'TR'>((searchParams.get('country') as any) || 'ALL')
   const [search,   setSearch]   = useState('')
   const [prog,     setProg]     = useState<string>('')
   const [selected, setSelected] = useState<UniversityRow | null>(null)
@@ -289,52 +289,57 @@ function UniversitiesContent() {
     <>
       <Navbar lang={lang} onLangChange={setLang} />
       <div className="bg-ink pt-[7.5rem]">
-        <div className="text-white py-14 px-4">
+        <div className="text-white py-10 px-4">
           <div className="max-w-4xl mx-auto text-center">
             <p className="text-brand-400 text-xs font-semibold uppercase tracking-widest mb-3">
               {lang === 'ru' ? 'Университеты' : lang === 'uz' ? 'Universitetlar' : 'Universities'}
             </p>
             <h1 className="text-3xl sm:text-5xl font-bold mb-3">{t.universities.title}</h1>
-            <p className="text-white/60 text-base sm:text-lg">{t.universities.subtitle}</p>
-            <div className="flex justify-center gap-6 mt-8 text-sm">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-brand-400">{unis.filter(u => u.country === 'SA').length}+</div>
-                <div className="text-white/50 text-xs mt-0.5">{lang === 'ru' ? 'Университетов в КСА' : lang === 'uz' ? 'KSA universitetlari' : 'Universities in KSA'}</div>
-              </div>
-              <div className="w-px bg-white/10" />
-              <div className="text-center">
-                <div className="text-2xl font-bold text-brand-400">{unis.filter(u => u.country === 'AE').length}+</div>
-                <div className="text-white/50 text-xs mt-0.5">{lang === 'ru' ? 'Университетов в ОАЭ' : lang === 'uz' ? 'BAA universitetlari' : 'Universities in UAE'}</div>
-              </div>
-              <div className="w-px bg-white/10" />
-              <div className="text-center">
-                <div className="text-2xl font-bold text-brand-400">{allPrograms.length}+</div>
-                <div className="text-white/50 text-xs mt-0.5">{lang === 'ru' ? 'Специальностей' : lang === 'uz' ? 'Mutaxassisliklar' : 'Specializations'}</div>
-              </div>
+            <p className="text-white/60 text-base sm:text-lg mb-8">{t.universities.subtitle}</p>
+
+            {/* Country filter — inline below subtitle */}
+            <div className="flex flex-wrap justify-center gap-2">
+              {([
+                { code: 'ALL', iso: null,  labelRu: 'Все',               labelEn: 'All',          labelUz: 'Barchasi' },
+                { code: 'SA',  iso: 'sa',  labelRu: 'Саудовская Аравия', labelEn: 'Saudi Arabia', labelUz: 'Saudiya' },
+                { code: 'AE',  iso: 'ae',  labelRu: 'ОАЭ',               labelEn: 'UAE',          labelUz: 'BAA' },
+                { code: 'QA',  iso: 'qa',  labelRu: 'Катар',             labelEn: 'Qatar',        labelUz: 'Qatar' },
+                { code: 'KW',  iso: 'kw',  labelRu: 'Кувейт',            labelEn: 'Kuwait',       labelUz: 'Quvayt' },
+                { code: 'TR',  iso: 'tr',  labelRu: 'Турция',            labelEn: 'Turkey',       labelUz: 'Turkiya' },
+              ] as { code: string; iso: string | null; labelRu: string; labelEn: string; labelUz: string }[]).map(c => {
+                const isActive = filter === c.code
+                const label = lang === 'ru' ? c.labelRu : lang === 'uz' ? c.labelUz : c.labelEn
+                return (
+                  <button
+                    key={c.code}
+                    onClick={() => setFilter(c.code as any)}
+                    className={cn(
+                      'flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 border',
+                      isActive
+                        ? 'bg-[#C9922A] text-white border-[#C9922A] shadow-lg shadow-[#C9922A]/30'
+                        : 'bg-white/10 text-white/80 border-white/10 hover:bg-white/20 hover:text-white'
+                    )}
+                  >
+                    {c.iso && (
+                      <span className="w-5 h-3.5 rounded overflow-hidden shrink-0 shadow-sm inline-flex">
+                        <img src={`https://flagcdn.com/w40/${c.iso}.png`} alt={label} className="w-full h-full object-cover" />
+                      </span>
+                    )}
+                    {label}
+                  </button>
+                )
+              })}
             </div>
           </div>
         </div>
       </div>
 
+      {/* Search + specialization bar — sticky below navbar */}
       <div
-        className="fixed top-16 inset-x-0 h-14 z-40 bg-white border-b border-border shadow-sm flex items-center"
+        className="sticky top-16 inset-x-0 z-40 bg-white border-b border-border shadow-sm"
         style={{ WebkitTransform: 'translateZ(0)', transform: 'translateZ(0)' }}
       >
-        <div className="container-wide flex items-center gap-2">
-          <div className="flex gap-1 bg-surface rounded-xl p-1 shrink-0">
-            {(['ALL', 'SA', 'AE'] as const).map(c => (
-              <button key={c} onClick={() => setFilter(c)}
-                className={cn('px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap',
-                  filter === c ? 'bg-brand-400 text-white shadow-sm' : 'text-muted hover:text-ink'
-                )}>
-                {c === 'ALL'
-                  ? (lang === 'ru' ? 'Все' : lang === 'uz' ? 'Barchasi' : 'All')
-                  : c === 'SA'
-                  ? 'КСА'
-                  : 'ОАЭ'}
-              </button>
-            ))}
-          </div>
+        <div className="container-wide flex items-center gap-2 h-14">
           <div className="relative flex-1 min-w-0">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
             <input
@@ -383,8 +388,10 @@ function UniversitiesContent() {
                           <Star className="w-3 h-3" /> Топ {uni.rank}
                         </div>
                       )}
-                      <div className="absolute top-3 right-3 z-20 text-2xl">
-                        {uni.country === 'SA' ? '🇸🇦' : '🇦🇪'}
+                      <div className="absolute top-3 right-3 z-20">
+                        <span className="w-7 h-5 rounded overflow-hidden shadow-sm inline-flex">
+                          <img src={`https://flagcdn.com/w40/${uni.country.toLowerCase()}.png`} alt={uni.country} className="w-full h-full object-cover" />
+                        </span>
                       </div>
                       <div className="absolute bottom-0 left-0 right-0 z-20 p-4">
                         <h3 className="font-bold text-white text-base leading-tight drop-shadow">
@@ -492,7 +499,9 @@ function UniversitiesContent() {
 
                   <div className="absolute bottom-0 left-0 right-0 p-5">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xl">{selected.country === 'SA' ? '🇸🇦' : '🇦🇪'}</span>
+                      <span className="w-8 h-5 rounded overflow-hidden shadow-sm inline-flex">
+                          <img src={`https://flagcdn.com/w40/${selected.country.toLowerCase()}.png`} alt={selected.country} className="w-full h-full object-cover" />
+                        </span>
                       {selected.city && (
                         <span className="flex items-center gap-1 text-white/70 text-xs">
                           <MapPin className="w-3 h-3" /> {selected.city}
