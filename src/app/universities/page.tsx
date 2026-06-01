@@ -336,7 +336,7 @@ function UniversitiesContent() {
 
       {/* Search + specialization bar — sticky below navbar */}
       <div
-        className="sticky top-16 inset-x-0 z-40 bg-white border-b border-border shadow-sm"
+        className="bg-white border-b border-border shadow-sm"
         style={{ WebkitTransform: 'translateZ(0)', transform: 'translateZ(0)' }}
       >
         <div className="container-wide flex items-center gap-2 h-14">
