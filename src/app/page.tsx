@@ -246,7 +246,7 @@ export default function HomePage() {
           <div className="grid grid-cols-3 gap-4">
             {([
               { iso: 'qa', code: 'QA', name: t.countries.qa, desc: t.countries.qaDesc, href: '/apply',
-                photo: 'https://images.unsplash.com/photo-1586899028174-e7098604235b?w=600&q=85' },
+                photo: 'https://images.unsplash.com/photo-1647252262017-582a7dbb73d0?w=600&q=85' },
               { iso: 'kw', code: 'KW', name: t.countries.kw, desc: t.countries.kwDesc, href: '/apply',
                 photo: 'https://images.unsplash.com/photo-1578895101408-1a36b834405b?w=600&q=85' },
               { iso: 'tr', code: 'TR', name: t.countries.tr, desc: t.countries.trDesc, href: '/apply',
