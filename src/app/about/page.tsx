@@ -73,7 +73,15 @@ const STEPS = [
 
 export default function AboutPage() {
   const [lang, setLang] = useLanguage()
+  const [submittedCount, setSubmittedCount] = useState<number | null>(null)
   const isRu = lang === 'ru'
+
+  useEffect(() => {
+    fetch('/api/stats')
+      .then(r => r.json())
+      .then(d => setSubmittedCount(d.submitted))
+      .catch(() => setSubmittedCount(41))
+  }, [])
 
   return (
     <>
@@ -114,7 +122,9 @@ export default function AboutPage() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
             {STATS.map((s, i) => (
               <motion.div key={i} {...fadeUp(i * 0.08)} className="text-center">
-                <p className="text-3xl sm:text-4xl font-bold text-ink mb-1">{s.n}</p>
+                <p className="text-3xl sm:text-4xl font-bold text-ink mb-1">
+                  {i === 0 && submittedCount !== null ? String(submittedCount) : s.n}
+                </p>
                 <p className="text-xs text-muted">{isRu ? s.label_ru : s.label_en}</p>
               </motion.div>
             ))}

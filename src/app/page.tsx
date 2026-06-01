@@ -56,6 +56,7 @@ const HERO_SLIDES = [
 export default function HomePage() {
   const [lang, setLang] = useLanguage()
   const [slide, setSlide] = useState(0)
+  const [submittedCount, setSubmittedCount] = useState<number | null>(null)
   const t = translations[lang]
 
   useEffect(() => {
@@ -63,6 +64,13 @@ export default function HomePage() {
       setSlide(s => (s + 1) % HERO_SLIDES.length)
     }, 6000)
     return () => clearInterval(timer)
+  }, [])
+
+  useEffect(() => {
+    fetch('/api/stats')
+      .then(r => r.json())
+      .then(d => setSubmittedCount(d.submitted))
+      .catch(() => setSubmittedCount(41))
   }, [])
 
   const steps = lang === 'ru' ? [
@@ -150,7 +158,7 @@ export default function HomePage() {
 
             <motion.div variants={fadeUp} className="mt-16 grid grid-cols-3 gap-6 max-w-lg mx-auto">
               {[
-                [t.hero.stat1, t.hero.stat1l],
+                [submittedCount !== null ? String(submittedCount) : t.hero.stat1, t.hero.stat1l],
                 [t.hero.stat2, t.hero.stat2l],
                 [t.hero.stat3, t.hero.stat3l],
               ].map(([val, label], i) => (
