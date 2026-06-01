@@ -1,5 +1,4 @@
 'use client'
-export { metadata } from './metadata'
 import { useLanguage } from '@/hooks/useLanguage'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
