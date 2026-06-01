@@ -515,57 +515,76 @@ function ApplyContent() {
 
           {/* ── STEP 0 — Выбор страны ── */}
           {step === 0 && (
-            <motion.div key="step0" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
+            <motion.div key="step0" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.3 }}>
               <div className="mb-10 text-center">
-                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-2">{lang === 'ru' ? 'Начало' : 'Start'}</p>
-                <h1 className="text-3xl font-bold text-ink mb-2">{lang === 'ru' ? 'Выберите страну' : 'Select Country'}</h1>
-                <p className="text-muted text-sm">{lang === 'ru' ? 'В какую страну вы хотите подать заявку?' : 'Which country do you want to apply to?'}</p>
+                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-3">{lang === 'ru' ? 'Шаг 1' : 'Step 1'}</p>
+                <h1 className="text-3xl font-bold text-ink mb-2">{lang === 'ru' ? 'Куда хотите поступить?' : 'Where do you want to study?'}</h1>
+                <p className="text-muted text-sm">{lang === 'ru' ? 'Выберите страну назначения' : 'Choose your destination country'}</p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+              <div className="grid grid-cols-1 gap-3 mb-10">
                 {[
-                  { code: 'SA', flag: '🇸🇦', nameRu: 'Саудовская Аравия', nameEn: 'Saudi Arabia' },
-                  { code: 'AE', flag: '🇦🇪', nameRu: 'ОАЭ', nameEn: 'UAE' },
-                  { code: 'QA', flag: '🇶🇦', nameRu: 'Катар', nameEn: 'Qatar' },
-                  { code: 'KW', flag: '🇰🇼', nameRu: 'Кувейт', nameEn: 'Kuwait' },
-                  { code: 'TR', flag: '🇹🇷', nameRu: 'Турция', nameEn: 'Turkey' },
-                ].map(country => (
-                  <button
-                    key={country.code}
-                    onClick={() => setSelectedCountry(country.code)}
-                    className={cn(
-                      'flex items-center gap-4 p-5 rounded-2xl border-2 text-left transition-all shadow-sm',
-                      selectedCountry === country.code
-                        ? 'border-[#1B4332] bg-[#1B4332]/5 shadow-md'
-                        : 'border-gray-100 bg-white hover:border-gray-300 hover:shadow-md'
-                    )}
-                  >
-                    <span className="text-4xl">{country.flag}</span>
-                    <div className="flex-1">
-                      <p className="font-bold text-ink text-base">{lang === 'ru' ? country.nameRu : country.nameEn}</p>
-                    </div>
-                    <div className={cn(
-                      'w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all shrink-0',
-                      selectedCountry === country.code ? 'border-[#1B4332] bg-[#1B4332]' : 'border-gray-300'
-                    )}>
-                      {selectedCountry === country.code && <div className="w-2 h-2 rounded-full bg-white" />}
-                    </div>
-                  </button>
-                ))}
+                  { code: 'SA', flag: '🇸🇦', nameRu: 'Саудовская Аравия', nameEn: 'Saudi Arabia', descRu: 'Ведущие исламские университеты мира', descEn: "World's leading Islamic universities" },
+                  { code: 'AE', flag: '🇦🇪', nameRu: 'ОАЭ', nameEn: 'United Arab Emirates', descRu: 'Современное образование в Дубае и Абу-Даби', descEn: 'Modern education in Dubai & Abu Dhabi' },
+                  { code: 'TR', flag: '🇹🇷', nameRu: 'Турция', nameEn: 'Turkey', descRu: 'Доступное образование европейского уровня', descEn: 'Affordable European-level education' },
+                ].map(country => {
+                  const isSelected = selectedCountry === country.code
+                  return (
+                    <button
+                      key={country.code}
+                      onClick={() => setSelectedCountry(country.code)}
+                      className={cn(
+                        'group relative flex items-center gap-5 p-5 rounded-2xl border-2 text-left transition-all duration-200',
+                        isSelected
+                          ? 'border-[#1B4332] bg-white shadow-lg shadow-[#1B4332]/10'
+                          : 'border-gray-100 bg-white hover:border-gray-200 hover:shadow-md'
+                      )}
+                    >
+                      {/* Flag */}
+                      <div className={cn(
+                        'w-14 h-14 rounded-xl flex items-center justify-center text-3xl shrink-0 transition-all duration-200',
+                        isSelected ? 'bg-[#1B4332]/8 scale-105' : 'bg-gray-50 group-hover:bg-gray-100'
+                      )}>
+                        {country.flag}
+                      </div>
+
+                      {/* Text */}
+                      <div className="flex-1 min-w-0">
+                        <p className={cn('font-bold text-base mb-0.5 transition-colors', isSelected ? 'text-[#1B4332]' : 'text-ink')}>{lang === 'ru' ? country.nameRu : country.nameEn}</p>
+                        <p className="text-xs text-muted leading-relaxed">{lang === 'ru' ? country.descRu : country.descEn}</p>
+                      </div>
+
+                      {/* Check */}
+                      <div className={cn(
+                        'w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-all duration-200',
+                        isSelected ? 'border-[#1B4332] bg-[#1B4332]' : 'border-gray-200 group-hover:border-gray-300'
+                      )}>
+                        {isSelected && (
+                          <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 12 12">
+                            <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        )}
+                      </div>
+
+                      {/* Selected accent line */}
+                      {isSelected && <div className="absolute left-0 top-3 bottom-3 w-1 bg-[#1B4332] rounded-r-full" />}
+                    </button>
+                  )
+                })}
               </div>
 
-              <div className="flex justify-end">
-                <button
-                  onClick={() => { if (selectedCountry) setStep(1) }}
-                  disabled={!selectedCountry}
-                  className={cn(
-                    'flex items-center gap-2 px-8 py-3.5 text-white text-sm font-semibold rounded-xl transition-all shadow-sm',
-                    selectedCountry ? 'bg-[#1B4332] hover:bg-[#1B4332]/90' : 'bg-gray-300 cursor-not-allowed'
-                  )}
-                >
-                  {lang === 'ru' ? 'Далее' : 'Next'} <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
+              <button
+                onClick={() => { if (selectedCountry) setStep(1) }}
+                disabled={!selectedCountry}
+                className={cn(
+                  'w-full flex items-center justify-center gap-2 py-4 text-white text-sm font-semibold rounded-2xl transition-all duration-200',
+                  selectedCountry
+                    ? 'bg-[#1B4332] hover:bg-[#1B4332]/90 shadow-lg shadow-[#1B4332]/20'
+                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                )}
+              >
+                {lang === 'ru' ? 'Продолжить' : 'Continue'} <ChevronRight className="w-4 h-4" />
+              </button>
             </motion.div>
           )}
 
