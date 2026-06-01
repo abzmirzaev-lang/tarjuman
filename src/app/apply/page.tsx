@@ -523,40 +523,56 @@ function ApplyContent() {
               </div>
 
               <div className="grid grid-cols-1 gap-3 mb-10">
-                {[
-                  { code: 'SA', flag: '🇸🇦', nameRu: 'Саудовская Аравия', nameEn: 'Saudi Arabia', descRu: 'Ведущие исламские университеты мира', descEn: "World's leading Islamic universities" },
-                  { code: 'AE', flag: '🇦🇪', nameRu: 'ОАЭ', nameEn: 'United Arab Emirates', descRu: 'Современное образование в Дубае и Абу-Даби', descEn: 'Modern education in Dubai & Abu Dhabi' },
-                  { code: 'TR', flag: '🇹🇷', nameRu: 'Турция', nameEn: 'Turkey', descRu: 'Доступное образование европейского уровня', descEn: 'Affordable European-level education' },
-                ].map(country => {
+                {([
+                  { code: 'SA', iso: 'sa', nameRu: 'Саудовская Аравия', nameEn: 'Saudi Arabia',       descRu: 'Ведущие исламские университеты мира',          descEn: "World's top Islamic universities" },
+                  { code: 'AE', iso: 'ae', nameRu: 'ОАЭ',               nameEn: 'UAE',                 descRu: 'Современное образование в Дубае и Абу-Даби',    descEn: 'Modern education in Dubai & Abu Dhabi' },
+                  { code: 'QA', iso: 'qa', nameRu: 'Катар',             nameEn: 'Qatar',               descRu: 'Образование мирового класса на Ближнем Востоке', descEn: 'World-class education in the Middle East' },
+                  { code: 'KW', iso: 'kw', nameRu: 'Кувейт',            nameEn: 'Kuwait',              descRu: 'Стипендии и бесплатное обучение',               descEn: 'Scholarships & free education programs' },
+                  { code: 'TR', iso: 'tr', nameRu: 'Турция',            nameEn: 'Turkey',              descRu: 'Доступное образование европейского уровня',      descEn: 'Affordable European-level education' },
+                ] as { code: string; iso: string; nameRu: string; nameEn: string; descRu: string; descEn: string }[]).map(country => {
                   const isSelected = selectedCountry === country.code
                   return (
                     <button
                       key={country.code}
                       onClick={() => setSelectedCountry(country.code)}
                       className={cn(
-                        'group relative flex items-center gap-5 p-5 rounded-2xl border-2 text-left transition-all duration-200',
+                        'group relative flex items-center gap-4 p-4 rounded-2xl border-2 text-left transition-all duration-200 overflow-hidden',
                         isSelected
                           ? 'border-[#1B4332] bg-white shadow-lg shadow-[#1B4332]/10'
                           : 'border-gray-100 bg-white hover:border-gray-200 hover:shadow-md'
                       )}
                     >
-                      {/* Flag */}
+                      {/* Accent bar */}
                       <div className={cn(
-                        'w-14 h-14 rounded-xl flex items-center justify-center text-3xl shrink-0 transition-all duration-200',
-                        isSelected ? 'bg-[#1B4332]/8 scale-105' : 'bg-gray-50 group-hover:bg-gray-100'
+                        'absolute left-0 top-0 bottom-0 w-1 transition-all duration-200',
+                        isSelected ? 'bg-[#1B4332]' : 'bg-transparent'
+                      )} />
+
+                      {/* Flag image */}
+                      <div className={cn(
+                        'w-14 h-10 rounded-lg overflow-hidden shrink-0 transition-all duration-200 shadow-sm',
+                        isSelected ? 'ring-2 ring-[#1B4332]/30' : ''
                       )}>
-                        {country.flag}
+                        <img
+                          src={`https://flagcdn.com/w80/${country.iso}.png`}
+                          alt={country.nameEn}
+                          className="w-full h-full object-cover"
+                        />
                       </div>
 
                       {/* Text */}
-                      <div className="flex-1 min-w-0">
-                        <p className={cn('font-bold text-base mb-0.5 transition-colors', isSelected ? 'text-[#1B4332]' : 'text-ink')}>{lang === 'ru' ? country.nameRu : country.nameEn}</p>
-                        <p className="text-xs text-muted leading-relaxed">{lang === 'ru' ? country.descRu : country.descEn}</p>
+                      <div className="flex-1 min-w-0 pl-1">
+                        <p className={cn('font-bold text-base leading-tight mb-0.5 transition-colors', isSelected ? 'text-[#1B4332]' : 'text-ink')}>
+                          {lang === 'ru' ? country.nameRu : country.nameEn}
+                        </p>
+                        <p className="text-xs text-muted leading-relaxed">
+                          {lang === 'ru' ? country.descRu : country.descEn}
+                        </p>
                       </div>
 
-                      {/* Check */}
+                      {/* Checkmark */}
                       <div className={cn(
-                        'w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-all duration-200',
+                        'w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-all duration-200 ml-2',
                         isSelected ? 'border-[#1B4332] bg-[#1B4332]' : 'border-gray-200 group-hover:border-gray-300'
                       )}>
                         {isSelected && (
@@ -565,9 +581,6 @@ function ApplyContent() {
                           </svg>
                         )}
                       </div>
-
-                      {/* Selected accent line */}
-                      {isSelected && <div className="absolute left-0 top-3 bottom-3 w-1 bg-[#1B4332] rounded-r-full" />}
                     </button>
                   )
                 })}
@@ -577,10 +590,10 @@ function ApplyContent() {
                 onClick={() => { if (selectedCountry) setStep(1) }}
                 disabled={!selectedCountry}
                 className={cn(
-                  'w-full flex items-center justify-center gap-2 py-4 text-white text-sm font-semibold rounded-2xl transition-all duration-200',
+                  'w-full flex items-center justify-center gap-2 py-4 text-sm font-semibold rounded-2xl transition-all duration-200',
                   selectedCountry
-                    ? 'bg-[#1B4332] hover:bg-[#1B4332]/90 shadow-lg shadow-[#1B4332]/20'
-                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    ? 'bg-[#1B4332] text-white hover:bg-[#1B4332]/90 shadow-lg shadow-[#1B4332]/20'
+                    : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                 )}
               >
                 {lang === 'ru' ? 'Продолжить' : 'Continue'} <ChevronRight className="w-4 h-4" />
