@@ -19,6 +19,14 @@ async function sendMessage(chat_id: number | string, text: string, reply_markup?
   })
 }
 
+async function sendPhoto(chat_id: number | string, photo: string, caption?: string) {
+  await fetch(`${API}/sendPhoto`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ chat_id, photo, caption, parse_mode: 'HTML' }),
+  })
+}
+
 async function answerCallbackQuery(callback_query_id: string, text?: string) {
   await fetch(`${API}/answerCallbackQuery`, {
     method: 'POST',
@@ -286,6 +294,7 @@ export async function POST(req: NextRequest) {
           // Новый пользователь — выбор языка
           const detectedLang = tgLang?.startsWith('uz') ? 'uz' : tgLang?.startsWith('en') ? 'en' : 'ru'
           await setUserLang(chatId, detectedLang)
+          await sendPhoto(chatId, 'https://tarjumanedu.com/og-image.png')
           await sendMessage(
             chatId,
             `🌐 <b>Выберите язык / Tilni tanlang / Choose language:</b>`,

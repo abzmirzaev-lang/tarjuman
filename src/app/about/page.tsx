@@ -19,7 +19,7 @@ const STATS = [
   { n: '41',   label_ru: 'Студентов успешно подали',  label_en: 'Students applied' },
   { n: '6ч',    label_ru: 'Минимальный срок подачи',      label_en: 'Min. submission time' },
   { n: '100%',  label_ru: 'Документы с первого раза',     label_en: 'Docs correct first try' },
-  { n: '2',     label_ru: 'Страны: КСА и ОАЭ',            label_en: 'Countries: KSA & UAE' },
+  { n: '5',     label_ru: 'Стран: КСА, ОАЭ, Катар, Кувейт, Турция', label_en: 'Countries: KSA, UAE, Qatar, Kuwait, Turkey' },
 ]
 
 const VALUES = [
