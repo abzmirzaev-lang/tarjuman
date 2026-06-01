@@ -56,18 +56,24 @@ const VALUES = [
 const STEPS = [
   {
     num: '01',
-    title_ru: 'Опыт изнутри',
+    title_ru: 'Опыт изнутри', title_en: 'Inside Experience', title_uz: 'Ichki tajriba',
     body_ru: 'Наша команда сама прошла путь поступления в арабские университеты. Мы знаем каждый подводный камень — и обходим их за вас.',
+    body_en: 'Our team has gone through the Arab university application process ourselves. We know every obstacle — and navigate around them for you.',
+    body_uz: "Jamoamiz o'zi arab universitetlariga kirish yo'lini bosib o'tgan. Biz har bir to'siqni bilamiz — va siz uchun ularni aylanib o'tamiz.",
   },
   {
     num: '02',
-    title_ru: 'Сервис, который нужен',
+    title_ru: 'Сервис, который нужен', title_en: 'The Service You Need', title_uz: 'Kerakli xizmat',
     body_ru: 'Мы создали то, что хотели иметь сами: без лишних ожиданий, ошибок в документах и непонятных задержек.',
+    body_en: "We built what we wished we'd had: no unnecessary waiting, no document errors, no confusing delays.",
+    body_uz: "Biz o'zimiz uchun bo'lishini istaganini yaratdik: ortiqcha kutish, hujjatlardagi xatolar va kechikishlarsiz.",
   },
   {
     num: '03',
-    title_ru: 'Всегда на связи',
+    title_ru: 'Всегда на связи', title_en: 'Always Available', title_uz: 'Doim aloqada',
     body_ru: 'После подачи сопровождаем до получения оффера. Уведомления в Telegram при каждом обновлении статуса.',
+    body_en: 'After submission we support you until you receive your offer. Telegram notifications on every status update.',
+    body_uz: "Ariza topshirilgandan so'ng taklif olguncha yordam beramiz. Har yangilanishda Telegram bildirishnomasi.",
   },
 ]
 
@@ -159,15 +165,15 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center mb-12">
             <motion.h2 {...fadeUp(0)} className="text-3xl sm:text-4xl font-bold text-ink mb-3">
-              {isRu ? 'Почему мы?' : 'Why us?'}
+              {lang === 'ru' ? 'Почему мы?' : lang === 'uz' ? 'Nega biz?' : 'Why us?'}
             </motion.h2>
           </div>
           <div className="grid sm:grid-cols-3 gap-6">
             {STEPS.map((s, i) => (
               <motion.div key={i} {...fadeUp(i * 0.1)} className="card p-6">
                 <span className="text-3xl font-bold text-brand-400 mb-4 block">{s.num}</span>
-                <h3 className="font-semibold text-ink mb-2">{s.title_ru}</h3>
-                <p className="text-sm text-muted leading-relaxed">{s.body_ru}</p>
+                <h3 className="font-semibold text-ink mb-2">{lang === 'en' ? s.title_en : lang === 'uz' ? s.title_uz : s.title_ru}</h3>
+                <p className="text-sm text-muted leading-relaxed">{lang === 'en' ? s.body_en : lang === 'uz' ? s.body_uz : s.body_ru}</p>
               </motion.div>
             ))}
           </div>

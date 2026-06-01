@@ -27,6 +27,7 @@ async function sendPhoto(chat_id: number | string, photo: string, caption?: stri
   })
 }
 
+
 async function answerCallbackQuery(callback_query_id: string, text?: string) {
   await fetch(`${API}/answerCallbackQuery`, {
     method: 'POST',
