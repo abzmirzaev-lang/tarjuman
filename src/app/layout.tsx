@@ -64,17 +64,17 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'ru_RU',
     images: [{
-      url: '/icon-512.png',
-      width: 512,
-      height: 512,
-      alt: 'TARJUMAN — Образование в Саудовской Аравии и ОАЭ',
+      url: '/og-image.png',
+      width: 640,
+      height: 640,
+      alt: 'TARJUMAN — Образование в Арабских Странах',
     }],
   },
   twitter: {
     card: 'summary',
     title: 'TARJUMAN — Поступление в университеты Саудовской Аравии, ОАЭ, Катара и Турции',
     description: 'Профессиональная помощь в поступлении в университеты СА, ОАЭ, Катара, Кувейта и Турции.',
-    images: ['/icon-512.png'],
+    images: ['/og-image.png'],
   },
   alternates: {
     canonical: APP_URL,
@@ -86,7 +86,7 @@ const jsonLd = {
   '@type': 'EducationalOrganization',
   name: 'TARJUMAN',
   url: APP_URL,
-  logo: `${APP_URL}/icon-512.png`,
+  logo: `${APP_URL}/og-image.png`,
   description: 'Профессиональная помощь в поступлении в университеты Саудовской Аравии, ОАЭ, Катара, Кувейта и Турции.',
   contactPoint: {
     '@type': 'ContactPoint',
