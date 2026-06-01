@@ -200,45 +200,75 @@ export default function HomePage() {
       </section>
 
       {/* COUNTRIES */}
-      <section className="section bg-white">
+      <section className="section bg-[#F7F8FA]">
         <div className="container-narrow">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-ink mb-3">{t.countries.title}</h2>
+          <div className="text-center mb-10">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-50 border border-brand-200 rounded-full text-brand-700 text-xs font-semibold uppercase tracking-widest mb-4">
+              {lang === 'ru' ? 'Направления' : lang === 'uz' ? "Yo'nalishlar" : 'Destinations'}
+            </span>
+            <h2 className="text-3xl font-bold text-ink mb-2">{t.countries.title}</h2>
+            <p className="text-muted text-sm">{lang === 'ru' ? 'Выберите страну и начните путь к поступлению' : lang === 'uz' ? "Mamlakat tanlang va qabul yo'lini boshlang" : 'Choose a country and start your admission journey'}</p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
+          {/* Top row: SA + AE large cards */}
+          <div className="grid sm:grid-cols-2 gap-4 mb-4">
             {([
-              { iso: 'sa', code: 'SA', name: t.countries.sa, desc: t.countries.saDesc, href: '/universities?country=SA' },
-              { iso: 'ae', code: 'AE', name: t.countries.ae, desc: t.countries.aeDesc, href: '/universities?country=AE' },
-              { iso: 'qa', code: 'QA', name: t.countries.qa, desc: t.countries.qaDesc, href: '/apply' },
-              { iso: 'kw', code: 'KW', name: t.countries.kw, desc: t.countries.kwDesc, href: '/apply' },
-              { iso: 'tr', code: 'TR', name: t.countries.tr, desc: t.countries.trDesc, href: '/apply' },
-            ] as { iso: string; code: string; name: string; desc: string; href: string }[]).map((c) => (
+              { iso: 'sa', code: 'SA', name: t.countries.sa, desc: t.countries.saDesc, href: '/universities?country=SA',
+                photo: 'https://images.unsplash.com/photo-1586715065342-98d1f6016fd1?w=800&q=85' },
+              { iso: 'ae', code: 'AE', name: t.countries.ae, desc: t.countries.aeDesc, href: '/universities?country=AE',
+                photo: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=85' },
+            ] as { iso: string; code: string; name: string; desc: string; href: string; photo: string }[]).map((c) => (
               <Link key={c.code} href={c.href}>
-                <motion.div
-                  whileHover={{ y: -4 }}
-                  className="group relative bg-white rounded-2xl border border-gray-100 p-6 flex flex-col gap-4 hover:shadow-xl hover:border-[#1B4332]/20 transition-all duration-300 overflow-hidden cursor-pointer h-full"
-                >
-                  {/* Subtle gradient on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#1B4332]/0 to-[#1B4332]/0 group-hover:from-[#1B4332]/3 group-hover:to-transparent transition-all duration-300 pointer-events-none rounded-2xl" />
-
-                  {/* Flag */}
-                  <div className="relative w-full h-24 rounded-xl overflow-hidden shadow-sm">
-                    <img
-                      src={`https://flagcdn.com/w320/${c.iso}.png`}
-                      alt={c.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                <motion.div whileHover={{ y: -3 }} className="group relative rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-2xl transition-all duration-400 h-56">
+                  <img src={c.photo} alt={c.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
+                  <div className="absolute inset-0 p-5 flex flex-col justify-between">
+                    <div className="flex justify-end">
+                      <span className="w-9 h-6 rounded-md overflow-hidden shadow-lg inline-flex ring-1 ring-white/30">
+                        <img src={`https://flagcdn.com/w40/${c.iso}.png`} alt={c.name} className="w-full h-full object-cover" />
+                      </span>
+                    </div>
+                    <div>
+                      <h3 className="text-white font-bold text-xl mb-1 drop-shadow-lg">{c.name}</h3>
+                      <p className="text-white/75 text-xs leading-relaxed mb-3">{c.desc}</p>
+                      <span className="inline-flex items-center gap-1 text-white text-xs font-semibold bg-white/15 backdrop-blur-sm border border-white/20 px-3 py-1.5 rounded-full group-hover:bg-white/25 transition-colors">
+                        {lang === 'ru' ? 'Смотреть университеты' : lang === 'uz' ? "Universitetlar" : 'View universities'}
+                        <ChevronRight className="w-3 h-3" />
+                      </span>
+                    </div>
                   </div>
+                </motion.div>
+              </Link>
+            ))}
+          </div>
 
-                  <div className="flex-1">
-                    <h3 className="text-base font-bold text-ink mb-1 group-hover:text-[#1B4332] transition-colors">{c.name}</h3>
-                    <p className="text-muted text-xs leading-relaxed">{c.desc}</p>
-                  </div>
-
-                  <div className="flex items-center gap-1 text-[#1B4332] text-xs font-semibold mt-auto">
-                    {lang === 'ru' ? 'Подать заявку' : lang === 'uz' ? "Ariza berish" : 'Apply now'}
-                    <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+          {/* Bottom row: QA + KW + TR smaller cards */}
+          <div className="grid grid-cols-3 gap-4">
+            {([
+              { iso: 'qa', code: 'QA', name: t.countries.qa, desc: t.countries.qaDesc, href: '/apply',
+                photo: 'https://images.unsplash.com/photo-1547448415-e9f5b28e570d?w=600&q=85' },
+              { iso: 'kw', code: 'KW', name: t.countries.kw, desc: t.countries.kwDesc, href: '/apply',
+                photo: 'https://images.unsplash.com/photo-1578895101408-1a36b834405b?w=600&q=85' },
+              { iso: 'tr', code: 'TR', name: t.countries.tr, desc: t.countries.trDesc, href: '/apply',
+                photo: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=600&q=85' },
+            ] as { iso: string; code: string; name: string; desc: string; href: string; photo: string }[]).map((c) => (
+              <Link key={c.code} href={c.href}>
+                <motion.div whileHover={{ y: -3 }} className="group relative rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-400 h-40">
+                  <img src={c.photo} alt={c.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <div className="absolute inset-0 p-4 flex flex-col justify-between">
+                    <div className="flex justify-end">
+                      <span className="w-7 h-5 rounded overflow-hidden shadow-md inline-flex ring-1 ring-white/30">
+                        <img src={`https://flagcdn.com/w40/${c.iso}.png`} alt={c.name} className="w-full h-full object-cover" />
+                      </span>
+                    </div>
+                    <div>
+                      <h3 className="text-white font-bold text-sm leading-tight mb-1 drop-shadow">{c.name}</h3>
+                      <span className="inline-flex items-center gap-0.5 text-white/80 text-[10px] font-medium">
+                        {lang === 'ru' ? 'Подать заявку' : lang === 'uz' ? "Ariza" : 'Apply'}
+                        <ChevronRight className="w-2.5 h-2.5" />
+                      </span>
+                    </div>
                   </div>
                 </motion.div>
               </Link>
