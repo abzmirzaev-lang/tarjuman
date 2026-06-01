@@ -22,27 +22,27 @@ const fadeUp = {
 
 const HERO_SLIDES = [
   {
-    photo: 'https://images.unsplash.com/photo-1692977579997-948328cdb7d2?w=1800&q=90',
+    photo: 'https://images.unsplash.com/photo-1692977579997-948328cdb7d2?w=1200&q=80',
     label: 'Мечеть Пророка — Медина',
     city: 'Медина, Саудовская Аравия',
   },
   {
-    photo: 'https://images.unsplash.com/photo-1724191078796-8a997b989f43?w=1800&q=90',
+    photo: 'https://images.unsplash.com/photo-1724191078796-8a997b989f43?w=1200&q=80',
     label: 'Зелёный купол Мечети Пророка',
     city: 'Медина, Саудовская Аравия',
   },
   {
-    photo: 'https://images.unsplash.com/photo-1663900108404-a05e8bf82cda?w=1800&q=90',
+    photo: 'https://images.unsplash.com/photo-1663900108404-a05e8bf82cda?w=1200&q=80',
     label: 'Эр-Рияд ночью',
     city: 'Эр-Рияд, Саудовская Аравия',
   },
   {
-    photo: 'https://images.unsplash.com/photo-1770685798053-c7b282cc3188?w=1800&q=90',
+    photo: 'https://images.unsplash.com/photo-1770685798053-c7b282cc3188?w=1200&q=80',
     label: 'Эр-Рияд на закате',
     city: 'Эр-Рияд, Саудовская Аравия',
   },
   {
-    photo: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1800&q=90',
+    photo: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=80',
     label: 'Дубай',
     city: 'Дубай, ОАЭ',
   },
@@ -222,9 +222,9 @@ export default function HomePage() {
           <div className="grid sm:grid-cols-2 gap-4 mb-4">
             {([
               { iso: 'sa', code: 'SA', name: t.countries.sa, desc: t.countries.saDesc, href: '/universities?country=SA',
-                photo: 'https://images.unsplash.com/photo-1586715065342-98d1f6016fd1?w=800&q=85' },
+                photo: 'https://images.unsplash.com/photo-1586715065342-98d1f6016fd1?w=600&q=75' },
               { iso: 'ae', code: 'AE', name: t.countries.ae, desc: t.countries.aeDesc, href: '/universities?country=AE',
-                photo: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=85' },
+                photo: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&q=75' },
             ] as { iso: string; code: string; name: string; desc: string; href: string; photo: string }[]).map((c) => (
               <Link key={c.code} href={c.href}>
                 <motion.div whileHover={{ y: -3 }} className="group relative rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-2xl transition-all duration-400 h-56">
@@ -463,16 +463,3 @@ export default function HomePage() {
                   : 'Apply right now — it takes just 5 minutes'}
               </p>
               <Link href="/apply">
-                <Button variant="primary" size="xl" iconRight={<ArrowRight className="w-5 h-5" />}>
-                  {t.hero.cta}
-                </Button>
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      <Footer lang={lang} />
-    </>
-  )
-}
