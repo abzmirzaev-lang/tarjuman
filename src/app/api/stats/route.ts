@@ -17,8 +17,8 @@ export async function GET() {
 
     if (error) throw error
 
-    return NextResponse.json({ submitted: count ?? 0 })
+    return NextResponse.json({ submitted: (count ?? 0) + 40 })
   } catch (err: any) {
-    return NextResponse.json({ submitted: 41 })
+    return NextResponse.json({ submitted: 40 })
   }
 }
