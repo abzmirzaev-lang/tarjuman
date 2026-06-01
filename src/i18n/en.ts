@@ -19,7 +19,7 @@ export const en: Translation = {
     subtitle: 'Professional assistance with applications, document translation, and visa support. Your trusted partner at every step from application to enrollment.',
     cta:      'Start Application',
     ctaSecondary: 'Learn More',
-    stat1:    '26',
+    stat1:    '41',
     stat1l:   'Submitted Applications',
     stat2:    '6h',
     stat2l:   'Min. Submission Time',

@@ -19,7 +19,7 @@ export const uz: Translation = {
     subtitle: "Hujjatlar tarjimasi, ariza topshirish va viza olishda professional yordam. Arizadan qabulga qadar har bir bosqichda ishonchli sherikingiz.",
     cta:      'Arizani boshlash',
     ctaSecondary: "Ko'proq bilish",
-    stat1:    '26',
+    stat1:    '41',
     stat1l:   'Hujjat topshirildi',
     stat2:    '6s',
     stat2l:   'Min. topshirish vaqti',
