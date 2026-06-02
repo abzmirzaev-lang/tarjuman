@@ -59,12 +59,12 @@ export function Footer({ lang = 'ru' }: { lang?: AppLanguage }) {
 
         {/* Legal */}
         <div>
-          <h4 className="text-white font-semibold mb-3 text-sm">Документы</h4>
+          <h4 className="text-white font-semibold mb-3 text-sm">{t.footer.legalTitle}</h4>
           <ul className="space-y-2">
             {[
-              ['/terms',   'Условия использования'],
-              ['/privacy', 'Конфиденциальность'   ],
-              ['/refund',  'Политика возврата'     ],
+              ['/terms',   t.footer.terms  ],
+              ['/privacy', t.footer.privacy],
+              ['/refund',  t.footer.refund ],
             ].map(([href, label]) => (
               <li key={href}>
                 <Link href={href} className="text-sm text-white/60 hover:text-white transition-colors">

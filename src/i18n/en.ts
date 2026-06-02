@@ -116,6 +116,8 @@ export const en: Translation = {
     navTitle:     'Navigation',
     contactTitle: 'Contacts',
     writeTg:      'Write to us',
+    refund:       'Refund Policy',
+    legalTitle:   'Legal',
   },
   common: {
     loading:  'Loading...',

@@ -116,6 +116,8 @@ export const uz: Translation = {
     navTitle:     'Navigatsiya',
     contactTitle: 'Aloqa',
     writeTg:      'Bizga yozing',
+    refund:       'Qaytarish siyosati',
+    legalTitle:   'Hujjatlar',
   },
   common: {
     loading:  'Yuklanmoqda...',

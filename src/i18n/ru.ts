@@ -114,6 +114,8 @@ export const ru = {
     navTitle:     'Навигация',
     contactTitle: 'Контакты',
     writeTg:      'Написать нам',
+    refund:       'Политика возврата',
+    legalTitle:   'Документы',
   },
   common: {
     loading:  'Загрузка...',
