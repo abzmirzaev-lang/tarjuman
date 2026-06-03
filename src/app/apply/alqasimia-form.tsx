@@ -471,7 +471,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
             university_name: 'Al Qasimia University',
             faculty:         p,
           })),
-          notes: JSON.stringify(extraData),
+          extra_data: extraData,
         })
         .select()
         .single()
@@ -483,20 +483,24 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
       const uploads = (Object.entries(docs) as [AQDocType, AQDoc | undefined][])
         .filter(([, d]) => d != null)
         .map(async ([type, doc]) => {
-          const ext  = doc!.file.name.split('.').pop()
-          const path = `${user.id}/${app.id}/${type}_${uuidv4()}.${ext}`
-          await supabase.storage.from('documents').upload(path, doc!.file, { upsert: true })
-          await supabase.from('documents').insert({
-            application_id: app.id,
-            user_id:        user.id,
-            type,
-            file_name:      doc!.file.name,
-            file_path:      path,
-            file_size:      doc!.file.size,
-            mime_type:      doc!.file.type,
-          })
+          try {
+            const ext  = doc!.file.name.split('.').pop()
+            const path = `${user.id}/${app.id}/${type}_${uuidv4()}.${ext}`
+            const { error: uploadErr } = await supabase.storage.from('documents').upload(path, doc!.file, { upsert: true })
+            if (uploadErr) { console.error('Upload error', type, uploadErr); return }
+            const { error: insertErr } = await supabase.from('documents').insert({
+              application_id: app.id,
+              user_id:        user.id,
+              type,
+              file_name:      doc!.file.name,
+              file_path:      path,
+              file_size:      doc!.file.size,
+              mime_type:      doc!.file.type,
+            })
+            if (insertErr) console.error('Insert error', type, insertErr)
+          } catch (e) { console.error('Doc error', type, e) }
         })
-      await Promise.all(uploads)
+      await Promise.allSettled(uploads)
 
       // Payment redirect
       const { data: { session: sess } } = await supabase.auth.getSession()

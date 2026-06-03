@@ -159,8 +159,8 @@ export default function AdminPage() {
     const isJson = rawNotes.trimStart().startsWith('{') || rawNotes.trimStart().startsWith('[')
     setSelected(app); setNoteText(isJson ? '' : rawNotes); setDetailTab('info')
     const [{ data: d1 }, { data: d2 }, { data: m }] = await Promise.all([
-      supabase.from('documents').select('*').eq('application_id', app.id),
-      supabase.from('documents').select('*').eq('user_id', app.user_id).is('application_id', null),
+      supabase.from('documents').select('*').eq('application_id', app.id).order('created_at'),
+      supabase.from('documents').select('*').eq('user_id', app.user_id).order('created_at'),
       supabase.from('messages').select('*').eq('application_id', app.id).order('created_at'),
     ])
     const allDocs = [...(d1 ?? []), ...(d2 ?? [])]
