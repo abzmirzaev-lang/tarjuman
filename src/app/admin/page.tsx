@@ -155,7 +155,9 @@ export default function AdminPage() {
   }
 
   async function openDetail(app: ApplicationRow) {
-    setSelected(app); setNoteText(app.notes ?? ''); setDetailTab('info')
+    const rawNotes = app.notes ?? ''
+    const isJson = rawNotes.trimStart().startsWith('{') || rawNotes.trimStart().startsWith('[')
+    setSelected(app); setNoteText(isJson ? '' : rawNotes); setDetailTab('info')
     const [{ data: d }, { data: m }] = await Promise.all([
       supabase.from('documents').select('*').eq('application_id', app.id),
       supabase.from('messages').select('*').eq('application_id', app.id).order('created_at'),
