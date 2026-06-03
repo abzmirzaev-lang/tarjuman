@@ -65,6 +65,7 @@ export function Footer({ lang = 'ru' }: { lang?: AppLanguage }) {
               ['/terms',   t.footer.terms  ],
               ['/privacy', t.footer.privacy],
               ['/refund',  t.footer.refund ],
+              ['/legal',   lang === 'ru' ? 'О компании' : lang === 'uz' ? 'Kompaniya haqida' : 'Company Info'],
             ].map(([href, label]) => (
               <li key={href}>
                 <Link href={href} className="text-sm text-white/60 hover:text-white transition-colors">
