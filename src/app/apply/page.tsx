@@ -503,44 +503,77 @@ function ApplyContent() {
                 </div>
 
                 <div className="grid grid-cols-1 gap-3 mb-10">
-                  {/* Al Qasimia University */}
+                  {/* Al Qasimia University — premium card */}
                   <button
                     onClick={() => setUaeStep('degree')}
-                    className="group relative flex items-center gap-4 p-5 rounded-2xl border-2 border-[#1B4332] bg-white shadow-lg shadow-[#1B4332]/10 text-left transition-all duration-200 hover:shadow-xl hover:scale-[1.01]"
+                    className="group relative rounded-2xl overflow-hidden border-2 border-[#1B4332] shadow-xl shadow-[#1B4332]/15 text-left transition-all duration-300 hover:shadow-2xl hover:scale-[1.01] hover:border-[#1B4332]"
                   >
-                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#1B4332] rounded-l-2xl" />
-                    {/* University logo */}
-                    <div className="w-14 h-14 rounded-xl overflow-hidden border border-[#1B4332]/20 shrink-0 ml-1 bg-white">
-                      <img
-                        src="https://upload.wikimedia.org/wikipedia/en/2/2f/Al_Qasimia_University_logo.png"
-                        alt="Al Qasimia University"
-                        className="w-full h-full object-contain p-1"
-                        onError={e => {
-                          const t = e.currentTarget
-                          t.style.display = 'none'
-                          t.parentElement!.innerHTML = '<div class="w-full h-full bg-[#1B4332]/5 flex items-center justify-center"><span class="text-[#1B4332] font-bold text-lg">AQ</span></div>'
-                        }}
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0 pl-1">
-                      <p className="font-bold text-base text-[#1B4332] mb-0.5">Al Qasimia University</p>
-                      <p className="text-xs text-[#1B4332]/60 font-medium mb-1" dir="rtl">جامعة القاسمية</p>
-                      <p className="text-xs text-muted">
-                        {lang === 'ru' ? 'Шарджа, ОАЭ · Исламские науки, язык, экономика'
-                          : lang === 'uz' ? 'Sharjah, BAA · Islom fanlari, til, iqtisodiyot'
-                          : 'Sharjah, UAE · Islamic sciences, language, economics'}
-                      </p>
-                      <div className="flex gap-1.5 mt-2 flex-wrap">
-                        <span className="text-[10px] bg-[#1B4332]/10 text-[#1B4332] px-2 py-0.5 rounded-full font-semibold">
-                          {lang === 'ru' ? 'Бакалавриат' : lang === 'uz' ? 'Bakalavr' : 'Bachelor'}
-                        </span>
-                        <span className="text-[10px] bg-[#1B4332]/10 text-[#1B4332] px-2 py-0.5 rounded-full font-semibold">
-                          {lang === 'ru' ? 'Магистратура' : lang === 'uz' ? 'Magistratura' : 'Master'}
-                        </span>
-                        <span className="text-[10px] bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full font-semibold">2026–2027</span>
+                    {/* Photo header */}
+                    <div className="relative h-40 overflow-hidden bg-gradient-to-br from-[#071a10] via-[#1B4332] to-[#0a2218]">
+                      <div className="absolute inset-0 opacity-[0.07]" style={{backgroundImage:'repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%)',backgroundSize:'22px 22px'}} />
+                      {/* Logo centered */}
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <img
+                          src="https://upload.wikimedia.org/wikipedia/en/2/2f/Al_Qasimia_University_logo.png"
+                          alt="Al Qasimia University"
+                          className="h-20 w-auto object-contain drop-shadow-2xl group-hover:scale-105 transition-transform duration-500"
+                          onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+                        />
+                      </div>
+                      {/* Badges */}
+                      <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-[#C9922A] text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-md">
+                        <svg className="w-3 h-3 fill-white" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        {lang === 'ru' ? 'Приём открыт' : lang === 'uz' ? 'Qabul ochiq' : 'Admissions open'}
+                      </div>
+                      <div className="absolute top-3 right-3 w-8 h-5 rounded overflow-hidden shadow-sm">
+                        <img src="https://flagcdn.com/w40/ae.png" alt="UAE" className="w-full h-full object-cover" />
+                      </div>
+                      {/* Gradient bottom */}
+                      <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/60 to-transparent" />
+                      <div className="absolute bottom-3 left-4">
+                        <p className="text-white/50 text-xs" dir="rtl">جامعة القاسمية</p>
                       </div>
                     </div>
-                    <ChevronRight className="w-5 h-5 text-[#1B4332] shrink-0" />
+
+                    {/* Info body */}
+                    <div className="bg-white p-4">
+                      <div className="flex items-start justify-between gap-3 mb-3">
+                        <div>
+                          <p className="font-bold text-lg text-[#1B4332] leading-tight">Al Qasimia University</p>
+                          <p className="text-xs text-muted mt-0.5">📍 Sharjah, UAE · {lang === 'ru' ? 'Осн. 2009' : lang === 'uz' ? 'Asos. 2009' : 'Est. 2009'}</p>
+                        </div>
+                        <ChevronRight className="w-5 h-5 text-[#1B4332] mt-1 shrink-0 group-hover:translate-x-1 transition-transform" />
+                      </div>
+
+                      {/* Benefits row */}
+                      <div className="grid grid-cols-3 gap-2 mb-3">
+                        {[
+                          { emoji: '💰', val: '1 500 AED', sub: lang === 'ru' ? 'стипендия' : lang === 'uz' ? 'stipendiya' : 'stipend' },
+                          { emoji: '🍽️', val: lang === 'ru' ? '3 раза/день' : lang === 'uz' ? '3 mahal' : '3 meals/day', sub: lang === 'ru' ? 'питание' : lang === 'uz' ? 'ovqat' : 'meals' },
+                          { emoji: '🏠', val: lang === 'ru' ? 'Бесплатно' : lang === 'uz' ? 'Bepul' : 'Free', sub: lang === 'ru' ? 'общежитие' : lang === 'uz' ? 'yotoqxona' : 'dorm' },
+                        ].map((b, i) => (
+                          <div key={i} className="bg-[#1B4332]/5 rounded-xl p-2 text-center">
+                            <div className="text-base mb-0.5">{b.emoji}</div>
+                            <div className="text-[10px] font-bold text-[#1B4332] leading-tight">{b.val}</div>
+                            <div className="text-[9px] text-muted">{b.sub}</div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Tags */}
+                      <div className="flex flex-wrap gap-1.5">
+                        <span className="text-[10px] bg-[#1B4332]/10 text-[#1B4332] px-2.5 py-1 rounded-full font-semibold">
+                          {lang === 'ru' ? 'Бакалавриат' : lang === 'uz' ? 'Bakalavr' : 'Bachelor'}
+                        </span>
+                        <span className="text-[10px] bg-[#1B4332]/10 text-[#1B4332] px-2.5 py-1 rounded-full font-semibold">
+                          {lang === 'ru' ? 'Магистратура' : lang === 'uz' ? 'Magistratura' : "Master's"}
+                        </span>
+                        <span className="text-[10px] bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-full font-semibold">2026–2027</span>
+                        <span className="text-[10px] bg-amber-50 text-amber-700 px-2.5 py-1 rounded-full font-semibold">
+                          {lang === 'ru' ? '8 факультетов' : lang === 'uz' ? '8 fakultet' : '8 faculties'}
+                        </span>
+                      </div>
+                    </div>
                   </button>
                 </div>
 
