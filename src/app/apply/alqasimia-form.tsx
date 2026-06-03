@@ -321,9 +321,16 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
   }
 
   const validatePrograms = () => {
-    if (selectedPrograms.length < 3) {
-      toast.error(t('Выберите минимум 3 специальности', 'Kamida 3 ta yo\'nalish tanlang', 'Select at least 3 programs'))
-      return false
+    if (degreeType === 'master') {
+      if (selectedPrograms.length < 1) {
+        toast.error(t('Выберите специальность', 'Yo\'nalish tanlang', 'Select a program'))
+        return false
+      }
+    } else {
+      if (selectedPrograms.length < 3) {
+        toast.error(t('Выберите 3 специальности', 'Kamida 3 ta yo\'nalish tanlang', 'Select 3 programs'))
+        return false
+      }
     }
     if (degreeType === 'master' && !form.bachelor_university) {
       toast.error(t('Укажите данные о дипломе бакалавра', 'Bakalavr diplomi ma\'lumotlarini kiriting', 'Enter bachelor degree info'))
@@ -368,14 +375,20 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
 
   const toggleProgram = (prog: Program) => {
     const key = progKey(prog)
-    if (selectedPrograms.includes(key)) {
-      setSelectedPrograms(p => p.filter(x => x !== key))
+    if (degreeType === 'master') {
+      // Master: only 1 selection allowed — clicking another replaces current
+      setSelectedPrograms(selectedPrograms.includes(key) ? [] : [key])
     } else {
-      if (selectedPrograms.length >= 3) {
-        toast.error(t('Максимум 3 специальности', 'Maksimal 3 ta yo\'nalish', 'Maximum 3 programs'))
-        return
+      // Bachelor: up to 3
+      if (selectedPrograms.includes(key)) {
+        setSelectedPrograms(p => p.filter(x => x !== key))
+      } else {
+        if (selectedPrograms.length >= 3) {
+          toast.error(t('Максимум 3 специальности', 'Maksimal 3 ta yo\'nalish', 'Maximum 3 programs'))
+          return
+        }
+        setSelectedPrograms(p => [...p, key])
       }
-      setSelectedPrograms(p => [...p, key])
     }
   }
 
@@ -999,11 +1012,10 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                 <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{t(`Шаг 4 из ${TOTAL}`, `4-qadam ${TOTAL} tadan`, `Step 4 of ${TOTAL}`)}</p>
                 <h1 className="text-3xl font-bold text-ink">{t('Выбор специальности', 'Yo\'nalish tanlash', 'Program selection')}</h1>
                 <p className="text-muted mt-1 text-sm">
-                  {t(
-                    'Выберите минимум 3 специальности. Университет оставляет за собой право определить специальность.',
-                    'Kamida 3 ta yo\'nalish tanlang. Universitet yo\'nalishni mustaqil belgilash huquqini saqlaydi.',
-                    'Select at least 3 programs. The university reserves the right to assign one of your chosen programs.'
-                  )}
+                  {degreeType === 'master'
+                    ? t('Выберите 1 специальность.', 'Bitta yo\'nalish tanlang.', 'Select 1 program.')
+                    : t('Выберите ровно 3 специальности. Университет оставляет за собой право определить специальность.', 'Aynan 3 ta yo\'nalish tanlang. Universitet yo\'nalishni mustaqil belgilash huquqini saqlaydi.', 'Select exactly 3 programs. The university reserves the right to assign one.')
+                  }
                 </p>
               </div>
 
@@ -1027,7 +1039,8 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                         )}
                       >
                         <span className={cn(
-                          'w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-all',
+                          'w-5 h-5 border-2 flex items-center justify-center shrink-0 transition-all',
+                          degreeType === 'master' ? 'rounded-full' : 'rounded-md',
                           selected ? 'bg-[#1B4332] border-[#1B4332]' : 'border-gray-300'
                         )}>
                           {selected && <CheckCircle2 className="w-3 h-3 text-white" />}
