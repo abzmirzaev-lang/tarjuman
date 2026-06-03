@@ -77,8 +77,11 @@ export function Footer({ lang = 'ru' }: { lang?: AppLanguage }) {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="container-wide py-5 flex items-center justify-center text-xs text-white/40">
+        <div className="container-wide py-5 flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-white/40">
           <p>{t.footer.copy}</p>
+          <p className="text-center md:text-right">
+            bughyat alqasid Establishment · CR&nbsp;7051611031 · Kingdom of Saudi Arabia
+          </p>
         </div>
       </div>
     </footer>
