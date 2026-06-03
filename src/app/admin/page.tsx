@@ -122,6 +122,7 @@ export default function AdminPage() {
   const [noteText,   setNoteText]   = useState('')
   const [detailOpen, setDetailOpen] = useState(false)
   const [sending,    setSending]    = useState(false)
+  const [detailTab,  setDetailTab]  = useState<'info'|'form'|'docs'|'chat'>('info')
 
   const [startingProcessing,  setStartingProcessing]  = useState(false)
   const [completeModalOpen,   setCompleteModalOpen]   = useState(false)
@@ -154,7 +155,7 @@ export default function AdminPage() {
   }
 
   async function openDetail(app: ApplicationRow) {
-    setSelected(app); setNoteText(app.notes ?? '')
+    setSelected(app); setNoteText(app.notes ?? ''); setDetailTab('info')
     const [{ data: d }, { data: m }] = await Promise.all([
       supabase.from('documents').select('*').eq('application_id', app.id),
       supabase.from('messages').select('*').eq('application_id', app.id).order('created_at'),
@@ -219,6 +220,16 @@ export default function AdminPage() {
       setApps(prev => prev.map(a => a.id === selected.id ? { ...a, status: 'SUBMITTED' } : a))
       setSelected(prev => prev ? { ...prev, status: 'SUBMITTED' } : null)
       setAppDocs(prev => [...prev, ...newDocs])
+
+      // Авто-сообщение клиенту
+      const uniName = (selected as any).extra_data?.university ?? 'университет'
+      const clientName = selected.full_name?.split(' ')[0] ?? 'Уважаемый клиент'
+      const autoMsg = `🎓 ${clientName}, ваша заявка успешно подана в ${uniName}!\n\nВаши переведённые документы доступны в личном кабинете. Университет рассмотрит вашу заявку и свяжется с вами.\n\nЖелаем удачи! 🌟\n\n— Команда TARJUMAN`
+      await supabase.from('messages').insert({
+        application_id: selected.id, user_id: selected.user_id, sender: 'ADMIN', content: autoMsg,
+      })
+      setAppMsgs(prev => [...prev, { id: 'auto-'+Date.now(), application_id: selected.id, user_id: selected.user_id, sender: 'ADMIN', content: autoMsg, is_read: false, created_at: new Date().toISOString() }])
+
       setCompleteFiles([]); setStudysaudiLogin(''); setStudysaudiPassword(''); setCompleteModalOpen(false)
       toast.success(`✅ Подано! ${newDocs.length} документ(ов) загружено. Клиент уведомлён.`)
     } catch (e: any) { toast.error(e.message ?? 'Ошибка') }
@@ -719,157 +730,282 @@ export default function AdminPage() {
       </nav>
 
       {/* ══ DETAIL MODAL (dark) ══ */}
-      <DarkModal open={detailOpen} onClose={() => setDetailOpen(false)} title={selected?.full_name} size="xl">
-        {selected && (
-          <div className="flex max-h-[80vh]" style={{ borderTop: 'none' }}>
-            {/* Left panel */}
-            <div className="w-72 shrink-0 p-5 space-y-4 overflow-y-auto border-r border-white/[0.06]">
+      <DarkModal open={detailOpen} onClose={() => setDetailOpen(false)} size="xl">
+        {selected && (() => {
+          const ex = (selected as any).extra_data ?? {}
+          const Row = ({ label, value }: { label: string; value?: any }) =>
+            value ? (
+              <div className="flex items-start justify-between gap-3 py-2 border-b border-white/[0.04] last:border-0">
+                <span className="text-[11px] text-white/30 shrink-0 w-32">{label}</span>
+                <span className="text-xs text-white/80 font-medium text-right break-words">{value}</span>
+              </div>
+            ) : null
 
-              {selected.status === 'PAID' && (
-                <div className="rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-4">
-                  <p className="text-xs font-semibold text-emerald-400 mb-1">Ждёт обработки</p>
-                  <p className="text-xs text-white/40 mb-3">Нажмите — клиент получит email</p>
-                  <button onClick={startProcessing} disabled={startingProcessing}
-                    className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-emerald-500 text-white text-sm font-bold hover:bg-emerald-400 transition-colors disabled:opacity-50">
-                    {startingProcessing ? <><Loader2 className="w-4 h-4 animate-spin"/>Запускаю…</> : <><Play className="w-4 h-4"/>Начать обработку</>}
-                  </button>
+          return (
+            <div className="flex flex-col max-h-[90vh]">
+              {/* Header */}
+              <div className="flex items-center gap-4 px-5 py-4 border-b border-white/[0.06]">
+                <div className="w-10 h-10 rounded-xl bg-brand-400/20 flex items-center justify-center text-brand-400 font-bold text-sm shrink-0">
+                  {getInitials(selected.full_name)}
                 </div>
-              )}
-
-              {selected.status === 'IN_PROGRESS' && (
-                <div className="rounded-xl bg-blue-500/10 border border-blue-500/20 p-4">
-                  <p className="text-xs font-semibold text-blue-400 mb-1">В обработке</p>
-                  <p className="text-xs text-white/40 mb-3">Загрузите документы и завершите</p>
-                  <button onClick={() => setCompleteModalOpen(true)}
-                    className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-blue-500 text-white text-sm font-bold hover:bg-blue-400 transition-colors">
-                    <Flag className="w-4 h-4"/>Завершить обработку
-                  </button>
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-white text-base leading-tight truncate">{selected.full_name}</p>
+                  <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                    <span className={cn('text-[10px] font-bold px-2 py-0.5 rounded-full', STATUS_COLOR[selected.status])}>{STATUS_RU[selected.status]}</span>
+                    <span className="text-[11px] text-white/30">{PACKAGES[selected.service_package]?.name_ru}</span>
+                    <span className="text-[11px] text-white/30">{formatDate(selected.created_at)}</span>
+                  </div>
                 </div>
-              )}
-
-              {/* Status list */}
-              <div>
-                <p className="text-[11px] text-white/30 font-semibold uppercase tracking-wider mb-2">Статус</p>
-                <div className="space-y-0.5">
-                  {ALL_STATUSES.map(s => (
-                    <button key={s} onClick={() => changeStatus(selected.id, s)}
-                      className={cn('w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-left',
-                        selected.status === s ? 'bg-brand-400/20 text-brand-400' : 'text-white/30 hover:text-white/70 hover:bg-white/[0.05]'
-                      )}>
-                      {selected.status === s && <CheckCircle2 className="w-3 h-3"/>}
-                      {STATUS_RU[s]}
+                {/* Action buttons */}
+                <div className="flex gap-2 shrink-0">
+                  {selected.status === 'PAID' && (
+                    <button onClick={startProcessing} disabled={startingProcessing}
+                      className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-500 text-white text-xs font-bold hover:bg-emerald-400 transition-colors disabled:opacity-50">
+                      {startingProcessing ? <Loader2 className="w-3.5 h-3.5 animate-spin"/> : <Play className="w-3.5 h-3.5"/>}
+                      Начать
                     </button>
-                  ))}
+                  )}
+                  {selected.status === 'IN_PROGRESS' && (
+                    <button onClick={() => setCompleteModalOpen(true)}
+                      className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-blue-500 text-white text-xs font-bold hover:bg-blue-400 transition-colors">
+                      <Flag className="w-3.5 h-3.5"/>Завершить
+                    </button>
+                  )}
+                  <button onClick={() => setDetailOpen(false)} className="p-2 rounded-lg hover:bg-white/10 text-white/40 hover:text-white transition-colors">
+                    <X className="w-4 h-4"/>
+                  </button>
                 </div>
               </div>
 
-              {/* Info */}
-              <div>
-                <p className="text-[11px] text-white/30 font-semibold uppercase tracking-wider mb-2">Данные</p>
-                <div className="space-y-1.5 text-xs">
-                  {[
-                    ['Страна',      selected.country==='SA'?'Саудовская Аравия':'ОАЭ'],
-                    ['Пакет',       PACKAGES[selected.service_package].name_ru],
-                    ['Гражданство', selected.citizenship],
-                    ['Телефон',     selected.phone],
-                    ['Telegram',    selected.telegram],
-                    ['Образование', selected.education_level],
-                    ['Арабский',    (selected as any).arabic_level],
-                    ['Английский',  (selected as any).english_level],
-                    ['Пол',         (selected as any).gender==='male'?'Мужчина':(selected as any).gender==='female'?'Женщина':null],
-                    ['Контакт',     (selected as any).guardian_name],
-                    ['Тел. контакта', (selected as any).guardian_phone],
-                  ].map(([label, val]) => val ? (
-                    <div key={label} className="flex justify-between gap-2">
-                      <span className="text-white/30 shrink-0">{label}</span>
-                      <span className="text-white/70 font-medium text-right">{val}</span>
-                    </div>
-                  ) : null)}
-                </div>
+              {/* Tabs */}
+              <div className="flex gap-0 border-b border-white/[0.06] px-2">
+                {([
+                  { key: 'info',  label: 'Обзор'  },
+                  { key: 'form',  label: 'Анкета'  },
+                  { key: 'docs',  label: `Документы ${appDocs.length > 0 ? `(${appDocs.length})` : ''}` },
+                  { key: 'chat',  label: `Чат ${appMsgs.length > 0 ? `(${appMsgs.length})` : ''}` },
+                ] as const).map(t => (
+                  <button key={t.key} onClick={() => setDetailTab(t.key)}
+                    className={cn('px-4 py-2.5 text-xs font-medium transition-all border-b-2 -mb-px',
+                      detailTab === t.key ? 'border-brand-400 text-brand-400' : 'border-transparent text-white/30 hover:text-white/60'
+                    )}>
+                    {t.label}
+                  </button>
+                ))}
               </div>
 
-              {/* Faculties */}
-              {(selected as any).selected_faculties?.length > 0 && (
-                <div>
-                  <p className="text-[11px] text-white/30 font-semibold uppercase tracking-wider mb-2">Университеты</p>
-                  <div className="space-y-1">
-                    {(selected as any).selected_faculties.map((f: any, i: number) => (
-                      <div key={i} className="text-xs bg-white/[0.04] border border-white/[0.06] rounded-lg px-2 py-1.5">
-                        <p className="font-medium text-white/80">{f.university_name}</p>
-                        <p className="text-white/30">{f.faculty}</p>
+              {/* Tab content */}
+              <div className="flex-1 overflow-y-auto">
+
+                {/* ── INFO TAB ── */}
+                {detailTab === 'info' && (
+                  <div className="p-5 space-y-5">
+                    {/* Status control */}
+                    <div>
+                      <p className="text-[11px] text-white/30 font-semibold uppercase tracking-wider mb-2">Изменить статус</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {ALL_STATUSES.map(s => (
+                          <button key={s} onClick={() => changeStatus(selected.id, s)}
+                            className={cn('flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all',
+                              selected.status === s ? 'bg-brand-400/20 text-brand-400 border border-brand-400/30' : 'bg-white/[0.05] text-white/40 hover:text-white/70'
+                            )}>
+                            {selected.status === s && <CheckCircle2 className="w-3 h-3"/>}
+                            {STATUS_RU[s]}
+                          </button>
+                        ))}
                       </div>
+                    </div>
+
+                    {/* Quick info grid */}
+                    <div className="grid grid-cols-2 gap-3">
+                      {[
+                        { label: 'Университет', value: ex.university ?? (selected.country==='AE'?'Al Qasimia University':'—') },
+                        { label: 'Степень', value: ex.degree_type==='bachelor'?'Бакалавриат':ex.degree_type==='master'?'Магистратура':selected.education_level },
+                        { label: 'Гражданство', value: selected.citizenship ?? ex.nationality },
+                        { label: 'Телефон', value: selected.phone ?? ex.mobile },
+                        { label: 'Пакет', value: PACKAGES[selected.service_package]?.name_ru },
+                        { label: 'Страна', value: selected.country==='SA'?'Саудовская Аравия':'ОАЭ' },
+                      ].map(({ label, value }) => value ? (
+                        <div key={label} className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-3">
+                          <p className="text-[10px] text-white/30 mb-1">{label}</p>
+                          <p className="text-sm text-white font-medium truncate">{value}</p>
+                        </div>
+                      ) : null)}
+                    </div>
+
+                    {/* Selected programs */}
+                    {ex.programs?.length > 0 && (
+                      <div>
+                        <p className="text-[11px] text-white/30 font-semibold uppercase tracking-wider mb-2">Выбранные факультеты</p>
+                        <div className="flex flex-wrap gap-2">
+                          {ex.programs.map((p: string, i: number) => (
+                            <span key={i} className="text-xs bg-brand-400/10 border border-brand-400/20 text-brand-400 px-3 py-1 rounded-full" dir="rtl">{p}</span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Note */}
+                    <div>
+                      <p className="text-[11px] text-white/30 font-semibold uppercase tracking-wider mb-2">Внутренние заметки</p>
+                      <textarea
+                        className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-3 py-2.5 text-xs text-white placeholder-white/20 focus:outline-none focus:border-brand-400/50 h-24 resize-none"
+                        value={noteText} onChange={e => setNoteText(e.target.value)} placeholder="Заметки видны только администратору..."
+                      />
+                      <button onClick={saveNote} className="mt-1.5 px-4 py-1.5 rounded-lg bg-brand-400/15 text-brand-400 hover:bg-brand-400/25 text-xs font-semibold transition-all">
+                        Сохранить заметку
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* ── FORM TAB ── */}
+                {detailTab === 'form' && (
+                  <div className="p-5 space-y-5">
+                    {/* Personal */}
+                    <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl overflow-hidden">
+                      <div className="px-4 py-2.5 bg-white/[0.03] border-b border-white/[0.06]">
+                        <p className="text-xs font-bold text-white/60 uppercase tracking-wider">👤 Личные данные</p>
+                      </div>
+                      <div className="px-4 py-1">
+                        <Row label="Имя (рус/узб)" value={ex.first_name && ex.last_name ? `${ex.last_name} ${ex.first_name} ${ex.middle_name ?? ''}`.trim() : null} />
+                        <Row label="Имя на арабском" value={ex.arabic_name} />
+                        <Row label="Дата рождения" value={ex.birth_date} />
+                        <Row label="Место рождения" value={ex.birth_place} />
+                        <Row label="Страна рождения" value={ex.birth_country} />
+                        <Row label="Гражданство" value={ex.nationality ?? selected.citizenship} />
+                        <Row label="Пол" value={ex.gender==='male'?'Мужчина':ex.gender==='female'?'Женщина':ex.gender} />
+                        <Row label="Семейное положение" value={ex.marital_status} />
+                        <Row label="Паспорт №" value={ex.passport_number} />
+                        <Row label="Дата выдачи" value={ex.passport_issued} />
+                        <Row label="Срок действия" value={ex.passport_expiry} />
+                        <Row label="Кем выдан" value={ex.passport_issuedby} />
+                      </div>
+                    </div>
+
+                    {/* Contacts */}
+                    <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl overflow-hidden">
+                      <div className="px-4 py-2.5 bg-white/[0.03] border-b border-white/[0.06]">
+                        <p className="text-xs font-bold text-white/60 uppercase tracking-wider">📞 Контакты и семья</p>
+                      </div>
+                      <div className="px-4 py-1">
+                        <Row label="Email" value={ex.email ?? selected.email} />
+                        <Row label="Мобильный" value={ex.mobile ?? selected.phone} />
+                        <Row label="WhatsApp" value={ex.whatsapp} />
+                        <Row label="Домашний тел." value={ex.home_phone} />
+                        <Row label="Ближайший аэропорт" value={ex.nearest_airport} />
+                        <Row label="Telegram" value={ex.telegram ?? selected.telegram} />
+                        <Row label="Skype" value={ex.skype} />
+                        <Row label="Instagram" value={ex.instagram} />
+                        <Row label="Facebook" value={ex.facebook} />
+                        <Row label="Отец — имя" value={ex.father_name} />
+                        <Row label="Отец — тел." value={ex.father_phone} />
+                        <Row label="Мать — имя" value={ex.mother_name} />
+                        <Row label="Мать — тел." value={ex.mother_phone} />
+                      </div>
+                    </div>
+
+                    {/* Education */}
+                    <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl overflow-hidden">
+                      <div className="px-4 py-2.5 bg-white/[0.03] border-b border-white/[0.06]">
+                        <p className="text-xs font-bold text-white/60 uppercase tracking-wider">🎓 Образование</p>
+                      </div>
+                      <div className="px-4 py-1">
+                        <Row label="Тип учеб. заведения" value={ex.school_type} />
+                        <Row label="Название" value={ex.school_name} />
+                        <Row label="Страна" value={ex.school_country} />
+                        <Row label="Город" value={ex.school_city} />
+                        <Row label="Язык обучения" value={ex.school_language} />
+                        <Row label="Дата окончания" value={ex.graduation_date} />
+                        <Row label="Средний балл (GPA)" value={ex.gpa} />
+                        <Row label="Языки" value={Array.isArray(ex.known_languages) ? ex.known_languages.join(', ') : ex.known_languages} />
+                        <Row label="Лет изучал арабский" value={ex.arabic_years} />
+                        <Row label="Где изучал арабский" value={ex.arabic_institute} />
+                        {/* Bachelor info (for masters) */}
+                        <Row label="Университет (бакалавр)" value={ex.bachelor_university} />
+                        <Row label="Специальность (бакалавр)" value={ex.bachelor_speciality} />
+                        <Row label="Год окончания (бакалавр)" value={ex.bachelor_year} />
+                        <Row label="GPA (бакалавр)" value={ex.bachelor_gpa} />
+                      </div>
+                    </div>
+
+                    {/* Programs */}
+                    {ex.programs?.length > 0 && (
+                      <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl overflow-hidden">
+                        <div className="px-4 py-2.5 bg-white/[0.03] border-b border-white/[0.06]">
+                          <p className="text-xs font-bold text-white/60 uppercase tracking-wider">📚 Выбранные программы ({ex.degree_type==='bachelor'?'Бакалавриат':'Магистратура'})</p>
+                        </div>
+                        <div className="px-4 py-3 flex flex-wrap gap-2">
+                          {ex.programs.map((p: string, i: number) => (
+                            <span key={i} className="text-xs bg-brand-400/10 border border-brand-400/20 text-brand-400 px-3 py-1.5 rounded-full" dir="rtl">{p}</span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* ── DOCS TAB ── */}
+                {detailTab === 'docs' && (
+                  <div className="p-5 space-y-3">
+                    {appDocs.length === 0 ? (
+                      <div className="text-center py-12 text-white/20 text-sm">Документов нет</div>
+                    ) : appDocs.map(doc => (
+                      <button key={doc.id} onClick={() => downloadDoc(doc)}
+                        className="w-full flex items-center gap-3 p-4 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.06] hover:border-brand-400/30 transition-all group text-left">
+                        <div className="w-10 h-10 rounded-xl bg-brand-400/10 flex items-center justify-center shrink-0">
+                          <FileText className="w-4 h-4 text-brand-400"/>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm text-white font-medium truncate group-hover:text-brand-400 transition-colors">{doc.file_name}</p>
+                          <p className="text-xs text-white/30 mt-0.5">{doc.mime_type} · {formatDate(doc.created_at)}</p>
+                        </div>
+                        <Download className="w-4 h-4 text-white/20 group-hover:text-brand-400 transition-colors shrink-0"/>
+                      </button>
                     ))}
                   </div>
-                </div>
-              )}
+                )}
 
-              {/* Note */}
-              <div>
-                <p className="text-[11px] text-white/30 font-semibold uppercase tracking-wider mb-2">Заметки</p>
-                <textarea
-                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-3 py-2 text-xs text-white placeholder-white/20 focus:outline-none focus:border-brand-400/50 h-20 resize-none"
-                  value={noteText} onChange={e => setNoteText(e.target.value)} placeholder="Внутренние заметки..."
-                />
-                <button onClick={saveNote} className="mt-1 w-full py-1.5 rounded-lg bg-white/[0.06] text-white/40 hover:text-white hover:bg-white/[0.1] text-xs font-medium transition-all">
-                  Сохранить
-                </button>
-              </div>
-
-              {/* Documents */}
-              <div>
-                <p className="text-[11px] text-white/30 font-semibold uppercase tracking-wider mb-2">Документы ({appDocs.length})</p>
-                <div className="space-y-1">
-                  {appDocs.map(doc => (
-                    <button key={doc.id} onClick={() => downloadDoc(doc)}
-                      className="w-full flex items-center gap-2 p-2 rounded-lg hover:bg-white/[0.05] transition-colors text-left group">
-                      <FileText className="w-3.5 h-3.5 text-brand-400 shrink-0"/>
-                      <span className="text-xs text-white/60 flex-1 truncate group-hover:text-white">{doc.file_name}</span>
-                      <Download className="w-3 h-3 text-white/20 group-hover:text-white/60"/>
-                    </button>
-                  ))}
-                  {appDocs.length === 0 && <p className="text-xs text-white/20">Нет документов</p>}
-                </div>
-              </div>
-            </div>
-
-            {/* Right: chat */}
-            <div className="flex-1 flex flex-col min-w-0">
-              <div className="px-5 py-3 border-b border-white/[0.06]">
-                <p className="text-sm font-semibold text-white">Сообщения</p>
-              </div>
-              <div className="flex-1 overflow-y-auto p-4 space-y-3">
-                {appMsgs.map(msg => (
-                  <div key={msg.id} className={cn('flex', msg.sender==='ADMIN'?'justify-end':'justify-start')}>
-                    <div className={cn('max-w-[75%] rounded-2xl px-4 py-2.5 text-sm',
-                      msg.sender==='ADMIN'?'bg-brand-400 text-ink rounded-br-sm':'bg-white/[0.08] text-white rounded-bl-sm'
-                    )}>
-                      <p className={cn('text-[10px] font-semibold mb-0.5', msg.sender==='ADMIN'?'text-ink/60':'text-brand-400')}>
-                        {msg.sender==='ADMIN'?'Admin':selected.full_name}
-                      </p>
-                      <p>{msg.content}</p>
-                      <p className={cn('text-[10px] mt-1', msg.sender==='ADMIN'?'text-ink/40':'text-white/30')}>
-                        {formatDate(msg.created_at)}
-                      </p>
+                {/* ── CHAT TAB ── */}
+                {detailTab === 'chat' && (
+                  <div className="flex flex-col h-[50vh]">
+                    <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                      {appMsgs.map(msg => (
+                        <div key={msg.id} className={cn('flex', msg.sender==='ADMIN'?'justify-end':'justify-start')}>
+                          <div className={cn('max-w-[80%] rounded-2xl px-4 py-3 text-sm',
+                            msg.sender==='ADMIN'?'bg-brand-400 text-ink rounded-br-sm':'bg-white/[0.08] text-white rounded-bl-sm'
+                          )}>
+                            <p className={cn('text-[10px] font-bold mb-1', msg.sender==='ADMIN'?'text-ink/50':'text-brand-400')}>
+                              {msg.sender==='ADMIN'?'Администратор':selected.full_name}
+                            </p>
+                            <p className="whitespace-pre-wrap leading-relaxed">{msg.content}</p>
+                            <p className={cn('text-[10px] mt-1.5', msg.sender==='ADMIN'?'text-ink/40':'text-white/30')}>
+                              {formatDate(msg.created_at)}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                      {appMsgs.length === 0 && <div className="text-center text-white/20 text-sm py-12">Сообщений нет</div>}
+                    </div>
+                    <div className="p-3 border-t border-white/[0.06] flex gap-2">
+                      <input
+                        className="flex-1 bg-white/[0.05] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-brand-400/50 transition-all"
+                        placeholder="Написать клиенту..."
+                        value={msgText} onChange={e => setMsgText(e.target.value)}
+                        onKeyDown={e => e.key==='Enter' && sendAdminMessage()}
+                      />
+                      <button onClick={sendAdminMessage} disabled={sending || !msgText.trim()}
+                        className="px-4 py-2 rounded-xl bg-brand-400 text-ink font-bold hover:bg-brand-300 transition-colors disabled:opacity-40">
+                        {sending ? <Loader2 className="w-4 h-4 animate-spin"/> : <Send className="w-4 h-4"/>}
+                      </button>
                     </div>
                   </div>
-                ))}
-                {appMsgs.length === 0 && <div className="text-center text-white/20 text-sm py-8">Нет сообщений</div>}
-              </div>
-              <div className="p-3 border-t border-white/[0.06] flex gap-2">
-                <input
-                  className="flex-1 bg-white/[0.05] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-brand-400/50 transition-all"
-                  placeholder="Написать клиенту..."
-                  value={msgText} onChange={e => setMsgText(e.target.value)}
-                  onKeyDown={e => e.key==='Enter' && sendAdminMessage()}
-                />
-                <button onClick={sendAdminMessage} disabled={sending || !msgText.trim()}
-                  className="px-4 py-2 rounded-xl bg-brand-400 text-ink font-bold hover:bg-brand-300 transition-colors disabled:opacity-40">
-                  {sending ? <Loader2 className="w-4 h-4 animate-spin"/> : <Send className="w-4 h-4"/>}
-                </button>
+                )}
+
               </div>
             </div>
-          </div>
-        )}
+          )
+        })()}
       </DarkModal>
 
       {/* ══ COMPLETE MODAL (dark) ══ */}
@@ -880,8 +1016,12 @@ export default function AdminPage() {
         size="md"
       >
         <div className="p-6 space-y-5">
-          <div className="rounded-xl bg-blue-500/10 border border-blue-500/20 p-4 text-sm text-blue-300">
-            Загрузите переведённые документы и укажите данные для входа на studyinsaudi.com. Клиент получит всё на почту.
+          {/* SMS preview */}
+          <div className="rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-4">
+            <p className="text-xs font-bold text-emerald-400 mb-2">📨 Сообщение клиенту (отправится автоматически)</p>
+            <div className="bg-white/[0.05] rounded-lg p-3 text-xs text-white/70 leading-relaxed whitespace-pre-wrap">
+              {`🎓 ${selected?.full_name?.split(' ')[0] ?? 'Клиент'}, ваша заявка успешно подана в ${(selected as any)?.extra_data?.university ?? 'Al Qasimia University'}!\n\nВаши переведённые документы доступны в личном кабинете. Университет рассмотрит вашу заявку и свяжется с вами.\n\nЖелаем удачи! 🌟\n\n— Команда TARJUMAN`}
+            </div>
           </div>
 
           {/* StudyInSaudi credentials */}
