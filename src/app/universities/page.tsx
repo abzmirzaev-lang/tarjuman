@@ -2,7 +2,7 @@
 import { useLanguage } from '@/hooks/useLanguage'
 import { useState, useEffect, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, ExternalLink, GraduationCap, MapPin, X, Users, Calendar, Star, BookOpen, Globe2 } from 'lucide-react'
+import { Search, ExternalLink, GraduationCap, MapPin, X, Users, Calendar, Star, BookOpen, Globe2, Banknote, UtensilsCrossed, BedDouble, FileCheck, Instagram, Facebook } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Navbar } from '@/components/layout/Navbar'
@@ -208,6 +208,13 @@ const UNI_EXTRA: Record<string, {
     photo: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=75',
     color: 'from-violet-900 to-purple-700',
     desc_ru: 'Государственный университет ОАЭ, основан в 1998 году в честь шейха Зайеда. Кампусы в Абу-Даби и Дубае. Программы на английском языке по бизнесу, коммуникациям, искусству и образованию.',
+  },
+  'Al Qasimia University': {
+    founded: 2009,
+    students: '5,000+',
+    photo: 'https://images.unsplash.com/photo-1564769662533-4f00a87b4056?w=800&q=75',
+    color: 'from-[#1B4332] to-emerald-600',
+    desc_ru: 'Исламский университет в Шардже (ОАЭ), основан в 2009 году шейхом Султаном бин Мухаммад аль-Касими. Специализируется на исламских науках, арабском языке, праве и экономике. Ведёт обучение на арабском языке. Иностранным студентам предоставляется стипендия, питание и общежитие.',
   },
 }
 const DEFAULT_EXTRA = {
@@ -560,6 +567,161 @@ function UniversitiesContent() {
                     </div>
                   )}
                 </div>
+
+                {/* Al Qasimia special sections */}
+                {selected.name_en === 'Al Qasimia University' && (
+                  <>
+                    {/* Benefits */}
+                    <div>
+                      <p className="text-xs font-semibold text-ink uppercase tracking-wider mb-3">
+                        {lang === 'ru' ? 'Что даёт университет студентам' : lang === 'uz' ? 'Universitet talabalariga nima beradi' : 'What the university provides'}
+                      </p>
+                      <div className="grid grid-cols-3 gap-3">
+                        <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-4 flex flex-col items-center text-center gap-2">
+                          <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
+                            <Banknote className="w-5 h-5 text-emerald-700" />
+                          </div>
+                          <div className="text-base font-bold text-emerald-800">1 500 AED</div>
+                          <div className="text-[11px] text-emerald-600 leading-tight">
+                            {lang === 'ru' ? 'стипендия в месяц' : lang === 'uz' ? 'oylik stipendiya' : 'monthly stipend'}
+                          </div>
+                        </div>
+                        <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4 flex flex-col items-center text-center gap-2">
+                          <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+                            <UtensilsCrossed className="w-5 h-5 text-amber-700" />
+                          </div>
+                          <div className="text-base font-bold text-amber-800">
+                            {lang === 'ru' ? '3 раза' : lang === 'uz' ? '3 marta' : '3 times'}
+                          </div>
+                          <div className="text-[11px] text-amber-600 leading-tight">
+                            {lang === 'ru' ? 'питание в день' : lang === 'uz' ? 'kunlik ovqat' : 'meals per day'}
+                          </div>
+                        </div>
+                        <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 flex flex-col items-center text-center gap-2">
+                          <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                            <BedDouble className="w-5 h-5 text-blue-700" />
+                          </div>
+                          <div className="text-base font-bold text-blue-800">
+                            {lang === 'ru' ? 'Общежитие' : lang === 'uz' ? 'Yotoqxona' : 'Dormitory'}
+                          </div>
+                          <div className="text-[11px] text-blue-600 leading-tight">
+                            {lang === 'ru' ? 'бесплатное проживание' : lang === 'uz' ? 'bepul turar joy' : 'free accommodation'}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Faculties */}
+                    <div>
+                      <p className="text-xs font-semibold text-ink uppercase tracking-wider mb-3">
+                        {lang === 'ru' ? 'Факультеты — Бакалавриат' : lang === 'uz' ? 'Fakultetlar — Bakalavr' : 'Faculties — Bachelor'}
+                      </p>
+                      <div className="space-y-1.5">
+                        {[
+                          { ar: 'تفسير وعلوم القرآن',      ru: 'Толкование и науки Корана',       uz: 'Tafsir va Qur\'on fanlari' },
+                          { ar: 'اللغة العربية وآدابها',    ru: 'Арабский язык и литература',      uz: 'Arab tili va adabiyoti' },
+                          { ar: 'الإعلام',                  ru: 'Медиа и журналистика',             uz: 'Media va jurnalistika' },
+                          { ar: 'الاقتصاد',                 ru: 'Экономика',                        uz: 'Iqtisodiyot' },
+                          { ar: 'أصول الدين',               ru: 'Основы религии (Акыда)',           uz: 'Din asoslari (Aqida)' },
+                          { ar: 'الفقه وأصوله',             ru: 'Исламское право (Фикх)',           uz: 'Islom huquqi (Fiqh)' },
+                          { ar: 'الحضارة والتاريخ الإسلامي',ru: 'Исламская цивилизация и история', uz: 'Islom sivilizatsiyasi va tarixi' },
+                          { ar: 'القراءات',                 ru: 'Чтение Корана (Кираат)',           uz: 'Qur\'on qiroati (Qiroat)' },
+                        ].map((f, i) => (
+                          <div key={i} className="flex items-center justify-between py-2 px-3 rounded-xl bg-gray-50 hover:bg-emerald-50 transition-colors">
+                            <span className="text-sm text-ink font-medium">
+                              {lang === 'ru' ? f.ru : lang === 'uz' ? f.uz : f.ar}
+                            </span>
+                            <span className="text-xs text-gray-400" dir="rtl">{f.ar}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <p className="text-xs font-semibold text-ink uppercase tracking-wider mt-4 mb-3">
+                        {lang === 'ru' ? 'Факультеты — Магистратура' : lang === 'uz' ? 'Fakultetlar — Magistratura' : 'Faculties — Master\'s'}
+                      </p>
+                      <div className="space-y-1.5">
+                        {[
+                          { ar: 'اللغة العربية وآدابها', ru: 'Арабский язык и литература', uz: 'Arab tili va adabiyoti' },
+                          { ar: 'الفقه وأصوله',          ru: 'Исламское право (Фикх)',    uz: 'Islom huquqi (Fiqh)' },
+                          { ar: 'التفسير والحديث',       ru: 'Тафсир и хадисоведение',   uz: 'Tafsir va hadis ilmi' },
+                        ].map((f, i) => (
+                          <div key={i} className="flex items-center justify-between py-2 px-3 rounded-xl bg-gray-50 hover:bg-emerald-50 transition-colors">
+                            <span className="text-sm text-ink font-medium">
+                              {lang === 'ru' ? f.ru : lang === 'uz' ? f.uz : f.ar}
+                            </span>
+                            <span className="text-xs text-gray-400" dir="rtl">{f.ar}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Required documents */}
+                    <div>
+                      <p className="text-xs font-semibold text-ink uppercase tracking-wider mb-3">
+                        {lang === 'ru' ? 'Необходимые документы' : lang === 'uz' ? 'Kerakli hujjatlar' : 'Required Documents'}
+                      </p>
+                      <div className="space-y-2">
+                        {(lang === 'uz' ? [
+                          'Xorijiy pasport (faqat bosh sahifasi)',
+                          '11-sinf attestati',
+                          '9-sinf o\'qish baholar jadvali',
+                          '10-sinf o\'qish baholar jadvali',
+                          'Bir dona fotosurat (3×4), rangli, oq fonda',
+                          'Tibbiy ma\'lumotnoma (086 shakli)',
+                          'Ta\'lim yoki ish joyidan tavsifnoma',
+                          'Tug\'ilish guvohnomasi',
+                          'Al-Qosimiya universitetining Instagram yoki Facebook sahifasiga obuna bo\'lganingizni tasdiqlash skrini',
+                        ] : lang === 'en' ? [
+                          'Passport (main page only)',
+                          '11th grade certificate',
+                          '9th grade transcript',
+                          '10th grade transcript',
+                          'One photo (3×4 cm), color on white background',
+                          'Medical certificate (form 086)',
+                          'Reference letter from school, university or workplace',
+                          'Birth certificate',
+                          'Screenshot confirming subscription to Al Qasimia Instagram or Facebook',
+                        ] : [
+                          'Загранпаспорт (только главная страница)',
+                          'Аттестат 11 класса',
+                          'Табель оценок за 9-й класс',
+                          'Табель оценок за 10-й класс',
+                          'Одна фотокарточка (3×4), цветной на белом фоне',
+                          'Медицинская справка формы 086',
+                          'Характеристика с места учёбы (школы, университета) или работы',
+                          'Свидетельство о рождении',
+                          'Скрин экрана, что вы подписаны на Instagram или Facebook вуза',
+                        ]).map((doc, i) => (
+                          <div key={i} className="flex items-start gap-3 py-2 px-3 rounded-xl bg-gray-50">
+                            <div className="w-5 h-5 bg-emerald-100 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                              <FileCheck className="w-3 h-3 text-emerald-700" />
+                            </div>
+                            <span className="text-sm text-ink">{doc}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="mt-3 flex gap-3">
+                        <a
+                          href="https://www.instagram.com/alqasimiauni/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-pink-200 bg-pink-50 text-pink-700 text-xs font-medium hover:bg-pink-100 transition-colors"
+                        >
+                          <Instagram className="w-4 h-4" />
+                          Instagram
+                        </a>
+                        <a
+                          href="https://www.facebook.com/AlQasimiaUni/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-blue-200 bg-blue-50 text-blue-700 text-xs font-medium hover:bg-blue-100 transition-colors"
+                        >
+                          <Facebook className="w-4 h-4" />
+                          Facebook
+                        </a>
+                      </div>
+                    </div>
+                  </>
+                )}
 
                 {/* Footer actions */}
                 <div className="border-t border-border p-4 sm:p-5 flex gap-3 shrink-0">
