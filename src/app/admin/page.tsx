@@ -158,13 +158,11 @@ export default function AdminPage() {
     const rawNotes = app.notes ?? ''
     const isJson = rawNotes.trimStart().startsWith('{') || rawNotes.trimStart().startsWith('[')
     setSelected(app); setNoteText(isJson ? '' : rawNotes); setDetailTab('info')
-    const [{ data: d1 }, { data: d2 }, { data: m }] = await Promise.all([
+    const [{ data: d1 }, { data: m }] = await Promise.all([
       supabase.from('documents').select('*').eq('application_id', app.id).order('created_at'),
-      supabase.from('documents').select('*').eq('user_id', app.user_id).order('created_at'),
       supabase.from('messages').select('*').eq('application_id', app.id).order('created_at'),
     ])
-    const allDocs = [...(d1 ?? []), ...(d2 ?? [])]
-    const uniqueDocs = allDocs.filter((d, i, arr) => arr.findIndex(x => x.id === d.id) === i)
+    const uniqueDocs = d1 ?? []
     setAppDocs(uniqueDocs); setAppMsgs(m ?? [])
     setDetailOpen(true)
   }
@@ -737,7 +735,10 @@ export default function AdminPage() {
       {/* ══ DETAIL MODAL (dark) ══ */}
       <DarkModal open={detailOpen} onClose={() => setDetailOpen(false)} size="xl">
         {selected && (() => {
-          const ex = (selected as any).extra_data ?? {}
+          const rawExtra = (selected as any).extra_data
+        const ex: any = (rawExtra && Object.keys(rawExtra).length > 0)
+          ? rawExtra
+          : (() => { try { return JSON.parse((selected as any).notes ?? '{}') } catch { return {} } })()
           const Row = ({ label, value }: { label: string; value?: any }) =>
             value ? (
               <div className="flex items-start justify-between gap-3 py-2 border-b border-white/[0.04] last:border-0">
