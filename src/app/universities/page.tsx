@@ -2,7 +2,7 @@
 import { useLanguage } from '@/hooks/useLanguage'
 import { useState, useEffect, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, ExternalLink, GraduationCap, MapPin, X, Users, Calendar, Star, BookOpen, Globe2, Banknote, UtensilsCrossed, BedDouble, FileCheck, Instagram, Facebook } from 'lucide-react'
+import { Search, ExternalLink, GraduationCap, MapPin, X, Users, Calendar, Star, BookOpen, Globe2, Banknote, UtensilsCrossed, BedDouble, FileCheck, Instagram, Facebook, ShieldCheck } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Navbar } from '@/components/layout/Navbar'
@@ -400,6 +400,86 @@ function UniversitiesContent() {
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filtered.map((uni, i) => {
                 const extra = getExtra(uni)
+                const isAQ = uni.name_en === 'Al Qasimia University'
+
+                if (isAQ) return (
+                  <motion.div
+                    key={uni.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                    className="card overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 ring-2 ring-[#1B4332]/20"
+                  >
+                    {/* AQ card header */}
+                    <div className="relative h-48 overflow-hidden bg-gradient-to-br from-[#071a10] via-[#1B4332] to-[#0a2218]">
+                      <div className="absolute inset-0 opacity-[0.08]" style={{backgroundImage:'repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%)',backgroundSize:'20px 20px'}} />
+                      <div className="absolute top-3 left-3 z-20 flex items-center gap-1 bg-[#C9922A] text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-md">
+                        <Star className="w-3 h-3 fill-white" />
+                        {lang === 'ru' ? 'Приём открыт' : lang === 'uz' ? 'Qabul ochiq' : 'Admissions open'}
+                      </div>
+                      <div className="absolute top-3 right-3 z-20 w-7 h-5 rounded overflow-hidden shadow-sm">
+                        <img src="https://flagcdn.com/w40/ae.png" alt="UAE" className="w-full h-full object-cover" />
+                      </div>
+                      <div className="absolute inset-0 flex items-center justify-center z-10">
+                        <img
+                          src="https://upload.wikimedia.org/wikipedia/en/2/2f/Al_Qasimia_University_logo.png"
+                          alt="Al Qasimia University"
+                          className="h-20 w-auto object-contain drop-shadow-xl group-hover:scale-105 transition-transform duration-500"
+                          onError={e => { (e.target as HTMLImageElement).style.display = 'none' }}
+                        />
+                      </div>
+                      <div className="absolute bottom-0 left-0 right-0 z-20 p-4 bg-gradient-to-t from-black/70 to-transparent">
+                        <h3 className="font-bold text-white text-base leading-tight">{uni[nameKey]}</h3>
+                        <div className="flex items-center gap-1 text-white/70 text-xs mt-1">
+                          <MapPin className="w-3 h-3" /> Sharjah, UAE
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Benefits mini row */}
+                    <div className="grid grid-cols-3 gap-0 border-b border-gray-100">
+                      {[
+                        { icon: <Banknote className="w-3.5 h-3.5" />, label: '1 500 AED' },
+                        { icon: <UtensilsCrossed className="w-3.5 h-3.5" />, label: lang === 'ru' ? '3 раза/день' : lang === 'uz' ? '3 mahal' : '3 meals/day' },
+                        { icon: <BedDouble className="w-3.5 h-3.5" />, label: lang === 'ru' ? 'Общежитие' : lang === 'uz' ? 'Yotoqxona' : 'Dorm' },
+                      ].map((b, j) => (
+                        <div key={j} className="flex flex-col items-center gap-1 py-2.5 text-[#1B4332] border-r last:border-r-0 border-gray-100">
+                          {b.icon}
+                          <span className="text-[10px] font-semibold">{b.label}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="p-4 space-y-3">
+                      <div className="flex items-center gap-4 text-xs text-muted">
+                        <div className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" /><span>{foundedLabel} 2009</span></div>
+                        <div className="flex items-center gap-1"><Users className="w-3.5 h-3.5" /><span>5,000+ {studentsLabel}</span></div>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {['Islamic Studies','Arabic Language','Shariah','Quran'].slice(0,3).map(p => (
+                          <span key={p} className="badge badge-green text-[10px]">{lang === 'ru' ? (PROGRAMS_RU[p] ?? p) : p}</span>
+                        ))}
+                        <span className="badge badge-gray text-[10px]">+8</span>
+                      </div>
+                      <div className="flex items-center justify-between pt-1">
+                        <Link
+                          href="/universities/al-qasimia"
+                          className="text-xs text-brand-500 font-medium group-hover:underline"
+                        >
+                          {detailLabel} →
+                        </Link>
+                        <Link
+                          href="/apply?country=AE"
+                          onClick={e => e.stopPropagation()}
+                          className="btn btn-primary btn-sm px-3 py-1.5 text-xs"
+                        >
+                          {applyLabel}
+                        </Link>
+                      </div>
+                    </div>
+                  </motion.div>
+                )
+
                 return (
                   <motion.div
                     key={uni.id}
@@ -409,93 +489,43 @@ function UniversitiesContent() {
                     onClick={() => setSelected(uni)}
                     className="card overflow-hidden cursor-pointer group hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                   >
-                    {uni.name_en === 'Al Qasimia University' ? (
-                      <div className="relative h-44 overflow-hidden bg-gradient-to-br from-[#0d2b1e] via-[#1B4332] to-[#0d2b1e]">
-                        {/* Decorative pattern */}
-                        <div className="absolute inset-0 opacity-10" style={{backgroundImage:'repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%)',backgroundSize:'20px 20px'}} />
-                        {/* Featured badge */}
-                        <div className="absolute top-3 left-3 z-20 flex items-center gap-1 bg-[#C9922A] text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow">
-                          <Star className="w-3 h-3 fill-white" />
-                          {lang === 'ru' ? 'Доступно сейчас' : lang === 'uz' ? 'Hozir mavjud' : 'Open now'}
+                    <div className="relative h-44 overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-br from-green-900 to-green-700 opacity-50 z-10" />
+                      <img
+                        src={extra.photo}
+                        alt={uni.name_en}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        onError={e => { (e.target as HTMLImageElement).style.display = 'none' }}
+                      />
+                      {uni.rank <= 5 && (
+                        <div className="absolute top-3 left-3 z-20 flex items-center gap-1 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full">
+                          <Star className="w-3 h-3" /> Топ {uni.rank}
                         </div>
-                        <div className="absolute top-3 right-3 z-20">
-                          <span className="w-7 h-5 rounded overflow-hidden shadow-sm inline-flex">
-                            <img src="https://flagcdn.com/w40/ae.png" alt="UAE" className="w-full h-full object-cover" />
-                          </span>
-                        </div>
-                        {/* Logo centered */}
-                        <div className="absolute inset-0 flex items-center justify-center z-10">
-                          <img
-                            src="https://upload.wikimedia.org/wikipedia/en/2/2f/Al_Qasimia_University_logo.png"
-                            alt="Al Qasimia University"
-                            className="h-20 w-auto object-contain drop-shadow-lg"
-                            onError={e => { (e.target as HTMLImageElement).style.display = 'none' }}
-                          />
-                        </div>
-                        <div className="absolute bottom-0 left-0 right-0 z-20 p-4 bg-gradient-to-t from-black/60 to-transparent">
-                          <h3 className="font-bold text-white text-base leading-tight drop-shadow">{uni[nameKey]}</h3>
-                          <div className="flex items-center gap-1 text-white/80 text-xs mt-1">
-                            <MapPin className="w-3 h-3" /> Sharjah, UAE
-                          </div>
-                        </div>
+                      )}
+                      <div className="absolute top-3 right-3 z-20">
+                        <span className="w-7 h-5 rounded overflow-hidden shadow-sm inline-flex">
+                          <img src={`https://flagcdn.com/w40/${uni.country.toLowerCase()}.png`} alt={uni.country} className="w-full h-full object-cover" />
+                        </span>
                       </div>
-                    ) : (
-                      <div className="relative h-44 overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-br from-green-900 to-green-700 opacity-50 z-10" />
-                        <img
-                          src={extra.photo}
-                          alt={uni.name_en}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          onError={e => { (e.target as HTMLImageElement).style.display = 'none' }}
-                        />
-                        {uni.rank <= 5 && (
-                          <div className="absolute top-3 left-3 z-20 flex items-center gap-1 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full">
-                            <Star className="w-3 h-3" /> Топ {uni.rank}
-                          </div>
-                        )}
-                        <div className="absolute top-3 right-3 z-20">
-                          <span className="w-7 h-5 rounded overflow-hidden shadow-sm inline-flex">
-                            <img src={`https://flagcdn.com/w40/${uni.country.toLowerCase()}.png`} alt={uni.country} className="w-full h-full object-cover" />
-                          </span>
-                        </div>
-                        <div className="absolute bottom-0 left-0 right-0 z-20 p-4">
-                          <h3 className="font-bold text-white text-base leading-tight drop-shadow">{uni[nameKey]}</h3>
-                          {uni.city && (
-                            <div className="flex items-center gap-1 text-white/80 text-xs mt-1">
-                              <MapPin className="w-3 h-3" /> {uni.city}
-                            </div>
-                          )}
-                        </div>
+                      <div className="absolute bottom-0 left-0 right-0 z-20 p-4">
+                        <h3 className="font-bold text-white text-base leading-tight drop-shadow">{uni[nameKey]}</h3>
+                        {uni.city && <div className="flex items-center gap-1 text-white/80 text-xs mt-1"><MapPin className="w-3 h-3" /> {uni.city}</div>}
                       </div>
-                    )}
+                    </div>
 
                     <div className="p-4 space-y-3">
                       <div className="flex items-center gap-4 text-xs text-muted">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="w-3.5 h-3.5" />
-                          <span>{foundedLabel} {extra.founded}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Users className="w-3.5 h-3.5" />
-                          <span>{extra.students} {studentsLabel}</span>
-                        </div>
+                        <div className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" /><span>{foundedLabel} {extra.founded}</span></div>
+                        <div className="flex items-center gap-1"><Users className="w-3.5 h-3.5" /><span>{extra.students} {studentsLabel}</span></div>
                       </div>
-
                       <div className="flex flex-wrap gap-1.5">
                         {uni.programs.slice(0, 3).map(p => (
-                          <span key={p} className="badge badge-green text-[10px]">
-                            {lang === 'ru' ? (PROGRAMS_RU[p] ?? p) : p}
-                          </span>
+                          <span key={p} className="badge badge-green text-[10px]">{lang === 'ru' ? (PROGRAMS_RU[p] ?? p) : p}</span>
                         ))}
-                        {uni.programs.length > 3 && (
-                          <span className="badge badge-gray text-[10px]">+{uni.programs.length - 3}</span>
-                        )}
+                        {uni.programs.length > 3 && <span className="badge badge-gray text-[10px]">+{uni.programs.length - 3}</span>}
                       </div>
-
                       <div className="flex items-center justify-between pt-1">
-                        <span className="text-xs text-brand-500 font-medium group-hover:underline">
-                          {detailLabel} →
-                        </span>
+                        <span className="text-xs text-brand-500 font-medium group-hover:underline">{detailLabel} →</span>
                         <Link
                           href={`/apply?university=${uni.id}&country=${uni.country}`}
                           onClick={e => e.stopPropagation()}
