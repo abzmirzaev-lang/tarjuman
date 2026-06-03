@@ -145,6 +145,44 @@ function Field({ label, required, children }: { label: string; required?: boolea
 const INPUT = "w-full h-11 px-4 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 transition-all bg-white"
 const SELECT = "w-full h-11 px-4 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 transition-all bg-white appearance-none"
 
+// ── Helpers (outside component to avoid focus loss on re-render) ──────────────
+
+function YesNo({ value, onChange, ru }: { value: string; onChange: (v: string) => void; ru: boolean }) {
+  return (
+    <select value={value} onChange={e => onChange(e.target.value)} className={SELECT}>
+      <option value="">{ru ? 'Выберите...' : 'Select...'}</option>
+      <option value="yes">{ru ? 'Да' : 'Yes'}</option>
+      <option value="no">{ru ? 'Нет' : 'No'}</option>
+    </select>
+  )
+}
+
+function SectionHeader({ title, optional, ru }: { title: string; optional?: boolean; ru: boolean }) {
+  return (
+    <div className="px-6 py-4 border-b border-gray-50 bg-gray-50/50 flex items-center justify-between">
+      <p className="text-xs font-semibold text-muted uppercase tracking-wider">{title}</p>
+      {optional && <span className="text-[11px] text-muted bg-gray-100 px-2 py-0.5 rounded-full">{ru ? 'Необязательно' : 'Optional'}</span>}
+    </div>
+  )
+}
+
+function Card({ children }: { children: React.ReactNode }) {
+  return <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-4">{children}</div>
+}
+
+function NavButtons({ onBack, onNext, ru }: { onBack: () => void; onNext: () => void; ru: boolean }) {
+  return (
+    <div className="flex justify-between mt-8">
+      <button onClick={onBack} className="flex items-center gap-2 px-5 py-3 bg-white border border-gray-200 text-ink text-sm font-medium rounded-xl hover:bg-gray-50 transition-all">
+        <ChevronLeft className="w-4 h-4" /> {ru ? 'Назад' : 'Back'}
+      </button>
+      <button onClick={onNext} className="flex items-center gap-2 px-8 py-3.5 bg-[#1B4332] text-white text-sm font-semibold rounded-xl hover:bg-[#1B4332]/90 transition-all shadow-sm">
+        {ru ? 'Далее' : 'Next'} <ChevronRight className="w-4 h-4" />
+      </button>
+    </div>
+  )
+}
+
 // ── Main component ────────────────────────────────────────────────────────────
 
 interface AlQasimiaFormProps {
@@ -392,46 +430,6 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
     }
   }
 
-  // ── YES/NO select ───────────────────────────────────────────────────────────
-
-  function YesNo({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-    return (
-      <select value={value} onChange={e => onChange(e.target.value)} className={SELECT}>
-        <option value="">{ru ? 'Выберите...' : 'Select...'}</option>
-        <option value="yes">{ru ? 'Да' : 'Yes'}</option>
-        <option value="no">{ru ? 'Нет' : 'No'}</option>
-      </select>
-    )
-  }
-
-  // ── Section header ──────────────────────────────────────────────────────────
-
-  function SectionHeader({ title, optional }: { title: string; optional?: boolean }) {
-    return (
-      <div className="px-6 py-4 border-b border-gray-50 bg-gray-50/50 flex items-center justify-between">
-        <p className="text-xs font-semibold text-muted uppercase tracking-wider">{title}</p>
-        {optional && <span className="text-[11px] text-muted bg-gray-100 px-2 py-0.5 rounded-full">{ru ? 'Необязательно' : 'Optional'}</span>}
-      </div>
-    )
-  }
-
-  function Card({ children }: { children: React.ReactNode }) {
-    return <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-4">{children}</div>
-  }
-
-  function NavButtons({ onBack: onBackBtn }: { onBack: () => void }) {
-    return (
-      <div className="flex justify-between mt-8">
-        <button onClick={onBackBtn} className="flex items-center gap-2 px-5 py-3 bg-white border border-gray-200 text-ink text-sm font-medium rounded-xl hover:bg-gray-50 transition-all">
-          <ChevronLeft className="w-4 h-4" /> {ru ? 'Назад' : 'Back'}
-        </button>
-        <button onClick={handleNext} className="flex items-center gap-2 px-8 py-3.5 bg-[#1B4332] text-white text-sm font-semibold rounded-xl hover:bg-[#1B4332]/90 transition-all shadow-sm">
-          {ru ? 'Далее' : 'Next'} <ChevronRight className="w-4 h-4" />
-        </button>
-      </div>
-    )
-  }
-
   // ── RENDER ──────────────────────────────────────────────────────────────────
 
   return (
@@ -509,7 +507,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
 
               {/* Passport info */}
               <Card>
-                <SectionHeader title={ru ? 'Паспортные данные' : 'Passport information'} />
+                <SectionHeader title={ru ? 'Паспортные данные' : 'Passport information'} ru={ru} />
                 <div className="p-6 space-y-4">
                   <Field label={ru ? 'Полное имя по загранпаспорту' : 'Full name (as in passport)'} required>
                     <input value={form.full_name} onChange={e => setF('full_name', e.target.value)}
@@ -561,7 +559,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
 
               {/* Personal info */}
               <Card>
-                <SectionHeader title={ru ? 'Личные сведения' : 'Personal information'} />
+                <SectionHeader title={ru ? 'Личные сведения' : 'Personal information'} ru={ru} />
                 <div className="p-6 space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <Field label={ru ? 'Пол' : 'Gender'} required>
@@ -593,26 +591,26 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
 
               {/* UAE & other status */}
               <Card>
-                <SectionHeader title={ru ? 'Дополнительные сведения' : 'Additional details'} />
+                <SectionHeader title={ru ? 'Дополнительные сведения' : 'Additional details'} ru={ru} />
                 <div className="p-6 space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <Field label={ru ? 'Проживаете ли в ОАЭ?' : 'Currently living in UAE?'} required>
-                      <YesNo value={form.lives_in_uae} onChange={v => setF('lives_in_uae', v)} />
+                      <YesNo value={form.lives_in_uae} onChange={v => setF('lives_in_uae', v)} ru={ru} />
                     </Field>
                     <Field label={ru ? 'Проживали ли ранее в ОАЭ?' : 'Previously lived in UAE?'}>
-                      <YesNo value={form.lived_in_uae} onChange={v => setF('lived_in_uae', v)} />
+                      <YesNo value={form.lived_in_uae} onChange={v => setF('lived_in_uae', v)} ru={ru} />
                     </Field>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <Field label={ru ? 'Работаете ли вы?' : 'Are you employed?'}>
-                      <YesNo value={form.is_working} onChange={v => setF('is_working', v)} />
+                      <YesNo value={form.is_working} onChange={v => setF('is_working', v)} ru={ru} />
                     </Field>
                     <Field label={ru ? 'Есть ли инвалидность?' : 'Do you have a disability?'}>
-                      <YesNo value={form.has_disability} onChange={v => setF('has_disability', v)} />
+                      <YesNo value={form.has_disability} onChange={v => setF('has_disability', v)} ru={ru} />
                     </Field>
                   </div>
                   <Field label={ru ? 'Получены ли 2 дозы вакцины COVID-19?' : 'Have you received 2 COVID-19 vaccine doses?'} required>
-                    <YesNo value={form.covid_vaccinated} onChange={v => setF('covid_vaccinated', v)} />
+                    <YesNo value={form.covid_vaccinated} onChange={v => setF('covid_vaccinated', v)} ru={ru} />
                   </Field>
                 </div>
               </Card>
@@ -638,7 +636,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
 
               {/* Contacts */}
               <Card>
-                <SectionHeader title={ru ? 'Контактные данные' : 'Contact details'} />
+                <SectionHeader title={ru ? 'Контактные данные' : 'Contact details'} ru={ru} />
                 <div className="p-6 space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <Field label={ru ? 'Номер нац. ID' : 'National ID number'}>
@@ -692,7 +690,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
 
               {/* Father */}
               <Card>
-                <SectionHeader title={ru ? 'Данные отца' : 'Father\'s information'} />
+                <SectionHeader title={ru ? 'Данные отца' : 'Father\'s information'} ru={ru} />
                 <div className="p-6 space-y-4">
                   <Field label={ru ? 'ФИО' : 'Full name'}>
                     <input value={form.father_name} onChange={e => setF('father_name', e.target.value)} className={INPUT} />
@@ -713,7 +711,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
 
               {/* Mother */}
               <Card>
-                <SectionHeader title={ru ? 'Данные матери' : 'Mother\'s information'} />
+                <SectionHeader title={ru ? 'Данные матери' : 'Mother\'s information'} ru={ru} />
                 <div className="p-6 space-y-4">
                   <Field label={ru ? 'ФИО' : 'Full name'}>
                     <input value={form.mother_name} onChange={e => setF('mother_name', e.target.value)} className={INPUT} />
@@ -734,7 +732,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
 
               {/* Relative */}
               <Card>
-                <SectionHeader title={ru ? 'Данные родственника' : 'Relative\'s information'} optional />
+                <SectionHeader title={ru ? 'Данные родственника' : 'Relative\'s information'} optional ru={ru} />
                 <div className="p-6 space-y-4">
                   <Field label={ru ? 'ФИО' : 'Full name'}>
                     <input value={form.relative_name} onChange={e => setF('relative_name', e.target.value)} className={INPUT} />
@@ -753,7 +751,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                 </div>
               </Card>
 
-              <NavButtons onBack={() => setStep(1)} />
+              <NavButtons onBack={() => setStep(1)} onNext={handleNext} ru={ru} />
             </motion.div>
           )}
 
@@ -766,7 +764,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               </div>
 
               <Card>
-                <SectionHeader title={ru ? 'Среднее образование' : 'Secondary education'} />
+                <SectionHeader title={ru ? 'Среднее образование' : 'Secondary education'} ru={ru} />
                 <div className="p-6 space-y-4">
                   <Field label={ru ? 'Тип школы' : 'School type'}>
                     <select value={form.school_type} onChange={e => setF('school_type', e.target.value)} className={SELECT}>
@@ -809,7 +807,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               </Card>
 
               <Card>
-                <SectionHeader title={ru ? 'Знание языков' : 'Languages'} />
+                <SectionHeader title={ru ? 'Знание языков' : 'Languages'} ru={ru} />
                 <div className="p-6 space-y-4">
                   <Field label={ru ? 'Какие языки знаете?' : 'Languages you know'}>
                     <input value={form.known_languages} onChange={e => setF('known_languages', e.target.value)}
@@ -827,7 +825,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                 </div>
               </Card>
 
-              <NavButtons onBack={() => setStep(2)} />
+              <NavButtons onBack={() => setStep(2)} onNext={handleNext} ru={ru} />
             </motion.div>
           )}
 
@@ -845,7 +843,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               </div>
 
               <Card>
-                <SectionHeader title={degreeType === 'bachelor' ? (ru ? 'Бакалавриат' : 'Bachelor\'s programs') : (ru ? 'Магистратура' : 'Master\'s programs')} />
+                <SectionHeader title={degreeType === 'bachelor' ? (ru ? 'Бакалавриат' : 'Bachelor\'s programs') : (ru ? 'Магистратура' : 'Master\'s programs')} ru={ru} />
                 <div className="p-4 grid gap-2">
                   {programs.map(prog => {
                     const selected = selectedPrograms.includes(prog)
@@ -887,7 +885,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               {/* Master: Bachelor degree info */}
               {degreeType === 'master' && (
                 <Card>
-                  <SectionHeader title={ru ? 'Данные о дипломе бакалавра' : 'Bachelor\'s degree information'} />
+                  <SectionHeader title={ru ? 'Данные о дипломе бакалавра' : 'Bachelor\'s degree information'} ru={ru} />
                   <div className="p-6 space-y-4">
                     <Field label={ru ? 'Название университета' : 'University name'} required>
                       <input value={form.bachelor_university} onChange={e => setF('bachelor_university', e.target.value)} className={INPUT} />
@@ -939,14 +937,14 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                         <input value={form.bachelor_grade} onChange={e => setF('bachelor_grade', e.target.value)} className={INPUT} />
                       </Field>
                       <Field label={ru ? 'Эмиратская нострификация диплома?' : 'Emirates degree equivalency?'}>
-                        <YesNo value={form.bachelor_equivalency} onChange={v => setF('bachelor_equivalency', v)} />
+                        <YesNo value={form.bachelor_equivalency} onChange={v => setF('bachelor_equivalency', v)} ru={ru} />
                       </Field>
                     </div>
                   </div>
                 </Card>
               )}
 
-              <NavButtons onBack={() => setStep(3)} />
+              <NavButtons onBack={() => setStep(3)} onNext={handleNext} ru={ru} />
             </motion.div>
           )}
 
@@ -979,7 +977,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
 
               {/* Optional */}
               <Card>
-                <SectionHeader title={ru ? 'Дополнительные документы' : 'Additional documents'} optional />
+                <SectionHeader title={ru ? 'Дополнительные документы' : 'Additional documents'} optional ru={ru} />
                 <div className="p-4 grid gap-2">
                   {OPTIONAL_DOCS.map(dt => (
                     <DocZone key={dt} docType={dt}
@@ -1012,7 +1010,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                 </Card>
               )}
 
-              <NavButtons onBack={() => setStep(4)} />
+              <NavButtons onBack={() => setStep(4)} onNext={handleNext} ru={ru} />
             </motion.div>
           )}
 
@@ -1066,7 +1064,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                 })}
               </div>
 
-              <NavButtons onBack={() => setStep(5)} />
+              <NavButtons onBack={() => setStep(5)} onNext={handleNext} ru={ru} />
             </motion.div>
           )}
 
@@ -1214,3 +1212,4 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
     </div>
   )
 }
+                                                                                                                                                                                                                                                                                                        
