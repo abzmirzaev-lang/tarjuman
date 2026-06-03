@@ -244,6 +244,24 @@ const PROGRAMS_RU: Record<string, string> = {
   'Arts & Sciences': 'Гуманитарные науки',
 }
 
+// ── Al Qasimia hardcoded entry ────────────────────────────────────────────────
+const AQ_UNI: UniversityRow = {
+  id: 'al-qasimia-university',
+  name_ru: 'Университет аль-Касимия',
+  name_uz: 'Al-Qosimiya universiteti',
+  name_en: 'Al Qasimia University',
+  country: 'AE',
+  city: 'Sharjah',
+  website_url: 'https://www.alqasimia.ac.ae',
+  description_ru: 'Исламский университет в Шардже (ОАЭ), основан в 2009 году шейхом Султаном бин Мухаммад аль-Касими. Специализируется на исламских науках, арабском языке, праве и экономике. Ведёт обучение на арабском языке. Иностранным студентам предоставляется стипендия 1 500 AED в месяц, трёхразовое питание и общежитие.',
+  description_uz: 'Al-Qosimiya universiteti 2009 yilda Sharjada (BAA) shayx Sulton bin Muhammad al-Qosimiy tomonidan tashkil etilgan. Islom fanlari, arab tili, huquq va iqtisodiyot bo\'yicha ta\'lim beradi. Xorijiy talabalarga oyiga 1 500 AED stipendiya, kuniga 3 mahal ovqat va yotoqxona beriladi.',
+  description_en: 'An Islamic university in Sharjah (UAE), founded in 2009 by Sheikh Sultan bin Muhammad Al Qasimi. Specialises in Islamic sciences, Arabic language, law and economics. Teaching is conducted in Arabic. International students receive a monthly stipend of 1,500 AED, three meals a day and free dormitory accommodation.',
+  programs: ['Islamic Studies', 'Arabic Language', 'Shariah', 'Quran'],
+  is_active: true,
+  rank: 1,
+  created_at: '2024-01-01',
+}
+
 function UniversitiesContent() {
   const searchParams = useSearchParams()
   const [lang, setLang] = useLanguage()
@@ -270,9 +288,14 @@ function UniversitiesContent() {
     return () => window.removeEventListener('keydown', fn)
   }, [])
 
-  const allPrograms = Array.from(new Set(unis.flatMap(u => u.programs))).sort()
+  // Merge AQ_UNI into list if not already in DB results
+  const allUnis = unis.some(u => u.name_en === 'Al Qasimia University')
+    ? unis
+    : [AQ_UNI, ...unis]
 
-  const filtered = unis.filter(u => {
+  const allPrograms = Array.from(new Set(allUnis.flatMap(u => u.programs))).sort()
+
+  const filtered = allUnis.filter(u => {
     const matchCountry = filter === 'ALL' || u.country === filter
     const matchSearch  = !search || u.name_ru.toLowerCase().includes(search.toLowerCase()) ||
                          u.name_en.toLowerCase().includes(search.toLowerCase())
@@ -386,35 +409,65 @@ function UniversitiesContent() {
                     onClick={() => setSelected(uni)}
                     className="card overflow-hidden cursor-pointer group hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                   >
-                    <div className="relative h-44 overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-br from-green-900 to-green-700 opacity-50 z-10" />
-                      <img
-                        src={extra.photo}
-                        alt={uni.name_en}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        onError={e => { (e.target as HTMLImageElement).style.display = 'none' }}
-                      />
-                      {uni.rank <= 5 && (
-                        <div className="absolute top-3 left-3 z-20 flex items-center gap-1 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full">
-                          <Star className="w-3 h-3" /> Топ {uni.rank}
+                    {uni.name_en === 'Al Qasimia University' ? (
+                      <div className="relative h-44 overflow-hidden bg-gradient-to-br from-[#0d2b1e] via-[#1B4332] to-[#0d2b1e]">
+                        {/* Decorative pattern */}
+                        <div className="absolute inset-0 opacity-10" style={{backgroundImage:'repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%)',backgroundSize:'20px 20px'}} />
+                        {/* Featured badge */}
+                        <div className="absolute top-3 left-3 z-20 flex items-center gap-1 bg-[#C9922A] text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow">
+                          <Star className="w-3 h-3 fill-white" />
+                          {lang === 'ru' ? 'Доступно сейчас' : lang === 'uz' ? 'Hozir mavjud' : 'Open now'}
                         </div>
-                      )}
-                      <div className="absolute top-3 right-3 z-20">
-                        <span className="w-7 h-5 rounded overflow-hidden shadow-sm inline-flex">
-                          <img src={`https://flagcdn.com/w40/${uni.country.toLowerCase()}.png`} alt={uni.country} className="w-full h-full object-cover" />
-                        </span>
-                      </div>
-                      <div className="absolute bottom-0 left-0 right-0 z-20 p-4">
-                        <h3 className="font-bold text-white text-base leading-tight drop-shadow">
-                          {uni[nameKey]}
-                        </h3>
-                        {uni.city && (
+                        <div className="absolute top-3 right-3 z-20">
+                          <span className="w-7 h-5 rounded overflow-hidden shadow-sm inline-flex">
+                            <img src="https://flagcdn.com/w40/ae.png" alt="UAE" className="w-full h-full object-cover" />
+                          </span>
+                        </div>
+                        {/* Logo centered */}
+                        <div className="absolute inset-0 flex items-center justify-center z-10">
+                          <img
+                            src="https://upload.wikimedia.org/wikipedia/en/2/2f/Al_Qasimia_University_logo.png"
+                            alt="Al Qasimia University"
+                            className="h-20 w-auto object-contain drop-shadow-lg"
+                            onError={e => { (e.target as HTMLImageElement).style.display = 'none' }}
+                          />
+                        </div>
+                        <div className="absolute bottom-0 left-0 right-0 z-20 p-4 bg-gradient-to-t from-black/60 to-transparent">
+                          <h3 className="font-bold text-white text-base leading-tight drop-shadow">{uni[nameKey]}</h3>
                           <div className="flex items-center gap-1 text-white/80 text-xs mt-1">
-                            <MapPin className="w-3 h-3" /> {uni.city}
+                            <MapPin className="w-3 h-3" /> Sharjah, UAE
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="relative h-44 overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-br from-green-900 to-green-700 opacity-50 z-10" />
+                        <img
+                          src={extra.photo}
+                          alt={uni.name_en}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          onError={e => { (e.target as HTMLImageElement).style.display = 'none' }}
+                        />
+                        {uni.rank <= 5 && (
+                          <div className="absolute top-3 left-3 z-20 flex items-center gap-1 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full">
+                            <Star className="w-3 h-3" /> Топ {uni.rank}
                           </div>
                         )}
+                        <div className="absolute top-3 right-3 z-20">
+                          <span className="w-7 h-5 rounded overflow-hidden shadow-sm inline-flex">
+                            <img src={`https://flagcdn.com/w40/${uni.country.toLowerCase()}.png`} alt={uni.country} className="w-full h-full object-cover" />
+                          </span>
+                        </div>
+                        <div className="absolute bottom-0 left-0 right-0 z-20 p-4">
+                          <h3 className="font-bold text-white text-base leading-tight drop-shadow">{uni[nameKey]}</h3>
+                          {uni.city && (
+                            <div className="flex items-center gap-1 text-white/80 text-xs mt-1">
+                              <MapPin className="w-3 h-3" /> {uni.city}
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
+                    )}
 
                     <div className="p-4 space-y-3">
                       <div className="flex items-center gap-4 text-xs text-muted">
@@ -486,33 +539,51 @@ function UniversitiesContent() {
               >
                 {/* Photo header */}
                 <div className="relative h-52 sm:h-64 shrink-0">
-                  <div className="absolute inset-0 bg-gradient-to-br from-green-900 to-green-700 opacity-50 z-10" />
-                  <img
-                    src={extra.photo}
-                    alt={selected.name_en}
-                    className="w-full h-full object-cover"
-                    onError={e => { (e.target as HTMLImageElement).style.display = 'none' }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                  {selected.name_en === 'Al Qasimia University' ? (
+                    <>
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#0d2b1e] via-[#1B4332] to-[#0a2218]" />
+                      <div className="absolute inset-0 opacity-10" style={{backgroundImage:'repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%)',backgroundSize:'24px 24px'}} />
+                      <div className="absolute inset-0 flex items-center justify-center z-10">
+                        <img
+                          src="https://upload.wikimedia.org/wikipedia/en/2/2f/Al_Qasimia_University_logo.png"
+                          alt="Al Qasimia University"
+                          className="h-24 w-auto object-contain drop-shadow-2xl"
+                          onError={e => { (e.target as HTMLImageElement).style.display = 'none' }}
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="absolute inset-0 bg-gradient-to-br from-green-900 to-green-700 opacity-50 z-10" />
+                      <img
+                        src={extra.photo}
+                        alt={selected.name_en}
+                        className="w-full h-full object-cover"
+                        onError={e => { (e.target as HTMLImageElement).style.display = 'none' }}
+                      />
+                    </>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent z-10" />
 
                   <button
                     onClick={() => setSelected(null)}
-                    className="absolute top-4 right-4 w-8 h-8 bg-black/40 hover:bg-black/60 rounded-full flex items-center justify-center transition-colors"
+                    className="absolute top-4 right-4 z-30 w-8 h-8 bg-black/40 hover:bg-black/60 rounded-full flex items-center justify-center transition-colors"
                   >
                     <X className="w-4 h-4 text-white" />
                   </button>
 
-                  {selected.rank <= 5 && (
-                    <div className="absolute top-4 left-4 flex items-center gap-1 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full">
-                      <Star className="w-3 h-3" /> Топ {selected.rank}
+                  {selected.name_en === 'Al Qasimia University' && (
+                    <div className="absolute top-4 left-4 z-30 flex items-center gap-1 bg-[#C9922A] text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow">
+                      <Star className="w-3 h-3 fill-white" />
+                      {lang === 'ru' ? 'Приём открыт' : lang === 'uz' ? 'Qabul ochiq' : 'Admissions open'}
                     </div>
                   )}
 
-                  <div className="absolute bottom-0 left-0 right-0 p-5">
+                  <div className="absolute bottom-0 left-0 right-0 z-20 p-5">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="w-8 h-5 rounded overflow-hidden shadow-sm inline-flex">
-                          <img src={`https://flagcdn.com/w40/${selected.country.toLowerCase()}.png`} alt={selected.country} className="w-full h-full object-cover" />
-                        </span>
+                        <img src={`https://flagcdn.com/w40/${selected.country.toLowerCase()}.png`} alt={selected.country} className="w-full h-full object-cover" />
+                      </span>
                       {selected.city && (
                         <span className="flex items-center gap-1 text-white/70 text-xs">
                           <MapPin className="w-3 h-3" /> {selected.city}
