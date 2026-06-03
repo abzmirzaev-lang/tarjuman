@@ -279,7 +279,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
     // Facebook, Instagram, Twitter/X — optional
     const required = [
       form.email, form.mobile, form.whatsapp, form.home_phone,
-      form.skype, form.nearest_airport,
+      form.nearest_airport,
       form.father_name, form.father_phone,
       form.mother_name, form.mother_phone,
     ]
@@ -705,7 +705,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                   <div className="space-y-4">
                     <Field label={t('Номер нац. ID', 'Milliy ID raqami', 'National ID number')}>
                       <input value={form.national_id_number} onChange={e => setF('national_id_number', e.target.value)}
-                        placeholder={ru ? 'Номер или «Нет»' : uz ? 'Raqam yoki «Yo\'q»' : 'Number or "No"'} className={INPUT} />
+                        placeholder={''} className={INPUT} />
                     </Field>
                     <Field label="Email" required>
                       <input type="email" value={form.email} onChange={e => setF('email', e.target.value)}
@@ -719,33 +719,33 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                     </Field>
                     <Field label="WhatsApp" required>
                       <input type="tel" value={form.whatsapp} onChange={e => setF('whatsapp', e.target.value)}
-                        placeholder={ru ? '+998... или «Нет»' : uz ? '+998... yoki «Yo\'q»' : '+998... or "No"'} className={INPUT} />
+                        placeholder='+998...' className={INPUT} />
                     </Field>
                   </div>
                   <div className="space-y-4">
                     <Field label={t('Домашний телефон', 'Uy telefoni', 'Home phone')} required>
                       <input type="tel" value={form.home_phone} onChange={e => setF('home_phone', e.target.value)}
-                        placeholder={ru ? '+998... или «Нет»' : uz ? '+998... yoki «Yo\'q»' : '+998... or "No"'} className={INPUT} />
+                        placeholder='+998...' className={INPUT} />
                     </Field>
-                    <Field label="Skype" required>
+                    <Field label="Skype">
                       <input value={form.skype} onChange={e => setF('skype', e.target.value)}
-                        placeholder={ru ? 'login или «Нет»' : uz ? 'login yoki «Yo\'q»' : 'login or "No"'} className={INPUT} />
+                        placeholder={'Skype'} className={INPUT} />
                     </Field>
                   </div>
                   <div className="space-y-4">
                     <Field label="Facebook">
                       <input value={form.facebook_contact} onChange={e => setF('facebook_contact', e.target.value)}
-                        placeholder={ru ? 'facebook.com/... или «Нет»' : uz ? 'facebook.com/... yoki «Yo\'q»' : 'facebook.com/... or "No"'} className={INPUT} />
+                        placeholder={'facebook.com/...'} className={INPUT} />
                     </Field>
                     <Field label="Instagram">
                       <input value={form.instagram_contact} onChange={e => setF('instagram_contact', e.target.value)}
-                        placeholder={ru ? '@username или «Нет»' : uz ? '@username yoki «Yo\'q»' : '@username or "No"'} className={INPUT} />
+                        placeholder={'@username'} className={INPUT} />
                     </Field>
                   </div>
                   <div className="space-y-4">
                     <Field label="Twitter / X">
                       <input value={form.twitter} onChange={e => setF('twitter', e.target.value)}
-                        placeholder={ru ? '@username или «Нет»' : uz ? '@username yoki «Yo\'q»' : '@username or "No"'} className={INPUT} />
+                        placeholder={'@username'} className={INPUT} />
                     </Field>
                     <Field label={t('Ближайший аэропорт', 'Eng yaqin xalqaro aeroport', 'Nearest international airport')} required>
                       <input value={form.nearest_airport} onChange={e => setF('nearest_airport', e.target.value)}
@@ -765,7 +765,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                   <div className="space-y-4">
                     <Field label={t('Телефон', 'Telefon', 'Phone')} required>
                       <input type="tel" value={form.father_phone} onChange={e => setF('father_phone', e.target.value)}
-                        placeholder={ru ? '+998... или «Нет»' : uz ? '+998... yoki «Yo\'q»' : '+998... or "No"'} className={INPUT} />
+                        placeholder='+998...' className={INPUT} />
                     </Field>
                     <Field label="Email">
                       <input type="email" value={form.father_email} onChange={e => setF('father_email', e.target.value)}
@@ -789,7 +789,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                   <div className="space-y-4">
                     <Field label={t('Телефон', 'Telefon', 'Phone')} required>
                       <input type="tel" value={form.mother_phone} onChange={e => setF('mother_phone', e.target.value)}
-                        placeholder={ru ? '+998... или «Нет»' : uz ? '+998... yoki «Yo\'q»' : '+998... or "No"'} className={INPUT} />
+                        placeholder='+998...' className={INPUT} />
                     </Field>
                     <Field label="Email">
                       <input type="email" value={form.mother_email} onChange={e => setF('mother_email', e.target.value)}
