@@ -361,6 +361,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
     if (step === 4 && !validatePrograms()) return
     if (step === 5 && !validateDocs()) return
     setStep(s => s + 1)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const handleDocUpload = (type: AQDocType, file: File) => {
