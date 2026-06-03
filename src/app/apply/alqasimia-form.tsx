@@ -247,9 +247,14 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
   // ── Validators ──────────────────────────────────────────────────────────────
 
   const validatePersonal = () => {
-    if (!form.full_name || !form.citizenship || !form.passport_number ||
-        !form.date_of_birth || !form.gender || !form.marital_status ||
-        !form.religion || !form.lives_in_uae || !form.covid_vaccinated) {
+    const required = [
+      form.full_name, form.citizenship, form.passport_number,
+      form.passport_issued, form.passport_expiry,
+      form.date_of_birth, form.country_of_birth, form.city_of_birth,
+      form.gender, form.religion, form.marital_status,
+      form.lives_in_uae, form.covid_vaccinated,
+    ]
+    if (required.some(v => !v.trim())) {
       toast.error(ru ? 'Заполните все обязательные поля' : 'Fill all required fields')
       return false
     }
@@ -257,15 +262,28 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
   }
 
   const validateContacts = () => {
+    // Facebook, Instagram, Twitter/X — optional
     const required = [
       form.email, form.mobile, form.whatsapp, form.home_phone,
-      form.skype, form.facebook_contact, form.instagram_contact,
-      form.twitter, form.nearest_airport,
+      form.skype, form.nearest_airport,
       form.father_name, form.father_phone,
       form.mother_name, form.mother_phone,
     ]
     if (required.some(v => !v.trim())) {
       toast.error(ru ? 'Заполните все обязательные поля (если нет — напишите «Нет»)' : 'Fill all required fields (if none — write "No")')
+      return false
+    }
+    return true
+  }
+
+  const validateEducation = () => {
+    const required = [
+      form.school_type, form.school_name, form.school_country,
+      form.school_city, form.school_language, form.graduation_date, form.gpa,
+      form.known_languages, form.arabic_years,
+    ]
+    if (required.some(v => !v.trim())) {
+      toast.error(ru ? 'Заполните все обязательные поля образования' : 'Fill all required education fields')
       return false
     }
     return true
@@ -299,8 +317,16 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
     if (step === 1 && !validatePrograms()) return
     if (step === 2 && !validatePersonal()) return
     if (step === 3 && !validateContacts()) return
+    if (step === 4 && !validateEducation()) return
     if (step === 5 && !validateDocs()) return
     setStep(s => s + 1)
+  }
+
+  const handleDocUpload = (type: AQDocType, file: File) => {
+    setDocs(d => ({ ...d, [type]: { type, file } }))
+  }
+  const handleDocRemove = (type: AQDocType) => {
+    setDocs(d => { const nd = { ...d }; delete nd[type]; return nd })
   }
 
   const toggleProgram = (prog: string) => {
@@ -681,17 +707,17 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                     </Field>
                   </div>
                   <div className="space-y-4">
-                    <Field label="Facebook" required>
+                    <Field label="Facebook">
                       <input value={form.facebook_contact} onChange={e => setF('facebook_contact', e.target.value)}
                         placeholder={ru ? 'facebook.com/... или «Нет»' : 'facebook.com/... or "No"'} className={INPUT} />
                     </Field>
-                    <Field label="Instagram" required>
+                    <Field label="Instagram">
                       <input value={form.instagram_contact} onChange={e => setF('instagram_contact', e.target.value)}
                         placeholder={ru ? '@username или «Нет»' : '@username or "No"'} className={INPUT} />
                     </Field>
                   </div>
                   <div className="space-y-4">
-                    <Field label="Twitter / X" required>
+                    <Field label="Twitter / X">
                       <input value={form.twitter} onChange={e => setF('twitter', e.target.value)}
                         placeholder={ru ? '@username или «Нет»' : '@username or "No"'} className={INPUT} />
                     </Field>
@@ -787,7 +813,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               <Card>
                 <SectionHeader title={ru ? 'Среднее образование' : 'Secondary education'} ru={ru} />
                 <div className="p-6 space-y-4">
-                  <Field label={ru ? 'Тип школы' : 'School type'}>
+                  <Field label={ru ? 'Тип школы' : 'School type'} required>
                     <select value={form.school_type} onChange={e => setF('school_type', e.target.value)} className={SELECT}>
                       <option value="">{ru ? 'Выберите...' : 'Select...'}</option>
                       <option value="public">{ru ? 'Государственная' : 'Public'}</option>
@@ -797,30 +823,30 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                     </select>
                   </Field>
                   <div className="space-y-4">
-                    <Field label={ru ? 'Название школы' : 'School name'}>
+                    <Field label={ru ? 'Название школы' : 'School name'} required>
                       <input value={form.school_name} onChange={e => setF('school_name', e.target.value)} className={INPUT} />
                     </Field>
-                    <Field label={ru ? 'Средний балл (GPA)' : 'GPA / average grade'}>
+                    <Field label={ru ? 'Средний балл (GPA)' : 'GPA / average grade'} required>
                       <input value={form.gpa} onChange={e => setF('gpa', e.target.value)}
                         placeholder="4.5 / 5.0" className={INPUT} />
                     </Field>
                   </div>
                   <div className="space-y-4">
-                    <Field label={ru ? 'Страна' : 'Country'}>
+                    <Field label={ru ? 'Страна' : 'Country'} required>
                       <input value={form.school_country} onChange={e => setF('school_country', e.target.value)} className={INPUT} />
                     </Field>
-                    <Field label={ru ? 'Город' : 'City'}>
+                    <Field label={ru ? 'Город' : 'City'} required>
                       <input value={form.school_city} onChange={e => setF('school_city', e.target.value)} className={INPUT} />
                     </Field>
                   </div>
                   <div className="space-y-4">
-                    <Field label={ru ? 'Язык обучения' : 'Language of instruction'}>
+                    <Field label={ru ? 'Язык обучения' : 'Language of instruction'} required>
                       <select value={form.school_language} onChange={e => setF('school_language', e.target.value)} className={SELECT}>
                         <option value="">{ru ? 'Выберите...' : 'Select...'}</option>
                         {['Арабский','Русский','Узбекский','Казахский','Таджикский','Английский','Другой'].map(l => <option key={l} value={l}>{l}</option>)}
                       </select>
                     </Field>
-                    <Field label={ru ? 'Дата окончания' : 'Graduation date'}>
+                    <Field label={ru ? 'Дата окончания' : 'Graduation date'} required>
                       <input type="date" value={form.graduation_date} onChange={e => setF('graduation_date', e.target.value)} className={INPUT} />
                     </Field>
                   </div>
@@ -830,12 +856,12 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               <Card>
                 <SectionHeader title={ru ? 'Знание языков' : 'Languages'} ru={ru} />
                 <div className="p-6 space-y-4">
-                  <Field label={ru ? 'Какие языки знаете?' : 'Languages you know'}>
+                  <Field label={ru ? 'Какие языки знаете?' : 'Languages you know'} required>
                     <input value={form.known_languages} onChange={e => setF('known_languages', e.target.value)}
                       placeholder={ru ? 'Русский, Узбекский, Арабский...' : 'Russian, Uzbek, Arabic...'} className={INPUT} />
                   </Field>
                   <div className="space-y-4">
-                    <Field label={ru ? 'Лет изучали арабский' : 'Years studying Arabic'}>
+                    <Field label={ru ? 'Лет изучали арабский' : 'Years studying Arabic'} required>
                       <input type="number" min="0" value={form.arabic_years} onChange={e => setF('arabic_years', e.target.value)}
                         placeholder="0" className={INPUT} />
                     </Field>
