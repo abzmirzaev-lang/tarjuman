@@ -1091,6 +1091,25 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                 <p className="text-muted mt-1 text-sm">{t('PDF, JPG или PNG — до 10 МБ каждый', 'PDF, JPG yoki PNG — har biri 10 MB gacha', 'PDF, JPG or PNG — up to 10MB each')}</p>
               </div>
 
+              {/* Scanner warning */}
+              <div className="mb-6 flex gap-3 p-4 rounded-2xl bg-amber-50 border border-amber-200">
+                <div className="shrink-0 mt-0.5">
+                  <AlertCircle className="w-5 h-5 text-amber-500" />
+                </div>
+                <div className="text-sm text-amber-800 leading-relaxed">
+                  <p className="font-semibold mb-1">
+                    {t('Требования к документам', 'Hujjatlarga talablar', 'Document requirements')}
+                  </p>
+                  <p>
+                    {t(
+                      'Документы должны быть в формате PDF или JPG, отсканированные на портативном сканере. Документы, сфотографированные на телефон, не принимаются в обработку.',
+                      'Hujjatlar PDF yoki JPG formatida, portativ skaner yordamida skanerlanishi kerak. Telefonda suratga olingan hujjatlar qabul qilinmaydi.',
+                      'Documents must be in PDF or JPG format, scanned with a portable scanner. Documents photographed on a phone are not accepted for processing.'
+                    )}
+                  </p>
+                </div>
+              </div>
+
               {/* Required */}
               <Card>
                 <div className="px-6 py-4 border-b border-gray-50 bg-gray-50/50 flex items-center gap-2">
