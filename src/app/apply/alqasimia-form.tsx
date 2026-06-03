@@ -589,13 +589,13 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                       <input value={form.passport_number} onChange={e => setF('passport_number', e.target.value)}
                         placeholder="AA1234567" className={INPUT} />
                     </Field>
-                    <Field label={t('Место выдачи паспорта', 'Pasport berilgan joy', 'Place of issue')}>
+                    <Field label={t('Место выдачи паспорта', 'Pasport berilgan joy', 'Place of issue')} required>
                       <input value={form.passport_issued} onChange={e => setF('passport_issued', e.target.value)}
                         placeholder={ru ? 'Город, страна' : uz ? 'Shahar, mamlakat' : 'City, country'} className={INPUT} />
                     </Field>
                   </div>
                   <div className="space-y-4">
-                    <Field label={t('Срок действия паспорта', 'Pasport muddati', 'Passport expiry')}>
+                    <Field label={t('Срок действия паспорта', 'Pasport muddati', 'Passport expiry')} required>
                       <input type="date" value={form.passport_expiry} onChange={e => setF('passport_expiry', e.target.value)} className={INPUT} />
                     </Field>
                     <Field label={t('Дата рождения', 'Tug\'ilgan sana', 'Date of birth')} required>
