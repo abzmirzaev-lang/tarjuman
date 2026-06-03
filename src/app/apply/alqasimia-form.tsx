@@ -14,6 +14,19 @@ import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
 import { v4 as uuidv4 } from 'uuid'
 
+// ── Language options ──────────────────────────────────────────────────────────
+
+const LANGUAGE_OPTIONS = [
+  { key: 'arabic',   ru: 'Арабский',    uz: 'Arab tili',    en: 'Arabic' },
+  { key: 'russian',  ru: 'Русский',     uz: 'Rus tili',     en: 'Russian' },
+  { key: 'uzbek',    ru: 'Узбекский',   uz: 'O\'zbek tili', en: 'Uzbek' },
+  { key: 'english',  ru: 'Английский',  uz: 'Ingliz tili',  en: 'English' },
+  { key: 'turkish',  ru: 'Турецкий',    uz: 'Turk tili',    en: 'Turkish' },
+  { key: 'french',   ru: 'Французский', uz: 'Fransuz tili', en: 'French' },
+  { key: 'german',   ru: 'Немецкий',    uz: 'Nemis tili',   en: 'German' },
+  { key: 'other',    ru: 'Другой',      uz: 'Boshqa',       en: 'Other' },
+]
+
 // ── Programs ─────────────────────────────────────────────────────────────────
 
 interface Program {
@@ -876,10 +889,44 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               <Card>
                 <SectionHeader title={t('Знание языков', 'Til bilimlari', 'Languages')} lang={lang} />
                 <div className="p-6 space-y-4">
-                  <Field label={t('Какие языки знаете?', 'Qanday tillarni bilasiz?', 'Languages you know')} required>
-                    <input value={form.known_languages} onChange={e => setF('known_languages', e.target.value)}
-                      placeholder={ru ? 'Русский, Узбекский, Арабский...' : uz ? 'Rus, O\'zbek, Arab...' : 'Russian, Uzbek, Arabic...'} className={INPUT} />
-                  </Field>
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      {t('Какие языки знаете?', 'Qanday tillarni bilasiz?', 'Languages you know')}
+                      <span className="text-red-500 ml-1">*</span>
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {LANGUAGE_OPTIONS.map(opt => {
+                        const label = ru ? opt.ru : uz ? opt.uz : opt.en
+                        const selected = form.known_languages.split(',').map(s => s.trim()).filter(Boolean).includes(opt.key)
+                        return (
+                          <button
+                            key={opt.key}
+                            type="button"
+                            onClick={() => {
+                              const current = form.known_languages.split(',').map(s => s.trim()).filter(Boolean)
+                              const next = selected
+                                ? current.filter(k => k !== opt.key)
+                                : [...current, opt.key]
+                              setF('known_languages', next.join(', '))
+                            }}
+                            className={cn(
+                              'px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200 select-none',
+                              selected
+                                ? 'bg-[#1B4332] text-white border-[#1B4332] shadow-sm scale-105'
+                                : 'bg-white text-gray-600 border-gray-200 hover:border-[#1B4332] hover:text-[#1B4332]'
+                            )}
+                          >
+                            {label}
+                          </button>
+                        )
+                      })}
+                    </div>
+                    {form.known_languages === '' && (
+                      <p className="text-xs text-muted-foreground mt-2">
+                        {t('Выберите один или несколько языков', 'Bir yoki bir nechta til tanlang', 'Select one or more languages')}
+                      </p>
+                    )}
+                  </div>
                   <div className="space-y-4">
                     <Field label={t('Сколько лет изучали арабский язык?', 'Arab tilini necha yil o\'rgandingiz?', 'How many years did you study Arabic?')} required>
                       <input type="number" min="0" value={form.arabic_years} onChange={e => setF('arabic_years', e.target.value)}
