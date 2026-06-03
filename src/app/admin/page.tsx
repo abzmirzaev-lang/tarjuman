@@ -19,6 +19,28 @@ import { toast } from 'sonner'
 
 type AdminTab = 'overview' | 'applications' | 'users' | 'payments'
 
+const DOC_TYPE_LABEL: Record<string, string> = {
+  PASSPORT:            'Паспорт',
+  PHOTO:               'Фото 3×4',
+  DIPLOMA:             'Диплом / Аттестат',
+  TRANSCRIPT:          'Транскрипт',
+  IELTS:               'IELTS / TOEFL',
+  ARABIC_CERT:         'Сертификат арабского',
+  RECOMMENDATION:      'Рекомендательное письмо',
+  MEDICAL:             'Медицинская справка',
+  CRIMINAL_RECORD:     'Справка о несудимости',
+  BIRTH_CERT:          'Свидетельство о рождении',
+  NATIONAL_ID:         'Нац. удостоверение личности',
+  CONDUCT_CERT:        'Справка о хорошем поведении',
+  SOCIAL_MEDIA:        'Скриншот подписки Instagram/Facebook',
+  GRADE9:              'Табель 9 класса',
+  GRADE10:             'Табель 10 класса',
+  GRADE11:             'Аттестат 11 класса',
+  BACHELOR_DIPLOMA:    'Диплом бакалавра',
+  BACHELOR_TRANSCRIPT: 'Транскрипт бакалавра',
+  OTHER:               'Другое',
+}
+
 const ALL_STATUSES: ApplicationStatus[] = [
   'REGISTERED', 'PAID', 'IN_PROGRESS', 'SUBMITTED'
 ]
@@ -758,6 +780,7 @@ export default function AdminPage() {
         const ex: any = (rawExtra && Object.keys(rawExtra).length > 0)
           ? rawExtra
           : (() => { try { return JSON.parse((selected as any).notes ?? '{}') } catch { return {} } })()
+        const clientUser = users.find(u => u.id === selected.user_id)
           const Row = ({ label, value }: { label: string; value?: any }) =>
             value ? (
               <div className="flex items-start justify-between gap-3 py-2 border-b border-white/[0.04] last:border-0">
@@ -920,7 +943,7 @@ export default function AdminPage() {
                         <p className="text-xs font-bold text-white/60 uppercase tracking-wider">📞 Контакты</p>
                       </div>
                       <div className="px-4 py-1">
-                        <Row label="Email" value={ex.email ?? selected.email} />
+                        <Row label="Email" value={ex.email ?? clientUser?.email ?? selected.email} />
                         <Row label="Мобильный" value={ex.mobile ?? selected.phone} />
                         <Row label="WhatsApp" value={ex.whatsapp} />
                         <Row label="Домашний тел." value={ex.home_phone} />
@@ -1003,19 +1026,23 @@ export default function AdminPage() {
                   <div className="p-5 space-y-3">
                     {appDocs.length === 0 ? (
                       <div className="text-center py-12 text-white/20 text-sm">Документов нет</div>
-                    ) : appDocs.map(doc => (
-                      <button key={doc.id} onClick={() => downloadDoc(doc)}
-                        className="w-full flex items-center gap-3 p-4 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.06] hover:border-brand-400/30 transition-all group text-left">
-                        <div className="w-10 h-10 rounded-xl bg-brand-400/10 flex items-center justify-center shrink-0">
-                          <FileText className="w-4 h-4 text-brand-400"/>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm text-white font-medium truncate group-hover:text-brand-400 transition-colors">{doc.file_name}</p>
-                          <p className="text-xs text-white/30 mt-0.5">{doc.mime_type} · {formatDate(doc.created_at)}</p>
-                        </div>
-                        <Download className="w-4 h-4 text-white/20 group-hover:text-brand-400 transition-colors shrink-0"/>
-                      </button>
-                    ))}
+                    ) : appDocs.map(doc => {
+                      const typeLabel = DOC_TYPE_LABEL[doc.type] ?? doc.type
+                      return (
+                        <button key={doc.id} onClick={() => downloadDoc(doc)}
+                          className="w-full flex items-center gap-3 p-4 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.06] hover:border-brand-400/30 transition-all group text-left">
+                          <div className="w-10 h-10 rounded-xl bg-brand-400/10 flex items-center justify-center shrink-0">
+                            <FileText className="w-4 h-4 text-brand-400"/>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm text-white font-semibold truncate group-hover:text-brand-400 transition-colors">{typeLabel}</p>
+                            <p className="text-xs text-white/40 truncate mt-0.5">{doc.file_name}</p>
+                            <p className="text-xs text-white/20 mt-0.5">{formatDate(doc.created_at)}</p>
+                          </div>
+                          <Download className="w-4 h-4 text-white/20 group-hover:text-brand-400 transition-colors shrink-0"/>
+                        </button>
+                      )
+                    })}
                   </div>
                 )}
 
