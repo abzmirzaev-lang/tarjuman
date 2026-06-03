@@ -158,11 +158,14 @@ export default function AdminPage() {
     const rawNotes = app.notes ?? ''
     const isJson = rawNotes.trimStart().startsWith('{') || rawNotes.trimStart().startsWith('[')
     setSelected(app); setNoteText(isJson ? '' : rawNotes); setDetailTab('info')
-    const [{ data: d }, { data: m }] = await Promise.all([
+    const [{ data: d1 }, { data: d2 }, { data: m }] = await Promise.all([
       supabase.from('documents').select('*').eq('application_id', app.id),
+      supabase.from('documents').select('*').eq('user_id', app.user_id).is('application_id', null),
       supabase.from('messages').select('*').eq('application_id', app.id).order('created_at'),
     ])
-    setAppDocs(d ?? []); setAppMsgs(m ?? [])
+    const allDocs = [...(d1 ?? []), ...(d2 ?? [])]
+    const uniqueDocs = allDocs.filter((d, i, arr) => arr.findIndex(x => x.id === d.id) === i)
+    setAppDocs(uniqueDocs); setAppMsgs(m ?? [])
     setDetailOpen(true)
   }
 
@@ -900,10 +903,14 @@ export default function AdminPage() {
                         <Row label="Skype" value={ex.skype} />
                         <Row label="Instagram" value={ex.instagram} />
                         <Row label="Facebook" value={ex.facebook} />
-                        <Row label="Отец — имя" value={ex.father_name} />
-                        <Row label="Отец — тел." value={ex.father_phone} />
-                        <Row label="Мать — имя" value={ex.mother_name} />
-                        <Row label="Мать — тел." value={ex.mother_phone} />
+                        <Row label="Отец — имя" value={ex.father_name ?? ex.father?.name} />
+                        <Row label="Отец — тел." value={ex.father_phone ?? ex.father?.phone} />
+                        <Row label="Отец — email" value={ex.father?.email} />
+                        <Row label="Отец — работа" value={ex.father?.work} />
+                        <Row label="Мать — имя" value={ex.mother_name ?? ex.mother?.name} />
+                        <Row label="Мать — тел." value={ex.mother_phone ?? ex.mother?.phone} />
+                        <Row label="Мать — email" value={ex.mother?.email} />
+                        <Row label="Мать — работа" value={ex.mother?.work} />
                       </div>
                     </div>
 
@@ -944,6 +951,36 @@ export default function AdminPage() {
                         </div>
                       </div>
                     )}
+
+                    {/* All extra_data fields (catch-all) */}
+                    {(() => {
+                      const knownKeys = new Set([
+                        'first_name','last_name','middle_name','arabic_name','birth_date','birth_place','birth_country',
+                        'nationality','gender','marital_status','passport_number','passport_issued','passport_expiry','passport_issuedby',
+                        'email','mobile','whatsapp','home_phone','nearest_airport','telegram','skype','instagram','facebook','twitter',
+                        'father','mother','father_name','father_phone','mother_name','mother_phone',
+                        'school_type','school_name','school_country','school_city','school_language','graduation_date','gpa',
+                        'known_languages','arabic_years','arabic_institute',
+                        'bachelor_university','bachelor_speciality','bachelor_year','bachelor_gpa',
+                        'programs','degree_type','university',
+                        'country_of_birth','city_of_birth','prev_citizenship','religion','lives_in_uae','lived_in_uae',
+                        'is_working','has_disability','covid_vaccinated','national_id_number','sns','instagram_contact','facebook_contact',
+                      ])
+                      const extra = Object.entries(ex).filter(([k, v]) => !knownKeys.has(k) && v !== null && v !== undefined && v !== '')
+                      if (extra.length === 0) return null
+                      return (
+                        <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl overflow-hidden">
+                          <div className="px-4 py-2.5 bg-white/[0.03] border-b border-white/[0.06]">
+                            <p className="text-xs font-bold text-white/60 uppercase tracking-wider">📋 Дополнительные данные</p>
+                          </div>
+                          <div className="px-4 py-1">
+                            {extra.map(([k, v]) => (
+                              <Row key={k} label={k} value={typeof v === 'object' ? JSON.stringify(v) : String(v)} />
+                            ))}
+                          </div>
+                        </div>
+                      )
+                    })()}
                   </div>
                 )}
 
