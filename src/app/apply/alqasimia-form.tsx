@@ -603,11 +603,11 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                     </Field>
                   </div>
                   <div className="space-y-4">
-                    <Field label={t('Страна рождения', 'Tug\'ilgan mamlakat', 'Country of birth')}>
+                    <Field label={t('Страна рождения', 'Tug\'ilgan mamlakat', 'Country of birth')} required>
                       <input value={form.country_of_birth} onChange={e => setF('country_of_birth', e.target.value)}
                         placeholder={t('Страна', 'Mamlakat', 'Country')} className={INPUT} />
                     </Field>
-                    <Field label={t('Город рождения', 'Tug\'ilgan shahar', 'City of birth')}>
+                    <Field label={t('Город рождения', 'Tug\'ilgan shahar', 'City of birth')} required>
                       <input value={form.city_of_birth} onChange={e => setF('city_of_birth', e.target.value)}
                         placeholder={t('Город', 'Shahar', 'City')} className={INPUT} />
                     </Field>
