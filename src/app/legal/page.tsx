@@ -3,7 +3,7 @@ import { useLanguage } from '@/hooks/useLanguage'
 import Link from 'next/link'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
-import { Building2, FileText, Mail, MapPin, Hash, Calendar, Globe } from 'lucide-react'
+import { Building2, FileText, Mail, MapPin, Hash, Calendar, Globe, Phone, Send } from 'lucide-react'
 
 type Lang = 'ru' | 'uz' | 'en'
 
@@ -92,12 +92,12 @@ const ICONS: Record<string, React.ReactNode> = {
 }
 
 export default function LegalPage() {
-  const { lang } = useLanguage()
+  const [lang, setLang] = useLanguage()
   const c = CONTENT[(lang as Lang) ?? 'ru']
 
   return (
     <>
-      <Navbar lang={lang} />
+      <Navbar lang={lang} onLangChange={setLang} />
       <main className="min-h-screen bg-gray-50">
         {/* Hero */}
         <section className="bg-ink text-white py-16 px-4">
@@ -152,15 +152,27 @@ export default function LegalPage() {
             </div>
             <div className="px-6 py-5 space-y-3">
               <div className="flex items-center gap-3 text-sm">
+                <Globe className="w-4 h-4 text-[#1B4332]" />
+                <a href="https://tarjumanedu.com" className="text-[#1B4332] hover:underline font-medium">
+                  tarjumanedu.com
+                </a>
+              </div>
+              <div className="flex items-center gap-3 text-sm">
                 <Mail className="w-4 h-4 text-[#1B4332]" />
                 <a href="mailto:tarjumanedu@gmail.com" className="text-[#1B4332] hover:underline font-medium">
                   tarjumanedu@gmail.com
                 </a>
               </div>
               <div className="flex items-center gap-3 text-sm">
-                <Globe className="w-4 h-4 text-[#1B4332]" />
-                <a href="https://tarjuman.uz" className="text-[#1B4332] hover:underline font-medium">
-                  tarjuman.uz
+                <Send className="w-4 h-4 text-[#1B4332]" />
+                <a href="https://t.me/TARJUMAN_KSA" target="_blank" rel="noopener noreferrer" className="text-[#1B4332] hover:underline font-medium">
+                  @TARJUMAN_KSA
+                </a>
+              </div>
+              <div className="flex items-center gap-3 text-sm">
+                <Phone className="w-4 h-4 text-[#1B4332]" />
+                <a href="tel:+966597703132" className="text-[#1B4332] hover:underline font-medium">
+                  +966 597 703 132
                 </a>
               </div>
             </div>
