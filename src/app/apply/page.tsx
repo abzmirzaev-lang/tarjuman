@@ -733,11 +733,11 @@ function ApplyContent() {
 
               <div className="grid grid-cols-1 gap-3 mb-10">
                 {([
-                  { code: 'SA', iso: 'sa', nameRu: 'Саудовская Аравия', nameEn: 'Saudi Arabia',       descRu: 'Ведущие исламские университеты мира',          descEn: "World's top Islamic universities", closed: true },
                   { code: 'AE', iso: 'ae', nameRu: 'ОАЭ',               nameEn: 'UAE',                 descRu: 'Современное образование в Дубае и Абу-Даби',    descEn: 'Modern education in Dubai & Abu Dhabi' },
-                  { code: 'QA', iso: 'qa', nameRu: 'Катар',             nameEn: 'Qatar',               descRu: 'Образование мирового класса на Ближнем Востоке', descEn: 'World-class education in the Middle East' },
-                  { code: 'KW', iso: 'kw', nameRu: 'Кувейт',            nameEn: 'Kuwait',              descRu: 'Стипендии и бесплатное обучение',               descEn: 'Scholarships & free education programs' },
-                  { code: 'TR', iso: 'tr', nameRu: 'Турция',            nameEn: 'Turkey',              descRu: 'Доступное образование европейского уровня',      descEn: 'Affordable European-level education' },
+                  { code: 'SA', iso: 'sa', nameRu: 'Саудовская Аравия', nameEn: 'Saudi Arabia',       descRu: 'Ведущие исламские университеты мира',          descEn: "World's top Islamic universities", closed: true },
+                  { code: 'QA', iso: 'qa', nameRu: 'Катар',             nameEn: 'Qatar',               descRu: 'Образование мирового класса на Ближнем Востоке', descEn: 'World-class education in the Middle East', closed: true },
+                  { code: 'KW', iso: 'kw', nameRu: 'Кувейт',            nameEn: 'Kuwait',              descRu: 'Стипендии и бесплатное обучение',               descEn: 'Scholarships & free education programs', closed: true },
+                  { code: 'TR', iso: 'tr', nameRu: 'Турция',            nameEn: 'Turkey',              descRu: 'Доступное образование европейского уровня',      descEn: 'Affordable European-level education', closed: true },
                 ] as { code: string; iso: string; nameRu: string; nameEn: string; descRu: string; descEn: string; closed?: boolean }[]).map(country => {
                   const isSelected = selectedCountry === country.code
                   return (
