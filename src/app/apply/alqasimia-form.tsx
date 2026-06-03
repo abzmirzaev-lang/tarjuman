@@ -696,12 +696,6 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               <Card>
                 <SectionHeader title={t('Контактные данные', 'Aloqa ma\'lumotlari', 'Contact details')} lang={lang} />
                 <div className="p-6 space-y-4">
-                  <p className="text-xs text-muted bg-amber-50 border border-amber-200 rounded-xl px-3 py-2">
-                    {ru
-                      ? '⚠️ Все поля обязательны. Если аккаунта нет — напишите «Нет».'
-                      : uz ? '⚠️ Barcha maydonlar majburiy. Akkaunt yo\'q bo\'lsa — «Yo\'q» deb yozing.'
-                      : '⚠️ All fields are required. If you don\'t have an account — write "No".'}
-                  </p>
                   <div className="space-y-4">
                     <Field label={t('Номер нац. ID', 'Milliy ID raqami', 'National ID number')}>
                       <input value={form.national_id_number} onChange={e => setF('national_id_number', e.target.value)}
