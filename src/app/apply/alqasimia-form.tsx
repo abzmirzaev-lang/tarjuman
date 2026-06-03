@@ -238,15 +238,15 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
 
   const programs = degreeType === 'bachelor' ? BACHELOR_PROGRAMS : MASTER_PROGRAMS
 
-  // Steps: 1=Personal, 2=Contact+Family, 3=Education, 4=Programs, 5=Docs, 6=Package, 7=Review
+  // Steps: 1=Programs, 2=Personal, 3=Contacts, 4=Education, 5=Docs, 6=Package, 7=Review
   const TOTAL = 7
   const STEP_NAMES = ru
-    ? ['Личные данные', 'Контакты и семья', 'Образование', 'Программы', 'Документы', 'Пакет', 'Проверка']
-    : ['Personal data', 'Contacts & family', 'Education', 'Programs', 'Documents', 'Package', 'Review']
+    ? ['Программы', 'Личные данные', 'Контакты и семья', 'Образование', 'Документы', 'Пакет', 'Проверка']
+    : ['Programs', 'Personal data', 'Contacts & family', 'Education', 'Documents', 'Package', 'Review']
 
   // ── Validators ──────────────────────────────────────────────────────────────
 
-  const validateStep1 = () => {
+  const validatePersonal = () => {
     if (!form.full_name || !form.citizenship || !form.passport_number ||
         !form.date_of_birth || !form.gender || !form.marital_status ||
         !form.religion || !form.lives_in_uae || !form.covid_vaccinated) {
@@ -256,11 +256,11 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
     return true
   }
 
-  const validateStep2 = () => {
+  const validateContacts = () => {
     const required = [
       form.email, form.mobile, form.whatsapp, form.home_phone,
       form.skype, form.facebook_contact, form.instagram_contact,
-      form.twitter, form.nearest_airport, form.national_id_number,
+      form.twitter, form.nearest_airport,
       form.father_name, form.father_phone,
       form.mother_name, form.mother_phone,
     ]
@@ -271,9 +271,9 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
     return true
   }
 
-  const validateStep4 = () => {
-    if (selectedPrograms.length === 0) {
-      toast.error(ru ? 'Выберите хотя бы одну специальность' : 'Select at least one program')
+  const validatePrograms = () => {
+    if (selectedPrograms.length < 3) {
+      toast.error(ru ? 'Выберите минимум 3 специальности' : 'Select at least 3 programs')
       return false
     }
     if (degreeType === 'master' && !form.bachelor_university) {
@@ -283,7 +283,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
     return true
   }
 
-  const validateStep5 = () => {
+  const validateDocs = () => {
     const required = [...REQUIRED_DOCS, ...(degreeType === 'master' ? MASTER_DOCS : [])]
     const missing = required.filter(d => !docs[d])
     if (missing.length > 0) {
@@ -296,10 +296,10 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
   }
 
   const handleNext = () => {
-    if (step === 1 && !validateStep1()) return
-    if (step === 2 && !validateStep2()) return
-    if (step === 4 && !validateStep4()) return
-    if (step === 5 && !validateStep5()) return
+    if (step === 1 && !validatePrograms()) return
+    if (step === 2 && !validatePersonal()) return
+    if (step === 3 && !validateContacts()) return
+    if (step === 5 && !validateDocs()) return
     setStep(s => s + 1)
   }
 
@@ -500,14 +500,14 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
         </div>
       </header>
 
-      <div className="max-w-2xl mx-auto px-4 py-8 pb-16">
+      <div className="max-w-2xl mx-auto px-4 py-8 pb-32">
         <AnimatePresence mode="wait">
 
           {/* ── STEP 1: Personal data ── */}
-          {step === 1 && (
-            <motion.div key="s1" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
+          {step === 2 && (
+            <motion.div key="s2new" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
               <div className="mb-8">
-                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{ru ? `Шаг 1 из ${TOTAL}` : `Step 1 of ${TOTAL}`}</p>
+                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{ru ? `Шаг 2 из ${TOTAL}` : `Step 2 of ${TOTAL}`}</p>
                 <h1 className="text-3xl font-bold text-ink">{ru ? 'Личные данные' : 'Personal data'}</h1>
                 <p className="text-muted mt-1 text-sm">{ru ? 'Данные из загранпаспорта и личные сведения' : 'Passport data and personal information'}</p>
               </div>
@@ -623,7 +623,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               </Card>
 
               <div className="flex justify-between mt-2">
-                <button onClick={onBack} className="flex items-center gap-2 px-5 py-3 bg-white border border-gray-200 text-ink text-sm font-medium rounded-xl hover:bg-gray-50 transition-all">
+                <button onClick={() => setStep(1)} className="flex items-center gap-2 px-5 py-3 bg-white border border-gray-200 text-ink text-sm font-medium rounded-xl hover:bg-gray-50 transition-all">
                   <ChevronLeft className="w-4 h-4" /> {ru ? 'Назад' : 'Back'}
                 </button>
                 <button onClick={handleNext} className="flex items-center gap-2 px-8 py-3.5 bg-[#1B4332] text-white text-sm font-semibold rounded-xl hover:bg-[#1B4332]/90 transition-all shadow-sm">
@@ -634,10 +634,10 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
           )}
 
           {/* ── STEP 2: Contacts + Family ── */}
-          {step === 2 && (
-            <motion.div key="s2" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
+          {step === 3 && (
+            <motion.div key="s3new" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
               <div className="mb-8">
-                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{ru ? `Шаг 2 из ${TOTAL}` : `Step 2 of ${TOTAL}`}</p>
+                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{ru ? `Шаг 3 из ${TOTAL}` : `Step 3 of ${TOTAL}`}</p>
                 <h1 className="text-3xl font-bold text-ink">{ru ? 'Контакты и семья' : 'Contacts & family'}</h1>
               </div>
 
@@ -651,7 +651,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                       : '⚠️ All fields are required. If you don\'t have an account — write "No".'}
                   </p>
                   <div className="grid grid-cols-2 gap-4">
-                    <Field label={ru ? 'Номер нац. ID' : 'National ID number'} required>
+                    <Field label={ru ? 'Номер нац. ID' : 'National ID number'}>
                       <input value={form.national_id_number} onChange={e => setF('national_id_number', e.target.value)}
                         placeholder={ru ? 'Номер или «Нет»' : 'Number or "No"'} className={INPUT} />
                     </Field>
@@ -772,15 +772,15 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                 </div>
               </Card>
 
-              <NavButtons onBack={() => setStep(1)} onNext={handleNext} ru={ru} />
+              <NavButtons onBack={onBack} onNext={handleNext} ru={ru} />
             </motion.div>
           )}
 
           {/* ── STEP 3: Education ── */}
-          {step === 3 && (
-            <motion.div key="s3" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
+          {step === 4 && (
+            <motion.div key="s4new" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
               <div className="mb-8">
-                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{ru ? `Шаг 3 из ${TOTAL}` : `Step 3 of ${TOTAL}`}</p>
+                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{ru ? `Шаг 4 из ${TOTAL}` : `Step 4 of ${TOTAL}`}</p>
                 <h1 className="text-3xl font-bold text-ink">{ru ? 'Образование' : 'Education'}</h1>
               </div>
 
@@ -846,15 +846,15 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                 </div>
               </Card>
 
-              <NavButtons onBack={() => setStep(2)} onNext={handleNext} ru={ru} />
+              <NavButtons onBack={onBack} onNext={handleNext} ru={ru} />
             </motion.div>
           )}
 
           {/* ── STEP 4: Programs (+ master bachelor info) ── */}
-          {step === 4 && (
-            <motion.div key="s4" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
+          {step === 1 && (
+            <motion.div key="s1new" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
               <div className="mb-8">
-                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{ru ? `Шаг 4 из ${TOTAL}` : `Step 4 of ${TOTAL}`}</p>
+                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{ru ? `Шаг 1 из ${TOTAL}` : `Step 1 of ${TOTAL}`}</p>
                 <h1 className="text-3xl font-bold text-ink">{ru ? 'Выбор специальности' : 'Program selection'}</h1>
                 <p className="text-muted mt-1 text-sm">
                   {ru
@@ -965,7 +965,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                 </Card>
               )}
 
-              <NavButtons onBack={() => setStep(3)} onNext={handleNext} ru={ru} />
+              <NavButtons onBack={onBack} onNext={handleNext} ru={ru} />
             </motion.div>
           )}
 
@@ -1207,30 +1207,4 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               <CheckCircle2 className="w-8 h-8 text-emerald-500" />
             </div>
             <h3 className="text-xl font-bold text-ink mb-2">{ru ? 'Заявка принята!' : 'Application accepted!'}</h3>
-            <p className="text-muted text-sm leading-relaxed mb-4">
-              {ru ? 'Ваша заявка в Al Qasimia University принята. Менеджер свяжется с вами для подтверждения оплаты.' : 'Your application to Al Qasimia University has been received. A manager will contact you to confirm payment.'}
-            </p>
-            <a
-              href={`https://t.me/tarjuman_help_bot?start=${appId}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#229ED9] text-white font-semibold hover:bg-[#1a8fc4] transition-colors mb-3"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.37l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.978.189z"/>
-              </svg>
-              {ru ? 'Получить уведомление в Telegram' : 'Get Telegram notification'}
-            </a>
-            <button
-              onClick={() => router.push(`/dashboard?app=${appId}`)}
-              className="w-full py-3 rounded-xl border border-border text-muted text-sm font-medium hover:bg-surface transition-colors"
-            >
-              {ru ? 'Перейти в личный кабинет' : 'Go to Dashboard'}
-            </button>
-          </motion.div>
-        </div>
-      )}
-    </div>
-  )
-}
-                                                                                                                                                                                                                                                                                                        
+            <p className="text-m
