@@ -881,11 +881,11 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                       placeholder={ru ? 'Русский, Узбекский, Арабский...' : uz ? 'Rus, O\'zbek, Arab...' : 'Russian, Uzbek, Arabic...'} className={INPUT} />
                   </Field>
                   <div className="space-y-4">
-                    <Field label={t('Лет изучали арабский', 'Arab tilini o\'rganish yillari', 'Years studying Arabic')} required>
+                    <Field label={t('Сколько лет изучали арабский язык?', 'Arab tilini necha yil o\'rgandingiz?', 'How many years did you study Arabic?')} required>
                       <input type="number" min="0" value={form.arabic_years} onChange={e => setF('arabic_years', e.target.value)}
                         placeholder="0" className={INPUT} />
                     </Field>
-                    <Field label={t('Институт / центр (арабский)', 'Arab tili o\'quv markazi', 'Arabic study institute/center')}>
+                    <Field label={t('Где изучали арабский язык? (название места)', 'Arab tilini qayerda o\'rgandingiz? (joy nomi)', 'Where did you study Arabic? (name of place)')}>
                       <input value={form.arabic_institute} onChange={e => setF('arabic_institute', e.target.value)} className={INPUT} />
                     </Field>
                   </div>
