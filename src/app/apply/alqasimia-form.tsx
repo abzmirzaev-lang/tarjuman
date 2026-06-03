@@ -520,7 +520,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                     <input value={form.full_name} onChange={e => setF('full_name', e.target.value)}
                       placeholder={ru ? 'Иванов Иван Иванович' : 'John Michael Doe'} className={INPUT} />
                   </Field>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-4">
                     <Field label={ru ? 'Текущее гражданство' : 'Current citizenship'} required>
                       <select value={form.citizenship} onChange={e => setF('citizenship', e.target.value)} className={SELECT}>
                         <option value="">{ru ? 'Страна...' : 'Country...'}</option>
@@ -533,7 +533,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                         placeholder={ru ? 'Если было' : 'If applicable'} className={INPUT} />
                     </Field>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-4">
                     <Field label={ru ? 'Номер паспорта' : 'Passport number'} required>
                       <input value={form.passport_number} onChange={e => setF('passport_number', e.target.value)}
                         placeholder="AA1234567" className={INPUT} />
@@ -543,7 +543,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                         placeholder={ru ? 'Город, страна' : 'City, country'} className={INPUT} />
                     </Field>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-4">
                     <Field label={ru ? 'Срок действия паспорта' : 'Passport expiry'}>
                       <input type="date" value={form.passport_expiry} onChange={e => setF('passport_expiry', e.target.value)} className={INPUT} />
                     </Field>
@@ -551,7 +551,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                       <input type="date" value={form.date_of_birth} onChange={e => setF('date_of_birth', e.target.value)} className={INPUT} />
                     </Field>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-4">
                     <Field label={ru ? 'Страна рождения' : 'Country of birth'}>
                       <input value={form.country_of_birth} onChange={e => setF('country_of_birth', e.target.value)}
                         placeholder={ru ? 'Страна' : 'Country'} className={INPUT} />
@@ -568,7 +568,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               <Card>
                 <SectionHeader title={ru ? 'Личные сведения' : 'Personal information'} ru={ru} />
                 <div className="p-6 space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-4">
                     <Field label={ru ? 'Пол' : 'Gender'} required>
                       <select value={form.gender} onChange={e => setF('gender', e.target.value)} className={SELECT}>
                         <option value="">{ru ? 'Выберите...' : 'Select...'}</option>
@@ -600,7 +600,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               <Card>
                 <SectionHeader title={ru ? 'Дополнительные сведения' : 'Additional details'} ru={ru} />
                 <div className="p-6 space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-4">
                     <Field label={ru ? 'Проживаете ли в ОАЭ?' : 'Currently living in UAE?'} required>
                       <YesNo value={form.lives_in_uae} onChange={v => setF('lives_in_uae', v)} ru={ru} />
                     </Field>
@@ -608,7 +608,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                       <YesNo value={form.lived_in_uae} onChange={v => setF('lived_in_uae', v)} ru={ru} />
                     </Field>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-4">
                     <Field label={ru ? 'Работаете ли вы?' : 'Are you employed?'}>
                       <YesNo value={form.is_working} onChange={v => setF('is_working', v)} ru={ru} />
                     </Field>
@@ -650,7 +650,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                       ? '⚠️ Все поля обязательны. Если аккаунта нет — напишите «Нет».'
                       : '⚠️ All fields are required. If you don\'t have an account — write "No".'}
                   </p>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-4">
                     <Field label={ru ? 'Номер нац. ID' : 'National ID number'}>
                       <input value={form.national_id_number} onChange={e => setF('national_id_number', e.target.value)}
                         placeholder={ru ? 'Номер или «Нет»' : 'Number or "No"'} className={INPUT} />
@@ -660,7 +660,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                         placeholder="example@mail.com" className={INPUT} />
                     </Field>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-4">
                     <Field label={ru ? 'Мобильный телефон' : 'Mobile phone'} required>
                       <input type="tel" value={form.mobile} onChange={e => setF('mobile', e.target.value)}
                         placeholder="+998901234567" className={INPUT} />
@@ -670,7 +670,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                         placeholder={ru ? '+998... или «Нет»' : '+998... or "No"'} className={INPUT} />
                     </Field>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-4">
                     <Field label={ru ? 'Домашний телефон' : 'Home phone'} required>
                       <input type="tel" value={form.home_phone} onChange={e => setF('home_phone', e.target.value)}
                         placeholder={ru ? '+998... или «Нет»' : '+998... or "No"'} className={INPUT} />
@@ -680,7 +680,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                         placeholder={ru ? 'login или «Нет»' : 'login or "No"'} className={INPUT} />
                     </Field>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-4">
                     <Field label="Facebook" required>
                       <input value={form.facebook_contact} onChange={e => setF('facebook_contact', e.target.value)}
                         placeholder={ru ? 'facebook.com/... или «Нет»' : 'facebook.com/... or "No"'} className={INPUT} />
@@ -690,7 +690,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                         placeholder={ru ? '@username или «Нет»' : '@username or "No"'} className={INPUT} />
                     </Field>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-4">
                     <Field label="Twitter / X" required>
                       <input value={form.twitter} onChange={e => setF('twitter', e.target.value)}
                         placeholder={ru ? '@username или «Нет»' : '@username or "No"'} className={INPUT} />
@@ -710,7 +710,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                   <Field label={ru ? 'ФИО' : 'Full name'} required>
                     <input value={form.father_name} onChange={e => setF('father_name', e.target.value)} className={INPUT} />
                   </Field>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-4">
                     <Field label={ru ? 'Телефон' : 'Phone'} required>
                       <input type="tel" value={form.father_phone} onChange={e => setF('father_phone', e.target.value)}
                         placeholder={ru ? '+998... или «Нет»' : '+998... or "No"'} className={INPUT} />
@@ -734,7 +734,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                   <Field label={ru ? 'ФИО' : 'Full name'} required>
                     <input value={form.mother_name} onChange={e => setF('mother_name', e.target.value)} className={INPUT} />
                   </Field>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-4">
                     <Field label={ru ? 'Телефон' : 'Phone'} required>
                       <input type="tel" value={form.mother_phone} onChange={e => setF('mother_phone', e.target.value)}
                         placeholder={ru ? '+998... или «Нет»' : '+998... or "No"'} className={INPUT} />
@@ -758,7 +758,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                   <Field label={ru ? 'ФИО' : 'Full name'}>
                     <input value={form.relative_name} onChange={e => setF('relative_name', e.target.value)} className={INPUT} />
                   </Field>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-4">
                     <Field label={ru ? 'Телефон' : 'Phone'}>
                       <input type="tel" value={form.relative_phone} onChange={e => setF('relative_phone', e.target.value)} className={INPUT} />
                     </Field>
@@ -796,7 +796,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                       <option value="other">{ru ? 'Другая' : 'Other'}</option>
                     </select>
                   </Field>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-4">
                     <Field label={ru ? 'Название школы' : 'School name'}>
                       <input value={form.school_name} onChange={e => setF('school_name', e.target.value)} className={INPUT} />
                     </Field>
@@ -805,7 +805,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                         placeholder="4.5 / 5.0" className={INPUT} />
                     </Field>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-4">
                     <Field label={ru ? 'Страна' : 'Country'}>
                       <input value={form.school_country} onChange={e => setF('school_country', e.target.value)} className={INPUT} />
                     </Field>
@@ -813,7 +813,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                       <input value={form.school_city} onChange={e => setF('school_city', e.target.value)} className={INPUT} />
                     </Field>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-4">
                     <Field label={ru ? 'Язык обучения' : 'Language of instruction'}>
                       <select value={form.school_language} onChange={e => setF('school_language', e.target.value)} className={SELECT}>
                         <option value="">{ru ? 'Выберите...' : 'Select...'}</option>
@@ -834,7 +834,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                     <input value={form.known_languages} onChange={e => setF('known_languages', e.target.value)}
                       placeholder={ru ? 'Русский, Узбекский, Арабский...' : 'Russian, Uzbek, Arabic...'} className={INPUT} />
                   </Field>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-4">
                     <Field label={ru ? 'Лет изучали арабский' : 'Years studying Arabic'}>
                       <input type="number" min="0" value={form.arabic_years} onChange={e => setF('arabic_years', e.target.value)}
                         placeholder="0" className={INPUT} />
@@ -911,7 +911,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                     <Field label={ru ? 'Название университета' : 'University name'} required>
                       <input value={form.bachelor_university} onChange={e => setF('bachelor_university', e.target.value)} className={INPUT} />
                     </Field>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-4">
                       <Field label={ru ? 'Гос. или частный?' : 'Public or private?'}>
                         <select value={form.bachelor_public_private} onChange={e => setF('bachelor_public_private', e.target.value)} className={SELECT}>
                           <option value="">{ru ? 'Выберите...' : 'Select...'}</option>
@@ -923,7 +923,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                         <input value={form.bachelor_country} onChange={e => setF('bachelor_country', e.target.value)} className={INPUT} />
                       </Field>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-4">
                       <Field label={ru ? 'Город' : 'City'}>
                         <input value={form.bachelor_city} onChange={e => setF('bachelor_city', e.target.value)} className={INPUT} />
                       </Field>
@@ -932,7 +932,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                           placeholder="2023" className={INPUT} />
                       </Field>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-4">
                       <Field label={ru ? 'Специальность' : 'Major'}>
                         <input value={form.bachelor_major} onChange={e => setF('bachelor_major', e.target.value)} className={INPUT} />
                       </Field>
@@ -941,7 +941,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                           placeholder="4" className={INPUT} />
                       </Field>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-4">
                       <Field label={ru ? 'Язык обучения' : 'Language of instruction'}>
                         <select value={form.bachelor_language} onChange={e => setF('bachelor_language', e.target.value)} className={SELECT}>
                           <option value="">{ru ? 'Выберите...' : 'Select...'}</option>
@@ -953,7 +953,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                           placeholder="3.8 / 4.0" className={INPUT} />
                       </Field>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-4">
                       <Field label={ru ? 'Общая оценка (отлично / хорошо...)' : 'Overall grade'}>
                         <input value={form.bachelor_grade} onChange={e => setF('bachelor_grade', e.target.value)} className={INPUT} />
                       </Field>
@@ -1211,7 +1211,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               {ru ? 'Ваша заявка в Al Qasimia University принята. Менеджер свяжется с вами для подтверждения оплаты.' : 'Your application to Al Qasimia University has been received. A manager will contact you to confirm payment.'}
             </p>
             <a
-              href={}
+              href={`https://t.me/tarjuman_help_bot?start=${appId}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#229ED9] text-white font-semibold hover:bg-[#1a8fc4] transition-colors mb-3"
@@ -1222,7 +1222,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               {ru ? 'Получить уведомление в Telegram' : 'Get Telegram notification'}
             </a>
             <button
-              onClick={() => router.push()}
+              onClick={() => router.push(`/dashboard?app=${appId}`)}
               className="w-full py-3 rounded-xl border border-border text-muted text-sm font-medium hover:bg-surface transition-colors"
             >
               {ru ? 'Перейти в личный кабинет' : 'Go to Dashboard'}
