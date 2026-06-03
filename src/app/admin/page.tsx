@@ -158,11 +158,30 @@ export default function AdminPage() {
     const rawNotes = app.notes ?? ''
     const isJson = rawNotes.trimStart().startsWith('{') || rawNotes.trimStart().startsWith('[')
     setSelected(app); setNoteText(isJson ? '' : rawNotes); setDetailTab('info')
-    const [{ data: d1 }, { data: m }] = await Promise.all([
+    const [{ data: d1 }, { data: storageFiles }, { data: m }] = await Promise.all([
       supabase.from('documents').select('*').eq('application_id', app.id).order('created_at'),
+      supabase.storage.from('documents').list(`${app.user_id}/${app.id}`, { limit: 100 }),
       supabase.from('messages').select('*').eq('application_id', app.id).order('created_at'),
     ])
-    const uniqueDocs = d1 ?? []
+    // Merge DB docs + any storage files not yet in DB
+    const dbDocs = d1 ?? []
+    const dbPaths = new Set(dbDocs.map((d: any) => d.file_path))
+    const extraDocs = (storageFiles ?? [])
+      .filter(f => f.name !== '.emptyFolderPlaceholder')
+      .filter(f => !Array.from(dbPaths).some(p => (p as string).endsWith(f.name)))
+      .map(f => ({
+        id: f.id ?? f.name,
+        application_id: app.id,
+        user_id: app.user_id,
+        type: 'OTHER',
+        file_name: f.name,
+        file_path: `${app.user_id}/${app.id}/${f.name}`,
+        file_size: f.metadata?.size ?? 0,
+        mime_type: f.metadata?.mimetype ?? '',
+        is_verified: false,
+        created_at: f.created_at ?? new Date().toISOString(),
+      }))
+    const uniqueDocs = [...dbDocs, ...extraDocs]
     setAppDocs(uniqueDocs); setAppMsgs(m ?? [])
     setDetailOpen(true)
   }
@@ -874,25 +893,31 @@ export default function AdminPage() {
                         <p className="text-xs font-bold text-white/60 uppercase tracking-wider">👤 Личные данные</p>
                       </div>
                       <div className="px-4 py-1">
-                        <Row label="Имя (рус/узб)" value={ex.first_name && ex.last_name ? `${ex.last_name} ${ex.first_name} ${ex.middle_name ?? ''}`.trim() : null} />
-                        <Row label="Имя на арабском" value={ex.arabic_name} />
-                        <Row label="Дата рождения" value={ex.birth_date} />
-                        <Row label="Место рождения" value={ex.birth_place} />
-                        <Row label="Страна рождения" value={ex.birth_country} />
-                        <Row label="Гражданство" value={ex.nationality ?? selected.citizenship} />
-                        <Row label="Пол" value={ex.gender==='male'?'Мужчина':ex.gender==='female'?'Женщина':ex.gender} />
+                        <Row label="ФИО" value={ex.full_name ?? selected.full_name} />
+                        <Row label="Гражданство" value={ex.citizenship ?? selected.citizenship} />
+                        <Row label="Предыдущее гражданство" value={ex.prev_citizenship} />
+                        <Row label="Дата рождения" value={ex.date_of_birth} />
+                        <Row label="Страна рождения" value={ex.country_of_birth} />
+                        <Row label="Город рождения" value={ex.city_of_birth} />
+                        <Row label="Пол" value={ex.gender} />
+                        <Row label="Религия" value={ex.religion} />
                         <Row label="Семейное положение" value={ex.marital_status} />
                         <Row label="Паспорт №" value={ex.passport_number} />
-                        <Row label="Дата выдачи" value={ex.passport_issued} />
-                        <Row label="Срок действия" value={ex.passport_expiry} />
-                        <Row label="Кем выдан" value={ex.passport_issuedby} />
+                        <Row label="Дата выдачи паспорта" value={ex.passport_issued} />
+                        <Row label="Срок действия паспорта" value={ex.passport_expiry} />
+                        <Row label="Нац. удостоверение №" value={ex.national_id_number} />
+                        <Row label="Живёт в ОАЭ" value={ex.lives_in_uae} />
+                        <Row label="Жил в ОАЭ ранее" value={ex.lived_in_uae} />
+                        <Row label="Работает" value={ex.is_working} />
+                        <Row label="Инвалидность" value={ex.has_disability} />
+                        <Row label="Вакцинирован от COVID" value={ex.covid_vaccinated} />
                       </div>
                     </div>
 
                     {/* Contacts */}
                     <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl overflow-hidden">
                       <div className="px-4 py-2.5 bg-white/[0.03] border-b border-white/[0.06]">
-                        <p className="text-xs font-bold text-white/60 uppercase tracking-wider">📞 Контакты и семья</p>
+                        <p className="text-xs font-bold text-white/60 uppercase tracking-wider">📞 Контакты</p>
                       </div>
                       <div className="px-4 py-1">
                         <Row label="Email" value={ex.email ?? selected.email} />
@@ -900,18 +925,31 @@ export default function AdminPage() {
                         <Row label="WhatsApp" value={ex.whatsapp} />
                         <Row label="Домашний тел." value={ex.home_phone} />
                         <Row label="Ближайший аэропорт" value={ex.nearest_airport} />
-                        <Row label="Telegram" value={ex.telegram ?? selected.telegram} />
                         <Row label="Skype" value={ex.skype} />
-                        <Row label="Instagram" value={ex.instagram} />
-                        <Row label="Facebook" value={ex.facebook} />
-                        <Row label="Отец — имя" value={ex.father_name ?? ex.father?.name} />
-                        <Row label="Отец — тел." value={ex.father_phone ?? ex.father?.phone} />
-                        <Row label="Отец — email" value={ex.father?.email} />
-                        <Row label="Отец — работа" value={ex.father?.work} />
-                        <Row label="Мать — имя" value={ex.mother_name ?? ex.mother?.name} />
-                        <Row label="Мать — тел." value={ex.mother_phone ?? ex.mother?.phone} />
-                        <Row label="Мать — email" value={ex.mother?.email} />
-                        <Row label="Мать — работа" value={ex.mother?.work} />
+                        <Row label="Instagram" value={ex.instagram_contact} />
+                        <Row label="Facebook" value={ex.facebook_contact} />
+                        <Row label="Twitter" value={ex.twitter} />
+                      </div>
+                    </div>
+
+                    {/* Family */}
+                    <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl overflow-hidden">
+                      <div className="px-4 py-2.5 bg-white/[0.03] border-b border-white/[0.06]">
+                        <p className="text-xs font-bold text-white/60 uppercase tracking-wider">👨‍👩‍👦 Семья</p>
+                      </div>
+                      <div className="px-4 py-1">
+                        <Row label="Отец — имя" value={ex.father?.name ?? ex.father_name} />
+                        <Row label="Отец — тел." value={ex.father?.phone ?? ex.father_phone} />
+                        <Row label="Отец — email" value={ex.father?.email ?? ex.father_email} />
+                        <Row label="Отец — работа" value={ex.father?.work ?? ex.father_work} />
+                        <Row label="Мать — имя" value={ex.mother?.name ?? ex.mother_name} />
+                        <Row label="Мать — тел." value={ex.mother?.phone ?? ex.mother_phone} />
+                        <Row label="Мать — email" value={ex.mother?.email ?? ex.mother_email} />
+                        <Row label="Мать — работа" value={ex.mother?.work ?? ex.mother_work} />
+                        <Row label="Родственник — имя" value={ex.relative?.name ?? ex.relative_name} />
+                        <Row label="Родственник — тел." value={ex.relative?.phone ?? ex.relative_phone} />
+                        <Row label="Родственник — email" value={ex.relative?.email ?? ex.relative_email} />
+                        <Row label="Родственник — работа" value={ex.relative?.work ?? ex.relative_work} />
                       </div>
                     </div>
 
@@ -928,14 +966,19 @@ export default function AdminPage() {
                         <Row label="Язык обучения" value={ex.school_language} />
                         <Row label="Дата окончания" value={ex.graduation_date} />
                         <Row label="Средний балл (GPA)" value={ex.gpa} />
-                        <Row label="Языки" value={Array.isArray(ex.known_languages) ? ex.known_languages.join(', ') : ex.known_languages} />
+                        <Row label="Знает языки" value={Array.isArray(ex.known_languages) ? ex.known_languages.join(', ') : ex.known_languages} />
                         <Row label="Лет изучал арабский" value={ex.arabic_years} />
                         <Row label="Где изучал арабский" value={ex.arabic_institute} />
-                        {/* Bachelor info (for masters) */}
-                        <Row label="Университет (бакалавр)" value={ex.bachelor_university} />
-                        <Row label="Специальность (бакалавр)" value={ex.bachelor_speciality} />
-                        <Row label="Год окончания (бакалавр)" value={ex.bachelor_year} />
-                        <Row label="GPA (бакалавр)" value={ex.bachelor_gpa} />
+                        {ex.degree_type === 'master' && <>
+                          <Row label="Университет (бакалавр)" value={ex.bachelor_university} />
+                          <Row label="Страна (бакалавр)" value={ex.bachelor_country} />
+                          <Row label="Специальность" value={ex.bachelor_major} />
+                          <Row label="Год окончания" value={ex.bachelor_year} />
+                          <Row label="GPA (бакалавр)" value={ex.bachelor_gpa} />
+                          <Row label="Оценка" value={ex.bachelor_grade} />
+                          <Row label="Язык обучения" value={ex.bachelor_language} />
+                          <Row label="Эквивалентность" value={ex.bachelor_equivalency} />
+                        </>}
                       </div>
                     </div>
 
@@ -952,36 +995,6 @@ export default function AdminPage() {
                         </div>
                       </div>
                     )}
-
-                    {/* All extra_data fields (catch-all) */}
-                    {(() => {
-                      const knownKeys = new Set([
-                        'first_name','last_name','middle_name','arabic_name','birth_date','birth_place','birth_country',
-                        'nationality','gender','marital_status','passport_number','passport_issued','passport_expiry','passport_issuedby',
-                        'email','mobile','whatsapp','home_phone','nearest_airport','telegram','skype','instagram','facebook','twitter',
-                        'father','mother','father_name','father_phone','mother_name','mother_phone',
-                        'school_type','school_name','school_country','school_city','school_language','graduation_date','gpa',
-                        'known_languages','arabic_years','arabic_institute',
-                        'bachelor_university','bachelor_speciality','bachelor_year','bachelor_gpa',
-                        'programs','degree_type','university',
-                        'country_of_birth','city_of_birth','prev_citizenship','religion','lives_in_uae','lived_in_uae',
-                        'is_working','has_disability','covid_vaccinated','national_id_number','sns','instagram_contact','facebook_contact',
-                      ])
-                      const extra = Object.entries(ex).filter(([k, v]) => !knownKeys.has(k) && v !== null && v !== undefined && v !== '')
-                      if (extra.length === 0) return null
-                      return (
-                        <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl overflow-hidden">
-                          <div className="px-4 py-2.5 bg-white/[0.03] border-b border-white/[0.06]">
-                            <p className="text-xs font-bold text-white/60 uppercase tracking-wider">📋 Дополнительные данные</p>
-                          </div>
-                          <div className="px-4 py-1">
-                            {extra.map(([k, v]) => (
-                              <Row key={k} label={k} value={typeof v === 'object' ? JSON.stringify(v) : String(v)} />
-                            ))}
-                          </div>
-                        </div>
-                      )
-                    })()}
                   </div>
                 )}
 
