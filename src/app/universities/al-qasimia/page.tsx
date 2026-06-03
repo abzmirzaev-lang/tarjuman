@@ -43,6 +43,14 @@ const T = {
     ],
     bachelor: 'Бакалавриат',
     master: 'Магистратура',
+    ageTitle: 'Требования к возрасту',
+    ageBachelor: 'Бакалавриат: от 16 до 24 лет',
+    ageMaster: 'Магистратура: до 30 лет',
+    arabicTitle: 'Курсы арабского языка',
+    arabicDesc: 'Не знаете арабский? Не проблема! Университет аль-Касимия предоставляет подготовительные курсы арабского языка для иностранных студентов. Вы сможете освоить язык до начала основной программы.',
+    docsTitle: 'Необходимые документы',
+    docsBachelor: 'Для бакалавриата',
+    docsMaster: 'Дополнительно для магистратуры',
     docs: [
       'Загранпаспорт (только главная страница)',
       'Аттестат 11 класса',
@@ -53,6 +61,10 @@ const T = {
       'Характеристика с места учёбы (школы, университета) или работы',
       'Свидетельство о рождении',
       'Скрин подписки на Instagram или Facebook университета',
+    ],
+    docsMasterExtra: [
+      'Диплом бакалавра (оригинал + копия)',
+      'Транскрипт оценок за весь период бакалавриата',
     ],
   },
   uz: {
@@ -85,6 +97,14 @@ const T = {
     ],
     bachelor: 'Bakalavr',
     master: 'Magistratura',
+    ageTitle: 'Yosh talablari',
+    ageBachelor: 'Bakalavr: 16 dan 24 yoshgacha',
+    ageMaster: 'Magistratura: 30 yoshgacha',
+    arabicTitle: 'Arab tili kurslari',
+    arabicDesc: 'Arab tilini bilmaysizmi? Muammo emas! Universitet xorijiy talabalar uchun tayyorlov arab tili kurslarini taqdim etadi. Asosiy dastur boshlanishidan oldin tilni o\'rgana olasiz.',
+    docsTitle: 'Kerakli hujjatlar',
+    docsBachelor: 'Bakalavr uchun',
+    docsMaster: 'Magistratura uchun qo\'shimcha',
     docs: [
       'Xorijiy pasport (faqat bosh sahifasi)',
       '11-sinf attestati',
@@ -95,6 +115,10 @@ const T = {
       'O\'quv yoki ish joyidan tavsifnoma',
       'Tug\'ilish guvohnomasi',
       'Universitetning Instagram yoki Facebook sahifasiga obuna bo\'lganingizni tasdiqlash skrini',
+    ],
+    docsMasterExtra: [
+      'Bakalavr diplomi (asl nusxa + nusxa)',
+      'Bakalavr davridagi baholar transkripty',
     ],
   },
   en: {
@@ -127,6 +151,14 @@ const T = {
     ],
     bachelor: "Bachelor's",
     master: "Master's",
+    ageTitle: 'Age Requirements',
+    ageBachelor: "Bachelor's: 16 to 24 years old",
+    ageMaster: "Master's: up to 30 years old",
+    arabicTitle: 'Arabic Language Courses',
+    arabicDesc: "Don't speak Arabic? No problem! The university provides preparatory Arabic language courses for international students so you can learn the language before starting your main program.",
+    docsTitle: 'Required Documents',
+    docsBachelor: "For Bachelor's",
+    docsMaster: "Additional for Master's",
     docs: [
       'Passport (main page only)',
       '11th grade certificate',
@@ -137,6 +169,10 @@ const T = {
       'Reference letter from school, university or workplace',
       'Birth certificate',
       'Screenshot confirming subscription to university Instagram or Facebook',
+    ],
+    docsMasterExtra: [
+      "Bachelor's degree diploma (original + copy)",
+      'Full academic transcript from bachelor studies',
     ],
   },
 }
@@ -182,22 +218,17 @@ export default function AlQasimiaPage() {
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <section className="relative h-[70vh] min-h-[480px] flex items-end overflow-hidden">
-        {/* Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#071a10] via-[#1B4332] to-[#0a2218]">
-          <div className="absolute inset-0 opacity-[0.07]" style={{backgroundImage:'repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%)',backgroundSize:'28px 28px'}} />
-        </div>
-
-        {/* Logo */}
-        <div className="absolute inset-0 flex items-center justify-center">
+        {/* Background photo */}
+        <div className="absolute inset-0">
           <img
-            src="https://upload.wikimedia.org/wikipedia/en/2/2f/Al_Qasimia_University_logo.png"
+            src="/al-qasimia.jpg"
             alt="Al Qasimia University"
-            className="h-48 w-auto object-contain opacity-20 select-none pointer-events-none"
+            className="w-full h-full object-cover"
           />
         </div>
 
         {/* Gradient bottom */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10" />
 
         {/* Content */}
         <div className="relative z-10 w-full max-w-4xl mx-auto px-6 pb-12">
@@ -225,6 +256,44 @@ export default function AlQasimiaPage() {
           <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <h2 className="text-2xl font-bold text-ink mb-4">{c.aboutTitle}</h2>
             <p className="text-gray-600 leading-relaxed text-base">{c.about}</p>
+          </motion.section>
+
+          {/* ── AGE REQUIREMENTS ─────────────────────────────────────────── */}
+          <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <h2 className="text-2xl font-bold text-ink mb-4">{c.ageTitle}</h2>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
+                  <GraduationCap className="w-6 h-6 text-emerald-600" />
+                </div>
+                <div>
+                  <div className="text-xs text-gray-400 mb-0.5">{c.bachelor}</div>
+                  <div className="text-sm font-semibold text-ink">{c.ageBachelor}</div>
+                </div>
+              </div>
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center shrink-0">
+                  <BookOpen className="w-6 h-6 text-amber-600" />
+                </div>
+                <div>
+                  <div className="text-xs text-gray-400 mb-0.5">{c.master}</div>
+                  <div className="text-sm font-semibold text-ink">{c.ageMaster}</div>
+                </div>
+              </div>
+            </div>
+          </motion.section>
+
+          {/* ── ARABIC COURSES ───────────────────────────────────────────── */}
+          <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <div className="bg-blue-50 border border-blue-100 rounded-2xl p-6 flex gap-4">
+              <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center shrink-0 mt-0.5">
+                <BookOpen className="w-6 h-6 text-blue-600" />
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-blue-900 mb-1">{c.arabicTitle}</h2>
+                <p className="text-blue-700 text-sm leading-relaxed">{c.arabicDesc}</p>
+              </div>
+            </div>
           </motion.section>
 
           {/* ── BENEFITS ─────────────────────────────────────────────────── */}
@@ -288,35 +357,52 @@ export default function AlQasimiaPage() {
           {/* ── DOCUMENTS ────────────────────────────────────────────────── */}
           <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <h2 className="text-2xl font-bold text-ink mb-6">{c.docsTitle}</h2>
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-              <div className="divide-y divide-gray-50">
-                {c.docs.map((doc, i) => (
-                  <div key={i} className="flex items-start gap-4 px-5 py-4">
-                    <div className="w-7 h-7 bg-emerald-50 rounded-full flex items-center justify-center shrink-0 mt-0.5">
-                      <FileCheck className="w-3.5 h-3.5 text-emerald-600" />
+            <div className="space-y-4">
+              {/* Bachelor docs */}
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <div className="flex items-center gap-2 px-5 py-3 bg-[#1B4332]/5 border-b border-gray-100">
+                  <GraduationCap className="w-4 h-4 text-[#1B4332]" />
+                  <span className="font-semibold text-[#1B4332] text-sm">{c.docsBachelor}</span>
+                </div>
+                <div className="divide-y divide-gray-50">
+                  {c.docs.map((doc, i) => (
+                    <div key={i} className="flex items-start gap-4 px-5 py-4">
+                      <div className="w-7 h-7 bg-emerald-50 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                        <FileCheck className="w-3.5 h-3.5 text-emerald-600" />
+                      </div>
+                      <span className="text-sm text-ink leading-relaxed">{doc}</span>
                     </div>
-                    <span className="text-sm text-ink leading-relaxed">{doc}</span>
-                  </div>
-                ))}
+                  ))}
+                </div>
+                {/* Social subscribe */}
+                <div className="px-5 pb-5 pt-2 flex gap-3">
+                  <a href="https://www.instagram.com/alqasimiauni/" target="_blank" rel="noopener noreferrer"
+                    className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-pink-200 bg-pink-50 text-pink-700 text-sm font-medium hover:bg-pink-100 transition-colors">
+                    <Instagram className="w-4 h-4" /> Instagram
+                  </a>
+                  <a href="https://www.facebook.com/AlQasimiaUni/" target="_blank" rel="noopener noreferrer"
+                    className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-blue-200 bg-blue-50 text-blue-700 text-sm font-medium hover:bg-blue-100 transition-colors">
+                    <Facebook className="w-4 h-4" /> Facebook
+                  </a>
+                </div>
               </div>
-              {/* Social subscribe */}
-              <div className="px-5 pb-5 pt-2 flex gap-3">
-                <a
-                  href="https://www.instagram.com/alqasimiauni/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-pink-200 bg-pink-50 text-pink-700 text-sm font-medium hover:bg-pink-100 transition-colors"
-                >
-                  <Instagram className="w-4 h-4" /> Instagram
-                </a>
-                <a
-                  href="https://www.facebook.com/AlQasimiaUni/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-blue-200 bg-blue-50 text-blue-700 text-sm font-medium hover:bg-blue-100 transition-colors"
-                >
-                  <Facebook className="w-4 h-4" /> Facebook
-                </a>
+
+              {/* Master extra docs */}
+              <div className="bg-white rounded-2xl border border-amber-100 shadow-sm overflow-hidden">
+                <div className="flex items-center gap-2 px-5 py-3 bg-amber-50 border-b border-amber-100">
+                  <BookOpen className="w-4 h-4 text-amber-700" />
+                  <span className="font-semibold text-amber-700 text-sm">{c.docsMaster}</span>
+                </div>
+                <div className="divide-y divide-gray-50">
+                  {c.docsMasterExtra.map((doc, i) => (
+                    <div key={i} className="flex items-start gap-4 px-5 py-4">
+                      <div className="w-7 h-7 bg-amber-50 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                        <FileCheck className="w-3.5 h-3.5 text-amber-600" />
+                      </div>
+                      <span className="text-sm text-ink leading-relaxed">{doc}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </motion.section>

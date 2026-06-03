@@ -509,17 +509,12 @@ function ApplyContent() {
                     className="group relative rounded-2xl overflow-hidden border-2 border-[#1B4332] shadow-xl shadow-[#1B4332]/15 text-left transition-all duration-300 hover:shadow-2xl hover:scale-[1.01] hover:border-[#1B4332]"
                   >
                     {/* Photo header */}
-                    <div className="relative h-40 overflow-hidden bg-gradient-to-br from-[#071a10] via-[#1B4332] to-[#0a2218]">
-                      <div className="absolute inset-0 opacity-[0.07]" style={{backgroundImage:'repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%)',backgroundSize:'22px 22px'}} />
-                      {/* Logo centered */}
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <img
-                          src="https://upload.wikimedia.org/wikipedia/en/2/2f/Al_Qasimia_University_logo.png"
-                          alt="Al Qasimia University"
-                          className="h-20 w-auto object-contain drop-shadow-2xl group-hover:scale-105 transition-transform duration-500"
-                          onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
-                        />
-                      </div>
+                    <div className="relative h-40 overflow-hidden">
+                      <img
+                        src="/al-qasimia.jpg"
+                        alt="Al Qasimia University"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
                       {/* Badges */}
                       <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-[#C9922A] text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-md">
                         <svg className="w-3 h-3 fill-white" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
