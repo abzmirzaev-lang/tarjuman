@@ -490,28 +490,53 @@ function ApplyContent() {
                 <div className="mb-10 text-center">
                   <div className="inline-flex items-center gap-2 mb-3">
                     <img src="https://flagcdn.com/w40/ae.png" alt="UAE" className="w-8 h-5 rounded object-cover" />
-                    <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest">{lang === 'ru' ? 'ОАЭ' : 'UAE'}</p>
+                    <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest">
+                      {lang === 'ru' ? 'ОАЭ' : lang === 'uz' ? 'BAA' : 'UAE'}
+                    </p>
                   </div>
-                  <h1 className="text-3xl font-bold text-ink mb-2">{lang === 'ru' ? 'Выберите университет' : 'Choose a university'}</h1>
-                  <p className="text-muted text-sm">{lang === 'ru' ? 'Доступные университеты ОАЭ' : 'Available UAE universities'}</p>
+                  <h1 className="text-3xl font-bold text-ink mb-2">
+                    {lang === 'ru' ? 'Выберите университет' : lang === 'uz' ? 'Universitet tanlang' : 'Choose a university'}
+                  </h1>
+                  <p className="text-muted text-sm">
+                    {lang === 'ru' ? 'Доступные университеты ОАЭ' : lang === 'uz' ? 'BAA universitetlari' : 'Available UAE universities'}
+                  </p>
                 </div>
 
                 <div className="grid grid-cols-1 gap-3 mb-10">
                   {/* Al Qasimia University */}
                   <button
                     onClick={() => setUaeStep('degree')}
-                    className="group relative flex items-center gap-4 p-5 rounded-2xl border-2 border-[#1B4332] bg-white shadow-lg shadow-[#1B4332]/10 text-left transition-all duration-200"
+                    className="group relative flex items-center gap-4 p-5 rounded-2xl border-2 border-[#1B4332] bg-white shadow-lg shadow-[#1B4332]/10 text-left transition-all duration-200 hover:shadow-xl hover:scale-[1.01]"
                   >
                     <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#1B4332] rounded-l-2xl" />
-                    <div className="w-14 h-14 rounded-xl bg-[#1B4332]/5 border border-[#1B4332]/20 flex items-center justify-center shrink-0 ml-1">
-                      <GraduationCap className="w-7 h-7 text-[#1B4332]" />
+                    {/* University logo */}
+                    <div className="w-14 h-14 rounded-xl overflow-hidden border border-[#1B4332]/20 shrink-0 ml-1 bg-white">
+                      <img
+                        src="https://upload.wikimedia.org/wikipedia/en/2/2f/Al_Qasimia_University_logo.png"
+                        alt="Al Qasimia University"
+                        className="w-full h-full object-contain p-1"
+                        onError={e => {
+                          const t = e.currentTarget
+                          t.style.display = 'none'
+                          t.parentElement!.innerHTML = '<div class="w-full h-full bg-[#1B4332]/5 flex items-center justify-center"><span class="text-[#1B4332] font-bold text-lg">AQ</span></div>'
+                        }}
+                      />
                     </div>
                     <div className="flex-1 min-w-0 pl-1">
                       <p className="font-bold text-base text-[#1B4332] mb-0.5">Al Qasimia University</p>
-                      <p className="text-xs text-muted">{lang === 'ru' ? 'Шарджа, ОАЭ · Исламские науки, язык, экономика' : 'Sharjah, UAE · Islamic sciences, language, economics'}</p>
+                      <p className="text-xs text-[#1B4332]/60 font-medium mb-1" dir="rtl">جامعة القاسمية</p>
+                      <p className="text-xs text-muted">
+                        {lang === 'ru' ? 'Шарджа, ОАЭ · Исламские науки, язык, экономика'
+                          : lang === 'uz' ? 'Sharjah, BAA · Islom fanlari, til, iqtisodiyot'
+                          : 'Sharjah, UAE · Islamic sciences, language, economics'}
+                      </p>
                       <div className="flex gap-1.5 mt-2 flex-wrap">
-                        <span className="text-[10px] bg-[#1B4332]/10 text-[#1B4332] px-2 py-0.5 rounded-full font-semibold">{lang === 'ru' ? 'Бакалавриат' : 'Bachelor'}</span>
-                        <span className="text-[10px] bg-[#1B4332]/10 text-[#1B4332] px-2 py-0.5 rounded-full font-semibold">{lang === 'ru' ? 'Магистратура' : 'Master'}</span>
+                        <span className="text-[10px] bg-[#1B4332]/10 text-[#1B4332] px-2 py-0.5 rounded-full font-semibold">
+                          {lang === 'ru' ? 'Бакалавриат' : lang === 'uz' ? 'Bakalavr' : 'Bachelor'}
+                        </span>
+                        <span className="text-[10px] bg-[#1B4332]/10 text-[#1B4332] px-2 py-0.5 rounded-full font-semibold">
+                          {lang === 'ru' ? 'Магистратура' : lang === 'uz' ? 'Magistratura' : 'Master'}
+                        </span>
                         <span className="text-[10px] bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full font-semibold">2026–2027</span>
                       </div>
                     </div>
@@ -523,7 +548,8 @@ function ApplyContent() {
                   onClick={() => { setUaeStep(null); setSelectedCountry('') }}
                   className="flex items-center gap-2 px-5 py-3 bg-white border border-gray-200 text-ink text-sm font-medium rounded-xl hover:bg-gray-50 transition-all"
                 >
-                  <ChevronLeft className="w-4 h-4" /> {lang === 'ru' ? 'Назад' : 'Back'}
+                  <ChevronLeft className="w-4 h-4" />
+                  {lang === 'ru' ? 'Назад' : lang === 'uz' ? 'Orqaga' : 'Back'}
                 </button>
               </motion.div>
             )}
@@ -533,8 +559,12 @@ function ApplyContent() {
               <motion.div key="uae-degree" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.3 }}>
                 <div className="mb-10 text-center">
                   <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-3">Al Qasimia University</p>
-                  <h1 className="text-3xl font-bold text-ink mb-2">{lang === 'ru' ? 'Уровень обучения' : 'Degree level'}</h1>
-                  <p className="text-muted text-sm">{lang === 'ru' ? 'Выберите программу поступления' : 'Choose your admission program'}</p>
+                  <h1 className="text-3xl font-bold text-ink mb-2">
+                    {lang === 'ru' ? 'Уровень обучения' : lang === 'uz' ? "Ta'lim darajasi" : 'Degree level'}
+                  </h1>
+                  <p className="text-muted text-sm">
+                    {lang === 'ru' ? 'Выберите программу поступления' : lang === 'uz' ? "Qabul dasturini tanlang" : 'Choose your admission program'}
+                  </p>
                 </div>
 
                 <div className="grid grid-cols-1 gap-3 mb-10">
@@ -542,15 +572,19 @@ function ApplyContent() {
                     {
                       type: 'bachelor' as const,
                       titleRu: 'Бакалавриат',
-                      titleEn: 'Bachelor\'s Degree',
+                      titleUz: "Bakalavr",
+                      titleEn: "Bachelor's Degree",
                       descRu: '8 направлений · Исламские науки, язык, СМИ, экономика',
+                      descUz: "8 yo'nalish · Islom fanlari, til, media, iqtisodiyot",
                       descEn: '8 programs · Islamic sciences, language, media, economics',
                     },
                     {
                       type: 'master' as const,
                       titleRu: 'Магистратура',
-                      titleEn: 'Master\'s Degree',
+                      titleUz: 'Magistratura',
+                      titleEn: "Master's Degree",
                       descRu: '3 направления · Язык, фикх, тафсир',
+                      descUz: "3 yo'nalish · Til, fiqh, tafsir",
                       descEn: '3 programs · Language, fiqh, tafsir',
                     },
                   ]).map(item => (
@@ -572,9 +606,11 @@ function ApplyContent() {
                       </div>
                       <div className="flex-1">
                         <p className={cn('font-bold text-base', aqDegreeType === item.type ? 'text-[#1B4332]' : 'text-ink')}>
-                          {lang === 'ru' ? item.titleRu : item.titleEn}
+                          {lang === 'ru' ? item.titleRu : lang === 'uz' ? item.titleUz : item.titleEn}
                         </p>
-                        <p className="text-xs text-muted mt-0.5">{lang === 'ru' ? item.descRu : item.descEn}</p>
+                        <p className="text-xs text-muted mt-0.5">
+                          {lang === 'ru' ? item.descRu : lang === 'uz' ? item.descUz : item.descEn}
+                        </p>
                       </div>
                       <div className={cn(
                         'w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-all',
@@ -592,7 +628,8 @@ function ApplyContent() {
 
                 <div className="flex justify-between">
                   <button onClick={() => setUaeStep('university')} className="flex items-center gap-2 px-5 py-3 bg-white border border-gray-200 text-ink text-sm font-medium rounded-xl hover:bg-gray-50 transition-all">
-                    <ChevronLeft className="w-4 h-4" /> {lang === 'ru' ? 'Назад' : 'Back'}
+                    <ChevronLeft className="w-4 h-4" />
+                    {lang === 'ru' ? 'Назад' : lang === 'uz' ? 'Orqaga' : 'Back'}
                   </button>
                   <button
                     onClick={() => { if (aqDegreeType) setAqFormActive(true) }}
@@ -604,7 +641,8 @@ function ApplyContent() {
                         : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                     )}
                   >
-                    {lang === 'ru' ? 'Заполнить анкету' : 'Fill application'} <ChevronRight className="w-4 h-4" />
+                    {lang === 'ru' ? 'Заполнить анкету' : lang === 'uz' ? 'Anketani to\'ldirish' : 'Fill application'}
+                    <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
               </motion.div>

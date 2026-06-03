@@ -16,21 +16,27 @@ import { v4 as uuidv4 } from 'uuid'
 
 // ── Programs ─────────────────────────────────────────────────────────────────
 
-const BACHELOR_PROGRAMS = [
-  'تفسير وعلوم القرآن',
-  'اللغة العربية وآدابها',
-  'الإعلام',
-  'الاقتصاد',
-  'أصول الدين',
-  'الفقه وأصوله',
-  'الحضارة والتاريخ الإسلامي',
-  'القراءات',
+interface Program {
+  ar: string
+  ru: string
+  uz: string
+}
+
+const BACHELOR_PROGRAMS: Program[] = [
+  { ar: 'تفسير وعلوم القرآن',        ru: 'Толкование и науки Корана',        uz: 'Tafsir va Qur\'on fanlari' },
+  { ar: 'اللغة العربية وآدابها',      ru: 'Арабский язык и литература',       uz: 'Arab tili va adabiyoti' },
+  { ar: 'الإعلام',                    ru: 'Медиа и журналистика',              uz: 'Media va jurnalistika' },
+  { ar: 'الاقتصاد',                   ru: 'Экономика',                         uz: 'Iqtisodiyot' },
+  { ar: 'أصول الدين',                 ru: 'Основы религии (Акыда)',            uz: 'Din asoslari (Aqida)' },
+  { ar: 'الفقه وأصوله',               ru: 'Исламское право (Фикх)',            uz: 'Islom huquqi (Fiqh)' },
+  { ar: 'الحضارة والتاريخ الإسلامي',  ru: 'Исламская цивилизация и история',   uz: 'Islom sivilizatsiyasi va tarixi' },
+  { ar: 'القراءات',                   ru: 'Чтение Корана (Кираат)',            uz: 'Qur\'on qiroati (Qiroat)' },
 ]
 
-const MASTER_PROGRAMS = [
-  'اللغة العربية وآدابها',
-  'الفقه وأصوله',
-  'التفسير والحديث',
+const MASTER_PROGRAMS: Program[] = [
+  { ar: 'اللغة العربية وآدابها', ru: 'Арабский язык и литература', uz: 'Arab tili va adabiyoti' },
+  { ar: 'الفقه وأصوله',          ru: 'Исламское право (Фикх)',     uz: 'Islom huquqi (Fiqh)' },
+  { ar: 'التفسير والحديث',        ru: 'Тафсир и хадисоведение',    uz: 'Tafsir va hadis ilmi' },
 ]
 
 // ── Document types ────────────────────────────────────────────────────────────
@@ -147,21 +153,23 @@ const SELECT = "w-full h-11 px-4 text-sm border border-gray-200 rounded-xl focus
 
 // ── Helpers (outside component to avoid focus loss on re-render) ──────────────
 
-function YesNo({ value, onChange, ru }: { value: string; onChange: (v: string) => void; ru: boolean }) {
+function YesNo({ value, onChange, lang }: { value: string; onChange: (v: string) => void; lang: string }) {
+  const ru = lang === 'ru'; const uz = lang === 'uz'
   return (
     <select value={value} onChange={e => onChange(e.target.value)} className={SELECT}>
-      <option value="">{ru ? 'Выберите...' : 'Select...'}</option>
-      <option value="yes">{ru ? 'Да' : 'Yes'}</option>
-      <option value="no">{ru ? 'Нет' : 'No'}</option>
+      <option value="">{ru ? 'Выберите...' : uz ? 'Tanlang...' : 'Select...'}</option>
+      <option value="yes">{ru ? 'Да' : uz ? 'Ha' : 'Yes'}</option>
+      <option value="no">{ru ? 'Нет' : uz ? 'Yo\'q' : 'No'}</option>
     </select>
   )
 }
 
-function SectionHeader({ title, optional, ru }: { title: string; optional?: boolean; ru: boolean }) {
+function SectionHeader({ title, optional, lang }: { title: string; optional?: boolean; lang: string }) {
+  const ru = lang === 'ru'; const uz = lang === 'uz'
   return (
     <div className="px-6 py-4 border-b border-gray-50 bg-gray-50/50 flex items-center justify-between">
       <p className="text-xs font-semibold text-muted uppercase tracking-wider">{title}</p>
-      {optional && <span className="text-[11px] text-muted bg-gray-100 px-2 py-0.5 rounded-full">{ru ? 'Необязательно' : 'Optional'}</span>}
+      {optional && <span className="text-[11px] text-muted bg-gray-100 px-2 py-0.5 rounded-full">{ru ? 'Необязательно' : uz ? 'Ixtiyoriy' : 'Optional'}</span>}
     </div>
   )
 }
@@ -170,14 +178,15 @@ function Card({ children }: { children: React.ReactNode }) {
   return <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-4">{children}</div>
 }
 
-function NavButtons({ onBack, onNext, ru }: { onBack: () => void; onNext: () => void; ru: boolean }) {
+function NavButtons({ onBack, onNext, lang }: { onBack: () => void; onNext: () => void; lang: string }) {
+  const ru = lang === 'ru'; const uz = lang === 'uz'
   return (
     <div className="flex justify-between mt-8">
       <button onClick={onBack} className="flex items-center gap-2 px-5 py-3 bg-white border border-gray-200 text-ink text-sm font-medium rounded-xl hover:bg-gray-50 transition-all">
-        <ChevronLeft className="w-4 h-4" /> {ru ? 'Назад' : 'Back'}
+        <ChevronLeft className="w-4 h-4" /> {ru ? 'Назад' : uz ? 'Orqaga' : 'Back'}
       </button>
       <button onClick={onNext} className="flex items-center gap-2 px-8 py-3.5 bg-[#1B4332] text-white text-sm font-semibold rounded-xl hover:bg-[#1B4332]/90 transition-all shadow-sm">
-        {ru ? 'Далее' : 'Next'} <ChevronRight className="w-4 h-4" />
+        {ru ? 'Далее' : uz ? 'Keyingi' : 'Next'} <ChevronRight className="w-4 h-4" />
       </button>
     </div>
   )
@@ -203,6 +212,9 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
   const [docs, setDocs] = useState<Partial<Record<AQDocType, AQDoc>>>({})
 
   const ru = lang === 'ru'
+  const uz = lang === 'uz'
+  const t = (ruText: string, uzText: string, enText: string) =>
+    ru ? ruText : uz ? uzText : enText
 
   const [form, setForm] = useState({
     // Personal
@@ -242,6 +254,8 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
   const TOTAL = 7
   const STEP_NAMES = ru
     ? ['Программы', 'Личные данные', 'Контакты и семья', 'Образование', 'Документы', 'Пакет', 'Проверка']
+    : uz
+    ? ['Yo\'nalishlar', 'Shaxsiy ma\'lumot', 'Aloqa va oila', 'Ta\'lim', 'Hujjatlar', 'Paket', 'Tekshirish']
     : ['Programs', 'Personal data', 'Contacts & family', 'Education', 'Documents', 'Package', 'Review']
 
   // ── Validators ──────────────────────────────────────────────────────────────
@@ -255,7 +269,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
       form.lives_in_uae, form.covid_vaccinated,
     ]
     if (required.some(v => !v.trim())) {
-      toast.error(ru ? 'Заполните все обязательные поля' : 'Fill all required fields')
+      toast.error(t('Заполните все обязательные поля', 'Barcha majburiy maydonlarni to\'ldiring', 'Fill all required fields'))
       return false
     }
     return true
@@ -270,7 +284,11 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
       form.mother_name, form.mother_phone,
     ]
     if (required.some(v => !v.trim())) {
-      toast.error(ru ? 'Заполните все обязательные поля (если нет — напишите «Нет»)' : 'Fill all required fields (if none — write "No")')
+      toast.error(t(
+        'Заполните все обязательные поля (если нет — напишите «Нет»)',
+        'Barcha majburiy maydonlarni to\'ldiring (yo\'q bo\'lsa — «Yo\'q» deb yozing)',
+        'Fill all required fields (if none — write "No")'
+      ))
       return false
     }
     return true
@@ -283,7 +301,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
       form.known_languages, form.arabic_years,
     ]
     if (required.some(v => !v.trim())) {
-      toast.error(ru ? 'Заполните все обязательные поля образования' : 'Fill all required education fields')
+      toast.error(t('Заполните все обязательные поля образования', 'Ta\'lim bo\'yicha barcha maydonlarni to\'ldiring', 'Fill all required education fields'))
       return false
     }
     return true
@@ -291,11 +309,11 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
 
   const validatePrograms = () => {
     if (selectedPrograms.length < 3) {
-      toast.error(ru ? 'Выберите минимум 3 специальности' : 'Select at least 3 programs')
+      toast.error(t('Выберите минимум 3 специальности', 'Kamida 3 ta yo\'nalish tanlang', 'Select at least 3 programs'))
       return false
     }
     if (degreeType === 'master' && !form.bachelor_university) {
-      toast.error(ru ? 'Укажите данные о дипломе бакалавра' : 'Enter bachelor degree info')
+      toast.error(t('Укажите данные о дипломе бакалавра', 'Bakalavr diplomi ma\'lumotlarini kiriting', 'Enter bachelor degree info'))
       return false
     }
     return true
@@ -305,9 +323,12 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
     const required = [...REQUIRED_DOCS, ...(degreeType === 'master' ? MASTER_DOCS : [])]
     const missing = required.filter(d => !docs[d])
     if (missing.length > 0) {
-      toast.error(ru
-        ? `Загрузите обязательные документы: ${missing.slice(0, 2).map(d => DOC_LABELS[d].ru).join(', ')}${missing.length > 2 ? '...' : ''}`
-        : `Upload required documents`)
+      const names = missing.slice(0, 2).map(d => DOC_LABELS[d].ru).join(', ')
+      toast.error(
+        ru ? `Загрузите обязательные документы: ${names}${missing.length > 2 ? '...' : ''}` :
+        uz ? `Majburiy hujjatlarni yuklang: ${names}${missing.length > 2 ? '...' : ''}` :
+             `Upload required documents`
+      )
       return false
     }
     return true
@@ -329,15 +350,19 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
     setDocs(d => { const nd = { ...d }; delete nd[type]; return nd })
   }
 
-  const toggleProgram = (prog: string) => {
-    if (selectedPrograms.includes(prog)) {
-      setSelectedPrograms(p => p.filter(x => x !== prog))
+  const progLabel = (prog: Program) => ru ? prog.ru : uz ? prog.uz : prog.ar
+  const progKey   = (prog: Program) => prog.ar // always store Arabic as canonical key
+
+  const toggleProgram = (prog: Program) => {
+    const key = progKey(prog)
+    if (selectedPrograms.includes(key)) {
+      setSelectedPrograms(p => p.filter(x => x !== key))
     } else {
       if (selectedPrograms.length >= 3) {
-        toast.error(ru ? 'Максимум 3 специальности' : 'Maximum 3 programs')
+        toast.error(t('Максимум 3 специальности', 'Maksimal 3 ta yo\'nalish', 'Maximum 3 programs'))
         return
       }
-      setSelectedPrograms(p => [...p, prog])
+      setSelectedPrograms(p => [...p, key])
     }
   }
 
@@ -475,7 +500,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               <GraduationCap className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p className="text-xs text-muted leading-none">{ru ? 'Заявка в' : 'Application to'}</p>
+              <p className="text-xs text-muted leading-none">{t('Заявка в', 'Ariza:', 'Application to')}</p>
               <p className="text-sm font-bold text-ink leading-tight">Al Qasimia University</p>
             </div>
           </div>
@@ -533,58 +558,58 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
           {step === 2 && (
             <motion.div key="s2new" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
               <div className="mb-8">
-                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{ru ? `Шаг 2 из ${TOTAL}` : `Step 2 of ${TOTAL}`}</p>
-                <h1 className="text-3xl font-bold text-ink">{ru ? 'Личные данные' : 'Personal data'}</h1>
-                <p className="text-muted mt-1 text-sm">{ru ? 'Данные из загранпаспорта и личные сведения' : 'Passport data and personal information'}</p>
+                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{t(`Шаг 2 из ${TOTAL}`, `2-qadam ${TOTAL} tadan`, `Step 2 of ${TOTAL}`)}</p>
+                <h1 className="text-3xl font-bold text-ink">{t('Личные данные', 'Shaxsiy ma\'lumot', 'Personal data')}</h1>
+                <p className="text-muted mt-1 text-sm">{t('Данные из загранпаспорта и личные сведения', 'Pasport va shaxsiy ma\'lumotlar', 'Passport data and personal information')}</p>
               </div>
 
               {/* Passport info */}
               <Card>
-                <SectionHeader title={ru ? 'Паспортные данные' : 'Passport information'} ru={ru} />
+                <SectionHeader title={t('Паспортные данные', 'Pasport ma\'lumotlari', 'Passport information')} lang={lang} />
                 <div className="p-6 space-y-4">
-                  <Field label={ru ? 'Полное имя по загранпаспорту' : 'Full name (as in passport)'} required>
+                  <Field label={t('Полное имя по загранпаспорту', 'To\'liq ism (pasport bo\'yicha)', 'Full name (as in passport)')} required>
                     <input value={form.full_name} onChange={e => setF('full_name', e.target.value)}
-                      placeholder={ru ? 'Иванов Иван Иванович' : 'John Michael Doe'} className={INPUT} />
+                      placeholder={ru ? 'Иванов Иван Иванович' : uz ? 'Ivanov Ivan Ivanovich' : 'John Michael Doe'} className={INPUT} />
                   </Field>
                   <div className="space-y-4">
-                    <Field label={ru ? 'Текущее гражданство' : 'Current citizenship'} required>
+                    <Field label={t('Текущее гражданство', 'Hozirgi fuqarolik', 'Current citizenship')} required>
                       <select value={form.citizenship} onChange={e => setF('citizenship', e.target.value)} className={SELECT}>
-                        <option value="">{ru ? 'Страна...' : 'Country...'}</option>
+                        <option value="">{t('Страна...', 'Mamlakat...', 'Country...')}</option>
                         {['Узбекистан','Казахстан','Таджикистан','Кыргызстан','Туркменистан','Азербайджан','Россия','Украина','Беларусь','Молдова','Грузия','Армения'].map(c => <option key={c} value={c}>{c}</option>)}
-                        <option value="Другое">{ru ? 'Другое' : 'Other'}</option>
+                        <option value="Другое">{t('Другое', 'Boshqa', 'Other')}</option>
                       </select>
                     </Field>
-                    <Field label={ru ? 'Предыдущее гражданство' : 'Previous citizenship'}>
+                    <Field label={t('Предыдущее гражданство', 'Avvalgi fuqarolik', 'Previous citizenship')}>
                       <input value={form.prev_citizenship} onChange={e => setF('prev_citizenship', e.target.value)}
-                        placeholder={ru ? 'Если было' : 'If applicable'} className={INPUT} />
+                        placeholder={ru ? 'Если было' : uz ? 'Agar bo\'lgan bo\'lsa' : 'If applicable'} className={INPUT} />
                     </Field>
                   </div>
                   <div className="space-y-4">
-                    <Field label={ru ? 'Номер паспорта' : 'Passport number'} required>
+                    <Field label={t('Номер паспорта', 'Pasport raqami', 'Passport number')} required>
                       <input value={form.passport_number} onChange={e => setF('passport_number', e.target.value)}
                         placeholder="AA1234567" className={INPUT} />
                     </Field>
-                    <Field label={ru ? 'Место выдачи паспорта' : 'Place of issue'}>
+                    <Field label={t('Место выдачи паспорта', 'Pasport berilgan joy', 'Place of issue')}>
                       <input value={form.passport_issued} onChange={e => setF('passport_issued', e.target.value)}
-                        placeholder={ru ? 'Город, страна' : 'City, country'} className={INPUT} />
+                        placeholder={ru ? 'Город, страна' : uz ? 'Shahar, mamlakat' : 'City, country'} className={INPUT} />
                     </Field>
                   </div>
                   <div className="space-y-4">
-                    <Field label={ru ? 'Срок действия паспорта' : 'Passport expiry'}>
+                    <Field label={t('Срок действия паспорта', 'Pasport muddati', 'Passport expiry')}>
                       <input type="date" value={form.passport_expiry} onChange={e => setF('passport_expiry', e.target.value)} className={INPUT} />
                     </Field>
-                    <Field label={ru ? 'Дата рождения' : 'Date of birth'} required>
+                    <Field label={t('Дата рождения', 'Tug\'ilgan sana', 'Date of birth')} required>
                       <input type="date" value={form.date_of_birth} onChange={e => setF('date_of_birth', e.target.value)} className={INPUT} />
                     </Field>
                   </div>
                   <div className="space-y-4">
-                    <Field label={ru ? 'Страна рождения' : 'Country of birth'}>
+                    <Field label={t('Страна рождения', 'Tug\'ilgan mamlakat', 'Country of birth')}>
                       <input value={form.country_of_birth} onChange={e => setF('country_of_birth', e.target.value)}
-                        placeholder={ru ? 'Страна' : 'Country'} className={INPUT} />
+                        placeholder={t('Страна', 'Mamlakat', 'Country')} className={INPUT} />
                     </Field>
-                    <Field label={ru ? 'Город рождения' : 'City of birth'}>
+                    <Field label={t('Город рождения', 'Tug\'ilgan shahar', 'City of birth')}>
                       <input value={form.city_of_birth} onChange={e => setF('city_of_birth', e.target.value)}
-                        placeholder={ru ? 'Город' : 'City'} className={INPUT} />
+                        placeholder={t('Город', 'Shahar', 'City')} className={INPUT} />
                     </Field>
                   </div>
                 </div>
@@ -592,31 +617,31 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
 
               {/* Personal info */}
               <Card>
-                <SectionHeader title={ru ? 'Личные сведения' : 'Personal information'} ru={ru} />
+                <SectionHeader title={t('Личные сведения', 'Shaxsiy ma\'lumotlar', 'Personal information')} lang={lang} />
                 <div className="p-6 space-y-4">
                   <div className="space-y-4">
-                    <Field label={ru ? 'Пол' : 'Gender'} required>
+                    <Field label={t('Пол', 'Jinsi', 'Gender')} required>
                       <select value={form.gender} onChange={e => setF('gender', e.target.value)} className={SELECT}>
-                        <option value="">{ru ? 'Выберите...' : 'Select...'}</option>
-                        <option value="male">{ru ? 'Мужчина' : 'Male'}</option>
-                        <option value="female">{ru ? 'Женщина' : 'Female'}</option>
+                        <option value="">{t('Выберите...', 'Tanlang...', 'Select...')}</option>
+                        <option value="male">{t('Мужчина', 'Erkak', 'Male')}</option>
+                        <option value="female">{t('Женщина', 'Ayol', 'Female')}</option>
                       </select>
                     </Field>
-                    <Field label={ru ? 'Религия' : 'Religion'} required>
+                    <Field label={t('Религия', 'Dini', 'Religion')} required>
                       <select value={form.religion} onChange={e => setF('religion', e.target.value)} className={SELECT}>
-                        <option value="">{ru ? 'Выберите...' : 'Select...'}</option>
-                        <option value="islam">{ru ? 'Ислам' : 'Islam'}</option>
-                        <option value="other">{ru ? 'Другое' : 'Other'}</option>
+                        <option value="">{t('Выберите...', 'Tanlang...', 'Select...')}</option>
+                        <option value="islam">{t('Ислам', 'Islom', 'Islam')}</option>
+                        <option value="other">{t('Другое', 'Boshqa', 'Other')}</option>
                       </select>
                     </Field>
                   </div>
-                  <Field label={ru ? 'Семейное положение' : 'Marital status'} required>
+                  <Field label={t('Семейное положение', 'Oilaviy holati', 'Marital status')} required>
                     <select value={form.marital_status} onChange={e => setF('marital_status', e.target.value)} className={SELECT}>
-                      <option value="">{ru ? 'Выберите...' : 'Select...'}</option>
-                      <option value="single">{ru ? 'Не в браке' : 'Single'}</option>
-                      <option value="married">{ru ? 'В браке' : 'Married'}</option>
-                      <option value="divorced">{ru ? 'Разведён(а)' : 'Divorced'}</option>
-                      <option value="widowed">{ru ? 'Вдовец/Вдова' : 'Widowed'}</option>
+                      <option value="">{t('Выберите...', 'Tanlang...', 'Select...')}</option>
+                      <option value="single">{t('Не в браке', 'Turmush qurmagan', 'Single')}</option>
+                      <option value="married">{t('В браке', 'Turmush qurgan', 'Married')}</option>
+                      <option value="divorced">{t('Разведён(а)', 'Ajrashgan', 'Divorced')}</option>
+                      <option value="widowed">{t('Вдовец/Вдова', 'Beva', 'Widowed')}</option>
                     </select>
                   </Field>
                 </div>
@@ -624,33 +649,33 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
 
               {/* UAE & other status */}
               <Card>
-                <SectionHeader title={ru ? 'Дополнительные сведения' : 'Additional details'} ru={ru} />
+                <SectionHeader title={t('Дополнительные сведения', 'Qo\'shimcha ma\'lumotlar', 'Additional details')} lang={lang} />
                 <div className="p-6 space-y-4">
                   <div className="space-y-4">
-                    <Field label={ru ? 'Проживаете ли в ОАЭ?' : 'Currently living in UAE?'} required>
-                      <YesNo value={form.lives_in_uae} onChange={v => setF('lives_in_uae', v)} ru={ru} />
+                    <Field label={t('Проживаете ли в ОАЭ?', 'BAA da yashaysizmi?', 'Currently living in UAE?')} required>
+                      <YesNo value={form.lives_in_uae} onChange={v => setF('lives_in_uae', v)} lang={lang} />
                     </Field>
-                    <Field label={ru ? 'Проживали ли ранее в ОАЭ?' : 'Previously lived in UAE?'}>
-                      <YesNo value={form.lived_in_uae} onChange={v => setF('lived_in_uae', v)} ru={ru} />
+                    <Field label={t('Проживали ли ранее в ОАЭ?', 'Avval BAA da yashagansizmi?', 'Previously lived in UAE?')}>
+                      <YesNo value={form.lived_in_uae} onChange={v => setF('lived_in_uae', v)} lang={lang} />
                     </Field>
                   </div>
                   <div className="space-y-4">
-                    <Field label={ru ? 'Работаете ли вы?' : 'Are you employed?'}>
-                      <YesNo value={form.is_working} onChange={v => setF('is_working', v)} ru={ru} />
+                    <Field label={t('Работаете ли вы?', 'Ishlaysizmi?', 'Are you employed?')}>
+                      <YesNo value={form.is_working} onChange={v => setF('is_working', v)} lang={lang} />
                     </Field>
-                    <Field label={ru ? 'Есть ли инвалидность?' : 'Do you have a disability?'}>
-                      <YesNo value={form.has_disability} onChange={v => setF('has_disability', v)} ru={ru} />
+                    <Field label={t('Есть ли инвалидность?', 'Nogironligingiz bormi?', 'Do you have a disability?')}>
+                      <YesNo value={form.has_disability} onChange={v => setF('has_disability', v)} lang={lang} />
                     </Field>
                   </div>
-                  <Field label={ru ? 'Получены ли 2 дозы вакцины COVID-19?' : 'Have you received 2 COVID-19 vaccine doses?'} required>
-                    <YesNo value={form.covid_vaccinated} onChange={v => setF('covid_vaccinated', v)} ru={ru} />
+                  <Field label={t('Получены ли 2 дозы вакцины COVID-19?', 'COVID-19 vaksinasining 2 dozasini oldingizmi?', 'Have you received 2 COVID-19 vaccine doses?')} required>
+                    <YesNo value={form.covid_vaccinated} onChange={v => setF('covid_vaccinated', v)} lang={lang} />
                   </Field>
                 </div>
               </Card>
 
               <div className="flex justify-between mt-2">
                 <button onClick={() => setStep(1)} className="flex items-center gap-2 px-5 py-3 bg-white border border-gray-200 text-ink text-sm font-medium rounded-xl hover:bg-gray-50 transition-all">
-                  <ChevronLeft className="w-4 h-4" /> {ru ? 'Назад' : 'Back'}
+                  <ChevronLeft className="w-4 h-4" /> {ru ? 'Назад' : uz ? 'Orqaga' : 'Back'}
                 </button>
                 <button onClick={handleNext} className="flex items-center gap-2 px-8 py-3.5 bg-[#1B4332] text-white text-sm font-semibold rounded-xl hover:bg-[#1B4332]/90 transition-all shadow-sm">
                   {ru ? 'Далее' : 'Next'} <ChevronRight className="w-4 h-4" />
@@ -663,23 +688,24 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
           {step === 3 && (
             <motion.div key="s3new" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
               <div className="mb-8">
-                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{ru ? `Шаг 3 из ${TOTAL}` : `Step 3 of ${TOTAL}`}</p>
-                <h1 className="text-3xl font-bold text-ink">{ru ? 'Контакты и семья' : 'Contacts & family'}</h1>
+                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{t(`Шаг 3 из ${TOTAL}`, `3-qadam ${TOTAL} tadan`, `Step 3 of ${TOTAL}`)}</p>
+                <h1 className="text-3xl font-bold text-ink">{t('Контакты и семья', 'Aloqa va oila', 'Contacts & family')}</h1>
               </div>
 
               {/* Contacts */}
               <Card>
-                <SectionHeader title={ru ? 'Контактные данные' : 'Contact details'} ru={ru} />
+                <SectionHeader title={t('Контактные данные', 'Aloqa ma\'lumotlari', 'Contact details')} lang={lang} />
                 <div className="p-6 space-y-4">
                   <p className="text-xs text-muted bg-amber-50 border border-amber-200 rounded-xl px-3 py-2">
                     {ru
                       ? '⚠️ Все поля обязательны. Если аккаунта нет — напишите «Нет».'
+                      : uz ? '⚠️ Barcha maydonlar majburiy. Akkaunt yo\'q bo\'lsa — «Yo\'q» deb yozing.'
                       : '⚠️ All fields are required. If you don\'t have an account — write "No".'}
                   </p>
                   <div className="space-y-4">
-                    <Field label={ru ? 'Номер нац. ID' : 'National ID number'}>
+                    <Field label={t('Номер нац. ID', 'Milliy ID raqami', 'National ID number')}>
                       <input value={form.national_id_number} onChange={e => setF('national_id_number', e.target.value)}
-                        placeholder={ru ? 'Номер или «Нет»' : 'Number or "No"'} className={INPUT} />
+                        placeholder={ru ? 'Номер или «Нет»' : uz ? 'Raqam yoki «Yo\'q»' : 'Number or "No"'} className={INPUT} />
                     </Field>
                     <Field label="Email" required>
                       <input type="email" value={form.email} onChange={e => setF('email', e.target.value)}
@@ -687,43 +713,43 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                     </Field>
                   </div>
                   <div className="space-y-4">
-                    <Field label={ru ? 'Мобильный телефон' : 'Mobile phone'} required>
+                    <Field label={t('Мобильный телефон', 'Mobil telefon', 'Mobile phone')} required>
                       <input type="tel" value={form.mobile} onChange={e => setF('mobile', e.target.value)}
                         placeholder="+998901234567" className={INPUT} />
                     </Field>
                     <Field label="WhatsApp" required>
                       <input type="tel" value={form.whatsapp} onChange={e => setF('whatsapp', e.target.value)}
-                        placeholder={ru ? '+998... или «Нет»' : '+998... or "No"'} className={INPUT} />
+                        placeholder={ru ? '+998... или «Нет»' : uz ? '+998... yoki «Yo\'q»' : '+998... or "No"'} className={INPUT} />
                     </Field>
                   </div>
                   <div className="space-y-4">
-                    <Field label={ru ? 'Домашний телефон' : 'Home phone'} required>
+                    <Field label={t('Домашний телефон', 'Uy telefoni', 'Home phone')} required>
                       <input type="tel" value={form.home_phone} onChange={e => setF('home_phone', e.target.value)}
-                        placeholder={ru ? '+998... или «Нет»' : '+998... or "No"'} className={INPUT} />
+                        placeholder={ru ? '+998... или «Нет»' : uz ? '+998... yoki «Yo\'q»' : '+998... or "No"'} className={INPUT} />
                     </Field>
                     <Field label="Skype" required>
                       <input value={form.skype} onChange={e => setF('skype', e.target.value)}
-                        placeholder={ru ? 'login или «Нет»' : 'login or "No"'} className={INPUT} />
+                        placeholder={ru ? 'login или «Нет»' : uz ? 'login yoki «Yo\'q»' : 'login or "No"'} className={INPUT} />
                     </Field>
                   </div>
                   <div className="space-y-4">
                     <Field label="Facebook">
                       <input value={form.facebook_contact} onChange={e => setF('facebook_contact', e.target.value)}
-                        placeholder={ru ? 'facebook.com/... или «Нет»' : 'facebook.com/... or "No"'} className={INPUT} />
+                        placeholder={ru ? 'facebook.com/... или «Нет»' : uz ? 'facebook.com/... yoki «Yo\'q»' : 'facebook.com/... or "No"'} className={INPUT} />
                     </Field>
                     <Field label="Instagram">
                       <input value={form.instagram_contact} onChange={e => setF('instagram_contact', e.target.value)}
-                        placeholder={ru ? '@username или «Нет»' : '@username or "No"'} className={INPUT} />
+                        placeholder={ru ? '@username или «Нет»' : uz ? '@username yoki «Yo\'q»' : '@username or "No"'} className={INPUT} />
                     </Field>
                   </div>
                   <div className="space-y-4">
                     <Field label="Twitter / X">
                       <input value={form.twitter} onChange={e => setF('twitter', e.target.value)}
-                        placeholder={ru ? '@username или «Нет»' : '@username or "No"'} className={INPUT} />
+                        placeholder={ru ? '@username или «Нет»' : uz ? '@username yoki «Yo\'q»' : '@username or "No"'} className={INPUT} />
                     </Field>
-                    <Field label={ru ? 'Ближайший аэропорт' : 'Nearest international airport'} required>
+                    <Field label={t('Ближайший аэропорт', 'Eng yaqin xalqaro aeroport', 'Nearest international airport')} required>
                       <input value={form.nearest_airport} onChange={e => setF('nearest_airport', e.target.value)}
-                        placeholder={ru ? 'Ташкент (TAS)' : 'Tashkent (TAS)'} className={INPUT} />
+                        placeholder={ru ? 'Ташкент (TAS)' : uz ? 'Toshkent (TAS)' : 'Tashkent (TAS)'} className={INPUT} />
                     </Field>
                   </div>
                 </div>
@@ -731,74 +757,74 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
 
               {/* Father */}
               <Card>
-                <SectionHeader title={ru ? 'Данные отца' : 'Father\'s information'} ru={ru} />
+                <SectionHeader title={t('Данные отца', 'Otasi haqida', 'Father\'s information')} lang={lang} />
                 <div className="p-6 space-y-4">
-                  <Field label={ru ? 'ФИО' : 'Full name'} required>
+                  <Field label={t('ФИО', 'To\'liq ism', 'Full name')} required>
                     <input value={form.father_name} onChange={e => setF('father_name', e.target.value)} className={INPUT} />
                   </Field>
                   <div className="space-y-4">
-                    <Field label={ru ? 'Телефон' : 'Phone'} required>
+                    <Field label={t('Телефон', 'Telefon', 'Phone')} required>
                       <input type="tel" value={form.father_phone} onChange={e => setF('father_phone', e.target.value)}
-                        placeholder={ru ? '+998... или «Нет»' : '+998... or "No"'} className={INPUT} />
+                        placeholder={ru ? '+998... или «Нет»' : uz ? '+998... yoki «Yo\'q»' : '+998... or "No"'} className={INPUT} />
                     </Field>
                     <Field label="Email">
                       <input type="email" value={form.father_email} onChange={e => setF('father_email', e.target.value)}
-                        placeholder={ru ? 'email или «Нет»' : 'email or "No"'} className={INPUT} />
+                        placeholder={ru ? 'email или «Нет»' : uz ? 'email yoki «Yo\'q»' : 'email or "No"'} className={INPUT} />
                     </Field>
                   </div>
-                  <Field label={ru ? 'Место работы' : 'Place of work'}>
+                  <Field label={t('Место работы', 'Ish joyi', 'Place of work')}>
                     <input value={form.father_work} onChange={e => setF('father_work', e.target.value)}
-                      placeholder={ru ? 'Организация или «Нет»' : 'Organization or "No"'} className={INPUT} />
+                      placeholder={ru ? 'Организация или «Нет»' : uz ? 'Tashkilot yoki «Yo\'q»' : 'Organization or "No"'} className={INPUT} />
                   </Field>
                 </div>
               </Card>
 
               {/* Mother */}
               <Card>
-                <SectionHeader title={ru ? 'Данные матери' : 'Mother\'s information'} ru={ru} />
+                <SectionHeader title={t('Данные матери', 'Onasi haqida', 'Mother\'s information')} lang={lang} />
                 <div className="p-6 space-y-4">
-                  <Field label={ru ? 'ФИО' : 'Full name'} required>
+                  <Field label={t('ФИО', 'To\'liq ism', 'Full name')} required>
                     <input value={form.mother_name} onChange={e => setF('mother_name', e.target.value)} className={INPUT} />
                   </Field>
                   <div className="space-y-4">
-                    <Field label={ru ? 'Телефон' : 'Phone'} required>
+                    <Field label={t('Телефон', 'Telefon', 'Phone')} required>
                       <input type="tel" value={form.mother_phone} onChange={e => setF('mother_phone', e.target.value)}
-                        placeholder={ru ? '+998... или «Нет»' : '+998... or "No"'} className={INPUT} />
+                        placeholder={ru ? '+998... или «Нет»' : uz ? '+998... yoki «Yo\'q»' : '+998... or "No"'} className={INPUT} />
                     </Field>
                     <Field label="Email">
                       <input type="email" value={form.mother_email} onChange={e => setF('mother_email', e.target.value)}
-                        placeholder={ru ? 'email или «Нет»' : 'email or "No"'} className={INPUT} />
+                        placeholder={ru ? 'email или «Нет»' : uz ? 'email yoki «Yo\'q»' : 'email or "No"'} className={INPUT} />
                     </Field>
                   </div>
-                  <Field label={ru ? 'Место работы' : 'Place of work'}>
+                  <Field label={t('Место работы', 'Ish joyi', 'Place of work')}>
                     <input value={form.mother_work} onChange={e => setF('mother_work', e.target.value)}
-                      placeholder={ru ? 'Организация или «Нет»' : 'Organization or "No"'} className={INPUT} />
+                      placeholder={ru ? 'Организация или «Нет»' : uz ? 'Tashkilot yoki «Yo\'q»' : 'Organization or "No"'} className={INPUT} />
                   </Field>
                 </div>
               </Card>
 
               {/* Relative */}
               <Card>
-                <SectionHeader title={ru ? 'Данные родственника' : 'Relative\'s information'} optional ru={ru} />
+                <SectionHeader title={t('Данные родственника', 'Qarindosh haqida', 'Relative\'s information')} optional lang={lang} />
                 <div className="p-6 space-y-4">
-                  <Field label={ru ? 'ФИО' : 'Full name'}>
+                  <Field label={t('ФИО', 'To\'liq ism', 'Full name')}>
                     <input value={form.relative_name} onChange={e => setF('relative_name', e.target.value)} className={INPUT} />
                   </Field>
                   <div className="space-y-4">
-                    <Field label={ru ? 'Телефон' : 'Phone'}>
+                    <Field label={t('Телефон', 'Telefon', 'Phone')}>
                       <input type="tel" value={form.relative_phone} onChange={e => setF('relative_phone', e.target.value)} className={INPUT} />
                     </Field>
                     <Field label="Email">
                       <input type="email" value={form.relative_email} onChange={e => setF('relative_email', e.target.value)} className={INPUT} />
                     </Field>
                   </div>
-                  <Field label={ru ? 'Место работы' : 'Place of work'}>
+                  <Field label={t('Место работы', 'Ish joyi', 'Place of work')}>
                     <input value={form.relative_work} onChange={e => setF('relative_work', e.target.value)} className={INPUT} />
                   </Field>
                 </div>
               </Card>
 
-              <NavButtons onBack={onBack} onNext={handleNext} ru={ru} />
+              <NavButtons onBack={onBack} onNext={handleNext} lang={lang} />
             </motion.div>
           )}
 
@@ -806,47 +832,47 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
           {step === 4 && (
             <motion.div key="s4new" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
               <div className="mb-8">
-                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{ru ? `Шаг 4 из ${TOTAL}` : `Step 4 of ${TOTAL}`}</p>
-                <h1 className="text-3xl font-bold text-ink">{ru ? 'Образование' : 'Education'}</h1>
+                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{t(`Шаг 4 из ${TOTAL}`, `4-qadam ${TOTAL} tadan`, `Step 4 of ${TOTAL}`)}</p>
+                <h1 className="text-3xl font-bold text-ink">{t('Образование', 'Ta\'lim', 'Education')}</h1>
               </div>
 
               <Card>
-                <SectionHeader title={ru ? 'Среднее образование' : 'Secondary education'} ru={ru} />
+                <SectionHeader title={t('Среднее образование', 'O\'rta ta\'lim', 'Secondary education')} lang={lang} />
                 <div className="p-6 space-y-4">
-                  <Field label={ru ? 'Тип школы' : 'School type'} required>
+                  <Field label={t('Тип школы', 'Maktab turi', 'School type')} required>
                     <select value={form.school_type} onChange={e => setF('school_type', e.target.value)} className={SELECT}>
-                      <option value="">{ru ? 'Выберите...' : 'Select...'}</option>
-                      <option value="public">{ru ? 'Государственная' : 'Public'}</option>
-                      <option value="private">{ru ? 'Частная' : 'Private'}</option>
-                      <option value="semi_public">{ru ? 'Полугосударственная' : 'Semi-public'}</option>
-                      <option value="other">{ru ? 'Другая' : 'Other'}</option>
+                      <option value="">{t('Выберите...', 'Tanlang...', 'Select...')}</option>
+                      <option value="public">{t('Государственная', 'Davlat', 'Public')}</option>
+                      <option value="private">{t('Частная', 'Xususiy', 'Private')}</option>
+                      <option value="semi_public">{t('Полугосударственная', 'Yarim davlat', 'Semi-public')}</option>
+                      <option value="other">{t('Другая', 'Boshqa', 'Other')}</option>
                     </select>
                   </Field>
                   <div className="space-y-4">
-                    <Field label={ru ? 'Название школы' : 'School name'} required>
+                    <Field label={t('Название школы', 'Maktab nomi', 'School name')} required>
                       <input value={form.school_name} onChange={e => setF('school_name', e.target.value)} className={INPUT} />
                     </Field>
-                    <Field label={ru ? 'Средний балл (GPA)' : 'GPA / average grade'} required>
+                    <Field label={t('Средний балл (GPA)', 'O\'rtacha ball (GPA)', 'GPA / average grade')} required>
                       <input value={form.gpa} onChange={e => setF('gpa', e.target.value)}
                         placeholder="4.5 / 5.0" className={INPUT} />
                     </Field>
                   </div>
                   <div className="space-y-4">
-                    <Field label={ru ? 'Страна' : 'Country'} required>
+                    <Field label={t('Страна', 'Mamlakat', 'Country')} required>
                       <input value={form.school_country} onChange={e => setF('school_country', e.target.value)} className={INPUT} />
                     </Field>
-                    <Field label={ru ? 'Город' : 'City'} required>
+                    <Field label={t('Город', 'Shahar', 'City')} required>
                       <input value={form.school_city} onChange={e => setF('school_city', e.target.value)} className={INPUT} />
                     </Field>
                   </div>
                   <div className="space-y-4">
-                    <Field label={ru ? 'Язык обучения' : 'Language of instruction'} required>
+                    <Field label={t('Язык обучения', 'O\'qitish tili', 'Language of instruction')} required>
                       <select value={form.school_language} onChange={e => setF('school_language', e.target.value)} className={SELECT}>
-                        <option value="">{ru ? 'Выберите...' : 'Select...'}</option>
+                        <option value="">{t('Выберите...', 'Tanlang...', 'Select...')}</option>
                         {['Арабский','Русский','Узбекский','Казахский','Таджикский','Английский','Другой'].map(l => <option key={l} value={l}>{l}</option>)}
                       </select>
                     </Field>
-                    <Field label={ru ? 'Дата окончания' : 'Graduation date'} required>
+                    <Field label={t('Дата окончания', 'Tugatish sanasi', 'Graduation date')} required>
                       <input type="date" value={form.graduation_date} onChange={e => setF('graduation_date', e.target.value)} className={INPUT} />
                     </Field>
                   </div>
@@ -854,25 +880,25 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               </Card>
 
               <Card>
-                <SectionHeader title={ru ? 'Знание языков' : 'Languages'} ru={ru} />
+                <SectionHeader title={t('Знание языков', 'Til bilimlari', 'Languages')} lang={lang} />
                 <div className="p-6 space-y-4">
-                  <Field label={ru ? 'Какие языки знаете?' : 'Languages you know'} required>
+                  <Field label={t('Какие языки знаете?', 'Qanday tillarni bilasiz?', 'Languages you know')} required>
                     <input value={form.known_languages} onChange={e => setF('known_languages', e.target.value)}
-                      placeholder={ru ? 'Русский, Узбекский, Арабский...' : 'Russian, Uzbek, Arabic...'} className={INPUT} />
+                      placeholder={ru ? 'Русский, Узбекский, Арабский...' : uz ? 'Rus, O\'zbek, Arab...' : 'Russian, Uzbek, Arabic...'} className={INPUT} />
                   </Field>
                   <div className="space-y-4">
-                    <Field label={ru ? 'Лет изучали арабский' : 'Years studying Arabic'} required>
+                    <Field label={t('Лет изучали арабский', 'Arab tilini o\'rganish yillari', 'Years studying Arabic')} required>
                       <input type="number" min="0" value={form.arabic_years} onChange={e => setF('arabic_years', e.target.value)}
                         placeholder="0" className={INPUT} />
                     </Field>
-                    <Field label={ru ? 'Институт / центр (арабский)' : 'Arabic study institute/center'}>
+                    <Field label={t('Институт / центр (арабский)', 'Arab tili o\'quv markazi', 'Arabic study institute/center')}>
                       <input value={form.arabic_institute} onChange={e => setF('arabic_institute', e.target.value)} className={INPUT} />
                     </Field>
                   </div>
                 </div>
               </Card>
 
-              <NavButtons onBack={onBack} onNext={handleNext} ru={ru} />
+              <NavButtons onBack={onBack} onNext={handleNext} lang={lang} />
             </motion.div>
           )}
 
@@ -880,27 +906,35 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
           {step === 1 && (
             <motion.div key="s1new" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
               <div className="mb-8">
-                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{ru ? `Шаг 1 из ${TOTAL}` : `Step 1 of ${TOTAL}`}</p>
-                <h1 className="text-3xl font-bold text-ink">{ru ? 'Выбор специальности' : 'Program selection'}</h1>
+                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{t(`Шаг 1 из ${TOTAL}`, `1-qadam ${TOTAL} tadan`, `Step 1 of ${TOTAL}`)}</p>
+                <h1 className="text-3xl font-bold text-ink">{t('Выбор специальности', 'Yo\'nalish tanlash', 'Program selection')}</h1>
                 <p className="text-muted mt-1 text-sm">
-                  {ru
-                    ? 'Выберите до 3 специальностей. Университет оставляет за собой право самостоятельно определить специальность.'
-                    : 'Select up to 3 programs. The university reserves the right to assign one of your chosen programs.'}
+                  {t(
+                    'Выберите минимум 3 специальности. Университет оставляет за собой право определить специальность.',
+                    'Kamida 3 ta yo\'nalish tanlang. Universitet yo\'nalishni mustaqil belgilash huquqini saqlaydi.',
+                    'Select at least 3 programs. The university reserves the right to assign one of your chosen programs.'
+                  )}
                 </p>
               </div>
 
               <Card>
-                <SectionHeader title={degreeType === 'bachelor' ? (ru ? 'Бакалавриат' : 'Bachelor\'s programs') : (ru ? 'Магистратура' : 'Master\'s programs')} ru={ru} />
+                <SectionHeader
+                  title={degreeType === 'bachelor'
+                    ? t('Бакалавриат', 'Bakalavr yo\'nalishlari', 'Bachelor\'s programs')
+                    : t('Магистратура', 'Magistratura yo\'nalishlari', 'Master\'s programs')}
+                  lang={lang}
+                />
                 <div className="p-4 grid gap-2">
                   {programs.map(prog => {
-                    const selected = selectedPrograms.includes(prog)
+                    const key = progKey(prog)
+                    const selected = selectedPrograms.includes(key)
+                    const label = progLabel(prog)
                     return (
-                      <button key={prog} onClick={() => toggleProgram(prog)}
+                      <button key={key} onClick={() => toggleProgram(prog)}
                         className={cn(
-                          'flex items-center gap-3 p-4 rounded-xl text-right border-2 transition-all w-full',
+                          'flex items-center gap-3 p-4 rounded-xl border-2 transition-all w-full text-left',
                           selected ? 'bg-[#1B4332]/5 border-[#1B4332]/30 text-[#1B4332]' : 'border-gray-100 hover:border-gray-200 hover:bg-gray-50 text-ink'
                         )}
-                        dir="rtl"
                       >
                         <span className={cn(
                           'w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-all',
@@ -908,7 +942,10 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                         )}>
                           {selected && <CheckCircle2 className="w-3 h-3 text-white" />}
                         </span>
-                        <span className="text-base font-medium flex-1">{prog}</span>
+                        <div className="flex-1">
+                          <span className="text-base font-medium block">{label}</span>
+                          <span className="text-xs text-muted" dir="rtl">{prog.ar}</span>
+                        </div>
                       </button>
                     )
                   })}
@@ -916,14 +953,19 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                 {selectedPrograms.length > 0 && (
                   <div className="px-4 pb-4">
                     <div className="bg-[#1B4332]/5 rounded-xl p-3 flex flex-wrap gap-2">
-                      {selectedPrograms.map((p, i) => (
-                        <span key={i} className="inline-flex items-center gap-1.5 text-xs bg-white border border-[#1B4332]/20 text-[#1B4332] px-2.5 py-1 rounded-lg font-medium" dir="rtl">
-                          {p}
-                          <button onClick={() => setSelectedPrograms(prev => prev.filter(x => x !== p))} className="hover:text-red-500">
-                            <X className="w-3 h-3" />
-                          </button>
-                        </span>
-                      ))}
+                      {selectedPrograms.map((key, i) => {
+                        const allProgs = [...BACHELOR_PROGRAMS, ...MASTER_PROGRAMS]
+                        const found = allProgs.find(p => p.ar === key)
+                        const label = found ? progLabel(found) : key
+                        return (
+                          <span key={i} className="inline-flex items-center gap-1.5 text-xs bg-white border border-[#1B4332]/20 text-[#1B4332] px-2.5 py-1 rounded-lg font-medium">
+                            {label}
+                            <button onClick={() => setSelectedPrograms(prev => prev.filter(x => x !== key))} className="hover:text-red-500">
+                              <X className="w-3 h-3" />
+                            </button>
+                          </span>
+                        )
+                      })}
                     </div>
                   </div>
                 )}
@@ -932,45 +974,45 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               {/* Master: Bachelor degree info */}
               {degreeType === 'master' && (
                 <Card>
-                  <SectionHeader title={ru ? 'Данные о дипломе бакалавра' : 'Bachelor\'s degree information'} ru={ru} />
+                  <SectionHeader title={t('Данные о дипломе бакалавра', 'Bakalavr diplomi haqida', 'Bachelor\'s degree information')} lang={lang} />
                   <div className="p-6 space-y-4">
-                    <Field label={ru ? 'Название университета' : 'University name'} required>
+                    <Field label={t('Название университета', 'Universitet nomi', 'University name')} required>
                       <input value={form.bachelor_university} onChange={e => setF('bachelor_university', e.target.value)} className={INPUT} />
                     </Field>
                     <div className="space-y-4">
-                      <Field label={ru ? 'Гос. или частный?' : 'Public or private?'}>
+                      <Field label={t('Гос. или частный?', 'Davlat yoki xususiy?', 'Public or private?')}>
                         <select value={form.bachelor_public_private} onChange={e => setF('bachelor_public_private', e.target.value)} className={SELECT}>
-                          <option value="">{ru ? 'Выберите...' : 'Select...'}</option>
-                          <option value="public">{ru ? 'Государственный' : 'Public'}</option>
-                          <option value="private">{ru ? 'Частный' : 'Private'}</option>
+                          <option value="">{t('Выберите...', 'Tanlang...', 'Select...')}</option>
+                          <option value="public">{t('Государственный', 'Davlat', 'Public')}</option>
+                          <option value="private">{t('Частный', 'Xususiy', 'Private')}</option>
                         </select>
                       </Field>
-                      <Field label={ru ? 'Страна' : 'Country'}>
+                      <Field label={t('Страна', 'Mamlakat', 'Country')}>
                         <input value={form.bachelor_country} onChange={e => setF('bachelor_country', e.target.value)} className={INPUT} />
                       </Field>
                     </div>
                     <div className="space-y-4">
-                      <Field label={ru ? 'Город' : 'City'}>
+                      <Field label={t('Город', 'Shahar', 'City')}>
                         <input value={form.bachelor_city} onChange={e => setF('bachelor_city', e.target.value)} className={INPUT} />
                       </Field>
-                      <Field label={ru ? 'Год окончания' : 'Graduation year'}>
+                      <Field label={t('Год окончания', 'Tugatish yili', 'Graduation year')}>
                         <input type="number" min="1990" max="2030" value={form.bachelor_year} onChange={e => setF('bachelor_year', e.target.value)}
                           placeholder="2023" className={INPUT} />
                       </Field>
                     </div>
                     <div className="space-y-4">
-                      <Field label={ru ? 'Специальность' : 'Major'}>
+                      <Field label={t('Специальность', 'Mutaxassislik', 'Major')}>
                         <input value={form.bachelor_major} onChange={e => setF('bachelor_major', e.target.value)} className={INPUT} />
                       </Field>
-                      <Field label={ru ? 'Срок обучения (лет)' : 'Duration (years)'}>
+                      <Field label={t('Срок обучения (лет)', 'O\'qish muddati (yil)', 'Duration (years)')}>
                         <input type="number" min="1" max="10" value={form.bachelor_duration} onChange={e => setF('bachelor_duration', e.target.value)}
                           placeholder="4" className={INPUT} />
                       </Field>
                     </div>
                     <div className="space-y-4">
-                      <Field label={ru ? 'Язык обучения' : 'Language of instruction'}>
+                      <Field label={t('Язык обучения', 'O\'qitish tili', 'Language of instruction')}>
                         <select value={form.bachelor_language} onChange={e => setF('bachelor_language', e.target.value)} className={SELECT}>
-                          <option value="">{ru ? 'Выберите...' : 'Select...'}</option>
+                          <option value="">{t('Выберите...', 'Tanlang...', 'Select...')}</option>
                           {['Арабский','Русский','Узбекский','Казахский','Английский','Другой'].map(l => <option key={l} value={l}>{l}</option>)}
                         </select>
                       </Field>
@@ -980,18 +1022,18 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                       </Field>
                     </div>
                     <div className="space-y-4">
-                      <Field label={ru ? 'Общая оценка (отлично / хорошо...)' : 'Overall grade'}>
+                      <Field label={t('Общая оценка (отлично / хорошо...)', 'Umumiy baho (a\'lo / yaxshi...)', 'Overall grade')}>
                         <input value={form.bachelor_grade} onChange={e => setF('bachelor_grade', e.target.value)} className={INPUT} />
                       </Field>
-                      <Field label={ru ? 'Эмиратская нострификация диплома?' : 'Emirates degree equivalency?'}>
-                        <YesNo value={form.bachelor_equivalency} onChange={v => setF('bachelor_equivalency', v)} ru={ru} />
+                      <Field label={t('Эмиратская нострификация диплома?', 'BAA diploma ekvivalenti?', 'Emirates degree equivalency?')}>
+                        <YesNo value={form.bachelor_equivalency} onChange={v => setF('bachelor_equivalency', v)} lang={lang} />
                       </Field>
                     </div>
                   </div>
                 </Card>
               )}
 
-              <NavButtons onBack={onBack} onNext={handleNext} ru={ru} />
+              <NavButtons onBack={onBack} onNext={handleNext} lang={lang} />
             </motion.div>
           )}
 
@@ -999,9 +1041,9 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
           {step === 5 && (
             <motion.div key="s5" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
               <div className="mb-8">
-                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{ru ? `Шаг 5 из ${TOTAL}` : `Step 5 of ${TOTAL}`}</p>
-                <h1 className="text-3xl font-bold text-ink">{ru ? 'Документы' : 'Documents'}</h1>
-                <p className="text-muted mt-1 text-sm">{ru ? 'PDF, JPG или PNG — до 10 МБ каждый' : 'PDF, JPG or PNG — up to 10MB each'}</p>
+                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{t(`Шаг 5 из ${TOTAL}`, `5-qadam ${TOTAL} tadan`, `Step 5 of ${TOTAL}`)}</p>
+                <h1 className="text-3xl font-bold text-ink">{t('Документы', 'Hujjatlar', 'Documents')}</h1>
+                <p className="text-muted mt-1 text-sm">{t('PDF, JPG или PNG — до 10 МБ каждый', 'PDF, JPG yoki PNG — har biri 10 MB gacha', 'PDF, JPG or PNG — up to 10MB each')}</p>
               </div>
 
               {/* Required */}
@@ -1024,7 +1066,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
 
               {/* Optional */}
               <Card>
-                <SectionHeader title={ru ? 'Дополнительные документы' : 'Additional documents'} optional ru={ru} />
+                <SectionHeader title={t('Дополнительные документы', 'Qo\'shimcha hujjatlar', 'Additional documents')} optional lang={lang} />
                 <div className="p-4 grid gap-2">
                   {OPTIONAL_DOCS.map(dt => (
                     <DocZone key={dt} docType={dt}
@@ -1057,7 +1099,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                 </Card>
               )}
 
-              <NavButtons onBack={() => setStep(4)} onNext={handleNext} ru={ru} />
+              <NavButtons onBack={() => setStep(4)} onNext={handleNext} lang={lang} />
             </motion.div>
           )}
 
@@ -1065,8 +1107,8 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
           {step === 6 && (
             <motion.div key="s6" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
               <div className="mb-8">
-                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{ru ? `Шаг 6 из ${TOTAL}` : `Step 6 of ${TOTAL}`}</p>
-                <h1 className="text-3xl font-bold text-ink">{ru ? 'Выбор пакета' : 'Choose a plan'}</h1>
+                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{t(`Шаг 6 из ${TOTAL}`, `6-qadam ${TOTAL} tadan`, `Step 6 of ${TOTAL}`)}</p>
+                <h1 className="text-3xl font-bold text-ink">{t('Выбор пакета', 'Paket tanlash', 'Choose a plan')}</h1>
               </div>
 
               <div className="space-y-3 mb-8">
@@ -1088,16 +1130,16 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                           </div>
                           <div>
                             <p className="font-bold text-ink text-base">{ru ? p.name_ru : p.name_en}</p>
-                            {k === 'STANDARD' && <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">{ru ? 'Популярный' : 'Popular'}</span>}
+                            {k === 'STANDARD' && <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">{t('Популярный', 'Mashhur', 'Popular')}</span>}
                           </div>
                         </div>
                         <div className="text-right">
                           <p className="text-2xl font-bold text-ink">${p.priceUSD}</p>
-                          <p className="text-xs text-muted">{ru ? 'разово' : 'one-time'}</p>
+                          <p className="text-xs text-muted">{t('разово', 'bir martalik', 'one-time')}</p>
                         </div>
                       </div>
                       <div className="grid sm:grid-cols-2 gap-2">
-                        {(ru ? p.features_ru : p.features_en).map((f, fi) => (
+                        {(ru || uz ? p.features_ru : p.features_en).map((f, fi) => (
                           <div key={fi} className="flex items-center gap-2 text-sm text-muted">
                             <div className={cn('w-4 h-4 rounded-full flex items-center justify-center shrink-0', isSelected ? 'bg-[#1B4332]/10' : 'bg-gray-100')}>
                               <CheckCircle2 className={cn('w-2.5 h-2.5', isSelected ? 'text-[#1B4332]' : 'text-gray-400')} />
@@ -1111,7 +1153,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                 })}
               </div>
 
-              <NavButtons onBack={() => setStep(5)} onNext={handleNext} ru={ru} />
+              <NavButtons onBack={() => setStep(5)} onNext={handleNext} lang={lang} />
             </motion.div>
           )}
 
@@ -1119,32 +1161,32 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
           {step === 7 && (
             <motion.div key="s7" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
               <div className="mb-8">
-                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{ru ? `Шаг 7 из ${TOTAL}` : `Step 7 of ${TOTAL}`}</p>
-                <h1 className="text-3xl font-bold text-ink">{ru ? 'Проверка и оплата' : 'Review & payment'}</h1>
+                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{t(`Шаг 7 из ${TOTAL}`, `7-qadam ${TOTAL} tadan`, `Step 7 of ${TOTAL}`)}</p>
+                <h1 className="text-3xl font-bold text-ink">{t('Проверка и оплата', 'Tekshirish va to\'lov', 'Review & payment')}</h1>
               </div>
 
               <div className="space-y-3 mb-6">
                 {/* Personal */}
                 <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                   <div className="px-5 py-3.5 border-b border-gray-50 flex items-center justify-between">
-                    <p className="text-xs font-semibold text-muted uppercase tracking-wider">{ru ? 'Личные данные' : 'Personal info'}</p>
-                    <button onClick={() => setStep(1)} className="text-xs text-[#1B4332] font-medium hover:underline">{ru ? 'Изменить' : 'Edit'}</button>
+                    <p className="text-xs font-semibold text-muted uppercase tracking-wider">{t('Личные данные', 'Shaxsiy ma\'lumot', 'Personal info')}</p>
+                    <button onClick={() => setStep(1)} className="text-xs text-[#1B4332] font-medium hover:underline">{t('Изменить', 'O\'zgartirish', 'Edit')}</button>
                   </div>
                   <div className="px-5 py-4 grid grid-cols-2 gap-y-2.5 text-sm">
-                    <span className="text-muted">{ru ? 'Имя' : 'Name'}</span><span className="text-ink font-medium">{form.full_name}</span>
-                    <span className="text-muted">{ru ? 'Гражданство' : 'Citizenship'}</span><span className="text-ink">{form.citizenship}</span>
-                    <span className="text-muted">{ru ? 'Паспорт' : 'Passport'}</span><span className="text-ink">{form.passport_number}</span>
-                    <span className="text-muted">{ru ? 'Дата рождения' : 'Date of birth'}</span><span className="text-ink">{form.date_of_birth}</span>
-                    <span className="text-muted">{ru ? 'Пол' : 'Gender'}</span><span className="text-ink">{form.gender}</span>
-                    <span className="text-muted">{ru ? 'Религия' : 'Religion'}</span><span className="text-ink">{form.religion}</span>
+                    <span className="text-muted">{t('Имя', 'Ism', 'Name')}</span><span className="text-ink font-medium">{form.full_name}</span>
+                    <span className="text-muted">{t('Гражданство', 'Fuqarolik', 'Citizenship')}</span><span className="text-ink">{form.citizenship}</span>
+                    <span className="text-muted">{t('Паспорт', 'Pasport', 'Passport')}</span><span className="text-ink">{form.passport_number}</span>
+                    <span className="text-muted">{t('Дата рождения', 'Tug\'ilgan sana', 'Date of birth')}</span><span className="text-ink">{form.date_of_birth}</span>
+                    <span className="text-muted">{t('Пол', 'Jinsi', 'Gender')}</span><span className="text-ink">{form.gender}</span>
+                    <span className="text-muted">{t('Религия', 'Dini', 'Religion')}</span><span className="text-ink">{form.religion}</span>
                   </div>
                 </div>
 
                 {/* Programs */}
                 <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                   <div className="px-5 py-3.5 border-b border-gray-50 flex items-center justify-between">
-                    <p className="text-xs font-semibold text-muted uppercase tracking-wider">{ru ? 'Специальности' : 'Programs'}</p>
-                    <button onClick={() => setStep(4)} className="text-xs text-[#1B4332] font-medium hover:underline">{ru ? 'Изменить' : 'Edit'}</button>
+                    <p className="text-xs font-semibold text-muted uppercase tracking-wider">{t('Специальности', 'Yo\'nalishlar', 'Programs')}</p>
+                    <button onClick={() => setStep(4)} className="text-xs text-[#1B4332] font-medium hover:underline">{t('Изменить', 'O\'zgartirish', 'Edit')}</button>
                   </div>
                   <div className="px-5 py-4 flex flex-wrap gap-2" dir="rtl">
                     {selectedPrograms.map((p, i) => (
@@ -1156,10 +1198,10 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                 {/* Documents */}
                 <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                   <div className="px-5 py-3.5 border-b border-gray-50 flex items-center justify-between">
-                    <p className="text-xs font-semibold text-muted uppercase tracking-wider">{ru ? 'Документы' : 'Documents'}</p>
+                    <p className="text-xs font-semibold text-muted uppercase tracking-wider">{t('Документы', 'Hujjatlar', 'Documents')}</p>
                     <div className="flex items-center gap-3">
-                      <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">{Object.values(docs).filter(Boolean).length} {ru ? 'файлов' : 'files'}</span>
-                      <button onClick={() => setStep(5)} className="text-xs text-[#1B4332] font-medium hover:underline">{ru ? 'Изменить' : 'Edit'}</button>
+                      <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">{Object.values(docs).filter(Boolean).length} {t('файлов', 'fayl', 'files')}</span>
+                      <button onClick={() => setStep(5)} className="text-xs text-[#1B4332] font-medium hover:underline">{t('Изменить', 'O\'zgartirish', 'Edit')}</button>
                     </div>
                   </div>
                   <div className="px-5 py-4 flex flex-wrap gap-2">
@@ -1175,19 +1217,19 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                 {/* Package */}
                 <div className="bg-[#1B4332] rounded-2xl p-5 flex items-center justify-between">
                   <div>
-                    <p className="text-white/60 text-xs mb-0.5">{ru ? 'Выбранный пакет' : 'Selected plan'}</p>
-                    <p className="text-white font-bold text-lg">{ru ? PACKAGES[pkg].name_ru : PACKAGES[pkg].name_en}</p>
+                    <p className="text-white/60 text-xs mb-0.5">{t('Выбранный пакет', 'Tanlangan paket', 'Selected plan')}</p>
+                    <p className="text-white font-bold text-lg">{ru || uz ? PACKAGES[pkg].name_ru : PACKAGES[pkg].name_en}</p>
                   </div>
                   <div className="text-right">
                     <p className="text-3xl font-bold text-white">${PACKAGES[pkg].priceUSD}</p>
-                    <button onClick={() => setStep(6)} className="text-white/60 text-xs hover:text-white transition-colors">{ru ? 'Изменить' : 'Change'}</button>
+                    <button onClick={() => setStep(6)} className="text-white/60 text-xs hover:text-white transition-colors">{t('Изменить', 'O\'zgartirish', 'Change')}</button>
                   </div>
                 </div>
               </div>
 
               <div className="flex justify-start mb-5">
                 <button onClick={() => setStep(6)} className="flex items-center gap-2 px-5 py-3 bg-white border border-gray-200 text-ink text-sm font-medium rounded-xl hover:bg-gray-50 transition-all">
-                  <ChevronLeft className="w-4 h-4" /> {ru ? 'Назад' : 'Back'}
+                  <ChevronLeft className="w-4 h-4" /> {ru ? 'Назад' : uz ? 'Orqaga' : 'Back'}
                 </button>
               </div>
 
@@ -1197,10 +1239,10 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                     <Zap className="w-6 h-6 text-gray-400" />
                   </div>
                   <div className="text-center">
-                    <p className="font-semibold text-ink text-sm">{ru ? 'Оплатить сейчас' : 'Pay Now'}</p>
-                    <p className="text-xs text-muted mt-0.5">{ru ? 'Карта / USDT' : 'Card / USDT'}</p>
+                    <p className="font-semibold text-ink text-sm">{t('Оплатить сейчас', 'Hozir to\'lash', 'Pay Now')}</p>
+                    <p className="text-xs text-muted mt-0.5">{t('Карта / USDT', 'Karta / USDT', 'Card / USDT')}</p>
                   </div>
-                  <span className="absolute top-3 right-3 text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold">{ru ? 'Скоро' : 'Soon'}</span>
+                  <span className="absolute top-3 right-3 text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold">{t('Скоро', 'Tez kunda', 'Soon')}</span>
                 </button>
 
                 <button onClick={handleSubmit} disabled={loading}
@@ -1209,8 +1251,8 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                     <Send className="w-6 h-6 text-white" />
                   </div>
                   <div className="text-center">
-                    <p className="font-bold text-[#1B4332] text-sm">{ru ? 'Оплата через перевод' : 'Pay via Transfer'}</p>
-                    <p className="text-xs text-muted mt-0.5">{ru ? 'Менеджер свяжется с вами' : 'Manager will contact you'}</p>
+                    <p className="font-bold text-[#1B4332] text-sm">{t('Оплата через перевод', "O'tkazma orqali to'lash", 'Pay via Transfer')}</p>
+                    <p className="text-xs text-muted mt-0.5">{t('Менеджер свяжется с вами', "Menejer siz bilan bog'lanadi", 'Manager will contact you')}</p>
                   </div>
                   {loading && <div className="w-5 h-5 border-2 border-[#1B4332] border-t-transparent rounded-full animate-spin" />}
                 </button>
@@ -1232,9 +1274,13 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
             <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <CheckCircle2 className="w-8 h-8 text-emerald-500" />
             </div>
-            <h3 className="text-xl font-bold text-ink mb-2">{ru ? 'Заявка принята!' : 'Application accepted!'}</h3>
+            <h3 className="text-xl font-bold text-ink mb-2">{t('Заявка принята!', 'Ariza qabul qilindi!', 'Application accepted!')}</h3>
             <p className="text-muted text-sm leading-relaxed mb-4">
-              {ru ? 'Ваша заявка в Al Qasimia University принята. Менеджер свяжется с вами для подтверждения оплаты.' : 'Your application to Al Qasimia University has been received. A manager will contact you to confirm payment.'}
+              {t(
+                'Ваша заявка в Al Qasimia University принята. Менеджер свяжется с вами для подтверждения оплаты.',
+                "Sizning arizangiz Al Qasimia University tomonidan qabul qilindi. Menejer to'lov tasdiqlash uchun siz bilan bog'lanadi.",
+                'Your application to Al Qasimia University has been received. A manager will contact you to confirm payment.'
+              )}
             </p>
             <a
               href={`https://t.me/tarjuman_help_bot?start=${appId}`}
@@ -1245,13 +1291,13 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
                 <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.37l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.978.189z"/>
               </svg>
-              {ru ? 'Получить уведомление в Telegram' : 'Get Telegram notification'}
+              {t('Получить уведомление в Telegram', 'Telegram bildirishnomasi olish', 'Get Telegram notification')}
             </a>
             <button
               onClick={() => router.push(`/dashboard?app=${appId}`)}
               className="w-full py-3 rounded-xl border border-border text-muted text-sm font-medium hover:bg-surface transition-colors"
             >
-              {ru ? 'Перейти в личный кабинет' : 'Go to Dashboard'}
+              {t('Перейти в личный кабинет', "Shaxsiy kabinetga o'tish", 'Go to Dashboard')}
             </button>
           </motion.div>
         </div>
