@@ -253,10 +253,10 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
   // Steps: 1=Programs, 2=Personal, 3=Contacts, 4=Education, 5=Docs, 6=Package, 7=Review
   const TOTAL = 7
   const STEP_NAMES = ru
-    ? ['Программы', 'Личные данные', 'Контакты и семья', 'Образование', 'Документы', 'Пакет', 'Проверка']
+    ? ['Личные данные', 'Контакты и семья', 'Образование', 'Программы', 'Документы', 'Пакет', 'Проверка']
     : uz
-    ? ['Yo\'nalishlar', 'Shaxsiy ma\'lumot', 'Aloqa va oila', 'Ta\'lim', 'Hujjatlar', 'Paket', 'Tekshirish']
-    : ['Programs', 'Personal data', 'Contacts & family', 'Education', 'Documents', 'Package', 'Review']
+    ? ['Shaxsiy ma\'lumot', 'Aloqa va oila', 'Ta\'lim', 'Yo\'nalishlar', 'Hujjatlar', 'Paket', 'Tekshirish']
+    : ['Personal data', 'Contacts & family', 'Education', 'Programs', 'Documents', 'Package', 'Review']
 
   // ── Validators ──────────────────────────────────────────────────────────────
 
@@ -335,10 +335,10 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
   }
 
   const handleNext = () => {
-    if (step === 1 && !validatePrograms()) return
-    if (step === 2 && !validatePersonal()) return
-    if (step === 3 && !validateContacts()) return
-    if (step === 4 && !validateEducation()) return
+    if (step === 1 && !validatePersonal()) return
+    if (step === 2 && !validateContacts()) return
+    if (step === 3 && !validateEducation()) return
+    if (step === 4 && !validatePrograms()) return
     if (step === 5 && !validateDocs()) return
     setStep(s => s + 1)
   }
@@ -555,10 +555,10 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
         <AnimatePresence mode="wait">
 
           {/* ── STEP 1: Personal data ── */}
-          {step === 2 && (
-            <motion.div key="s2new" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
+          {step === 1 && (
+            <motion.div key="s1personal" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
               <div className="mb-8">
-                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{t(`Шаг 2 из ${TOTAL}`, `2-qadam ${TOTAL} tadan`, `Step 2 of ${TOTAL}`)}</p>
+                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{t(`Шаг 1 из ${TOTAL}`, `1-qadam ${TOTAL} tadan`, `Step 1 of ${TOTAL}`)}</p>
                 <h1 className="text-3xl font-bold text-ink">{t('Личные данные', 'Shaxsiy ma\'lumot', 'Personal data')}</h1>
                 <p className="text-muted mt-1 text-sm">{t('Данные из загранпаспорта и личные сведения', 'Pasport va shaxsiy ma\'lumotlar', 'Passport data and personal information')}</p>
               </div>
@@ -674,7 +674,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               </Card>
 
               <div className="flex justify-between mt-2">
-                <button onClick={() => setStep(1)} className="flex items-center gap-2 px-5 py-3 bg-white border border-gray-200 text-ink text-sm font-medium rounded-xl hover:bg-gray-50 transition-all">
+                <button onClick={onBack} className="flex items-center gap-2 px-5 py-3 bg-white border border-gray-200 text-ink text-sm font-medium rounded-xl hover:bg-gray-50 transition-all">
                   <ChevronLeft className="w-4 h-4" /> {ru ? 'Назад' : uz ? 'Orqaga' : 'Back'}
                 </button>
                 <button onClick={handleNext} className="flex items-center gap-2 px-8 py-3.5 bg-[#1B4332] text-white text-sm font-semibold rounded-xl hover:bg-[#1B4332]/90 transition-all shadow-sm">
@@ -685,10 +685,10 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
           )}
 
           {/* ── STEP 2: Contacts + Family ── */}
-          {step === 3 && (
-            <motion.div key="s3new" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
+          {step === 2 && (
+            <motion.div key="s2new" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
               <div className="mb-8">
-                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{t(`Шаг 3 из ${TOTAL}`, `3-qadam ${TOTAL} tadan`, `Step 3 of ${TOTAL}`)}</p>
+                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{t(`Шаг 2 из ${TOTAL}`, `2-qadam ${TOTAL} tadan`, `Step 2 of ${TOTAL}`)}</p>
                 <h1 className="text-3xl font-bold text-ink">{t('Контакты и семья', 'Aloqa va oila', 'Contacts & family')}</h1>
               </div>
 
@@ -824,15 +824,15 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                 </div>
               </Card>
 
-              <NavButtons onBack={onBack} onNext={handleNext} lang={lang} />
+              <NavButtons onBack={() => setStep(1)} onNext={handleNext} lang={lang} />
             </motion.div>
           )}
 
           {/* ── STEP 3: Education ── */}
-          {step === 4 && (
-            <motion.div key="s4new" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
+          {step === 3 && (
+            <motion.div key="s3new" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
               <div className="mb-8">
-                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{t(`Шаг 4 из ${TOTAL}`, `4-qadam ${TOTAL} tadan`, `Step 4 of ${TOTAL}`)}</p>
+                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{t(`Шаг 3 из ${TOTAL}`, `3-qadam ${TOTAL} tadan`, `Step 3 of ${TOTAL}`)}</p>
                 <h1 className="text-3xl font-bold text-ink">{t('Образование', 'Ta\'lim', 'Education')}</h1>
               </div>
 
@@ -898,15 +898,64 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                 </div>
               </Card>
 
-              <NavButtons onBack={onBack} onNext={handleNext} lang={lang} />
+              {/* Master: Bachelor degree info — moved here from Programs step */}
+              {degreeType === 'master' && (
+                <Card>
+                  <SectionHeader title={t('Данные о дипломе бакалавра', 'Bakalavr diplomi haqida', 'Bachelor\'s degree information')} lang={lang} />
+                  <div className="p-6 space-y-4">
+                    <Field label={t('Название университета', 'Universitet nomi', 'University name')} required>
+                      <input value={form.bachelor_university} onChange={e => setF('bachelor_university', e.target.value)} className={INPUT} />
+                    </Field>
+                    <Field label={t('Гос. или частный?', 'Davlat yoki xususiy?', 'Public or private?')}>
+                      <select value={form.bachelor_public_private} onChange={e => setF('bachelor_public_private', e.target.value)} className={SELECT}>
+                        <option value="">{t('Выберите...', 'Tanlang...', 'Select...')}</option>
+                        <option value="public">{t('Государственный', 'Davlat', 'Public')}</option>
+                        <option value="private">{t('Частный', 'Xususiy', 'Private')}</option>
+                      </select>
+                    </Field>
+                    <Field label={t('Страна', 'Mamlakat', 'Country')}>
+                      <input value={form.bachelor_country} onChange={e => setF('bachelor_country', e.target.value)} className={INPUT} />
+                    </Field>
+                    <Field label={t('Город', 'Shahar', 'City')}>
+                      <input value={form.bachelor_city} onChange={e => setF('bachelor_city', e.target.value)} className={INPUT} />
+                    </Field>
+                    <Field label={t('Год окончания', 'Tugatish yili', 'Graduation year')}>
+                      <input type="number" min="1990" max="2030" value={form.bachelor_year} onChange={e => setF('bachelor_year', e.target.value)} placeholder="2023" className={INPUT} />
+                    </Field>
+                    <Field label={t('Специальность', 'Mutaxassislik', 'Major')}>
+                      <input value={form.bachelor_major} onChange={e => setF('bachelor_major', e.target.value)} className={INPUT} />
+                    </Field>
+                    <Field label={t('Срок обучения (лет)', 'O\'qish muddati (yil)', 'Duration (years)')}>
+                      <input type="number" min="1" max="10" value={form.bachelor_duration} onChange={e => setF('bachelor_duration', e.target.value)} placeholder="4" className={INPUT} />
+                    </Field>
+                    <Field label={t('Язык обучения', 'O\'qitish tili', 'Language of instruction')}>
+                      <select value={form.bachelor_language} onChange={e => setF('bachelor_language', e.target.value)} className={SELECT}>
+                        <option value="">{t('Выберите...', 'Tanlang...', 'Select...')}</option>
+                        {['Арабский','Русский','Узбекский','Казахский','Английский','Другой'].map(l => <option key={l} value={l}>{l}</option>)}
+                      </select>
+                    </Field>
+                    <Field label="GPA">
+                      <input value={form.bachelor_gpa} onChange={e => setF('bachelor_gpa', e.target.value)} placeholder="3.8 / 4.0" className={INPUT} />
+                    </Field>
+                    <Field label={t('Общая оценка (отлично / хорошо...)', 'Umumiy baho (a\'lo / yaxshi...)', 'Overall grade')}>
+                      <input value={form.bachelor_grade} onChange={e => setF('bachelor_grade', e.target.value)} className={INPUT} />
+                    </Field>
+                    <Field label={t('Эмиратская нострификация диплома?', 'BAA diploma ekvivalenti?', 'Emirates degree equivalency?')}>
+                      <YesNo value={form.bachelor_equivalency} onChange={v => setF('bachelor_equivalency', v)} lang={lang} />
+                    </Field>
+                  </div>
+                </Card>
+              )}
+
+              <NavButtons onBack={() => setStep(2)} onNext={handleNext} lang={lang} />
             </motion.div>
           )}
 
           {/* ── STEP 4: Programs (+ master bachelor info) ── */}
-          {step === 1 && (
-            <motion.div key="s1new" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
+          {step === 4 && (
+            <motion.div key="s4new" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
               <div className="mb-8">
-                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{t(`Шаг 1 из ${TOTAL}`, `1-qadam ${TOTAL} tadan`, `Step 1 of ${TOTAL}`)}</p>
+                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{t(`Шаг 4 из ${TOTAL}`, `4-qadam ${TOTAL} tadan`, `Step 4 of ${TOTAL}`)}</p>
                 <h1 className="text-3xl font-bold text-ink">{t('Выбор специальности', 'Yo\'nalish tanlash', 'Program selection')}</h1>
                 <p className="text-muted mt-1 text-sm">
                   {t(
@@ -971,69 +1020,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                 )}
               </Card>
 
-              {/* Master: Bachelor degree info */}
-              {degreeType === 'master' && (
-                <Card>
-                  <SectionHeader title={t('Данные о дипломе бакалавра', 'Bakalavr diplomi haqida', 'Bachelor\'s degree information')} lang={lang} />
-                  <div className="p-6 space-y-4">
-                    <Field label={t('Название университета', 'Universitet nomi', 'University name')} required>
-                      <input value={form.bachelor_university} onChange={e => setF('bachelor_university', e.target.value)} className={INPUT} />
-                    </Field>
-                    <div className="space-y-4">
-                      <Field label={t('Гос. или частный?', 'Davlat yoki xususiy?', 'Public or private?')}>
-                        <select value={form.bachelor_public_private} onChange={e => setF('bachelor_public_private', e.target.value)} className={SELECT}>
-                          <option value="">{t('Выберите...', 'Tanlang...', 'Select...')}</option>
-                          <option value="public">{t('Государственный', 'Davlat', 'Public')}</option>
-                          <option value="private">{t('Частный', 'Xususiy', 'Private')}</option>
-                        </select>
-                      </Field>
-                      <Field label={t('Страна', 'Mamlakat', 'Country')}>
-                        <input value={form.bachelor_country} onChange={e => setF('bachelor_country', e.target.value)} className={INPUT} />
-                      </Field>
-                    </div>
-                    <div className="space-y-4">
-                      <Field label={t('Город', 'Shahar', 'City')}>
-                        <input value={form.bachelor_city} onChange={e => setF('bachelor_city', e.target.value)} className={INPUT} />
-                      </Field>
-                      <Field label={t('Год окончания', 'Tugatish yili', 'Graduation year')}>
-                        <input type="number" min="1990" max="2030" value={form.bachelor_year} onChange={e => setF('bachelor_year', e.target.value)}
-                          placeholder="2023" className={INPUT} />
-                      </Field>
-                    </div>
-                    <div className="space-y-4">
-                      <Field label={t('Специальность', 'Mutaxassislik', 'Major')}>
-                        <input value={form.bachelor_major} onChange={e => setF('bachelor_major', e.target.value)} className={INPUT} />
-                      </Field>
-                      <Field label={t('Срок обучения (лет)', 'O\'qish muddati (yil)', 'Duration (years)')}>
-                        <input type="number" min="1" max="10" value={form.bachelor_duration} onChange={e => setF('bachelor_duration', e.target.value)}
-                          placeholder="4" className={INPUT} />
-                      </Field>
-                    </div>
-                    <div className="space-y-4">
-                      <Field label={t('Язык обучения', 'O\'qitish tili', 'Language of instruction')}>
-                        <select value={form.bachelor_language} onChange={e => setF('bachelor_language', e.target.value)} className={SELECT}>
-                          <option value="">{t('Выберите...', 'Tanlang...', 'Select...')}</option>
-                          {['Арабский','Русский','Узбекский','Казахский','Английский','Другой'].map(l => <option key={l} value={l}>{l}</option>)}
-                        </select>
-                      </Field>
-                      <Field label="GPA">
-                        <input value={form.bachelor_gpa} onChange={e => setF('bachelor_gpa', e.target.value)}
-                          placeholder="3.8 / 4.0" className={INPUT} />
-                      </Field>
-                    </div>
-                    <div className="space-y-4">
-                      <Field label={t('Общая оценка (отлично / хорошо...)', 'Umumiy baho (a\'lo / yaxshi...)', 'Overall grade')}>
-                        <input value={form.bachelor_grade} onChange={e => setF('bachelor_grade', e.target.value)} className={INPUT} />
-                      </Field>
-                      <Field label={t('Эмиратская нострификация диплома?', 'BAA diploma ekvivalenti?', 'Emirates degree equivalency?')}>
-                        <YesNo value={form.bachelor_equivalency} onChange={v => setF('bachelor_equivalency', v)} lang={lang} />
-                      </Field>
-                    </div>
-                  </div>
-                </Card>
-              )}
-
-              <NavButtons onBack={onBack} onNext={handleNext} lang={lang} />
+              <NavButtons onBack={() => setStep(3)} onNext={handleNext} lang={lang} />
             </motion.div>
           )}
 
