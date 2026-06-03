@@ -14,6 +14,7 @@ import { translations } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
 import { v4 as uuidv4 } from 'uuid'
+import { AlQasimiaForm } from './alqasimia-form'
 
 const EDUCATION_OPTIONS_RU = [
   { value: '',             label: 'Выберите...' },
@@ -114,6 +115,11 @@ function ApplyContent() {
 
   const [step, setStep]     = useState(0)
   const [selectedCountry, setSelectedCountry] = useState<string>('')
+
+  // UAE sub-flow
+  const [uaeStep, setUaeStep] = useState<'university' | 'degree' | null>(null)
+  const [aqDegreeType, setAqDegreeType] = useState<'bachelor' | 'master' | null>(null)
+  const [aqFormActive, setAqFormActive] = useState(false)
 
   const [user, setUser]     = useState<any>(null)
   const [loading, setLoading] = useState(false)
@@ -445,6 +451,171 @@ function ApplyContent() {
 
   if (!user) return null
 
+  // ── UAE: Al Qasimia full form ─────────────────────────────────────────────
+  if (aqFormActive && aqDegreeType) {
+    return (
+      <AlQasimiaForm
+        degreeType={aqDegreeType}
+        lang={lang}
+        user={user}
+        onBack={() => { setAqFormActive(false); setUaeStep('degree') }}
+      />
+    )
+  }
+
+  // ── UAE: university selection & degree choice ─────────────────────────────
+  if (uaeStep === 'university' || uaeStep === 'degree') {
+    return (
+      <div className="min-h-screen bg-[#F7F8FA]">
+        <header className="bg-white border-b border-gray-100 sticky top-0 z-20">
+          <div className="max-w-3xl mx-auto px-4 h-16 flex items-center">
+            <Link href="/">
+              <svg viewBox="0 0 156 36" width="120" height="28" aria-label="TARJUMAN">
+                <path d="M 2,36 L 2,22 L 8,10 L 16,4 L 24,10 L 30,22 L 30,36" fill="none" stroke="#1B4332" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round"/>
+                <line x1="9" y1="13" x2="23" y2="13" stroke="#C9922A" strokeWidth="2" strokeLinecap="round"/>
+                <line x1="16" y1="13" x2="16" y2="31" stroke="#C9922A" strokeWidth="2" strokeLinecap="round"/>
+                <text x="40" y="24" fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif" fontSize="15" fontWeight="700" fill="#1B4332" style={{ letterSpacing: '4px' }}>TARJUMAN</text>
+              </svg>
+            </Link>
+          </div>
+          <div className="h-0.5 bg-gray-100" />
+        </header>
+
+        <div className="max-w-2xl mx-auto px-4 py-8 pb-16">
+          <AnimatePresence mode="wait">
+
+            {/* UAE university selection */}
+            {uaeStep === 'university' && (
+              <motion.div key="uae-uni" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.3 }}>
+                <div className="mb-10 text-center">
+                  <div className="inline-flex items-center gap-2 mb-3">
+                    <img src="https://flagcdn.com/w40/ae.png" alt="UAE" className="w-8 h-5 rounded object-cover" />
+                    <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest">{lang === 'ru' ? 'ОАЭ' : 'UAE'}</p>
+                  </div>
+                  <h1 className="text-3xl font-bold text-ink mb-2">{lang === 'ru' ? 'Выберите университет' : 'Choose a university'}</h1>
+                  <p className="text-muted text-sm">{lang === 'ru' ? 'Доступные университеты ОАЭ' : 'Available UAE universities'}</p>
+                </div>
+
+                <div className="grid grid-cols-1 gap-3 mb-10">
+                  {/* Al Qasimia University */}
+                  <button
+                    onClick={() => setUaeStep('degree')}
+                    className="group relative flex items-center gap-4 p-5 rounded-2xl border-2 border-[#1B4332] bg-white shadow-lg shadow-[#1B4332]/10 text-left transition-all duration-200"
+                  >
+                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#1B4332] rounded-l-2xl" />
+                    <div className="w-14 h-14 rounded-xl bg-[#1B4332]/5 border border-[#1B4332]/20 flex items-center justify-center shrink-0 ml-1">
+                      <GraduationCap className="w-7 h-7 text-[#1B4332]" />
+                    </div>
+                    <div className="flex-1 min-w-0 pl-1">
+                      <p className="font-bold text-base text-[#1B4332] mb-0.5">Al Qasimia University</p>
+                      <p className="text-xs text-muted">{lang === 'ru' ? 'Шарджа, ОАЭ · Исламские науки, язык, экономика' : 'Sharjah, UAE · Islamic sciences, language, economics'}</p>
+                      <div className="flex gap-1.5 mt-2 flex-wrap">
+                        <span className="text-[10px] bg-[#1B4332]/10 text-[#1B4332] px-2 py-0.5 rounded-full font-semibold">{lang === 'ru' ? 'Бакалавриат' : 'Bachelor'}</span>
+                        <span className="text-[10px] bg-[#1B4332]/10 text-[#1B4332] px-2 py-0.5 rounded-full font-semibold">{lang === 'ru' ? 'Магистратура' : 'Master'}</span>
+                        <span className="text-[10px] bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full font-semibold">2026–2027</span>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-[#1B4332] shrink-0" />
+                  </button>
+                </div>
+
+                <button
+                  onClick={() => { setUaeStep(null); setSelectedCountry('') }}
+                  className="flex items-center gap-2 px-5 py-3 bg-white border border-gray-200 text-ink text-sm font-medium rounded-xl hover:bg-gray-50 transition-all"
+                >
+                  <ChevronLeft className="w-4 h-4" /> {lang === 'ru' ? 'Назад' : 'Back'}
+                </button>
+              </motion.div>
+            )}
+
+            {/* Degree type selection */}
+            {uaeStep === 'degree' && (
+              <motion.div key="uae-degree" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.3 }}>
+                <div className="mb-10 text-center">
+                  <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-3">Al Qasimia University</p>
+                  <h1 className="text-3xl font-bold text-ink mb-2">{lang === 'ru' ? 'Уровень обучения' : 'Degree level'}</h1>
+                  <p className="text-muted text-sm">{lang === 'ru' ? 'Выберите программу поступления' : 'Choose your admission program'}</p>
+                </div>
+
+                <div className="grid grid-cols-1 gap-3 mb-10">
+                  {([
+                    {
+                      type: 'bachelor' as const,
+                      titleRu: 'Бакалавриат',
+                      titleEn: 'Bachelor\'s Degree',
+                      descRu: '8 направлений · Исламские науки, язык, СМИ, экономика',
+                      descEn: '8 programs · Islamic sciences, language, media, economics',
+                    },
+                    {
+                      type: 'master' as const,
+                      titleRu: 'Магистратура',
+                      titleEn: 'Master\'s Degree',
+                      descRu: '3 направления · Язык, фикх, тафсир',
+                      descEn: '3 programs · Language, fiqh, tafsir',
+                    },
+                  ]).map(item => (
+                    <button
+                      key={item.type}
+                      onClick={() => { setAqDegreeType(item.type) }}
+                      className={cn(
+                        'group flex items-center gap-4 p-5 rounded-2xl border-2 text-left transition-all duration-200',
+                        aqDegreeType === item.type
+                          ? 'border-[#1B4332] bg-[#1B4332]/5 shadow-md'
+                          : 'border-gray-100 bg-white hover:border-gray-200 hover:shadow-md'
+                      )}
+                    >
+                      <div className={cn(
+                        'w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-all',
+                        aqDegreeType === item.type ? 'bg-[#1B4332] text-white' : 'bg-gray-100 text-gray-500'
+                      )}>
+                        <GraduationCap className="w-6 h-6" />
+                      </div>
+                      <div className="flex-1">
+                        <p className={cn('font-bold text-base', aqDegreeType === item.type ? 'text-[#1B4332]' : 'text-ink')}>
+                          {lang === 'ru' ? item.titleRu : item.titleEn}
+                        </p>
+                        <p className="text-xs text-muted mt-0.5">{lang === 'ru' ? item.descRu : item.descEn}</p>
+                      </div>
+                      <div className={cn(
+                        'w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-all',
+                        aqDegreeType === item.type ? 'border-[#1B4332] bg-[#1B4332]' : 'border-gray-200'
+                      )}>
+                        {aqDegreeType === item.type && (
+                          <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 12 12">
+                            <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex justify-between">
+                  <button onClick={() => setUaeStep('university')} className="flex items-center gap-2 px-5 py-3 bg-white border border-gray-200 text-ink text-sm font-medium rounded-xl hover:bg-gray-50 transition-all">
+                    <ChevronLeft className="w-4 h-4" /> {lang === 'ru' ? 'Назад' : 'Back'}
+                  </button>
+                  <button
+                    onClick={() => { if (aqDegreeType) setAqFormActive(true) }}
+                    disabled={!aqDegreeType}
+                    className={cn(
+                      'flex items-center gap-2 px-8 py-3.5 text-sm font-semibold rounded-2xl transition-all duration-200',
+                      aqDegreeType
+                        ? 'bg-[#1B4332] text-white hover:bg-[#1B4332]/90 shadow-lg shadow-[#1B4332]/20'
+                        : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    )}
+                  >
+                    {lang === 'ru' ? 'Заполнить анкету' : 'Fill application'} <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </motion.div>
+            )}
+
+          </AnimatePresence>
+        </div>
+      </div>
+    )
+  }
+
   const progressPct = step === 0 ? 0 : ((step - 1) / (STEPS.length - 1)) * 100
 
   return (
@@ -597,7 +768,11 @@ function ApplyContent() {
               </div>
 
               <button
-                onClick={() => { if (selectedCountry) setStep(1) }}
+                onClick={() => {
+                  if (!selectedCountry) return
+                  if (selectedCountry === 'AE') { setUaeStep('university') }
+                  else { setStep(1) }
+                }}
                 disabled={!selectedCountry}
                 className={cn(
                   'w-full flex items-center justify-center gap-2 py-4 text-sm font-semibold rounded-2xl transition-all duration-200',
