@@ -257,8 +257,15 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
   }
 
   const validateStep2 = () => {
-    if (!form.mobile || !form.email) {
-      toast.error(ru ? 'Укажите email и телефон' : 'Enter email and phone')
+    const required = [
+      form.email, form.mobile, form.whatsapp, form.home_phone,
+      form.skype, form.facebook_contact, form.instagram_contact,
+      form.twitter, form.nearest_airport, form.national_id_number,
+      form.father_name, form.father_phone,
+      form.mother_name, form.mother_phone,
+    ]
+    if (required.some(v => !v.trim())) {
+      toast.error(ru ? 'Заполните все обязательные поля (если нет — напишите «Нет»)' : 'Fill all required fields (if none — write "No")')
       return false
     }
     return true
@@ -638,9 +645,15 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               <Card>
                 <SectionHeader title={ru ? 'Контактные данные' : 'Contact details'} ru={ru} />
                 <div className="p-6 space-y-4">
+                  <p className="text-xs text-muted bg-amber-50 border border-amber-200 rounded-xl px-3 py-2">
+                    {ru
+                      ? '⚠️ Все поля обязательны. Если аккаунта нет — напишите «Нет».'
+                      : '⚠️ All fields are required. If you don\'t have an account — write "No".'}
+                  </p>
                   <div className="grid grid-cols-2 gap-4">
-                    <Field label={ru ? 'Номер нац. ID' : 'National ID number'}>
-                      <input value={form.national_id_number} onChange={e => setF('national_id_number', e.target.value)} className={INPUT} />
+                    <Field label={ru ? 'Номер нац. ID' : 'National ID number'} required>
+                      <input value={form.national_id_number} onChange={e => setF('national_id_number', e.target.value)}
+                        placeholder={ru ? 'Номер или «Нет»' : 'Number or "No"'} className={INPUT} />
                     </Field>
                     <Field label="Email" required>
                       <input type="email" value={form.email} onChange={e => setF('email', e.target.value)}
@@ -652,35 +665,37 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                       <input type="tel" value={form.mobile} onChange={e => setF('mobile', e.target.value)}
                         placeholder="+998901234567" className={INPUT} />
                     </Field>
-                    <Field label="WhatsApp">
+                    <Field label="WhatsApp" required>
                       <input type="tel" value={form.whatsapp} onChange={e => setF('whatsapp', e.target.value)}
-                        placeholder="+998901234567" className={INPUT} />
+                        placeholder={ru ? '+998... или «Нет»' : '+998... or "No"'} className={INPUT} />
                     </Field>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
-                    <Field label={ru ? 'Домашний телефон' : 'Home phone'}>
-                      <input type="tel" value={form.home_phone} onChange={e => setF('home_phone', e.target.value)} className={INPUT} />
+                    <Field label={ru ? 'Домашний телефон' : 'Home phone'} required>
+                      <input type="tel" value={form.home_phone} onChange={e => setF('home_phone', e.target.value)}
+                        placeholder={ru ? '+998... или «Нет»' : '+998... or "No"'} className={INPUT} />
                     </Field>
-                    <Field label="Skype">
-                      <input value={form.skype} onChange={e => setF('skype', e.target.value)} className={INPUT} />
+                    <Field label="Skype" required>
+                      <input value={form.skype} onChange={e => setF('skype', e.target.value)}
+                        placeholder={ru ? 'login или «Нет»' : 'login or "No"'} className={INPUT} />
                     </Field>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
-                    <Field label="Facebook">
+                    <Field label="Facebook" required>
                       <input value={form.facebook_contact} onChange={e => setF('facebook_contact', e.target.value)}
-                        placeholder="facebook.com/..." className={INPUT} />
+                        placeholder={ru ? 'facebook.com/... или «Нет»' : 'facebook.com/... or "No"'} className={INPUT} />
                     </Field>
-                    <Field label="Instagram">
+                    <Field label="Instagram" required>
                       <input value={form.instagram_contact} onChange={e => setF('instagram_contact', e.target.value)}
-                        placeholder="@username" className={INPUT} />
+                        placeholder={ru ? '@username или «Нет»' : '@username or "No"'} className={INPUT} />
                     </Field>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
-                    <Field label="Twitter / X">
+                    <Field label="Twitter / X" required>
                       <input value={form.twitter} onChange={e => setF('twitter', e.target.value)}
-                        placeholder="@username" className={INPUT} />
+                        placeholder={ru ? '@username или «Нет»' : '@username or "No"'} className={INPUT} />
                     </Field>
-                    <Field label={ru ? 'Ближайший аэропорт' : 'Nearest international airport'}>
+                    <Field label={ru ? 'Ближайший аэропорт' : 'Nearest international airport'} required>
                       <input value={form.nearest_airport} onChange={e => setF('nearest_airport', e.target.value)}
                         placeholder={ru ? 'Ташкент (TAS)' : 'Tashkent (TAS)'} className={INPUT} />
                     </Field>
@@ -692,19 +707,22 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               <Card>
                 <SectionHeader title={ru ? 'Данные отца' : 'Father\'s information'} ru={ru} />
                 <div className="p-6 space-y-4">
-                  <Field label={ru ? 'ФИО' : 'Full name'}>
+                  <Field label={ru ? 'ФИО' : 'Full name'} required>
                     <input value={form.father_name} onChange={e => setF('father_name', e.target.value)} className={INPUT} />
                   </Field>
                   <div className="grid grid-cols-2 gap-4">
-                    <Field label={ru ? 'Телефон' : 'Phone'}>
-                      <input type="tel" value={form.father_phone} onChange={e => setF('father_phone', e.target.value)} className={INPUT} />
+                    <Field label={ru ? 'Телефон' : 'Phone'} required>
+                      <input type="tel" value={form.father_phone} onChange={e => setF('father_phone', e.target.value)}
+                        placeholder={ru ? '+998... или «Нет»' : '+998... or "No"'} className={INPUT} />
                     </Field>
                     <Field label="Email">
-                      <input type="email" value={form.father_email} onChange={e => setF('father_email', e.target.value)} className={INPUT} />
+                      <input type="email" value={form.father_email} onChange={e => setF('father_email', e.target.value)}
+                        placeholder={ru ? 'email или «Нет»' : 'email or "No"'} className={INPUT} />
                     </Field>
                   </div>
                   <Field label={ru ? 'Место работы' : 'Place of work'}>
-                    <input value={form.father_work} onChange={e => setF('father_work', e.target.value)} className={INPUT} />
+                    <input value={form.father_work} onChange={e => setF('father_work', e.target.value)}
+                      placeholder={ru ? 'Организация или «Нет»' : 'Organization or "No"'} className={INPUT} />
                   </Field>
                 </div>
               </Card>
@@ -713,19 +731,22 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               <Card>
                 <SectionHeader title={ru ? 'Данные матери' : 'Mother\'s information'} ru={ru} />
                 <div className="p-6 space-y-4">
-                  <Field label={ru ? 'ФИО' : 'Full name'}>
+                  <Field label={ru ? 'ФИО' : 'Full name'} required>
                     <input value={form.mother_name} onChange={e => setF('mother_name', e.target.value)} className={INPUT} />
                   </Field>
                   <div className="grid grid-cols-2 gap-4">
-                    <Field label={ru ? 'Телефон' : 'Phone'}>
-                      <input type="tel" value={form.mother_phone} onChange={e => setF('mother_phone', e.target.value)} className={INPUT} />
+                    <Field label={ru ? 'Телефон' : 'Phone'} required>
+                      <input type="tel" value={form.mother_phone} onChange={e => setF('mother_phone', e.target.value)}
+                        placeholder={ru ? '+998... или «Нет»' : '+998... or "No"'} className={INPUT} />
                     </Field>
                     <Field label="Email">
-                      <input type="email" value={form.mother_email} onChange={e => setF('mother_email', e.target.value)} className={INPUT} />
+                      <input type="email" value={form.mother_email} onChange={e => setF('mother_email', e.target.value)}
+                        placeholder={ru ? 'email или «Нет»' : 'email or "No"'} className={INPUT} />
                     </Field>
                   </div>
                   <Field label={ru ? 'Место работы' : 'Place of work'}>
-                    <input value={form.mother_work} onChange={e => setF('mother_work', e.target.value)} className={INPUT} />
+                    <input value={form.mother_work} onChange={e => setF('mother_work', e.target.value)}
+                      placeholder={ru ? 'Организация или «Нет»' : 'Organization or "No"'} className={INPUT} />
                   </Field>
                 </div>
               </Card>
