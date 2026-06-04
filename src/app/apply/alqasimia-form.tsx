@@ -628,7 +628,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                   </div>
                   <div className="space-y-4">
                     <Field label={t('Срок действия паспорта', 'Pasport muddati', 'Passport expiry')} required>
-                      <input type="date" value={form.passport_expiry} onChange={e => setF('passport_expiry', e.target.value)} className={DATE_INPUT} />
+                      <input type="text" inputMode="numeric" placeholder="ДД.ММ.ГГГГ" value={form.passport_expiry} onChange={e => setF('passport_expiry', e.target.value)} className={DATE_INPUT} />
                     </Field>
                     <Field label={t('Номер нац. удостоверения (ID)', 'Milliy ID raqami', 'National ID number')}>
                       <input value={form.national_id_number} onChange={e => setF('national_id_number', e.target.value)}
@@ -637,7 +637,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                   </div>
                   <div className="space-y-4">
                     <Field label={t('Дата рождения', 'Tug\'ilgan sana', 'Date of birth')} required>
-                      <input type="date" value={form.date_of_birth} onChange={e => setF('date_of_birth', e.target.value)} className={DATE_INPUT} />
+                      <input type="text" inputMode="numeric" placeholder="ДД.ММ.ГГГГ" value={form.date_of_birth} onChange={e => setF('date_of_birth', e.target.value)} className={DATE_INPUT} />
                     </Field>
                     <Field label={t('Страна рождения', 'Tug\'ilgan mamlakat', 'Country of birth')} required>
                       <input value={form.country_of_birth} onChange={e => setF('country_of_birth', e.target.value)}
@@ -899,7 +899,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                       </select>
                     </Field>
                     <Field label={t('Дата окончания', 'Tugatish sanasi', 'Graduation date')} required>
-                      <input type="date" value={form.graduation_date} onChange={e => setF('graduation_date', e.target.value)} className={DATE_INPUT} />
+                      <input type="text" inputMode="numeric" placeholder="ДД.ММ.ГГГГ" value={form.graduation_date} onChange={e => setF('graduation_date', e.target.value)} className={DATE_INPUT} />
                     </Field>
                   </div>
                 </div>
