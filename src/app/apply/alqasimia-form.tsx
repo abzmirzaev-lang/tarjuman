@@ -629,11 +629,15 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                     <Field label={t('Срок действия паспорта', 'Pasport muddati', 'Passport expiry')} required>
                       <input type="date" value={form.passport_expiry} onChange={e => setF('passport_expiry', e.target.value)} className={INPUT} />
                     </Field>
-                    <Field label={t('Дата рождения', 'Tug\'ilgan sana', 'Date of birth')} required>
-                      <input type="date" value={form.date_of_birth} onChange={e => setF('date_of_birth', e.target.value)} className={INPUT} />
+                    <Field label={t('Номер нац. удостоверения (ID)', 'Milliy ID raqami', 'National ID number')}>
+                      <input value={form.national_id_number} onChange={e => setF('national_id_number', e.target.value)}
+                        placeholder={t('Номер ID (если есть)', 'ID raqami (mavjud bo\'lsa)', 'ID number (if applicable)')} className={INPUT} />
                     </Field>
                   </div>
                   <div className="space-y-4">
+                    <Field label={t('Дата рождения', 'Tug\'ilgan sana', 'Date of birth')} required>
+                      <input type="date" value={form.date_of_birth} onChange={e => setF('date_of_birth', e.target.value)} className={INPUT} />
+                    </Field>
                     <Field label={t('Страна рождения', 'Tug\'ilgan mamlakat', 'Country of birth')} required>
                       <input value={form.country_of_birth} onChange={e => setF('country_of_birth', e.target.value)}
                         placeholder={t('Страна', 'Mamlakat', 'Country')} className={INPUT} />
@@ -728,10 +732,6 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                 <SectionHeader title={t('Контактные данные', 'Aloqa ma\'lumotlari', 'Contact details')} lang={lang} />
                 <div className="p-6 space-y-4">
                   <div className="space-y-4">
-                    <Field label={t('Номер нац. ID', 'Milliy ID raqami', 'National ID number')}>
-                      <input value={form.national_id_number} onChange={e => setF('national_id_number', e.target.value)}
-                        placeholder={''} className={INPUT} />
-                    </Field>
                     <Field label="Email" required>
                       <input type="email" value={form.email} onChange={e => setF('email', e.target.value)}
                         placeholder="example@mail.com" className={INPUT} />
