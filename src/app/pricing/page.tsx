@@ -18,14 +18,14 @@ const FEATURES: Record<ServicePackage, Record<AppLanguage, string[]>> = {
     en: ['Submission of ready documents', 'Online status tracking', 'Telegram notifications', 'Reply within 48 h'],
   },
   STANDARD: {
-    ru: ['Перевод документов на арабский', 'Подача в течение 24 часов', 'Онлайн-трекинг статуса', 'Telegram-уведомления', 'Поддержка после зачисления'],
-    uz: ['Hujjatlarni arabchaga tarjima', '24 soat ichida topshirish', 'Onlayn holat kuzatuvi', 'Telegram bildirishnomalar', 'Qabul keyin yordam'],
-    en: ['Arabic document translation', 'Submission within 24 h', 'Online status tracking', 'Telegram notifications', 'Post-enrollment support'],
+    ru: ['Перевод документов на арабский', 'Подача в течение 1–3 суток', 'Онлайн-трекинг статуса', 'Telegram-уведомления', 'Поддержка после зачисления'],
+    uz: ['Hujjatlarni arabchaga tarjima', '1–3 kun ichida topshirish', 'Onlayn holat kuzatuvi', 'Telegram bildirishnomalar', 'Qabul keyin yordam'],
+    en: ['Arabic document translation', 'Submission within 1–3 days', 'Online status tracking', 'Telegram notifications', 'Post-enrollment support'],
   },
   VIP: {
-    ru: ['Перевод документов на арабский', 'Подача в течение 6 часов', 'Приоритетная обработка', 'Персональный менеджер', 'Безлимитный чат', 'Поддержка после зачисления'],
-    uz: ['Hujjatlarni arabchaga tarjima', '6 soat ichida topshirish', "Ustuvor ko'rib chiqish", 'Shaxsiy menejer', 'Cheksiz chat', 'Qabul keyin yordam'],
-    en: ['Arabic document translation', 'Submission within 6 h', 'Priority processing', 'Personal manager', 'Unlimited chat', 'Post-enrollment support'],
+    ru: ['Перевод документов на арабский', 'Подача в течение 12–24 часов', 'Приоритетная обработка', 'Персональный менеджер', 'Безлимитный чат', 'Поддержка после зачисления'],
+    uz: ['Hujjatlarni arabchaga tarjima', '12–24 soat ichida topshirish', "Ustuvor ko'rib chiqish", 'Shaxsiy menejer', 'Cheksiz chat', 'Qabul keyin yordam'],
+    en: ['Arabic document translation', 'Submission within 12–24 hours', 'Priority processing', 'Personal manager', 'Unlimited chat', 'Post-enrollment support'],
   },
 }
 
@@ -33,7 +33,7 @@ type Cell = true | false | string
 const TABLE_ROWS: { ru: string; uz: string; en: string; basic: Cell; standard: Cell; vip: Cell }[] = [
   { ru: 'Подача документов',          uz: 'Hujjat topshirish',    en: 'Document submission',     basic: true,   standard: true,   vip: true  },
   { ru: 'Перевод на арабский',        uz: 'Arabchaga tarjima',    en: 'Arabic translation',      basic: false,  standard: true,   vip: true  },
-  { ru: 'Срок подачи',                uz: 'Topshirish muddati',   en: 'Submission time',         basic: '48 ч', standard: '24 ч', vip: '6 ч' },
+  { ru: 'Срок подачи',                uz: 'Topshirish muddati',   en: 'Submission time',         basic: '48 ч', standard: '1–3 дня', vip: '12–24 ч' },
   { ru: 'Онлайн-трекинг',             uz: 'Onlayn kuzatuv',      en: 'Online tracking',         basic: true,   standard: true,   vip: true  },
   { ru: 'Telegram-уведомления',       uz: 'Telegram bildirish',  en: 'Telegram notifications',  basic: true,   standard: true,   vip: true  },
   { ru: 'Поддержка после зачисления', uz: 'Qabul keyin yordam',  en: 'Post-enrollment support', basic: false,  standard: true,   vip: true  },

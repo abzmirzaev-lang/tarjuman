@@ -153,7 +153,7 @@ export const PACKAGES: Record<ServicePackage, {
   features_en: string[]
 }> = {
   SUBMISSION: {
-    priceUSD:    29,
+    priceUSD:    39,
     name_ru:     'Базовый',
     name_en:     'Basic',
     name_uz:     'Asosiy',
@@ -161,20 +161,20 @@ export const PACKAGES: Record<ServicePackage, {
     features_en: ['Submission of ready translated documents', 'Support after acceptance'],
   },
   STANDARD: {
-    priceUSD:    69,
+    priceUSD:    79,
     name_ru:     'Стандарт',
     name_en:     'Standard',
     name_uz:     'Standart',
-    features_ru: ['Перевод документов', 'Подача в течение 24 часов', 'Поддержка после принятия'],
-    features_en: ['Document translation', 'Submission within 24 hours', 'Support after acceptance'],
+    features_ru: ['Перевод документов', 'Подача в течение 1–3 суток', 'Поддержка после принятия'],
+    features_en: ['Document translation', 'Submission within 1–3 days', 'Support after acceptance'],
   },
   VIP: {
     priceUSD:    99,
     name_ru:     'VIP',
     name_en:     'VIP',
     name_uz:     'VIP',
-    features_ru: ['Перевод документов', 'Подача в течение 6 часов', 'Поддержка после принятия', 'Безлимитный чат с менеджером'],
-    features_en: ['Document translation', 'Submission within 6 hours', 'Support after acceptance', 'Unlimited chat with manager'],
+    features_ru: ['Перевод документов', 'Подача в течение 12–24 часов', 'Поддержка после принятия', 'Безлимитный чат с менеджером'],
+    features_en: ['Document translation', 'Submission within 12–24 hours', 'Support after acceptance', 'Unlimited chat with manager'],
   },
 }
 
