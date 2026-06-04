@@ -162,6 +162,7 @@ function Field({ label, required, children }: { label: string; required?: boolea
 }
 
 const INPUT = "w-full h-11 px-4 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 transition-all bg-white"
+const DATE_INPUT = "w-full h-11 px-4 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 transition-all bg-white appearance-none block"
 const SELECT = "w-full h-11 px-4 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 transition-all bg-white appearance-none"
 
 // ── Helpers (outside component to avoid focus loss on re-render) ──────────────
@@ -627,7 +628,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                   </div>
                   <div className="space-y-4">
                     <Field label={t('Срок действия паспорта', 'Pasport muddati', 'Passport expiry')} required>
-                      <input type="date" value={form.passport_expiry} onChange={e => setF('passport_expiry', e.target.value)} className={INPUT} />
+                      <input type="date" value={form.passport_expiry} onChange={e => setF('passport_expiry', e.target.value)} className={DATE_INPUT} />
                     </Field>
                     <Field label={t('Номер нац. удостоверения (ID)', 'Milliy ID raqami', 'National ID number')}>
                       <input value={form.national_id_number} onChange={e => setF('national_id_number', e.target.value)}
@@ -636,7 +637,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                   </div>
                   <div className="space-y-4">
                     <Field label={t('Дата рождения', 'Tug\'ilgan sana', 'Date of birth')} required>
-                      <input type="date" value={form.date_of_birth} onChange={e => setF('date_of_birth', e.target.value)} className={INPUT} />
+                      <input type="date" value={form.date_of_birth} onChange={e => setF('date_of_birth', e.target.value)} className={DATE_INPUT} />
                     </Field>
                     <Field label={t('Страна рождения', 'Tug\'ilgan mamlakat', 'Country of birth')} required>
                       <input value={form.country_of_birth} onChange={e => setF('country_of_birth', e.target.value)}
@@ -898,7 +899,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                       </select>
                     </Field>
                     <Field label={t('Дата окончания', 'Tugatish sanasi', 'Graduation date')} required>
-                      <input type="date" value={form.graduation_date} onChange={e => setF('graduation_date', e.target.value)} className={INPUT} />
+                      <input type="date" value={form.graduation_date} onChange={e => setF('graduation_date', e.target.value)} className={DATE_INPUT} />
                     </Field>
                   </div>
                 </div>
@@ -1031,7 +1032,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                     : t('Магистратура', 'Magistratura yo\'nalishlari', 'Master\'s programs')}
                   lang={lang}
                 />
-                <div className="p-4 grid gap-2">
+                <div className="p-4 grid grid-cols-1 gap-2">
                   {programs.map(prog => {
                     const key = progKey(prog)
                     const selected = selectedPrograms.includes(key)
@@ -1117,7 +1118,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                   <AlertCircle className="w-3.5 h-3.5 text-red-400" />
                   <p className="text-xs font-semibold text-muted uppercase tracking-wider">{ru ? 'Обязательные документы' : 'Required documents'}</p>
                 </div>
-                <div className="p-4 grid gap-2">
+                <div className="p-4 grid grid-cols-1 gap-2">
                   {REQUIRED_DOCS.map(dt => (
                     <DocZone key={dt} docType={dt}
                       label={ru ? DOC_LABELS[dt].ru : DOC_LABELS[dt].en}
@@ -1132,7 +1133,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               {/* Optional */}
               <Card>
                 <SectionHeader title={t('Дополнительные документы', 'Qo\'shimcha hujjatlar', 'Additional documents')} optional lang={lang} />
-                <div className="p-4 grid gap-2">
+                <div className="p-4 grid grid-cols-1 gap-2">
                   {OPTIONAL_DOCS.map(dt => (
                     <DocZone key={dt} docType={dt}
                       label={ru ? DOC_LABELS[dt].ru : DOC_LABELS[dt].en}
@@ -1151,7 +1152,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                     <AlertCircle className="w-3.5 h-3.5 text-red-400" />
                     <p className="text-xs font-semibold text-muted uppercase tracking-wider">{ru ? 'Документы магистратуры' : 'Master\'s degree documents'}</p>
                   </div>
-                  <div className="p-4 grid gap-2">
+                  <div className="p-4 grid grid-cols-1 gap-2">
                     {MASTER_DOCS.map(dt => (
                       <DocZone key={dt} docType={dt}
                         label={ru ? DOC_LABELS[dt].ru : DOC_LABELS[dt].en}
