@@ -33,7 +33,7 @@ const VALUES = [
     bg: 'bg-violet-50',
     ru: { t: 'Честность', b: 'Мы говорим правду о шансах на поступление. Никаких пустых обещаний — только реальная оценка и максимальная помощь.' },
     en: { t: 'Honesty', b: 'We tell the truth about admission chances. No empty promises — just realistic assessment and maximum support.' },
-    uz: { t: 'Halollik', b: 'Qabul imkoniyatlari haqida haqiqatni aytamiz. Bo\'sh va'dalar yo\'q — faqat haqiqiy baholash va maksimal yordam.' },
+    uz: { t: 'Halollik', b: "Qabul imkoniyatlari haqida haqiqatni aytamiz. Bo'sh va'dalar yo'q — faqat haqiqiy baholash va maksimal yordam." },
   },
   {
     icon: Zap,
