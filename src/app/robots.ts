@@ -8,7 +8,19 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/admin', '/dashboard', '/api/', '/auth/'],
+        disallow: [
+          '/admin/',
+          '/dashboard/',
+          '/api/',
+          '/auth/',
+          '/(auth)/',
+          '/(dashboard)/',
+        ],
+      },
+      {
+        userAgent: 'Googlebot',
+        allow: '/',
+        disallow: ['/admin/', '/dashboard/', '/api/', '/auth/'],
       },
     ],
     sitemap: `${APP_URL}/sitemap.xml`,

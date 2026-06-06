@@ -1,12 +1,9 @@
 import type { Metadata } from 'next'
-
+const U = 'https://tarjumanedu.com'
 export const metadata: Metadata = {
-  title: 'Контакты',
-  description: 'Свяжитесь с TARJUMAN — помощь в поступлении в университеты Саудовской Аравии, ОАЭ, Катара и Турции. Telegram, WhatsApp, email.',
-  alternates: { canonical: '/contact' },
-  openGraph: {
-    title: 'Контакты | TARJUMAN',
-    description: 'Свяжитесь с нами для консультации по поступлению в зарубежные университеты.',
-    url: '/contact',
-  },
+  title: 'Контакты | TARJUMAN EDU — Консультация бесплатно',
+  description: 'Свяжитесь с TARJUMAN EDU: Telegram, WhatsApp, Email. Бесплатная консультация по поступлению в университеты Саудовской Аравии, ОАЭ, Турции.',
+  keywords: ['контакты Tarjuman Edu','консультация поступление','связаться с агентством','telegram поступление университет'],
+  alternates: { canonical: `${U}/contact` },
+  openGraph: { title:'Контакты | TARJUMAN EDU', description:'Telegram, WhatsApp, Email. Бесплатная консультация по поступлению.', url:`${U}/contact`, type:'website', images:[{url:`${U}/og-image.png`,width:640,height:640}] },
 }

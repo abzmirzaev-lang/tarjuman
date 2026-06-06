@@ -277,20 +277,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ url: checkoutSession.url })
     }
 
-    // ── РУЧНАЯ ОПЛАТА (fallback) ──────────────────────────────────────────
-    await notifyAdmin(
-      `🆕 *Новая заявка!*\n\n` +
-      `👤 *Имя:* ${app.full_name}\n` +
-      `📱 *Телефон:* ${app.phone}\n` +
-      `✈️ *Гражданство:* ${app.citizenship}\n` +
-      `📦 *Пакет:* ${packageInfo.name_ru} — $${packageInfo.priceUSD}\n` +
-      `🆔 *ID заявки:* ${applicationId}\n\n` +
-      `💳 Ожидает ручной оплаты`
-    )
-    return NextResponse.json({ url: null, manual: true })
+    return NextResponse.json({ error: 'No payment provider configured' }, { status: 503 })
 
-  } catch (err: any) {
-    console.error('Checkout error:', err)
-    return NextResponse.json({ error: err.message }, { status: 500 })
+  } catch (err) {
+    console.error('create-checkout error:', err)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

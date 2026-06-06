@@ -1,20 +1,10 @@
 import type { Metadata } from 'next'
-
+const U = 'https://tarjumanedu.com'
 export const metadata: Metadata = {
-  title: 'Университеты',
-  description: 'Более 26 университетов Саудовской Аравии и ОАЭ — Университет Короля Абдулазиза, Исламский университет Медины, Университет Умм аль-Кура и другие. Выберите и подайте заявку онлайн.',
-  keywords: [
-    'университеты Саудовской Аравии',
-    'университеты ОАЭ',
-    'Исламский университет Медины',
-    'Университет Короля Абдулазиза',
-    'King Saud University',
-    'поступить в университет Саудовской Аравии',
-  ],
-  alternates: { canonical: '/universities' },
-  openGraph: {
-    title: 'Университеты | TARJUMAN',
-    description: 'Более 26 ведущих университетов Саудовской Аравии и ОАЭ. Подайте заявку онлайн.',
-    url: '/universities',
-  },
+  title: 'Университеты Саудовской Аравии и ОАЭ | TARJUMAN EDU',
+  description: 'Полный список университетов-партнёров: Исламский университет Медины, King Saud University, Al Qasimia University, университеты ОАЭ. Подайте заявку онлайн.',
+  keywords: ['университеты Саудовской Аравии','университеты ОАЭ','Al Qasimia University','Исламский университет Медины','King Saud University','поступить университет Саудовская Аравия','список университетов ОАЭ','учёба арабских странах'],
+  alternates: { canonical: `${U}/universities` },
+  openGraph: { title:'Университеты Саудовской Аравии и ОАЭ | TARJUMAN', description:'12+ ведущих университетов: КСА, ОАЭ, Катар. Al Qasimia, IUM, KSU, KAU. Подайте заявку онлайн.', url:`${U}/universities`, type:'website', images:[{url:`${U}/og-image.png`,width:640,height:640}] },
+  twitter: { card:'summary', title:'Университеты КСА и ОАЭ | TARJUMAN', description:'Al Qasimia University, Исламский университет Медины, KSU, KAU и другие.' },
 }
