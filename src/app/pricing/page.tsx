@@ -189,4 +189,132 @@ export default function PricingPage() {
                       <span className={cn('text-sm ml-2', popular ? 'text-white/50' : 'text-muted')}>{ui.perApp}</span>
                     </div>
 
-                    {key === 
+                    {key === 'SUBMISSION' && (
+                      <p className={cn('text-xs mt-0.5', popular ? 'text-white/40' : 'text-muted')}>
+                        {tr({ ru: 'Вы переводите сами', en: 'You translate yourself', uz: 'O\'zingiz tarjima qilasiz' })}
+                      </p>
+                    )}
+
+                    {/* Feature list */}
+                    <ul className="mt-6 space-y-2.5">
+                      {feats.map((f, fi) => {
+                        const FIcon = f.icon
+                        return (
+                          <li key={fi} className="flex items-start gap-2.5">
+                            <div className={cn('w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center mt-0.5', popular ? 'bg-brand-400/20' : 'bg-brand-50')}>
+                              <FIcon className={cn('w-3 h-3', popular ? 'text-brand-400' : 'text-brand-600')} />
+                            </div>
+                            <span className={cn('text-sm leading-snug', popular ? 'text-white/80' : 'text-ink/70')}>
+                              {L === 'ru' ? f.ru : L === 'uz' ? f.uz : f.en}
+                            </span>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  </div>
+
+                  {/* CTA */}
+                  <div className={cn('p-6 mt-auto', popular ? 'bg-ink border-t border-white/10' : 'bg-white border-t border-border')}>
+                    <Link href={`/apply?package=${key}`}>
+                      <button className={cn(
+                        'w-full py-3.5 rounded-2xl font-bold text-sm transition-all duration-150 active:scale-[0.98]',
+                        popular
+                          ? 'bg-brand-400 text-ink hover:bg-brand-300'
+                          : 'bg-ink text-white hover:bg-ink/80'
+                      )}>
+                        {ui.apply} <ArrowRight className="inline w-4 h-4 ml-1" />
+                      </button>
+                    </Link>
+                  </div>
+                </motion.div>
+              )
+            })}
+          </div>
+
+          {/* ── COMPARISON TABLE ───────────────────────────────────────────── */}
+          <div className="bg-white rounded-3xl border border-border shadow-sm overflow-hidden">
+            <button
+              onClick={() => setTableOpen(o => !o)}
+              className="w-full flex items-center justify-between px-6 py-5 hover:bg-surface transition-colors"
+            >
+              <span className="font-bold text-ink">{tableOpen ? ui.hideCompare : ui.compare}</span>
+              {tableOpen ? <ChevronUp className="w-5 h-5 text-muted" /> : <ChevronDown className="w-5 h-5 text-muted" />}
+            </button>
+
+            {tableOpen && (
+              <div className="overflow-x-auto border-t border-border">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="bg-surface">
+                      <th className="text-left px-6 py-3.5 font-semibold text-muted w-1/2">{ui.tableHead}</th>
+                      {PLANS.map(({ key, popular }) => (
+                        <th key={key} className={cn('px-4 py-3.5 text-center font-bold text-xs uppercase tracking-wider', popular ? 'text-brand-600' : 'text-muted')}>
+                          {planName(key)}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {FEATURES.map((feat, fi) => (
+                      <tr key={fi} className={feat.highlight ? 'bg-brand-50/40' : 'hover:bg-surface/50'}>
+                        <td className="px-6 py-3.5 font-medium text-ink flex items-center gap-2">
+                          <feat.icon className="w-4 h-4 text-muted flex-shrink-0" />
+                          {L === 'ru' ? feat.ru : L === 'uz' ? feat.uz : feat.en}
+                        </td>
+                        {PLANS.map(({ key, popular }) => (
+                          <td key={key} className="px-4 py-3.5 text-center">
+                            <Cell value={feat[({ SUBMISSION: 'basic', STANDARD: 'standard', VIP: 'vip' } as const)[key as 'SUBMISSION' | 'STANDARD' | 'VIP']]} isPopular={popular} />
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+
+          {/* ── TRUST STRIP ────────────────────────────────────────────────── */}
+          <div className="flex flex-wrap justify-center gap-6 text-sm text-muted">
+            {[ShieldCheck, Zap, Star].map((Icon, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <Icon className="w-4 h-4 text-brand-500" />
+                <span>{[
+                  tr({ ru: 'Безопасная оплата', en: 'Secure payment', uz: "Xavfsiz to'lov" }),
+                  tr({ ru: 'Быстрая обработка', en: 'Fast processing', uz: 'Tez ishlov' }),
+                  tr({ ru: 'Проверено 120+ студентами', en: 'Trusted by 120+ students', uz: '120+ talaba ishonadi' }),
+                ][i]}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* ── CTA ────────────────────────────────────────────────────────── */}
+          <div className="bg-ink rounded-3xl p-8 sm:p-12 text-center text-white relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-brand-900/30 via-transparent to-violet-900/20 pointer-events-none" />
+            <div className="relative z-10">
+              <h2 className="text-2xl sm:text-4xl font-black mb-3">{ui.ctaTitle}</h2>
+              <p className="text-white/60 mb-8 max-w-lg mx-auto">{ui.ctaSub}</p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Link href="/apply">
+                  <button className="px-8 py-3.5 bg-brand-400 text-ink font-bold rounded-2xl hover:bg-brand-300 transition-colors active:scale-[0.98]">
+                    {ui.ctaBtn} <ArrowRight className="inline w-4 h-4 ml-1" />
+                  </button>
+                </Link>
+                <Link href="/contact">
+                  <button className="px-8 py-3.5 bg-white/10 border border-white/20 text-white font-semibold rounded-2xl hover:bg-white/20 transition-colors">
+                    {ui.consult}
+                  </button>
+                </Link>
+              </div>
+              <p className="mt-6 text-white/30 text-xs">{ui.notSure} <Link href="/contact" className="underline hover:text-white/60">{ui.consult.toLowerCase()}</Link></p>
+              <p className="mt-3 text-white/20 text-xs max-w-md mx-auto">
+                {tr({ ru: 'Tarjuman Edu оказывает консультационные, переводческие и организационные услуги. Решение о зачислении принимается университетом.', en: 'Tarjuman Edu provides consulting, translation and organizational services. Admission decisions are made by the university.', uz: 'Tarjuman Edu konsultatsiya, tarjima va tashkiliy xizmatlar ko\'rsatadi. Qabul qarori universitet tomonidan qabul qilinadi.' })}
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </>
+  )
+}
