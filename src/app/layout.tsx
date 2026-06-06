@@ -9,33 +9,35 @@ const APP_URL = 'https://tarjumanedu.com'
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: 'Tarjuman Edu — Postuplenie v Saudovskuyu Araviyu i OAE | Perevod dokumentov',
+    default: 'Tarjuman Edu — Поступление в Саудовскую Аравию и ОАЭ | Перевод документов',
     template: '%s | TARJUMAN EDU',
   },
-  description: 'Tarjuman Edu — professionalnaya pomosh studentam iz SNG pri postuplenii v universitety Saudovskoy Aravii i OAE. Perevod dokumentov na arabskiy, podacha zayavki, soprovozhdenie do zachisleniya. Al Qasimia University, IUM, KSU, KAU.',
+  description: 'Tarjuman Edu — профессиональная помощь студентам из СНГ при поступлении в университеты Саудовской Аравии и ОАЭ. Перевод документов на арабский, подача заявки, сопровождение до зачисления. Al Qasimia University, IUM, KSU, KAU.',
   keywords: [
-    'postuplenie v Saudovskuyu Araviyu',
-    'postuplenie v universitet Saudovskoy Aravii',
-    'stipendiya Saudovskaya Araviya',
-    'Al Qasimia University postuplenie',
+    'поступление в Саудовскую Аравию',
+    'поступление в университет Саудовской Аравии',
+    'подача документов в Саудовскую Аравию',
+    'подача документов в Саудию',
+    'учёба в Саудовской Аравии',
+    'учёба в ОАЭ для узбекистанцев',
+    'стипендия Саудовская Аравия',
+    'Al Qasimia University поступление',
     'Al Qasimia University',
-    'universitety OAE',
-    'postuplenie v universitet OAE',
-    'Islamskiy universitet Mediny',
+    'университеты ОАЭ поступление',
+    'Исламский университет Медины',
     'Islamic University of Madinah',
-    'King Saud University postuplenie',
-    'ucheba v Saudovskoy Aravii',
-    'ucheba v OAE dlya uzbekistantsev',
-    'perevod dokumentov na arabskiy',
-    'pomosh postuplenie arabskie universitety',
-    'agentstvo postuplenie Saudovskaya Araviya',
+    'King Saud University поступление',
+    'перевод документов на арабский',
+    'помощь поступление арабские университеты',
+    'агентство поступление Саудовская Аравия',
+    'Тарджуман Эду',
     'tarjuman edu',
-    'TARJUMAN postuplenie',
     'study in saudi arabia cis students',
     'study in uae for uzbekistan students',
     'oliy talim saudiya arabistoni',
     'stipendiya saudiya arabistoni',
     'arab universitetlari qabul',
+    'hujjat topshirish saudiya arabistoni',
   ],
   authors: [{ name: 'Tarjuman Edu', url: APP_URL }],
   creator: 'Tarjuman Edu',
@@ -55,8 +57,8 @@ export const metadata: Metadata = {
     other: [{ rel: 'icon', url: '/icon-512.png', sizes: '512x512', type: 'image/png' }],
   },
   openGraph: {
-    title: 'Tarjuman Edu — Postuplenie v Saudovskuyu Araviyu i OAE',
-    description: 'Perevod dokumentov, podacha zayavki, soprovozhdenie. Al Qasimia University, IUM, KSU, KAU i drugie. 43 zayavki obrabotano.',
+    title: 'Tarjuman Edu — Поступление в Саудовскую Аравию и ОАЭ',
+    description: 'Перевод документов, подача заявки, сопровождение до зачисления. Al Qasimia University, IUM, KSU, KAU и другие.',
     url: APP_URL,
     siteName: 'Tarjuman Edu',
     type: 'website',
@@ -70,8 +72,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Tarjuman Edu — Postuplenie v Saudovskuyu Araviyu i OAE',
-    description: 'Perevod dokumentov, podacha zayavki, soprovozhdenie. Al Qasimia, IUM, KSU, KAU.',
+    title: 'Tarjuman Edu — Поступление в Саудовскую Аравию и ОАЭ',
+    description: 'Перевод документов, подача заявки, сопровождение до зачисления. Al Qasimia, IUM, KSU, KAU.',
     images: [`${APP_URL}/og-image.png`],
   },
   alternates: {
@@ -93,7 +95,7 @@ const jsonLd = [
     url: APP_URL,
     logo: { '@type': 'ImageObject', url: `${APP_URL}/logo.png`, width: 512, height: 512 },
     image: `${APP_URL}/og-image.png`,
-    foundingDate: '2022',
+    foundingDate: '2025',
     contactPoint: [
       { '@type': 'ContactPoint', contactType: 'customer support', url: 'https://t.me/TARJUMAN_KSA', availableLanguage: ['Russian', 'Uzbek', 'English'] },
       { '@type': 'ContactPoint', contactType: 'customer support', email: 'support@tarjumanedu.com' },
@@ -147,29 +149,4 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <meta name="cryptomus" content="801d9f3b" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link rel="preconnect" href="https://images.unsplash.com" />
-        <link rel="dns-prefetch" href="https://flagcdn.com" />
-        <link
-          rel="preload"
-          as="image"
-          href="https://images.unsplash.com/photo-1692977579997-948328cdb7d2?w=1200&q=80"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
-          rel="stylesheet"
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-      </head>
-      <body>
-        {children}
-        <Footer />
-        <Toaster position="top-right" richColors />
-        <TelegramButton />
-      </body>
-    </html>
-  )
-}
+        <li

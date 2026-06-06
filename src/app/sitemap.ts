@@ -17,9 +17,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${APP_URL}/about`,                          lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${APP_URL}/faq`,                            lastModified: now, changeFrequency: 'monthly', priority: 0.75 },
     { url: `${APP_URL}/contact`,                        lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    // Review page
+    { url: `${APP_URL}/review`,                         lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
     // Legal — low priority
     { url: `${APP_URL}/terms`,                          lastModified: now, changeFrequency: 'yearly',  priority: 0.2 },
-    { url: `${APP_URL}/privacy`,                        lastModified: now, changeFrequency: 'yearly',  priority: 0.2 },
-    { url: `${APP_URL}/refund`,                         lastModified: now, changeFrequency: 'yearly',  priority: 0.2 },
-  ]
-}
+    { url: `${APP_URL}/privacy`,                        lastModified: now, changeFrequency: 'yearly',  prio
