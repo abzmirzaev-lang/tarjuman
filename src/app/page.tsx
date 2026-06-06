@@ -8,7 +8,7 @@ import {
   Send, Zap, Shield, Clock, Award, ChevronRight,
   Languages, Plane, HeartHandshake, Gauge, Check,
   BadgeCheck, SearchCheck, LifeBuoy, GraduationCap,
-  TrendingUp, Users, Building2, ThumbsUp
+  TrendingUp
 } from 'lucide-react'
 import { useInView } from 'framer-motion'
 import { Navbar } from '@/components/layout/Navbar'
@@ -186,77 +186,6 @@ function BenefitsSection({ lang }: { lang: AppLanguage }) {
   )
 }
 
-/* ─── WHY US ─────────────────────────────────────────────────────────────── */
-function WhyUsSection({ lang }: { lang: AppLanguage }) {
-  const title =
-    lang === 'ru' ? 'Почему выбирают Tarjuman Edu'
-    : lang === 'uz' ? 'Nega Tarjuman Edu tanlashadi'
-    : 'Why students choose Tarjuman Edu'
-
-  const points =
-    lang === 'ru' ? [
-      { icon: TrendingUp,  title: 'Высокий процент одобрения',   desc: 'Большинство наших заявок получают положительное решение от университетов.' },
-      { icon: Clock,       title: 'Быстрая обработка',           desc: 'Минимальный срок подачи — 6 часов. VIP-пакет приоритизируется немедленно.' },
-      { icon: Shield,      title: 'Безопасность данных',         desc: 'Все документы хранятся на защищённых серверах и передаются только в университет.' },
-      { icon: Users,       title: 'Команда профессионалов',      desc: 'Арабисты, переводчики и юристы с опытом в образовательной сфере.' },
-      { icon: Building2,   title: 'Проверенные партнёры',        desc: 'Работаем только с аккредитованными университетами Саудовской Аравии и ОАЭ.' },
-      { icon: ThumbsUp,    title: 'Гарантия возврата',           desc: 'Если документы не приняты по нашей вине — возвращаем деньги.' },
-    ] : lang === 'uz' ? [
-      { icon: TrendingUp,  title: 'Yuqori tasdiqlash foizi',     desc: 'Arizalarimizning ko\'p qismi universitetlardan ijobiy qaror oladi.' },
-      { icon: Clock,       title: 'Tez ishlov berish',           desc: 'Minimal topshirish muddati — 6 soat. VIP paket darhol ustuvorlik qilinadi.' },
-      { icon: Shield,      title: 'Ma\'lumotlar xavfsizligi',    desc: 'Barcha hujjatlar himoyalangan serverlarda saqlanadi va faqat universitetga uzatiladi.' },
-      { icon: Users,       title: 'Mutaxassislar jamoasi',       desc: 'Ta\'lim sohasida tajribali arabshunoslar, tarjimonlar va yuristlar.' },
-      { icon: Building2,   title: 'Ishonchli hamkorlar',         desc: 'Faqat Saudiya Arabistoni va BAA ning akkreditatsiyalangan universitetlari bilan ishlaymiz.' },
-      { icon: ThumbsUp,    title: 'Qaytarish kafolati',          desc: 'Agar hujjatlar bizning aybimiz bilan qabul qilinmasa — pulni qaytaramiz.' },
-    ] : [
-      { icon: TrendingUp,  title: 'High approval rate',          desc: 'Most of our applications receive a positive decision from universities.' },
-      { icon: Clock,       title: 'Fast processing',             desc: 'Minimum submission time — 6 hours. VIP package is prioritized immediately.' },
-      { icon: Shield,      title: 'Data security',               desc: 'All documents are stored on secure servers and transmitted only to the university.' },
-      { icon: Users,       title: 'Team of professionals',       desc: 'Arabists, translators and lawyers with experience in the educational field.' },
-      { icon: Building2,   title: 'Verified partners',           desc: 'We work only with accredited universities in Saudi Arabia and UAE.' },
-      { icon: ThumbsUp,    title: 'Refund guarantee',            desc: 'If documents are not accepted due to our fault — we refund your money.' },
-    ]
-
-  return (
-    <section className="section bg-ink text-white relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-brand-900/20 via-transparent to-brand-800/10 pointer-events-none" />
-      <div className="absolute -top-32 -right-32 w-96 h-96 bg-brand-400/5 rounded-full blur-3xl pointer-events-none" />
-
-      <div className="container-narrow relative z-10">
-        <div className="text-center mb-14">
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 border border-white/20 rounded-full text-white/80 text-xs font-semibold uppercase tracking-widest mb-4">
-            {lang === 'ru' ? 'Почему мы' : lang === 'uz' ? 'Nega biz' : 'Why us'}
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">{title}</h2>
-          <p className="text-white/50 max-w-md mx-auto text-sm">
-            {lang === 'ru' ? 'Мы не просто переводим документы — мы открываем двери к лучшему образованию'
-              : lang === 'uz' ? 'Biz shunchaki hujjatlarni tarjima qilmaymiz — yaxshiroq ta\'limga eshiklar ochamiz'
-              : "We don't just translate documents — we open doors to better education"}
-          </p>
-        </div>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {points.map((p, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.07 }}
-              className="group p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-brand-400/30 transition-all duration-300"
-            >
-              <div className="w-11 h-11 rounded-xl bg-brand-400/15 flex items-center justify-center mb-4 group-hover:bg-brand-400/25 transition-colors">
-                <p.icon className="w-5 h-5 text-brand-400" />
-              </div>
-              <h3 className="font-bold text-white mb-2 text-sm leading-snug">{p.title}</h3>
-              <p className="text-white/50 text-xs leading-relaxed">{p.desc}</p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
 
 /* ─── HOME PAGE ──────────────────────────────────────────────────────────── */
 export default function HomePage() {
@@ -658,9 +587,6 @@ export default function HomePage() {
 
       {/* BENEFITS */}
       <BenefitsSection lang={lang} />
-
-      {/* WHY US */}
-      <WhyUsSection lang={lang} />
 
       {/* HOW IT WORKS */}
       <section className="section bg-ink text-white">
