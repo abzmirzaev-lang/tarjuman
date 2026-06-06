@@ -59,6 +59,46 @@ export async function POST(request: NextRequest) {
 
     const packageInfo = PACKAGES[pkg]
 
+    // ── POLAR ────────────────────────────────────────────────────────────
+    if (process.env.POLAR_ACCESS_TOKEN) {
+      const productId = {
+        SUBMISSION: process.env.POLAR_PRODUCT_SUBMISSION,
+        STANDARD:   process.env.POLAR_PRODUCT_STANDARD,
+        VIP:        process.env.POLAR_PRODUCT_VIP,
+      }[pkg]
+
+      if (!productId) {
+        console.warn(`Polar: product ID not configured for package ${pkg}, falling through`)
+      } else {
+        // Encode metadata as URL-encoded JSON (Polar checkout GET route reads it)
+        const metadata = encodeURIComponent(JSON.stringify({
+          applicationId: applicationId,
+          userId:        session.user.id,
+          package:       pkg,
+        }))
+
+        const checkoutUrl =
+          `${process.env.NEXT_PUBLIC_APP_URL}/api/polar/checkout` +
+          `?products=${productId}` +
+          `&customerEmail=${encodeURIComponent(session.user.email ?? '')}` +
+          `&metadata=${metadata}`
+
+        // Save pending payment record
+        await supabase.from('payments').insert({
+          application_id:    applicationId,
+          user_id:           session.user.id,
+          stripe_session_id: `polar_pending_${applicationId}`,
+          amount:            packageInfo.priceUSD,
+          currency:          'USD',
+          method:            'POLAR',
+          status:            'PENDING',
+          package:           pkg,
+        })
+
+        return NextResponse.json({ url: checkoutUrl })
+      }
+    }
+
     // ── CRYPTOMUS ──────────────────────────────────────────────────────────
     if (process.env.CRYPTOMUS_MERCHANT_ID && process.env.CRYPTOMUS_PAYMENT_API_KEY) {
       const merchantId = process.env.CRYPTOMUS_MERCHANT_ID
