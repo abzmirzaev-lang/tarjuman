@@ -149,4 +149,272 @@ const FAQ_UZ: FAQCategory[] = [
     id: 'process', icon: Clock, title: 'Jarayon va muddatlar',
     items: [
       { q: "Qabul jarayoni qancha davom etadi?", a: "Bizning tomonimizdan topshirish paketga qarab 6–48 soat oladi. Universitetning ko'rib chiqish jarayoni 2 haftadan 4 oygacha. Ijobiy qarordan keyin viza rasmiylashtirilishi yana 2–6 hafta oladi. Jami: birinchi arizadan mamlakatga kirishgacha 2–6 oyga hisoblang." },
-      { q: "Arizalar qabuli qachon boshlanadi?", a: "Qabul muddatlari universitetga bog'liq
+      { q: "Arizalar qabuli qachon boshlanadi?", a: "Qabul muddatlari universitetga bog'liq va har yili o'zgaradi. Odatda: Saudiya Arabistoni — kuzgi semestr uchun yanvar–mart; BAA — mart–iyun. Biz joriy muddatlarni kuzatib boramiz va mijozlarni @tarjumanedu Telegram kanalida xabardor qilamiz." },
+      { q: "Arizamning holatini kuzatib bora olamanmi?", a: "Ha! Shaxsiy kabinetda siz real vaqt rejimida joriy holat, yuklangan barcha hujjatlar, o'zgarishlar tarixi va menejer izohlarini ko'rasiz. Har bir holat yangilanishida siz avtomatik ravishda Telegram orqali xabardor qilinasiz." },
+      { q: "Ariza topshirilgandan keyin nima bo'ladi?", a: "Topshirishdan so'ng universitet hujjatlarni ko'rib chiqadi va qaror chiqaradi: qabul qilindi (biz qabul xatini yuboramiz), kutilmoqda (qo'shimcha hujjatlar yoki suhbat) yoki rad etildi (sababini tushunishga va qayta topshirishga yordam beramiz). Har bir bosqichda menejeringiz aloqada." },
+    ],
+  },
+  {
+    id: 'requirements', icon: GraduationCap, title: 'Talabalar uchun talablar',
+    items: [
+      { q: "Arab tilini bilish shartmi?", a: "Ariza topshirish vaqtida shart emas. Ko'pchilik Saudiya Arabistoni universitetlari bir yillik tayyorlov til kursini o'z ichiga oladi. BAA dasturlari ko'pincha ingliz tilida olib boriladi. Biz sizning til darajangizga mos variant topamiz." },
+      { q: "Diplom yoki attestatning o'rtacha bali qancha bo'lishi kerak?", a: "Ko'pchilik universitetlar 60–65% (3.0/5.0) dan qabul qiladi. KFUPM, Qirol Abdulaziz universiteti kabi eng yaxshi universitetlar uchun 75–80% talab qilinadi. Biz sizga balingiz bilan qaysi universitetlarga haqiqiy imkoniyat borligini halol aytamiz." },
+      { q: "Xorijiy talabalar uchun stipendiyalar bormi?", a: "Ha, va juda saxiy. Madina Islom universiteti to'liq stipendiya taqdim etadi: bepul ta'lim, oylik nafaqa $300–500, yotoqxona va ovqatlanish. Ko'pchilik Saudiya Arabistoni davlat universitetlari xorijiy talabalardan ta'lim to'lovini olmaydi. Biz grant dasturlariga ariza berishingizda yordam beramiz." },
+      { q: "Ish tajribasiz talabalar qabul qilinadimi?", a: "Ha, ko'pchilik bakalavr va magistratura dasturlari ish tajribasisiz mavjud. Ba'zi magistratura va doktorantura dasturlari 2–3 yillik tajriba talab qiladi — biz yo'nalishingiz talablarini oldindan aniqlaymiz." },
+    ],
+  },
+  {
+    id: 'payment', icon: CreditCard, title: "Narx va to'lov",
+    items: [
+      { q: "Xizmatlaringiz qancha turadi?", a: "Uch tarif: Submission ($49) — tayyor hujjatlar paketingizni topshirish; Standard ($99) — tarjima + tekshirish + 1–3 kun ichida topshirish + qabul keyin qo'llab-quvvatlash; VIP ($199) — tarjima + 12–24 soat ichida ustuvor topshirish + shaxsiy menejer + cheksiz chat. Universitetdagi o'qish to'lovi alohida to'lanadi." },
+      { q: "Qanday to'lov usullari qabul qilinadi?", a: "Bank kartalar (Visa, Mastercard), kriptovalyuta (USDT, BTC) va boshqa usullarni qabul qilamiz. To'lovdan so'ng siz darhol email orqali tasdiqlash va ish boshlanadigan shaxsiy kabinetga kirish huquqini olasiz." },
+      { q: "Yashirin to'lovlar yoki qo'shimcha to'lovlar bormi?", a: "Yo'q. Paket narxi belgilangan va tavsifda ko'rsatilgan barcha xizmatlarni o'z ichiga oladi. Agar sizning holatingiz uchun qo'shimcha narsa kerak bo'lsa (masalan, apostil), biz to'lovdan oldin oldindan xabardor qilamiz." },
+    ],
+  },
+  {
+    id: 'refunds', icon: ShieldCheck, title: "Qaytarish va kafolatlar",
+    items: [
+      { q: "Pulni qaytarib olish mumkinmi?", a: "Ha. Agar biz hali ishni boshlamagan bo'lsak — 100% qaytarish. Agar hujjatlar tarjima qilingan, lekin ariza hali topshirilmagan bo'lsa — 50% qaytarish. Ariza universitetga topshirilgandan so'ng ish to'liq bajarilganligi sababli qaytarish ko'zda tutilmagan. Batafsil — Qaytarish siyosatida." },
+      { q: "Qabul bo'lishini kafolatlaysizmi?", a: "Yo'q. Tarjuman Edu konsultatsiya, tarjima va tashkiliy xizmatlar ko'rsatadi. Qabul qarori universitet tomonidan qabul qilinadi. Biz hujjatlar paketini sifatli tayyorlash uchun hamma narsani qilamiz, biroq yakuniy qaror universitetning qabul komissiyasida qoladi." },
+      { q: "Universitet rad etsa nima bo'ladi?", a: "Rad etish — bu oxiri emas. Biz rad etish sababini tahlil qilamiz, kerak bo'lsa hujjatlar paketini kuchaytirashga yordam beramiz (qo'shimcha ma'lumotnomalar, motivatsiya xatini yaxshilash) va qayta topshiramiz yoki muqobil universitetga murojaat qilamiz. Birinchi qayta topshirish — bepul." },
+      { q: "O'qishdan voz kechsam nima bo'ladi?", a: "Menejerimiz bilan imkon qadar tezroq bog'laning. Agar ish hali boshlanmagan bo'lsa — to'liq summani qaytarish. Biz sharoitlar o'zgarishini tushunamiz va har bir holga individual yondashamiz." },
+    ],
+  },
+]
+
+const CATEGORY_LABELS: Record<string, Record<string, string>> = {
+  general:      { ru: 'Общие',    uz: 'Umumiy',   en: 'General' },
+  documents:    { ru: 'Документы', uz: 'Hujjatlar', en: 'Documents' },
+  process:      { ru: 'Процесс',  uz: 'Jarayon',  en: 'Process' },
+  requirements: { ru: 'Требования', uz: 'Talablar', en: 'Requirements' },
+  payment:      { ru: 'Оплата',   uz: "To'lov",   en: 'Payment' },
+  refunds:      { ru: 'Возврат',  uz: 'Qaytarish', en: 'Refunds' },
+}
+
+/* ─── Accordion item ────────────────────────────────────────────────────── */
+function AccordionItem({ item, index, isOpen, onToggle }: {
+  item: FAQItem; index: number; isOpen: boolean; onToggle: () => void
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.04 }}
+      className={cn(
+        'rounded-2xl border transition-all duration-200 overflow-hidden',
+        isOpen
+          ? 'border-brand-300 bg-white shadow-md shadow-brand-100/50'
+          : 'border-border bg-white hover:border-brand-200 hover:shadow-sm'
+      )}
+    >
+      <button
+        onClick={onToggle}
+        className="w-full flex items-center gap-4 px-6 py-5 text-left"
+      >
+        <span className={cn(
+          'flex-shrink-0 w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center transition-colors',
+          isOpen ? 'bg-brand-400 text-ink' : 'bg-surface text-muted'
+        )}>
+          {index + 1}
+        </span>
+        <span className={cn('font-semibold text-sm sm:text-base leading-snug flex-1', isOpen ? 'text-ink' : 'text-ink/80')}>
+          {item.q}
+        </span>
+        <ChevronDown className={cn(
+          'w-5 h-5 shrink-0 transition-all duration-300',
+          isOpen ? 'rotate-180 text-brand-500' : 'text-muted'
+        )} />
+      </button>
+
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            key="content"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+            className="overflow-hidden"
+          >
+            <div className="px-6 pb-6 text-sm text-muted leading-relaxed border-t border-border/60 pt-4 ml-11">
+              {item.a}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  )
+}
+
+/* ─── Page ──────────────────────────────────────────────────────────────── */
+export default function FAQPage() {
+  const [lang, setLang] = useLanguage()
+  const [activeCategory, setActiveCategory] = useState('all')
+  const [openItem, setOpenItem] = useState<string | null>(null)
+  const [search, setSearch] = useState('')
+
+  const categories = lang === 'uz' ? FAQ_UZ : lang === 'en' ? FAQ_EN : FAQ_RU
+
+  const filtered = useMemo(() => {
+    const q = search.toLowerCase().trim()
+    return categories
+      .filter(cat => activeCategory === 'all' || cat.id === activeCategory)
+      .map(cat => ({
+        ...cat,
+        title: CATEGORY_LABELS[cat.id]?.[lang] ?? cat.title,
+        items: q
+          ? cat.items.filter(item => item.q.toLowerCase().includes(q) || item.a.toLowerCase().includes(q))
+          : cat.items,
+      }))
+      .filter(cat => cat.items.length > 0)
+  }, [activeCategory, search, lang, categories])
+
+  const totalCount = categories.reduce((acc, cat) => acc + cat.items.length, 0)
+
+  const ui = {
+    hero_label: 'FAQ',
+    hero_title: lang === 'ru' ? 'Часто задаваемые вопросы' : lang === 'uz' ? "Ko'p so'raladigan savollar" : 'Frequently Asked Questions',
+    hero_sub:   lang === 'ru' ? `${totalCount} вопросов и ответов о поступлении в арабские университеты` : lang === 'uz' ? `Arab universitetlariga qabul haqida ${totalCount} ta savol va javob` : `${totalCount} questions and answers about Arabic university admissions`,
+    search_ph:  lang === 'ru' ? 'Поиск по вопросам...' : lang === 'uz' ? 'Savollar bo\'yicha qidirish...' : 'Search questions...',
+    all:        lang === 'ru' ? 'Все' : lang === 'uz' ? 'Barchasi' : 'All',
+    no_results: lang === 'ru' ? 'Ничего не найдено' : lang === 'uz' ? 'Hech narsa topilmadi' : 'Nothing found',
+    cta_title:  lang === 'ru' ? 'Не нашли ответ?' : lang === 'uz' ? 'Javob topa olmadingizmi?' : "Didn't find an answer?",
+    cta_sub:    lang === 'ru' ? 'Задайте вопрос напрямую — отвечаем в течение нескольких часов' : lang === 'uz' ? "To'g'ridan-to'g'ri savol bering — bir necha soat ichida javob beramiz" : 'Ask us directly — we respond within a few hours',
+    tg:         'Telegram',
+  }
+
+  return (
+    <>
+      <Navbar lang={lang} onLangChange={setLang} />
+      <div className="pt-16 min-h-screen bg-[#F7F8FA]">
+
+        {/* Hero */}
+        <div className="bg-ink text-white py-16 px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <span className="inline-block text-brand-400 text-xs font-bold uppercase tracking-widest mb-3">{ui.hero_label}</span>
+            <h1 className="text-3xl sm:text-5xl font-black mb-4 leading-tight">{ui.hero_title}</h1>
+            <p className="text-white/60 text-base sm:text-lg mb-8">{ui.hero_sub}</p>
+
+            {/* Search */}
+            <div className="relative max-w-lg mx-auto">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+              <input
+                type="text"
+                value={search}
+                onChange={e => { setSearch(e.target.value); setOpenItem(null) }}
+                placeholder={ui.search_ph}
+                className="w-full pl-11 pr-4 py-3.5 bg-white/10 border border-white/20 rounded-2xl text-white placeholder:text-white/40 text-sm focus:outline-none focus:border-brand-400 focus:bg-white/15 transition"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-3xl mx-auto px-4 py-10 space-y-8">
+
+          {/* Category tabs */}
+          {!search && (
+            <div className="flex gap-2 flex-wrap">
+              <button
+                onClick={() => { setActiveCategory('all'); setOpenItem(null) }}
+                className={cn(
+                  'px-4 py-2 rounded-xl text-sm font-semibold transition-all',
+                  activeCategory === 'all'
+                    ? 'bg-ink text-white shadow-sm'
+                    : 'bg-white border border-border text-muted hover:border-ink/30'
+                )}
+              >
+                {ui.all} ({totalCount})
+              </button>
+              {categories.map(cat => (
+                <button
+                  key={cat.id}
+                  onClick={() => { setActiveCategory(cat.id); setOpenItem(null) }}
+                  className={cn(
+                    'inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all',
+                    activeCategory === cat.id
+                      ? 'bg-ink text-white shadow-sm'
+                      : 'bg-white border border-border text-muted hover:border-ink/30'
+                  )}
+                >
+                  <cat.icon className="w-3.5 h-3.5" />
+                  {CATEGORY_LABELS[cat.id]?.[lang] ?? cat.title}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* FAQ Items */}
+          {filtered.length === 0 ? (
+            <div className="text-center py-16 text-muted">
+              <Search className="w-10 h-10 mx-auto mb-3 opacity-30" />
+              <p className="font-medium">{ui.no_results}</p>
+            </div>
+          ) : (
+            filtered.map(cat => (
+              <div key={cat.id}>
+                {(activeCategory === 'all' || search) && (
+                  <div className="flex items-center gap-3 mb-4">
+                    <cat.icon className="w-4 h-4 text-brand-500" />
+                    <h2 className="text-sm font-bold text-ink uppercase tracking-wider">{cat.title}</h2>
+                    <div className="flex-1 h-px bg-border" />
+                    <span className="text-xs text-muted">{cat.items.length}</span>
+                  </div>
+                )}
+                <div className="space-y-3">
+                  {cat.items.map((item, i) => {
+                    const key = `${cat.id}-${i}`
+                    return (
+                      <AccordionItem
+                        key={key}
+                        item={item}
+                        index={i}
+                        isOpen={openItem === key}
+                        onToggle={() => setOpenItem(openItem === key ? null : key)}
+                      />
+                    )
+                  })}
+                </div>
+              </div>
+            ))
+          )}
+
+          {/* CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="rounded-3xl bg-ink text-white p-8 sm:p-10 text-center relative overflow-hidden"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-brand-900/30 to-transparent pointer-events-none" />
+            <div className="relative z-10">
+              <div className="w-12 h-12 rounded-2xl bg-brand-400/20 flex items-center justify-center mx-auto mb-4">
+                <MessageCircle className="w-6 h-6 text-brand-400" />
+              </div>
+              <h3 className="text-xl sm:text-2xl font-bold mb-2">{ui.cta_title}</h3>
+              <p className="text-white/60 mb-7 text-sm max-w-sm mx-auto">{ui.cta_sub}</p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <a
+                  href="https://t.me/tarjuman_help_bot"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-brand-400 text-ink font-bold rounded-2xl text-sm hover:bg-brand-300 transition-colors"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  {ui.tg}
+                </a>
+                <a
+                  href="mailto:support@tarjumanedu.com"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white/10 text-white font-semibold rounded-2xl text-sm hover:bg-white/20 transition-colors border border-white/20"
+                >
+                  <Mail className="w-4 h-4" />
+                  Email
+                </a>
+              </div>
+            </div>
+          </motion.div>
+
+        </div>
+      </div>
+    </>
+  )
+}
