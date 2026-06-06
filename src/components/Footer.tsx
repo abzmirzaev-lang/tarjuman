@@ -123,18 +123,13 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Address */}
-        <div className="mt-10 pt-6 border-t border-white/[0.07] text-xs text-white/25 text-center">
-          bughyat alqasid Establishment · Riyadh, Kingdom of Saudi Arabia · CR 7051611031
-        </div>
-
         {/* Bottom bar */}
-        <div className="mt-12 pt-6 border-t border-white/[0.07] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div className="mt-10 pt-6 border-t border-white/[0.07] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <p className="text-xs text-white/25">
             © {new Date().getFullYear()} Tarjuman Edu (bughyat alqasid Est.). Все права защищены.
           </p>
           <p className="text-xs text-white/25">
-            bughyat alqasid Establishment · CR №&nbsp;<span className="text-white/40 font-mono">7051611031</span> · KSA
+            bughyat alqasid Establishment · Riyadh, KSA · CR №&nbsp;<span className="text-white/40 font-mono">7051611031</span>
           </p>
         </div>
       </div>
