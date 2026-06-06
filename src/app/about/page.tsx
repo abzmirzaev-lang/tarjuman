@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import {
   ArrowRight, Target, Heart, Zap, Shield,
   CheckCircle2, Globe2, BookOpen,
-  Star,
+  Star, Briefcase, Languages, Headphones,
 } from 'lucide-react'
 import Link from 'next/link'
 import { Navbar } from '@/components/layout/Navbar'
@@ -75,8 +75,9 @@ const TEAM = [
     role_ru: 'Директор',
     role_en: 'Director',
     role_uz: 'Direktor',
-    emoji: '👨‍💼',
+    icon: Briefcase,
     grad: 'from-violet-500 to-purple-600',
+    glow: 'shadow-violet-500/25',
     ru: 'Руководит всеми операциями Tarjuman Edu. Отвечает за партнёрства с университетами и стратегическое развитие сервиса.',
     en: 'Leads all Tarjuman Edu operations. Responsible for university partnerships and the strategic development of the service.',
     uz: "Tarjuman Edu ning barcha operatsiyalarini boshqaradi. Universitetlar bilan hamkorlik va xizmatning strategik rivojlanishi uchun javobgar.",
@@ -86,8 +87,9 @@ const TEAM = [
     role_ru: 'Основатель & Главный переводчик',
     role_en: 'Founder & Head Translator',
     role_uz: 'Asoschisi & Bosh tarjimon',
-    emoji: '👨‍🎓',
+    icon: Languages,
     grad: 'from-amber-500 to-orange-500',
+    glow: 'shadow-amber-500/25',
     ru: 'Основал Tarjuman Edu, пройдя через процесс поступления в арабские университеты лично. Отвечает за качество всех переводов.',
     en: 'Founded Tarjuman Edu after going through the university application process personally. Responsible for the quality of all translations.',
     uz: "Arab universitetlariga qabul jarayonini shaxsan bosib o'tib, Tarjuman Edu ni tashkil etdi. Barcha tarjimalar sifati uchun javobgar.",
@@ -97,8 +99,9 @@ const TEAM = [
     role_ru: 'Менеджер & Переводчик',
     role_en: 'Manager & Translator',
     role_uz: 'Menejer & Tarjimon',
-    emoji: '👨‍💻',
+    icon: Headphones,
     grad: 'from-emerald-500 to-teal-600',
+    glow: 'shadow-emerald-500/25',
     ru: 'Сопровождает каждого студента от первой заявки до зачисления. Также участвует в переводе документов и проверке пакетов.',
     en: 'Guides every student from the first application to enrollment. Also assists with document translation and package review.',
     uz: "Har bir talabani birinchi arizadan qabulga qadar yo'llab-quvvatlaydi. Hujjatlar tarjimasi va paketlarni tekshirishda ham ishtirok etadi.",
@@ -192,17 +195,19 @@ export default function AboutPage() {
 
 
       {/* ── КОМАНДА ──────────────────────────────────────────────────────── */}
-      <section className="section bg-[#F7F8FA]">
-        <div className="max-w-5xl mx-auto px-4">
+      <section className="section bg-ink relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-brand-900/20 via-transparent to-violet-900/10 pointer-events-none" />
+        <div className="absolute -top-32 -right-32 w-96 h-96 bg-brand-400/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="max-w-5xl mx-auto px-4 relative z-10">
           <div className="text-center mb-12">
             <motion.div {...f(0)}>
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-50 border border-brand-200 rounded-full text-brand-700 text-xs font-semibold uppercase tracking-widest mb-4">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 border border-white/20 rounded-full text-white/80 text-xs font-semibold uppercase tracking-widest mb-4">
                 {t({ ru: 'Команда', en: 'Our Team', uz: 'Jamoa' })}
               </span>
-              <h2 className="text-3xl sm:text-4xl font-black text-ink mb-3">
+              <h2 className="text-3xl sm:text-4xl font-black text-white mb-3">
                 {t({ ru: 'Люди за сервисом', en: 'The people behind the service', uz: 'Xizmat ortidagi odamlar' })}
               </h2>
-              <p className="text-muted text-sm max-w-md mx-auto">
+              <p className="text-white/50 text-sm max-w-md mx-auto">
                 {t({
                   ru: 'Небольшая, но сильная команда экспертов с личным опытом поступления в арабские университеты.',
                   en: 'A small but strong team of experts with personal experience of enrolling in Arab universities.',
@@ -212,19 +217,24 @@ export default function AboutPage() {
             </motion.div>
           </div>
 
-          <div className="grid sm:grid-cols-3 gap-5">
+          <div className="grid sm:grid-cols-3 gap-6">
             {TEAM.map((m, i) => (
               <motion.div key={i} {...f(i * 0.08)}
-                className="bg-white rounded-2xl border border-border p-6 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+                className="group relative bg-white/5 border border-white/10 rounded-3xl p-8 text-center hover:bg-white/10 hover:border-white/20 transition-all duration-300 overflow-hidden"
               >
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${m.grad} flex items-center justify-center text-3xl mx-auto mb-4 shadow-lg`}>
-                  {m.emoji}
+                <div className={`absolute inset-0 bg-gradient-to-br ${m.grad} opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none`} />
+                {/* Icon avatar */}
+                <div className="relative mx-auto mb-5 w-20 h-20">
+                  <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${m.grad} flex items-center justify-center shadow-2xl ${m.glow}`}>
+                    <m.icon className="w-9 h-9 text-white" strokeWidth={1.5} />
+                  </div>
+                  <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${m.grad} blur-xl opacity-40 -z-10`} />
                 </div>
-                <h3 className="font-bold text-ink text-base mb-0.5">{m.name}</h3>
-                <p className="text-brand-600 text-xs font-semibold mb-3">
+                <h3 className="font-bold text-white text-base mb-1">{m.name}</h3>
+                <p className="text-brand-400 text-xs font-semibold mb-4 uppercase tracking-wide">
                   {t({ ru: m.role_ru, en: m.role_en, uz: m.role_uz })}
                 </p>
-                <p className="text-muted text-xs leading-relaxed">{t({ ru: m.ru, en: m.en, uz: m.uz })}</p>
+                <p className="text-white/50 text-xs leading-relaxed">{t({ ru: m.ru, en: m.en, uz: m.uz })}</p>
               </motion.div>
             ))}
           </div>
