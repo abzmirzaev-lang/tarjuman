@@ -1,13 +1,16 @@
 'use client'
 import { useLanguage } from '@/hooks/useLanguage'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ArrowRight, CheckCircle2, Star, Globe2, FileText,
   Send, Zap, Shield, Clock, Award, ChevronRight,
-  Languages, Plane, HeartHandshake, Gauge, Check
+  Languages, Plane, HeartHandshake, Gauge, Check,
+  BadgeCheck, SearchCheck, LifeBuoy, GraduationCap,
+  TrendingUp, Users, Building2, ThumbsUp
 } from 'lucide-react'
+import { useInView } from 'framer-motion'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { Button } from '@/components/ui'
@@ -18,6 +21,24 @@ import { translations } from '@/i18n'
 const fadeUp = {
   hidden:  { opacity: 0, y: 24 },
   visible: { opacity: 1, y: 0 },
+}
+
+function useCounter(target: number, duration = 1800) {
+  const [count, setCount] = useState(0)
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true })
+  useEffect(() => {
+    if (!inView) return
+    let start = 0
+    const step = target / (duration / 16)
+    const timer = setInterval(() => {
+      start += step
+      if (start >= target) { setCount(target); clearInterval(timer) }
+      else setCount(Math.floor(start))
+    }, 16)
+    return () => clearInterval(timer)
+  }, [inView, target, duration])
+  return { count, ref }
 }
 
 const HERO_SLIDES = [
@@ -53,6 +74,192 @@ const HERO_SLIDES = [
   },
 ]
 
+/* ─── STATS ─────────────────────────────────────────────────────────────── */
+function StatItem({ target, suffix, label }: { target: number; suffix: string; label: string }) {
+  const { count, ref } = useCounter(target)
+  return (
+    <div ref={ref} className="text-center">
+      <div className="text-4xl sm:text-5xl font-black text-ink mb-1 tabular-nums">
+        {count}{suffix}
+      </div>
+      <div className="text-sm text-muted font-medium">{label}</div>
+    </div>
+  )
+}
+
+function StatsSection({ lang }: { lang: AppLanguage }) {
+  const stats =
+    lang === 'ru' ? [
+      { target: 120, suffix: '+', label: 'Заявок обработано' },
+      { target: 85,  suffix: '+', label: 'Студентов зачислено' },
+      { target: 12,  suffix: '+', label: 'Университетов-партнёров' },
+    ] : lang === 'uz' ? [
+      { target: 120, suffix: '+', label: 'Ariza ko\'rib chiqildi' },
+      { target: 85,  suffix: '+', label: 'Talaba qabul qilindi' },
+      { target: 12,  suffix: '+', label: 'Hamkor universitetlar' },
+    ] : [
+      { target: 120, suffix: '+', label: 'Applications processed' },
+      { target: 85,  suffix: '+', label: 'Students enrolled' },
+      { target: 12,  suffix: '+', label: 'Partner universities' },
+    ]
+
+  return (
+    <section className="py-16 bg-white border-y border-border">
+      <div className="container-narrow">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="grid grid-cols-3 gap-6 sm:gap-10 divide-x divide-border"
+        >
+          {stats.map((s, i) => (
+            <StatItem key={i} {...s} />
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+/* ─── BENEFITS ───────────────────────────────────────────────────────────── */
+function BenefitsSection({ lang }: { lang: AppLanguage }) {
+  const title =
+    lang === 'ru' ? 'Наши преимущества'
+    : lang === 'uz' ? 'Bizning afzalliklarimiz'
+    : 'Our advantages'
+
+  const sub =
+    lang === 'ru' ? 'Мы берём на себя весь процесс — от перевода до зачисления'
+    : lang === 'uz' ? 'Biz butun jarayonni o\'z zimmamizga olamiz — tarjimadan qabulga qadar'
+    : 'We handle the entire process — from translation to enrollment'
+
+  const items =
+    lang === 'ru' ? [
+      { icon: BadgeCheck,  title: 'Официальный перевод документов',       desc: 'Все переводы заверены и приняты университетами Саудовской Аравии и ОАЭ.' },
+      { icon: SearchCheck, title: 'Проверка документов перед подачей',     desc: 'Каждый документ проходит проверку на соответствие требованиям вуза.' },
+      { icon: LifeBuoy,    title: 'Поддержка на каждом этапе',            desc: 'Персональный менеджер сопровождает вас от заявки до получения визы.' },
+      { icon: GraduationCap, title: 'Помощь с университетами СА и ОАЭ',  desc: 'Прямое взаимодействие с приёмными комиссиями ведущих арабских вузов.' },
+    ] : lang === 'uz' ? [
+      { icon: BadgeCheck,  title: 'Rasmiy hujjat tarjimasi',              desc: 'Barcha tarjimalar Saudiya Arabistoni va BAA universitetlari tomonidan qabul qilinadi.' },
+      { icon: SearchCheck, title: 'Topshirishdan oldin hujjatlarni tekshirish', desc: 'Har bir hujjat universitet talablariga muvofiqligini tekshiradi.' },
+      { icon: LifeBuoy,    title: 'Har bosqichda yordam',                 desc: 'Shaxsiy menejer arizadan vizaga qadar siz bilan birga.' },
+      { icon: GraduationCap, title: 'SA va BAA universitetlariga yordam', desc: 'Yetakchi arab universitetlarining qabul komissiyalari bilan to\'g\'ridan-to\'g\'ri aloqa.' },
+    ] : [
+      { icon: BadgeCheck,  title: 'Official document translation',         desc: 'All translations are certified and accepted by universities in Saudi Arabia and UAE.' },
+      { icon: SearchCheck, title: 'Document review before submission',     desc: 'Every document is checked against the university requirements.' },
+      { icon: LifeBuoy,    title: 'Support at every step',                desc: 'A personal manager accompanies you from application to visa.' },
+      { icon: GraduationCap, title: 'Help with SA & UAE universities',    desc: 'Direct communication with admissions offices of leading Arab universities.' },
+    ]
+
+  return (
+    <section className="section bg-[#F7F8FA]">
+      <div className="container-narrow">
+        <div className="text-center mb-12">
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-50 border border-brand-200 rounded-full text-brand-700 text-xs font-semibold uppercase tracking-widest mb-4">
+            {lang === 'ru' ? 'Преимущества' : lang === 'uz' ? 'Afzalliklar' : 'Benefits'}
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-bold text-ink mb-3">{title}</h2>
+          <p className="text-muted max-w-md mx-auto text-sm">{sub}</p>
+        </div>
+
+        <div className="grid sm:grid-cols-2 gap-5">
+          {items.map((item, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08 }}
+              className="flex gap-5 bg-white rounded-2xl border border-border p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-brand-50 flex items-center justify-center shrink-0">
+                <item.icon className="w-6 h-6 text-brand-600" />
+              </div>
+              <div>
+                <h3 className="font-bold text-ink mb-1">{item.title}</h3>
+                <p className="text-sm text-muted leading-relaxed">{item.desc}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ─── WHY US ─────────────────────────────────────────────────────────────── */
+function WhyUsSection({ lang }: { lang: AppLanguage }) {
+  const title =
+    lang === 'ru' ? 'Почему выбирают Tarjuman Edu'
+    : lang === 'uz' ? 'Nega Tarjuman Edu tanlashadi'
+    : 'Why students choose Tarjuman Edu'
+
+  const points =
+    lang === 'ru' ? [
+      { icon: TrendingUp,  title: 'Высокий процент зачисления',  desc: 'Более 95% наших клиентов успешно поступают в выбранный университет.' },
+      { icon: Clock,       title: 'Быстрая обработка',           desc: 'Минимальный срок подачи — 6 часов. VIP-пакет приоритизируется немедленно.' },
+      { icon: Shield,      title: 'Безопасность данных',         desc: 'Все документы хранятся на защищённых серверах и передаются только в университет.' },
+      { icon: Users,       title: 'Команда профессионалов',      desc: 'Арабисты, переводчики и юристы с опытом в образовательной сфере.' },
+      { icon: Building2,   title: 'Проверенные партнёры',        desc: 'Работаем только с аккредитованными университетами Саудовской Аравии и ОАЭ.' },
+      { icon: ThumbsUp,    title: 'Гарантия возврата',           desc: 'Если документы не приняты по нашей вине — возвращаем деньги.' },
+    ] : lang === 'uz' ? [
+      { icon: TrendingUp,  title: 'Yuqori qabul foizi',          desc: 'Mijozlarimizning 95% dan ko\'prog\'i tanlagan universitetiga muvaffaqiyatli qabul bo\'ladi.' },
+      { icon: Clock,       title: 'Tez ishlov berish',           desc: 'Minimal topshirish muddati — 6 soat. VIP paket darhol ustuvorlik qilinadi.' },
+      { icon: Shield,      title: 'Ma\'lumotlar xavfsizligi',    desc: 'Barcha hujjatlar himoyalangan serverlarda saqlanadi va faqat universitetga uzatiladi.' },
+      { icon: Users,       title: 'Mutaxassislar jamoasi',       desc: 'Ta\'lim sohasida tajribali arabshunoslar, tarjimonlar va yuristlar.' },
+      { icon: Building2,   title: 'Ishonchli hamkorlar',         desc: 'Faqat Saudiya Arabistoni va BAA ning akkreditatsiyalangan universitetlari bilan ishlaymiz.' },
+      { icon: ThumbsUp,    title: 'Qaytarish kafolati',          desc: 'Agar hujjatlar bizning aybimiz bilan qabul qilinmasa — pulni qaytaramiz.' },
+    ] : [
+      { icon: TrendingUp,  title: 'High enrollment rate',        desc: 'Over 95% of our clients are successfully admitted to their chosen university.' },
+      { icon: Clock,       title: 'Fast processing',             desc: 'Minimum submission time — 6 hours. VIP package is prioritized immediately.' },
+      { icon: Shield,      title: 'Data security',               desc: 'All documents are stored on secure servers and transmitted only to the university.' },
+      { icon: Users,       title: 'Team of professionals',       desc: 'Arabists, translators and lawyers with experience in the educational field.' },
+      { icon: Building2,   title: 'Verified partners',           desc: 'We work only with accredited universities in Saudi Arabia and UAE.' },
+      { icon: ThumbsUp,    title: 'Refund guarantee',            desc: 'If documents are not accepted due to our fault — we refund your money.' },
+    ]
+
+  return (
+    <section className="section bg-ink text-white relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-brand-900/20 via-transparent to-brand-800/10 pointer-events-none" />
+      <div className="absolute -top-32 -right-32 w-96 h-96 bg-brand-400/5 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="container-narrow relative z-10">
+        <div className="text-center mb-14">
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 border border-white/20 rounded-full text-white/80 text-xs font-semibold uppercase tracking-widest mb-4">
+            {lang === 'ru' ? 'Почему мы' : lang === 'uz' ? 'Nega biz' : 'Why us'}
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">{title}</h2>
+          <p className="text-white/50 max-w-md mx-auto text-sm">
+            {lang === 'ru' ? 'Мы не просто переводим документы — мы открываем двери к лучшему образованию'
+              : lang === 'uz' ? 'Biz shunchaki hujjatlarni tarjima qilmaymiz — yaxshiroq ta\'limga eshiklar ochamiz'
+              : "We don't just translate documents — we open doors to better education"}
+          </p>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {points.map((p, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.07 }}
+              className="group p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-brand-400/30 transition-all duration-300"
+            >
+              <div className="w-11 h-11 rounded-xl bg-brand-400/15 flex items-center justify-center mb-4 group-hover:bg-brand-400/25 transition-colors">
+                <p.icon className="w-5 h-5 text-brand-400" />
+              </div>
+              <h3 className="font-bold text-white mb-2 text-sm leading-snug">{p.title}</h3>
+              <p className="text-white/50 text-xs leading-relaxed">{p.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ─── HOME PAGE ──────────────────────────────────────────────────────────── */
 export default function HomePage() {
   const [lang, setLang] = useLanguage()
   const [slide, setSlide] = useState(0)
@@ -378,6 +585,15 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* STATS */}
+      <StatsSection lang={lang} />
+
+      {/* BENEFITS */}
+      <BenefitsSection lang={lang} />
+
+      {/* WHY US */}
+      <WhyUsSection lang={lang} />
 
       {/* HOW IT WORKS */}
       <section className="section bg-ink text-white">
