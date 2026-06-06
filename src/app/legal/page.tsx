@@ -2,7 +2,6 @@
 import { useLanguage } from '@/hooks/useLanguage'
 import Link from 'next/link'
 import { Navbar } from '@/components/layout/Navbar'
-import { Footer } from '@/components/layout/Footer'
 import { Building2, FileText, Mail, MapPin, Hash, Calendar, Globe, Phone, Send } from 'lucide-react'
 
 type Lang = 'ru' | 'uz' | 'en'
@@ -203,7 +202,6 @@ export default function LegalPage() {
 
         </div>
       </main>
-      <Footer lang={lang} />
     </>
   )
 }

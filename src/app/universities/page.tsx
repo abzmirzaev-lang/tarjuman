@@ -6,7 +6,6 @@ import { Search, ExternalLink, GraduationCap, MapPin, X, Users, Calendar, Star, 
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Navbar } from '@/components/layout/Navbar'
-import { Footer } from '@/components/layout/Footer'
 import { Button } from '@/components/ui'
 import { supabase } from '@/lib/supabase/client'
 import type { UniversityRow, AppLanguage } from '@/types'
@@ -541,7 +540,6 @@ function UniversitiesContent() {
             </div>
           )}
         </div>
-        <Footer lang={lang} />
       </div>
 
       {/* University Detail Modal */}

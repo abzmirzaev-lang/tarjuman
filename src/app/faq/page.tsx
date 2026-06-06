@@ -4,7 +4,6 @@ import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, Search, MessageCircle, Mail, BookOpen, FileText, Clock, GraduationCap, CreditCard, ShieldCheck } from 'lucide-react'
 import { Navbar } from '@/components/layout/Navbar'
-import { Footer } from '@/components/layout/Footer'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 
@@ -305,7 +304,7 @@ export default function FAQPage() {
 
         </div>
       </div>
-      <Footer lang={lang} />
     </>
   )
 }
+                             

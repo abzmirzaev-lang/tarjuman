@@ -2,7 +2,6 @@
 import { useLanguage } from '@/hooks/useLanguage'
 import Link from 'next/link'
 import { Navbar } from '@/components/layout/Navbar'
-import { Footer } from '@/components/layout/Footer'
 
 type Lang = 'ru' | 'uz' | 'en'
 
@@ -87,7 +86,6 @@ export default function TermsPage() {
           </div>
         </div>
       </div>
-      <Footer lang={lang} />
     </>
   )
 }

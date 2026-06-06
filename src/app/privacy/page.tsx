@@ -1,7 +1,6 @@
 'use client'
 import { useLanguage } from '@/hooks/useLanguage'
 import { Navbar } from '@/components/layout/Navbar'
-import { Footer } from '@/components/layout/Footer'
 
 type Lang = 'ru' | 'uz' | 'en'
 
@@ -82,7 +81,6 @@ export default function PrivacyPage() {
           ))}
         </div>
       </div>
-      <Footer lang={lang} />
     </>
   )
 }

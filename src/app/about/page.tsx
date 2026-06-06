@@ -8,7 +8,6 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { Navbar } from '@/components/layout/Navbar'
-import { Footer } from '@/components/layout/Footer'
 import type { AppLanguage } from '@/types'
 
 const f = (delay = 0) => ({
@@ -488,7 +487,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <Footer lang={lang} />
     </>
   )
 }

@@ -5,7 +5,6 @@ import { motion } from 'framer-motion'
 import { Mail, MessageSquare, Send, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { Navbar } from '@/components/layout/Navbar'
-import { Footer } from '@/components/layout/Footer'
 import { Button, Input } from '@/components/ui'
 import { toast } from 'sonner'
 import type { AppLanguage } from '@/types'
@@ -174,7 +173,6 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <Footer lang={lang} />
     </>
   )
 }

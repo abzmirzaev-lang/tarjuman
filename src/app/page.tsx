@@ -12,7 +12,6 @@ import {
 } from 'lucide-react'
 import { useInView } from 'framer-motion'
 import { Navbar } from '@/components/layout/Navbar'
-import { Footer } from '@/components/layout/Footer'
 import { Button } from '@/components/ui'
 import ReviewsSection from '@/components/ReviewsSection'
 import type { AppLanguage } from '@/types'
@@ -756,7 +755,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <Footer lang={lang} />
     </>
   )
 }

@@ -2,7 +2,6 @@
 import { useLanguage } from '@/hooks/useLanguage'
 import Link from 'next/link'
 import { Navbar } from '@/components/layout/Navbar'
-import { Footer } from '@/components/layout/Footer'
 import { motion } from 'framer-motion'
 import {
   MapPin, GraduationCap, Banknote, UtensilsCrossed,
@@ -440,7 +439,6 @@ export default function AlQasimiaPage() {
         </div>
       </main>
 
-      <Footer lang={lang} />
     </>
   )
 }
