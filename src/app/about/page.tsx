@@ -71,48 +71,37 @@ const PROCESS = [
 
 const TEAM = [
   {
-    name: 'Абдурахман',
-    role_ru: 'Основатель & CEO',
-    role_en: 'Founder & CEO',
-    role_uz: 'Asoschisi & CEO',
+    name: 'Yazeed Alajaleen',
+    role_ru: 'Директор',
+    role_en: 'Director',
+    role_uz: 'Direktor',
     emoji: '👨‍💼',
     grad: 'from-violet-500 to-purple-600',
-    ru: 'Сам поступил в Исламский университет Медины. Знает процесс изнутри и создал Tarjuman Edu, чтобы сделать его доступным для всех.',
-    en: 'Personally enrolled in the Islamic University of Madinah. Knows the process from the inside and built Tarjuman Edu to make it accessible to all.',
-    uz: "O'zi Madina Islom universitetiga kirgan. Jarayonni ichidan biladi va uni hammaga ochiq qilish uchun Tarjuman Edu ni yaratdi.",
+    ru: 'Руководит всеми операциями Tarjuman Edu. Отвечает за партнёрства с университетами и стратегическое развитие сервиса.',
+    en: 'Leads all Tarjuman Edu operations. Responsible for university partnerships and the strategic development of the service.',
+    uz: "Tarjuman Edu ning barcha operatsiyalarini boshqaradi. Universitetlar bilan hamkorlik va xizmatning strategik rivojlanishi uchun javobgar.",
   },
   {
-    name: 'Зайнаб',
-    role_ru: 'Главный переводчик',
-    role_en: 'Head Translator',
-    role_uz: 'Bosh tarjimon',
-    emoji: '👩‍🎓',
-    grad: 'from-rose-500 to-pink-600',
-    ru: 'Сертифицированный арабист с 7-летним опытом работы. Отвечает за качество всех переводов и соответствие требованиям университетов.',
-    en: 'Arabist with 7 years of experience. Responsible for the quality of all translations and university compliance.',
-    uz: '7 yillik tajribaga ega arabshunos. Barcha tarjimalar sifati va universitetlar talablariga muvofiqlik uchun javobgar.',
+    name: 'Abu Atika',
+    role_ru: 'Основатель & Главный переводчик',
+    role_en: 'Founder & Head Translator',
+    role_uz: 'Asoschisi & Bosh tarjimon',
+    emoji: '👨‍🎓',
+    grad: 'from-amber-500 to-orange-500',
+    ru: 'Основал Tarjuman Edu, пройдя через процесс поступления в арабские университеты лично. Отвечает за качество всех переводов.',
+    en: 'Founded Tarjuman Edu after going through the university application process personally. Responsible for the quality of all translations.',
+    uz: "Arab universitetlariga qabul jarayonini shaxsan bosib o'tib, Tarjuman Edu ni tashkil etdi. Barcha tarjimalar sifati uchun javobgar.",
   },
   {
-    name: 'Мухаммад',
-    role_ru: 'Менеджер по поступлению',
-    role_en: 'Admissions Manager',
-    role_uz: 'Qabul menejeri',
+    name: 'Abu Afnan',
+    role_ru: 'Менеджер & Переводчик',
+    role_en: 'Manager & Translator',
+    role_uz: 'Menejer & Tarjimon',
     emoji: '👨‍💻',
-    grad: 'from-blue-500 to-cyan-600',
-    ru: 'Специалист по требованиям 20+ арабских университетов. Лично курирует каждую заявку от проверки документов до зачисления.',
-    en: 'Specialist in requirements of 20+ Arab universities. Personally oversees each application from document review to enrollment.',
-    uz: '20+ arab universiteti talablarini biluvchi mutaxassis. Hujjatlar tekshirishdan qabulga qadar har bir arizani shaxsan nazorat qiladi.',
-  },
-  {
-    name: 'Нилуфар',
-    role_ru: 'Менеджер поддержки',
-    role_en: 'Support Manager',
-    role_uz: 'Qo\'llab-quvvatlash menejeri',
-    emoji: '👩‍💼',
     grad: 'from-emerald-500 to-teal-600',
-    ru: 'Отвечает за коммуникацию с каждым студентом. Первой берёт трубку, последней уходит. Потому что каждый студент важен.',
-    en: 'Responsible for communication with every student. First to pick up the phone, last to leave. Because every student matters.',
-    uz: 'Har bir talaba bilan muloqot uchun javobgar. Birinchi bo\'lib javob beradi, oxirgi bo\'lib ketadi. Chunki har bir talaba muhim.',
+    ru: 'Сопровождает каждого студента от первой заявки до зачисления. Также участвует в переводе документов и проверке пакетов.',
+    en: 'Guides every student from the first application to enrollment. Also assists with document translation and package review.',
+    uz: "Har bir talabani birinchi arizadan qabulga qadar yo'llab-quvvatlaydi. Hujjatlar tarjimasi va paketlarni tekshirishda ham ishtirok etadi.",
   },
 ]
 
@@ -170,30 +159,6 @@ export default function AboutPage() {
       </section>
 
 
-      {/* ── МИССИЯ ───────────────────────────────────────────────────────── */}
-      <section className="section bg-[#F7F8FA]">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <motion.div {...f(0)}>
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-50 border border-brand-200 rounded-full text-brand-700 text-xs font-semibold uppercase tracking-widest mb-5">
-              {t({ ru: 'Наша миссия', en: 'Our Mission', uz: 'Bizning missiyamiz' })}
-            </span>
-            <h2 className="text-3xl sm:text-5xl font-black text-ink mb-6 leading-tight">
-              {t({
-                ru: <>Сделать арабское образование<br /><span className="text-brand-500">доступным для каждого</span></>,
-                en: <>Make Arab-world education<br /><span className="text-brand-500">accessible to everyone</span></>,
-                uz: <>Arab ta'limini<br /><span className="text-brand-500">hamma uchun ochiq qilish</span></>,
-              })}
-            </h2>
-            <p className="text-muted text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-              {t({
-                ru: 'Мы верим, что языковой барьер, бюрократия и незнание требований не должны мешать достойным студентам получить образование мирового уровня. Наша задача — убрать все эти препятствия.',
-                en: 'We believe that language barriers, bureaucracy and unfamiliar requirements should not prevent deserving students from receiving world-class education. Our job is to remove all these obstacles.',
-                uz: "Til to'siqlari, byurokratiya va talablarni bilmaslik loyiq talabalarning jahon darajasidagi ta'lim olishiga to'sqinlik qilmasligi kerak deb ishonamiz. Bizning vazifamiz — bu to'siqlarning barchasini olib tashlash.",
-              })}
-            </p>
-          </motion.div>
-        </div>
-      </section>
 
       {/* ── ЦЕННОСТИ ─────────────────────────────────────────────────────── */}
       <section className="section bg-white">
@@ -247,7 +212,7 @@ export default function AboutPage() {
             </motion.div>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid sm:grid-cols-3 gap-5">
             {TEAM.map((m, i) => (
               <motion.div key={i} {...f(i * 0.08)}
                 className="bg-white rounded-2xl border border-border p-6 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
