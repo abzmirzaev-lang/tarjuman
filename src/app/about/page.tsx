@@ -22,7 +22,7 @@ const STATS = [
   { val: '43',  ru: 'Подали заявку',           uz: 'Ariza topshirdi',         en: 'Applications submitted' },
   { val: '30+', ru: 'Университетов для подачи', uz: 'Topshirish universitetlari',   en: 'Universities to apply' },
   { val: '6ч',  ru: 'Минимальный срок подачи', uz: 'Minimal topshirish',      en: 'Min. turnaround' },
-  { val: '3',   ru: 'Года на рынке',           uz: 'Yillik tajriba',          en: 'Years on market' },
+  { val: '1',   ru: 'Год на рынке',           uz: 'Yillik tajriba',          en: 'Year on market' },
 ]
 
 const VALUES = [
