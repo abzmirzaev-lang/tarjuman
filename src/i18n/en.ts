@@ -23,8 +23,8 @@ export const en: Translation = {
     stat1l:   'Submitted Applications',
     stat2:    '6h',
     stat2l:   'Min. Submission Time',
-    stat3:    '12+',
-    stat3l:   'Partner universities',
+    stat3:    '30+',
+    stat3l:   'Universities to apply',
   },
   services: {
     title:    'Our Services',
