@@ -433,7 +433,7 @@ export default function HomePage() {
               {[
                 { val: '120+', label: lang === 'ru' ? 'Заявок' : lang === 'uz' ? 'Ariza' : 'Applications' },
                 { val: '6 ч',  label: lang === 'ru' ? 'Мин. срок подачи' : lang === 'uz' ? 'Min. muddat' : 'Min. turnaround' },
-                { val: '95%',  label: lang === 'ru' ? 'Успешных подач' : lang === 'uz' ? 'Muvaffaqiyat' : 'Success rate' },
+                { val: '12+',  label: lang === 'ru' ? 'Университетов-партнёров' : lang === 'uz' ? 'Hamkor universitetlar' : 'Partner universities' },
               ].map((s, i) => (
                 <div key={i} className="flex flex-col items-center py-4 px-2 bg-black/20">
                   <span className="text-2xl font-black text-white">{s.val}</span>

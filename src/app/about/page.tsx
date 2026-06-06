@@ -21,7 +21,7 @@ const f = (delay = 0) => ({
 /* ─── DATA ──────────────────────────────────────────────────────────────── */
 const STATS = [
   { val: '120+', ru: 'Заявок обработано',     uz: 'Ariza ko\'rib chiqildi',   en: 'Applications processed' },
-  { val: '95%',  ru: 'Успешных зачислений',   uz: 'Muvaffaqiyatli qabullar', en: 'Successful enrollments' },
+  { val: '12+',  ru: 'Университетов-партнёров', uz: 'Hamkor universitetlar',   en: 'Partner universities' },
   { val: '12+',  ru: 'Университетов-партнёров', uz: 'Hamkor universitetlar',   en: 'Partner universities' },
   { val: '6ч',   ru: 'Минимальный срок',      uz: 'Minimal muddat',           en: 'Minimum turnaround' },
 ]
