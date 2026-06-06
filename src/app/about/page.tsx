@@ -3,8 +3,8 @@ import { useLanguage } from '@/hooks/useLanguage'
 import { motion } from 'framer-motion'
 import {
   ArrowRight, Target, Heart, Zap, Shield,
-  CheckCircle2, Globe2, Users, BookOpen,
-  Star, Lightbulb, TrendingUp, Clock,
+  CheckCircle2, Globe2, BookOpen,
+  Star,
 } from 'lucide-react'
 import Link from 'next/link'
 import { Navbar } from '@/components/layout/Navbar'
@@ -60,36 +60,6 @@ const VALUES = [
   },
 ]
 
-const TIMELINE = [
-  {
-    year: '2022',
-    icon: Lightbulb,
-    ru: { t: 'Идея', b: 'Наш основатель, сам прошедший через мучительный процесс поступления в Исламский университет Медины, решил создать сервис, который упростит этот путь для других студентов.' },
-    en: { t: 'The Idea', b: 'Our founder, having gone through the painful process of applying to the Islamic University of Madinah, decided to build a service that simplifies this journey for other students.' },
-    uz: { t: 'G\'oya', b: 'Asoschiimiz, o\'zi Madina Islom universiteti qabul jarayonini og\'ir bosib o\'tib, boshqa talabalar uchun bu yo\'lni osonlashtiradigan xizmat yaratishga qaror qildi.' },
-  },
-  {
-    year: '2023',
-    icon: Users,
-    ru: { t: 'Первые студенты', b: 'Запустили сервис в тестовом режиме. Первые 10 студентов прошли через весь наш процесс — от перевода документов до подачи заявки. Качество работы команды подтвердилось на практике.' },
-    en: { t: 'First Students', b: 'Launched in beta mode. The first 10 students went through our full process — from document translation to application submission. The quality of our team\'s work was proven in practice.' },
-    uz: { t: 'Birinchi talabalar', b: 'Xizmatni sinov rejimida ishga tushirdik. Birinchi 10 talaba hujjat tarjimasidan ariza topshirishgacha bo\'lgan jarayondan o\'tdi. Jamoa ishining sifati amalda tasdiqlandi.' },
-  },
-  {
-    year: '2024',
-    icon: TrendingUp,
-    ru: { t: 'Масштабирование', b: 'Расширили команду, добавили направление ОАЭ, запустили личный кабинет с онлайн-трекингом. Сервис активно растёт и продолжает принимать заявки.' },
-    en: { t: 'Scaling Up', b: 'Expanded the team, added the UAE direction, launched personal dashboard with online tracking. The service is growing and continues to accept applications.' },
-    uz: { t: 'Kengayish', b: 'Jamoani kengaytirdik, BAA yo\'nalishi qo\'shdik, onlayn kuzatuv bilan shaxsiy kabinet ishga tushirdik. Ko\'rib chiqilgan arizalar soni 100 dan oshdi.' },
-  },
-  {
-    year: '2025',
-    icon: Globe2,
-    ru: { t: 'Сегодня', b: 'Tarjuman Edu — признанный сервис с 12+ университетами-партнёрами. Продолжаем расти и помогаем студентам из СНГ построить своё будущее в лучших университетах арабского мира.' },
-    en: { t: 'Today', b: 'Tarjuman Edu is a recognized service with 12+ partner universities. We continue growing and helping CIS students build their future at the best universities in the Arab world.' },
-    uz: { t: 'Bugun', b: 'Tarjuman Edu — 12+ hamkor universiteti bilan tan olingan xizmat. O\'sishni davom ettiramiz va MDH talabalariga arab dunyosining eng yaxshi universitetlarida kelajak qurishga yordam beramiz.' },
-  },
-]
 
 const PROCESS = [
   { n: '01', icon: BookOpen, ru: { t: 'Вы оставляете заявку', b: 'Заполняете форму за 5 минут и загружаете документы прямо в личный кабинет.' }, en: { t: 'You apply', b: 'Fill out the form in 5 minutes and upload documents directly to your dashboard.' }, uz: { t: 'Ariza berasiz', b: '5 daqiqada formani to\'ldirasiz va hujjatlarni shaxsiy kabinetga yuklab qo\'yasiz.' } },
@@ -199,77 +169,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── ИСТОРИЯ ──────────────────────────────────────────────────────── */}
-      <section className="section bg-white">
-        <div className="max-w-5xl mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <motion.div {...f(0)}>
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-50 border border-brand-200 rounded-full text-brand-700 text-xs font-semibold uppercase tracking-widest mb-5">
-                {t({ ru: 'История', en: 'Our Story', uz: 'Tarix' })}
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-black text-ink mb-5 leading-tight">
-                {t({
-                  ru: 'Всё началось с одного студента',
-                  en: 'It all started with one student',
-                  uz: 'Hammasi bir talabadan boshlandi',
-                })}
-              </h2>
-              <div className="space-y-4 text-muted text-sm leading-relaxed">
-                <p>
-                  {t({
-                    ru: 'Наш основатель Абдурахман прошёл через мучительный процесс поступления в Исламский университет Медины самостоятельно — бесконечные очереди, путаные требования, отклонённые документы из-за мелких ошибок.',
-                    en: 'Our founder Abdurakhman went through the painful process of applying to the Islamic University of Madinah on his own — endless queues, confusing requirements, rejected documents due to minor errors.',
-                    uz: "Asoschiimiz Abduraxmon Madina Islom universitetiga mustaqil ravishda qabul jarayonining og'ir yo'lini bosib o'tdi — cheksiz navbatlar, chalkash talablar, mayda xatolar tufayli rad etilgan hujjatlar.",
-                  })}
-                </p>
-                <p>
-                  {t({
-                    ru: 'После зачисления он задал себе вопрос: почему нет сервиса, который берёт эту боль на себя? Так в 2022 году родилась идея Tarjuman Edu.',
-                    en: 'After enrolling, he asked himself: why is there no service that takes this pain away? That\'s how the idea of Tarjuman Edu was born in 2022.',
-                    uz: "Qabul bo'lgandan so'ng u o'ziga savol berdi: nega bu og'riqni o'z zimmasiga oladigan xizmat yo'q? Shunday qilib 2022 yilda Tarjuman Edu g'oyasi tug'ildi.",
-                  })}
-                </p>
-                <p>
-                  {t({
-                    ru: 'Сегодня мы помогли 43 студентам из стран СНГ поступить в лучшие университеты арабского мира. И это только начало.',
-                    en: 'Today we have helped 43 students from CIS countries enroll in the best universities of the Arab world. And this is just the beginning.',
-                    uz: "Bugun biz MDH mamlakatlaridan 43 dan ortiq talabaga arab dunyosining eng yaxshi universitetlariga kirishga yordam berdik. Bu faqat boshlanish.",
-                  })}
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Visual */}
-            <motion.div {...f(0.1)} className="relative">
-              <div className="aspect-[4/3] rounded-3xl overflow-hidden bg-gradient-to-br from-brand-900 to-ink">
-                <img
-                  src="https://images.unsplash.com/photo-1692977579997-948328cdb7d2?w=800&q=80"
-                  alt="Медина"
-                  className="w-full h-full object-cover opacity-70 mix-blend-luminosity"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent" />
-                <div className="absolute bottom-6 left-6 right-6">
-                  <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-brand-400/20 flex items-center justify-center">
-                        <BookOpen className="w-5 h-5 text-brand-400" />
-                      </div>
-                      <div>
-                        <p className="text-white text-sm font-bold">
-                          {t({ ru: 'Исламский университет Медины', en: 'Islamic University of Madinah', uz: 'Madina Islom universiteti' })}
-                        </p>
-                        <p className="text-white/60 text-xs">
-                          {t({ ru: 'Где всё началось', en: 'Where it all began', uz: 'Hamma narsa shu yerdan boshlandi' })}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
 
       {/* ── МИССИЯ ───────────────────────────────────────────────────────── */}
       <section className="section bg-[#F7F8FA]">
@@ -326,52 +225,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── ТАЙМЛАЙН ─────────────────────────────────────────────────────── */}
-      <section className="section bg-ink text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-brand-900/20 via-transparent to-violet-900/10 pointer-events-none" />
-        <div className="max-w-4xl mx-auto px-4 relative z-10">
-          <div className="text-center mb-14">
-            <motion.div {...f(0)}>
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 border border-white/20 rounded-full text-white/80 text-xs font-semibold uppercase tracking-widest mb-4">
-                {t({ ru: 'История развития', en: 'Our Journey', uz: 'Rivojlanish tarixi' })}
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-black text-white">
-                {t({ ru: 'Как мы росли', en: 'How we grew', uz: 'Biz qanday o\'sdik' })}
-              </h2>
-            </motion.div>
-          </div>
-
-          <div className="relative">
-            {/* Vertical line */}
-            <div className="absolute left-8 sm:left-1/2 top-0 bottom-0 w-px bg-white/10 -translate-x-1/2" />
-
-            <div className="space-y-10">
-              {TIMELINE.map((item, i) => (
-                <motion.div key={i} {...f(i * 0.1)}
-                  className={`relative flex gap-6 sm:gap-0 ${i % 2 === 0 ? 'sm:flex-row' : 'sm:flex-row-reverse'}`}
-                >
-                  {/* Content */}
-                  <div className={`flex-1 ${i % 2 === 0 ? 'sm:pr-12 sm:text-right' : 'sm:pl-12'} pl-16 sm:pl-0`}>
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-5 hover:bg-white/10 transition-colors">
-                      <span className="text-brand-400 text-xs font-bold uppercase tracking-widest">{item.year}</span>
-                      <h3 className="text-white font-bold text-lg mt-1 mb-2">{t({ ru: item.ru.t, en: item.en.t, uz: item.uz.t })}</h3>
-                      <p className="text-white/60 text-sm leading-relaxed">{t({ ru: item.ru.b, en: item.en.b, uz: item.uz.b })}</p>
-                    </div>
-                  </div>
-
-                  {/* Center dot */}
-                  <div className="absolute left-8 sm:left-1/2 -translate-x-1/2 w-10 h-10 bg-brand-400 rounded-full flex items-center justify-center shadow-lg shadow-brand-400/30 z-10 sm:top-4">
-                    <item.icon className="w-4 h-4 text-ink" />
-                  </div>
-
-                  {/* Spacer for opposite side */}
-                  <div className="flex-1 hidden sm:block" />
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* ── КОМАНДА ──────────────────────────────────────────────────────── */}
       <section className="section bg-[#F7F8FA]">
