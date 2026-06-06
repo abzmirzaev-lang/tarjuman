@@ -28,44 +28,6 @@ const AVATAR_GRADIENTS = [
   'from-indigo-500 to-blue-600',
 ]
 
-const STATIC_REVIEWS: Review[] = [
-  {
-    id: 's1', name: 'Абдурахман Юсупов', country: '🇺🇿 Узбекистан',
-    university: 'Исламский университет Медины', stars: 5,
-    text: 'Tarjuman помог мне с переводом документов и подачей в Университет Медины. Всё было быстро, профессионально и без лишних хлопот. Очень доволен результатом!',
-    created_at: '',
-  },
-  {
-    id: 's2', name: 'Зайнаб Рахимова', country: '🇹🇯 Таджикистан',
-    university: 'Университет им. Короля Сауда', stars: 5,
-    text: 'Переживала, что документы не примут. Менеджер проверил всё заранее, и поступление прошло без единого отказа. Рекомендую всем!',
-    created_at: '',
-  },
-  {
-    id: 's3', name: 'Мухаммад Алиев', country: '🇰🇿 Казахстан',
-    university: 'Университет ОАЭ (ОАЭ)', stars: 5,
-    text: 'Обратился за несколько недель до дедлайна. Команда уложилась в срок — документы подали за 12 часов. Получил приглашение от университета!',
-    created_at: '',
-  },
-  {
-    id: 's4', name: 'Фатима Каримова', country: '🇺🇿 Узбекистан',
-    university: 'Университет им. Короля Абдулазиза', stars: 5,
-    text: 'Перевод документов качественный, университет принял без замечаний. Поддержка на каждом шагу — от заявки до получения визы.',
-    created_at: '',
-  },
-  {
-    id: 's5', name: 'Бекзод Назаров', country: '🇺🇿 Узбекистан',
-    university: 'Университет Шарджи (ОАЭ)', stars: 5,
-    text: 'Сначала сомневался, но после первого звонка менеджера всё стало ясно. Процесс был полностью прозрачным. Сейчас учусь в Шардже!',
-    created_at: '',
-  },
-  {
-    id: 's6', name: 'Нилуфар Хасанова', country: '🇰🇬 Кыргызстан',
-    university: 'Исламский университет Медины', stars: 5,
-    text: 'Очень ответственный сервис. Проверили каждый документ, объяснили все требования. Поступила с первой попытки, хотя думала это невозможно.',
-    created_at: '',
-  },
-]
 
 /* ─── Infinite marquee strip ───────────────────────────────────────────── */
 function MarqueeStrip({ reviews, reverse = false }: { reviews: Review[]; reverse?: boolean }) {
@@ -180,8 +142,7 @@ export default function ReviewsSection({ lang = 'ru' }: { lang?: string }) {
     country:  lang === 'ru' ? 'Ваша страна...'                       : 'Your country...',
   }
 
-  // Merge API reviews with static ones (API first, then fill with static)
-  const allReviews = [...reviews, ...STATIC_REVIEWS].slice(0, Math.max(reviews.length + STATIC_REVIEWS.length, 6))
+  const allReviews = reviews
   const row1 = allReviews.filter((_, i) => i % 2 === 0)
   const row2 = allReviews.filter((_, i) => i % 2 === 1)
 
