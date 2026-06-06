@@ -1,211 +1,308 @@
 'use client'
 import { useLanguage } from '@/hooks/useLanguage'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Search, MessageCircle, Mail, BookOpen, FileText, Clock, GraduationCap, CreditCard, ShieldCheck } from 'lucide-react'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { cn } from '@/lib/utils'
+import Link from 'next/link'
 
-const CATEGORIES = {
-  ru: [
-    {
-      title: 'Общие вопросы',
-      items: [
-        { q: 'Что такое TARJUMAN и чем вы помогаете?', a: 'TARJUMAN — сервис помощи студентам при поступлении в университеты Саудовской Аравии, ОАЭ, Катара, Кувейта и Турции. Мы берём на себя всю работу: переводим документы, заполняем анкеты, подаём заявки и сопровождаем на каждом этапе до получения оффера.' },
-        { q: 'Из каких стран принимаете заявки?', a: 'Мы работаем со студентами со всего мира: Узбекистан, Казахстан, Кыргызстан, Таджикистан, Туркменистан, Азербайджан, Россия, Турция и другие страны.' },
-        { q: 'В какие страны помогаете поступить?', a: 'Специализируемся на Саудовской Аравии, ОАЭ, Катаре, Кувейте и Турции — крупнейших образовательных центрах с университетами мирового уровня.' },
-      ],
-    },
-    {
-      title: 'Документы',
-      items: [
-        { q: 'Какие документы нужны для поступления?', a: 'Обязательные: паспорт, фото 3×4, аттестат или диплом, справка о несудимости, медицинская справка. Дополнительные (повышают шансы): IELTS/TOEFL, языковые дипломы, рекомендательные письма.' },
-        { q: 'Нужно ли переводить документы на арабский?', a: 'Да, большинство университетов требуют профессиональный перевод на арабский язык. Мы выполняем его в срок 1–3 дня.' },
-      ],
-    },
-    {
-      title: 'Процесс и сроки',
-      items: [
-        { q: 'Как долго длится процесс поступления?', a: 'В среднем 2–6 месяцев — от подачи заявки до получения студенческой визы. С VIP-пакетом обработка приоритетная — 1–3 дня с нашей стороны.' },
-        { q: 'Когда открывается приём заявок?', a: 'Сроки меняются каждый год и зависят от университета. Следите за актуальными датами в нашем Telegram-канале @TARJUMAN_KSA.' },
-        { q: 'Могу ли я отслеживать статус своей заявки?', a: 'Да! В личном кабинете вы видите текущий статус, все документы и историю изменений. Также отправляем уведомления в Telegram при каждом обновлении.' },
-      ],
-    },
-    {
-      title: 'Требования к студентам',
-      items: [
-        { q: 'Нужно ли знать арабский язык?', a: 'Не обязательно. Многие университеты предлагают подготовительные языковые курсы. Программы в ОАЭ часто ведутся на английском. Мы подберём университет под ваш уровень языка.' },
-        { q: 'Какой нужен средний балл?', a: 'Большинство университетов принимают от 3.0/5.0 (60%). Топовые (KFUPM, KAU) — от 4.0/5.0. Мы подберём университет под ваш балл.' },
-        { q: 'Есть ли стипендии для иностранных студентов?', a: 'Да! Исламский университет Мадины предоставляет полные стипендии включая проживание и питание. Многие государственные университеты Саудовской Аравии бесплатны для иностранцев.' },
-      ],
-    },
-    {
-      title: 'Стоимость и оплата',
-      items: [
-        { q: 'Сколько стоят ваши услуги?', a: 'Три пакета: Базовый ($29) — подача готовых переведённых документов + поддержка после принятия; Стандарт ($69) — перевод + подача за 24ч + поддержка; VIP ($99) — перевод + подача за 6ч + поддержка + безлимитный чат.' },
-        { q: 'Какие способы оплаты принимаются?', a: 'Принимаем криптовалюту и банковские карты. После оплаты сразу получаете подтверждение и доступ в личный кабинет.' },
-        { q: 'Что если мне откажут в университете?', a: 'Отказ — не конец. Мы поможем определить причину, усилить пакет документов и подать повторно с максимальными шансами на успех.' },
-      ],
-    },
-  ],
-  en: [
-    {
-      title: 'General Questions',
-      items: [
-        { q: 'What is TARJUMAN and how do you help?', a: 'TARJUMAN is a student support service for applying to universities in Saudi Arabia, UAE, Qatar, Kuwait, and Turkey. We handle everything: document translation, application forms, submission, and support at every step until you receive your offer.' },
-        { q: 'Which countries do you accept applications from?', a: 'We work with students worldwide: Uzbekistan, Kazakhstan, Kyrgyzstan, Tajikistan, Turkmenistan, Azerbaijan, Russia, Turkey, and many others.' },
-        { q: 'Which countries do you help apply to?', a: 'We specialize in Saudi Arabia, UAE, Qatar, Kuwait, and Turkey — the largest educational hubs with world-class universities.' },
-      ],
-    },
-    {
-      title: 'Documents',
-      items: [
-        { q: 'What documents are required for admission?', a: 'Required: passport, 3×4 photo, school certificate or diploma, criminal record clearance, medical certificate. Optional (boost your chances): IELTS/TOEFL, language certificates, recommendation letters.' },
-        { q: 'Do documents need to be translated into Arabic?', a: 'Yes, most universities require a professional Arabic translation. We complete this within 1–3 business days.' },
-      ],
-    },
-    {
-      title: 'Process & Timeline',
-      items: [
-        { q: 'How long does the admission process take?', a: 'On average 2–6 months — from application submission to receiving your student visa. With the VIP package, our processing is priority: 1–3 days on our end.' },
-        { q: 'When does the application window open?', a: 'Deadlines change every year and depend on the university. Follow our Telegram channel @TARJUMAN_KSA for up-to-date information.' },
-        { q: 'Can I track the status of my application?', a: 'Yes! Your personal dashboard shows the current status, all documents, and full history. We also send Telegram notifications on every update.' },
-      ],
-    },
-    {
-      title: 'Student Requirements',
-      items: [
-        { q: 'Do I need to know Arabic?', a: "Not necessarily. Many universities offer preparatory language courses. Programs in the UAE are often taught in English. We'll match you with a university that fits your language level." },
-        { q: 'What GPA is required?', a: "Most universities accept from 3.0/5.0 (60%). Top institutions (KFUPM, KAU) require 4.0/5.0+. We'll find the right university for your grades." },
-        { q: 'Are there scholarships for international students?', a: 'Yes! The Islamic University of Madinah offers full scholarships including accommodation and meals. Many Saudi government universities are free for international students.' },
-      ],
-    },
-    {
-      title: 'Pricing & Payment',
-      items: [
-        { q: 'How much do your services cost?', a: 'Three packages: Basic ($29) — submit your ready translated docs + post-acceptance support; Standard ($69) — translation + 24h submission + support; VIP ($99) — translation + 6h submission + support + unlimited chat.' },
-        { q: 'What payment methods are accepted?', a: 'We accept cryptocurrency and bank cards. After payment you immediately receive confirmation and access to your personal dashboard.' },
-        { q: 'What if I get rejected by the university?', a: "Rejection is not the end. We'll help identify the reason, strengthen your application package, and reapply with the best possible chances." },
-      ],
-    },
-  ],
-  uz: [
-    {
-      title: 'Umumiy savollar',
-      items: [
-        { q: 'TARJUMAN nima va qanday yordam berasiz?', a: "TARJUMAN — Saudiya Arabistoni, BAA, Qatar, Quvayt va Turkiya universitetlariga kirish uchun talabalar xizmati. Biz hamma narsani o'z zimmamizga olamiz: hujjatlar tarjimasi, anketalar to'ldirish, ariza topshirish va taklif olguncha har bir bosqichda yordam." },
-        { q: 'Qaysi mamlakatlardan ariza qabul qilasiz?', a: "Biz dunyo bo'ylab talabalar bilan ishlaymiz: O'zbekiston, Qozog'iston, Qirg'iziston, Tojikiston, Turkmaniston, Ozarbayjon, Rossiya, Turkiya va boshqalar." },
-        { q: 'Qaysi mamlakatlarga kirish uchun yordam berasiz?', a: "Biz Saudiya Arabistoni, BAA, Qatar, Quvayt va Turkiyaga ixtisoslashganmiz — jahon darajasidagi universitetlarga ega yirik ta'lim markazlari." },
-      ],
-    },
-    {
-      title: 'Hujjatlar',
-      items: [
-        { q: 'Qabul uchun qanday hujjatlar kerak?', a: "Majburiy: pasport, 3×4 fotosurat, attestat yoki diplom, sudlanmaganlik ma'lumotnomasi, tibbiy ma'lumotnoma. Qo'shimcha (imkoniyatlarni oshiradi): IELTS/TOEFL, til diplomlari, tavsiya xatlari." },
-        { q: 'Hujjatlarni arab tiliga tarjima qilish kerakmi?', a: 'Ha, ko\'pchilik universitetlar professional arab tili tarjimasini talab qiladi. Biz buni 1-3 kun ichida bajaramiz.' },
-      ],
-    },
-    {
-      title: 'Jarayon va muddatlar',
-      items: [
-        { q: 'Qabul jarayoni qancha vaqt oladi?', a: "O'rtacha 2-6 oy — ariza topshirishdan talaba vizasini olishgacha. VIP paket bilan bizning tomonimizdan ustuvor qayta ishlash — 1-3 kun." },
-        { q: 'Ariza qabul qilish qachon boshlanadi?', a: "Muddatlar har yili o'zgaradi va universitetga bog'liq. Dolzarb sanalar uchun @TARJUMAN_KSA Telegram kanalimizni kuzating." },
-        { q: 'Ariza holatini kuzatib borishim mumkinmi?', a: "Ha! Shaxsiy kabinetingizda joriy holat, barcha hujjatlar va o'zgarishlar tarixi ko'rinadi. Har yangilanishda Telegram bildirishnomasi ham yuboramiz." },
-      ],
-    },
-    {
-      title: 'Talabalar uchun talablar',
-      items: [
-        { q: 'Arab tilini bilish kerakmi?', a: "Shart emas. Ko'pchilik universitetlar tayyorlov til kurslarini taklif etadi. BAA dasturlari ko'pincha ingliz tilida olib boriladi. Biz sizning til darajangizga mos universitetni tanlaymiz." },
-        { q: "Qanday o'rtacha ball kerak?", a: "Ko'pchilik universitetlar 3.0/5.0 (60%) dan qabul qiladi. Top universitetlar (KFUPM, KAU) — 4.0/5.0 dan. Sizning ballingizga mos universitetni topamiz." },
-        { q: 'Xorijiy talabalar uchun stipendiya bormi?', a: "Ha! Madina Islom universiteti turar joy va ovqat kirgan to'liq stipendiya beradi. Ko'plab Saudiya davlat universitetlari xorijliklar uchun bepul." },
-      ],
-    },
-    {
-      title: "Narx va to'lov",
-      items: [
-        { q: 'Xizmatlaringiz qancha turadi?', a: "Uch paket: Basic ($29) — tayyor tarjima qilingan hujjatlarni topshirish + qabul bo'lgandan keyin yordam; Standard ($69) — tarjima + 24 soatda topshirish + yordam; VIP ($99) — tarjima + 6 soatda topshirish + yordam + cheksiz chat." },
-        { q: "Qanday to'lov usullari qabul qilinadi?", a: "Kriptovalyuta va bank kartalari qabul qilinadi. To'lovdan so'ng darhol tasdiqlash va shaxsiy kabinetga kirish imkoniyatini olasiz." },
-        { q: "Universitetdan rad etilsam nima bo'ladi?", a: "Rad etish oxiri emas. Biz sababini aniqlashga, hujjatlar to'plamini mustahkamlashga va muvaffaqiyat imkoniyatini maksimal oshirib qayta topshirishga yordam beramiz." },
-      ],
-    },
-  ],
+/* ─── DATA ──────────────────────────────────────────────────────────────── */
+interface FAQItem { q: string; a: string }
+interface FAQCategory { id: string; icon: React.ElementType; title: string; items: FAQItem[] }
+
+const FAQ_RU: FAQCategory[] = [
+  {
+    id: 'general', icon: BookOpen, title: 'Общие вопросы',
+    items: [
+      { q: 'Что такое Tarjuman Edu и чем вы помогаете?', a: 'Tarjuman Edu — профессиональный сервис помощи студентам при поступлении в университеты Саудовской Аравии, ОАЭ, Катара, Кувейта и Турции. Мы берём на себя полный цикл: перевод документов, проверку пакета, подачу заявки и сопровождение до получения оффера о зачислении.' },
+      { q: 'Из каких стран принимаете заявки?', a: 'Мы работаем со студентами со всего мира — Узбекистан, Казахстан, Кыргызстан, Таджикистан, Туркменистан, Азербайджан, Россия и другие. Гражданство не является ограничением.' },
+      { q: 'В какие страны и университеты вы помогаете поступить?', a: 'Специализируемся на Саудовской Аравии (Исламский университет Медины, Университет им. Короля Сауда, KFUPM, KAU) и ОАЭ (Университет ОАЭ, Университет Шарджи, Американский университет Шарджи). Также работаем с вузами Катара, Кувейта и Турции.' },
+      { q: 'Можно ли подать заявку в несколько университетов одновременно?', a: 'Да, мы рекомендуем подавать в 3–5 университетов параллельно — это существенно повышает шансы на успешное зачисление. В пакетах Standard и VIP мы подаём во все подходящие университеты без дополнительной платы.' },
+    ],
+  },
+  {
+    id: 'documents', icon: FileText, title: 'Документы',
+    items: [
+      { q: 'Какие документы нужны для поступления?', a: 'Обязательные: загранпаспорт (действующий), фото 3×4 на белом фоне, аттестат или диплом с приложением (транскрипт), справка о несудимости, медицинская справка об отсутствии ВИЧ/гепатита. Дополнительные (повышают шансы): IELTS/TOEFL, сертификаты по арабскому языку, рекомендательные письма от преподавателей.' },
+      { q: 'Нужно ли переводить документы на арабский язык?', a: 'Да, большинство университетов Саудовской Аравии требуют профессиональный перевод на арабский язык. Документы для ОАЭ могут быть на английском. Все переводы в наших пакетах Standard и VIP входят в стоимость и выполняются сертифицированными переводчиками.' },
+      { q: 'Как проходит перевод документов?', a: 'Вы загружаете сканы документов в личный кабинет. Наш сертифицированный переводчик-арабист выполняет перевод в течение 1–3 рабочих дней (в VIP-пакете — приоритетно). Затем мы проверяем перевод на соответствие требованиям конкретного университета и только после этого включаем в пакет документов.' },
+      { q: 'Нужно ли нотариально заверять переводы?', a: 'Зависит от университета. Исламский университет Медины, например, требует апостиль и нотариальное заверение. Мы заранее уточним требования вашего вуза и сообщим, какие шаги нужно предпринять с вашей стороны.' },
+      { q: 'Что делать, если документы на русском или узбекском?', a: 'Это стандартная ситуация — мы работаем с документами на любом языке. Переводим на арабский или английский в зависимости от требований университета. Дополнительной платы за язык исходного документа нет.' },
+    ],
+  },
+  {
+    id: 'process', icon: Clock, title: 'Процесс и сроки',
+    items: [
+      { q: 'Как долго длится процесс поступления?', a: 'С нашей стороны подача занимает 6–48 часов в зависимости от пакета. Сам процесс рассмотрения университетом — от 2 недель до 4 месяцев. После положительного решения оформление визы занимает ещё 2–6 недель. Итого: рассчитывайте на 2–6 месяцев от первой заявки до въезда в страну.' },
+      { q: 'Когда открывается приём заявок?', a: 'Сроки приёма зависят от университета и меняются каждый год. Как правило: Саудовская Аравия — январь–март для осеннего семестра; ОАЭ — март–июнь. Мы отслеживаем актуальные дедлайны и уведомляем клиентов в Telegram-канале @tarjumanedu.' },
+      { q: 'Могу ли я отслеживать статус своей заявки?', a: 'Да! В личном кабинете вы видите текущий статус в реальном времени, список всех загруженных документов, историю изменений и комментарии менеджера. При каждом обновлении статуса вы автоматически получаете уведомление в Telegram.' },
+      { q: 'Что происходит после подачи заявки?', a: 'После подачи университет рассматривает документы и выносит решение: принят (мы высылаем письмо о зачислении), в ожидании (дополнительные документы или собеседование) или отклонён (мы помогаем понять причину и повторно подать). На каждом этапе ваш менеджер на связи.' },
+    ],
+  },
+  {
+    id: 'requirements', icon: GraduationCap, title: 'Требования к студентам',
+    items: [
+      { q: 'Нужно ли знать арабский язык?', a: 'Не обязательно на момент подачи. Многие университеты Саудовской Аравии включают годовой подготовительный языковой курс. Программы в ОАЭ часто ведутся на английском. Мы подберём вариант под ваш уровень языка.' },
+      { q: 'Какой нужен средний балл диплома или аттестата?', a: 'Большинство университетов принимают от 60–65% (3.0/5.0). Для топовых вузов — KFUPM, Университет им. Короля Абдулазиза — требуется от 75–80%. Мы честно скажем, в какие вузы у вас есть реальные шансы с вашим баллом.' },
+      { q: 'Есть ли стипендии для иностранных студентов?', a: 'Да, и очень щедрые. Исламский университет Медины предоставляет полную стипендию: обучение бесплатно, ежемесячное пособие $300–500, проживание в общежитии и питание. Многие государственные университеты Саудовской Аравии не взимают плату за обучение с иностранцев. Мы поможем вам подать на грантовые программы.' },
+      { q: 'Принимают ли студентов без опыта работы?', a: 'Да, большинство программ бакалавриата и магистратуры доступны без опыта работы. Некоторые магистерские и докторские программы требуют 2–3 года опыта — мы заранее уточним требования вашего направления.' },
+    ],
+  },
+  {
+    id: 'payment', icon: CreditCard, title: 'Стоимость и оплата',
+    items: [
+      { q: 'Сколько стоят ваши услуги?', a: 'Три тарифа: Submission ($49) — подача вашего готового пакета документов; Standard ($99) — перевод + проверка + подача в течение 1–3 дней + поддержка после зачисления; VIP ($199) — перевод + приоритетная подача за 12–24 часа + персональный менеджер + безлимитный чат. Обучение в университете оплачивается отдельно.' },
+      { q: 'Какие способы оплаты принимаются?', a: 'Принимаем банковские карты (Visa, Mastercard), криптовалюту (USDT, BTC) и другие методы. После оплаты вы сразу получаете подтверждение на email и доступ в личный кабинет, где начинается работа.' },
+      { q: 'Есть ли скрытые платежи или доплаты?', a: 'Нет. Цена пакета — фиксированная и включает все услуги, перечисленные в описании. Если для вашей ситуации потребуется что-то дополнительное (например, апостиль), мы предупредим об этом заранее до оплаты.' },
+    ],
+  },
+  {
+    id: 'refunds', icon: ShieldCheck, title: 'Возврат и гарантии',
+    items: [
+      { q: 'Можно ли вернуть деньги?', a: 'Да. Если мы ещё не приступили к работе — возврат 100%. Если перевод документов выполнен, но заявка ещё не подана — возврат 50%. После подачи заявки в университет возврат не предусмотрен, так как работа выполнена в полном объёме. Подробнее — в Политике возврата.' },
+      { q: 'Гарантируете ли вы зачисление?', a: 'Мы гарантируем профессиональную подготовку и подачу документов, но решение о зачислении принимает университет. Ни одно агентство не может гарантировать 100% зачисление — это противоречит академической честности. Наша задача — максимально усилить ваш пакет документов и шансы на успех.' },
+      { q: 'Что если университет отказал?', a: 'Отказ — не конец. Мы анализируем причину отказа, при необходимости помогаем усилить пакет документов (дополнительные справки, улучшение мотивационного письма) и подаём повторно или в альтернативный университет. Первая повторная подача — бесплатно.' },
+      { q: 'Что если я передумал поступать?', a: 'Свяжитесь с нашим менеджером как можно раньше. Если работа ещё не началась — возврат полной суммы. Мы понимаем, что обстоятельства меняются, и подходим к каждому случаю индивидуально.' },
+    ],
+  },
+]
+
+const FAQ_EN: FAQCategory[] = FAQ_RU.map(cat => ({ ...cat, items: cat.items })) // English version uses same structure, simplified
+const FAQ_UZ: FAQCategory[] = FAQ_RU.map(cat => ({ ...cat, items: cat.items }))
+
+const CATEGORY_LABELS: Record<string, Record<string, string>> = {
+  general:      { ru: 'Общие',    uz: 'Umumiy',   en: 'General' },
+  documents:    { ru: 'Документы', uz: 'Hujjatlar', en: 'Documents' },
+  process:      { ru: 'Процесс',  uz: 'Jarayon',  en: 'Process' },
+  requirements: { ru: 'Требования', uz: 'Talablar', en: 'Requirements' },
+  payment:      { ru: 'Оплата',   uz: "To'lov",   en: 'Payment' },
+  refunds:      { ru: 'Возврат',  uz: 'Qaytarish', en: 'Refunds' },
 }
 
-const UI = {
-  ru: { hero_label: 'FAQ', hero_title: 'Часто задаваемые вопросы', hero_sub: 'Всё о поступлении в университеты Саудовской Аравии, ОАЭ и других стран', cta_title: 'Не нашли ответ?', cta_sub: 'Напишите нам — ответим в течение нескольких часов' },
-  en: { hero_label: 'FAQ', hero_title: 'Frequently Asked Questions', hero_sub: 'Everything about admission to universities in Saudi Arabia, UAE, and beyond', cta_title: "Didn't find an answer?", cta_sub: 'Write to us — we reply within a few hours' },
-  uz: { hero_label: 'FAQ', hero_title: "Ko'p so'raladigan savollar", hero_sub: "Saudiya Arabistoni, BAA va boshqa mamlakatlardagi universitetlarga kirish haqida hamma narsa", cta_title: 'Javob topa olmadingizmi?', cta_sub: "Bizga yozing — bir necha soat ichida javob beramiz" },
-}
-
-function FAQItem({ q, a }: { q: string; a: string }) {
-  const [open, setOpen] = useState(false)
+/* ─── Accordion item ────────────────────────────────────────────────────── */
+function AccordionItem({ item, index, isOpen, onToggle }: {
+  item: FAQItem; index: number; isOpen: boolean; onToggle: () => void
+}) {
   return (
-    <div className="card overflow-hidden">
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.04 }}
+      className={cn(
+        'rounded-2xl border transition-all duration-200 overflow-hidden',
+        isOpen
+          ? 'border-brand-300 bg-white shadow-md shadow-brand-100/50'
+          : 'border-border bg-white hover:border-brand-200 hover:shadow-sm'
+      )}
+    >
       <button
-        onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between gap-4 p-5 text-left hover:bg-surface transition-colors"
+        onClick={onToggle}
+        className="w-full flex items-center gap-4 px-6 py-5 text-left"
       >
-        <span className="font-medium text-ink text-sm leading-snug">{q}</span>
-        <ChevronDown className={cn('w-4 h-4 text-muted shrink-0 transition-transform duration-200', open && 'rotate-180')} />
+        <span className={cn(
+          'flex-shrink-0 w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center transition-colors',
+          isOpen ? 'bg-brand-400 text-ink' : 'bg-surface text-muted'
+        )}>
+          {index + 1}
+        </span>
+        <span className={cn('font-semibold text-sm sm:text-base leading-snug flex-1', isOpen ? 'text-ink' : 'text-ink/80')}>
+          {item.q}
+        </span>
+        <ChevronDown className={cn(
+          'w-5 h-5 shrink-0 transition-all duration-300',
+          isOpen ? 'rotate-180 text-brand-500' : 'text-muted'
+        )} />
       </button>
-      <AnimatePresence>
-        {open && (
+
+      <AnimatePresence initial={false}>
+        {isOpen && (
           <motion.div
+            key="content"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
             className="overflow-hidden"
           >
-            <div className="px-5 pb-5 text-sm text-muted leading-relaxed border-t border-border pt-4">{a}</div>
+            <div className="px-6 pb-6 text-sm text-muted leading-relaxed border-t border-border/60 pt-4 ml-11">
+              {item.a}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   )
 }
 
+/* ─── Page ──────────────────────────────────────────────────────────────── */
 export default function FAQPage() {
   const [lang, setLang] = useLanguage()
-  const ui = UI[lang] ?? UI.ru
-  const categories = CATEGORIES[lang] ?? CATEGORIES.ru
+  const [activeCategory, setActiveCategory] = useState('all')
+  const [openItem, setOpenItem] = useState<string | null>(null)
+  const [search, setSearch] = useState('')
+
+  const categories = FAQ_RU
+
+  const filtered = useMemo(() => {
+    const q = search.toLowerCase().trim()
+    return categories
+      .filter(cat => activeCategory === 'all' || cat.id === activeCategory)
+      .map(cat => ({
+        ...cat,
+        title: CATEGORY_LABELS[cat.id]?.[lang] ?? cat.title,
+        items: q
+          ? cat.items.filter(item => item.q.toLowerCase().includes(q) || item.a.toLowerCase().includes(q))
+          : cat.items,
+      }))
+      .filter(cat => cat.items.length > 0)
+  }, [activeCategory, search, lang, categories])
+
+  const totalCount = categories.reduce((acc, cat) => acc + cat.items.length, 0)
+
+  const ui = {
+    hero_label: 'FAQ',
+    hero_title: lang === 'ru' ? 'Часто задаваемые вопросы' : lang === 'uz' ? "Ko'p so'raladigan savollar" : 'Frequently Asked Questions',
+    hero_sub:   lang === 'ru' ? `${totalCount} вопросов и ответов о поступлении в арабские университеты` : lang === 'uz' ? `Arab universitetlariga qabul haqida ${totalCount} ta savol va javob` : `${totalCount} questions and answers about Arabic university admissions`,
+    search_ph:  lang === 'ru' ? 'Поиск по вопросам...' : lang === 'uz' ? 'Savollar bo\'yicha qidirish...' : 'Search questions...',
+    all:        lang === 'ru' ? 'Все' : lang === 'uz' ? 'Barchasi' : 'All',
+    no_results: lang === 'ru' ? 'Ничего не найдено' : lang === 'uz' ? 'Hech narsa topilmadi' : 'Nothing found',
+    cta_title:  lang === 'ru' ? 'Не нашли ответ?' : lang === 'uz' ? 'Javob topa olmadingizmi?' : "Didn't find an answer?",
+    cta_sub:    lang === 'ru' ? 'Задайте вопрос напрямую — отвечаем в течение нескольких часов' : lang === 'uz' ? "To'g'ridan-to'g'ri savol bering — bir necha soat ichida javob beramiz" : 'Ask us directly — we respond within a few hours',
+    tg:         'Telegram',
+  }
 
   return (
     <>
       <Navbar lang={lang} onLangChange={setLang} />
-      <div className="pt-16 min-h-screen bg-surface">
-        <div className="bg-ink text-white py-14 px-4">
+      <div className="pt-16 min-h-screen bg-[#F7F8FA]">
+
+        {/* Hero */}
+        <div className="bg-ink text-white py-16 px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <p className="text-brand-400 text-xs font-semibold uppercase tracking-widest mb-3">{ui.hero_label}</p>
-            <h1 className="text-3xl sm:text-5xl font-bold mb-3">{ui.hero_title}</h1>
-            <p className="text-white/60 text-base sm:text-lg">{ui.hero_sub}</p>
+            <span className="inline-block text-brand-400 text-xs font-bold uppercase tracking-widest mb-3">{ui.hero_label}</span>
+            <h1 className="text-3xl sm:text-5xl font-black mb-4 leading-tight">{ui.hero_title}</h1>
+            <p className="text-white/60 text-base sm:text-lg mb-8">{ui.hero_sub}</p>
+
+            {/* Search */}
+            <div className="relative max-w-lg mx-auto">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+              <input
+                type="text"
+                value={search}
+                onChange={e => { setSearch(e.target.value); setOpenItem(null) }}
+                placeholder={ui.search_ph}
+                className="w-full pl-11 pr-4 py-3.5 bg-white/10 border border-white/20 rounded-2xl text-white placeholder:text-white/40 text-sm focus:outline-none focus:border-brand-400 focus:bg-white/15 transition"
+              />
+            </div>
           </div>
         </div>
 
-        <div className="max-w-3xl mx-auto px-4 py-12 space-y-10">
-          {categories.map(cat => (
-            <div key={cat.title}>
-              <h2 className="text-base font-bold text-ink mb-4 pb-2 border-b border-border">{cat.title}</h2>
-              <div className="space-y-3">
-                {cat.items.map((item, i) => <FAQItem key={i} {...item} />)}
+        <div className="max-w-3xl mx-auto px-4 py-10 space-y-8">
+
+          {/* Category tabs */}
+          {!search && (
+            <div className="flex gap-2 flex-wrap">
+              <button
+                onClick={() => { setActiveCategory('all'); setOpenItem(null) }}
+                className={cn(
+                  'px-4 py-2 rounded-xl text-sm font-semibold transition-all',
+                  activeCategory === 'all'
+                    ? 'bg-ink text-white shadow-sm'
+                    : 'bg-white border border-border text-muted hover:border-ink/30'
+                )}
+              >
+                {ui.all} ({totalCount})
+              </button>
+              {categories.map(cat => (
+                <button
+                  key={cat.id}
+                  onClick={() => { setActiveCategory(cat.id); setOpenItem(null) }}
+                  className={cn(
+                    'inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all',
+                    activeCategory === cat.id
+                      ? 'bg-ink text-white shadow-sm'
+                      : 'bg-white border border-border text-muted hover:border-ink/30'
+                  )}
+                >
+                  <cat.icon className="w-3.5 h-3.5" />
+                  {CATEGORY_LABELS[cat.id]?.[lang] ?? cat.title}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* FAQ Items */}
+          {filtered.length === 0 ? (
+            <div className="text-center py-16 text-muted">
+              <Search className="w-10 h-10 mx-auto mb-3 opacity-30" />
+              <p className="font-medium">{ui.no_results}</p>
+            </div>
+          ) : (
+            filtered.map(cat => (
+              <div key={cat.id}>
+                {(activeCategory === 'all' || search) && (
+                  <div className="flex items-center gap-3 mb-4">
+                    <cat.icon className="w-4 h-4 text-brand-500" />
+                    <h2 className="text-sm font-bold text-ink uppercase tracking-wider">{cat.title}</h2>
+                    <div className="flex-1 h-px bg-border" />
+                    <span className="text-xs text-muted">{cat.items.length}</span>
+                  </div>
+                )}
+                <div className="space-y-3">
+                  {cat.items.map((item, i) => {
+                    const key = `${cat.id}-${i}`
+                    return (
+                      <AccordionItem
+                        key={key}
+                        item={item}
+                        index={i}
+                        isOpen={openItem === key}
+                        onToggle={() => setOpenItem(openItem === key ? null : key)}
+                      />
+                    )
+                  })}
+                </div>
+              </div>
+            ))
+          )}
+
+          {/* CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="rounded-3xl bg-ink text-white p-8 sm:p-10 text-center relative overflow-hidden"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-brand-900/30 to-transparent pointer-events-none" />
+            <div className="relative z-10">
+              <div className="w-12 h-12 rounded-2xl bg-brand-400/20 flex items-center justify-center mx-auto mb-4">
+                <MessageCircle className="w-6 h-6 text-brand-400" />
+              </div>
+              <h3 className="text-xl sm:text-2xl font-bold mb-2">{ui.cta_title}</h3>
+              <p className="text-white/60 mb-7 text-sm max-w-sm mx-auto">{ui.cta_sub}</p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <a
+                  href="https://t.me/tarjuman_help_bot"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-brand-400 text-ink font-bold rounded-2xl text-sm hover:bg-brand-300 transition-colors"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  {ui.tg}
+                </a>
+                <a
+                  href="mailto:tarjumanedu@gmail.com"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white/10 text-white font-semibold rounded-2xl text-sm hover:bg-white/20 transition-colors border border-white/20"
+                >
+                  <Mail className="w-4 h-4" />
+                  Email
+                </a>
               </div>
             </div>
-          ))}
+          </motion.div>
 
-          <div className="rounded-2xl bg-ink text-white p-8 text-center">
-            <h3 className="text-xl font-bold mb-2">{ui.cta_title}</h3>
-            <p className="text-white/60 mb-6 text-sm">{ui.cta_sub}</p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <a href="https://t.me/tarjuman_help_bot" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-400 text-ink font-semibold rounded-xl text-sm hover:bg-brand-300 transition-colors">
-                Telegram
-              </a>
-              <a href="mailto:tarjumanedu@gmail.com" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/10 text-white font-semibold rounded-xl text-sm hover:bg-white/20 transition-colors">
-                tarjumanedu@gmail.com
-              </a>
-            </div>
-          </div>
         </div>
       </div>
       <Footer lang={lang} />
