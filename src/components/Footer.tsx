@@ -133,4 +133,30 @@ export default function Footer() {
                   href="https://wa.me/966574958717"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2.5 text-sm text-
+                  className="flex items-center gap-2.5 text-sm text-white/60 hover:text-white transition-colors duration-150 group"
+                >
+                  <span className="w-7 h-7 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-brand-400/50 transition-colors">
+                    <MessageCircle size={13} />
+                  </span>
+                  WhatsApp
+                  <ExternalLink size={10} className="opacity-40" />
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="mt-10 pt-6 border-t border-white/[0.07] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <p className="text-xs text-white/25">
+            © {new Date().getFullYear()} Tarjuman Edu (bughyat alqasid Est.).{' '}
+            {t('Все права защищены.', 'Barcha huquqlar himoyalangan.', 'All rights reserved.')}
+          </p>
+          <p className="text-xs text-white/25">
+            bughyat alqasid Establishment · Riyadh, KSA · CR №&nbsp;<span className="text-white/40 font-mono">7051611031</span>
+          </p>
+        </div>
+      </div>
+    </footer>
+  )
+}

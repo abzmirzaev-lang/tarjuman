@@ -149,4 +149,29 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <meta name="cryptomus" content="801d9f3b" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <li
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link rel="preconnect" href="https://images.unsplash.com" />
+        <link rel="dns-prefetch" href="https://flagcdn.com" />
+        <link
+          rel="preload"
+          as="image"
+          href="https://images.unsplash.com/photo-1692977579997-948328cdb7d2?w=1200&q=80"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
+          rel="stylesheet"
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
+      <body>
+        {children}
+        <Footer />
+        <Toaster position="top-right" richColors />
+        <TelegramButton />
+      </body>
+    </html>
+  )
+}
