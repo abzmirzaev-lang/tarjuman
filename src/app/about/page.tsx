@@ -72,9 +72,9 @@ const TIMELINE = [
   {
     year: '2023',
     icon: Users,
-    ru: { t: 'Первые студенты', b: 'Запустили сервис в тестовом режиме. Первые 10 студентов успешно поступили в университеты Саудовской Аравии. 100% успешность с первых же заявок дала нам уверенность в продукте.' },
-    en: { t: 'First Students', b: 'Launched in beta mode. The first 10 students successfully enrolled in Saudi Arabian universities. 100% success rate from the very first applications gave us confidence in the product.' },
-    uz: { t: 'Birinchi talabalar', b: 'Xizmatni sinov rejimida ishga tushirdik. Birinchi 10 talaba Saudiya Arabistoni universitetlariga muvaffaqiyatli qabul bo\'ldi. Birinchi arizalardan 100% muvaffaqiyat mahsulotga ishonch berdi.' },
+    ru: { t: 'Первые студенты', b: 'Запустили сервис в тестовом режиме. Первые 10 студентов прошли через весь наш процесс — от перевода документов до подачи заявки. Качество работы команды подтвердилось на практике.' },
+    en: { t: 'First Students', b: 'Launched in beta mode. The first 10 students went through our full process — from document translation to application submission. The quality of our team\'s work was proven in practice.' },
+    uz: { t: 'Birinchi talabalar', b: 'Xizmatni sinov rejimida ishga tushirdik. Birinchi 10 talaba hujjat tarjimasidan ariza topshirishgacha bo\'lgan jarayondan o\'tdi. Jamoa ishining sifati amalda tasdiqlandi.' },
   },
   {
     year: '2024',

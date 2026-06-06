@@ -196,21 +196,21 @@ function WhyUsSection({ lang }: { lang: AppLanguage }) {
 
   const points =
     lang === 'ru' ? [
-      { icon: TrendingUp,  title: 'Высокий процент зачисления',  desc: 'Более 95% наших клиентов успешно поступают в выбранный университет.' },
+      { icon: TrendingUp,  title: 'Высокий процент одобрения',   desc: 'Большинство наших заявок получают положительное решение от университетов.' },
       { icon: Clock,       title: 'Быстрая обработка',           desc: 'Минимальный срок подачи — 6 часов. VIP-пакет приоритизируется немедленно.' },
       { icon: Shield,      title: 'Безопасность данных',         desc: 'Все документы хранятся на защищённых серверах и передаются только в университет.' },
       { icon: Users,       title: 'Команда профессионалов',      desc: 'Арабисты, переводчики и юристы с опытом в образовательной сфере.' },
       { icon: Building2,   title: 'Проверенные партнёры',        desc: 'Работаем только с аккредитованными университетами Саудовской Аравии и ОАЭ.' },
       { icon: ThumbsUp,    title: 'Гарантия возврата',           desc: 'Если документы не приняты по нашей вине — возвращаем деньги.' },
     ] : lang === 'uz' ? [
-      { icon: TrendingUp,  title: 'Yuqori qabul foizi',          desc: 'Mijozlarimizning 95% dan ko\'prog\'i tanlagan universitetiga muvaffaqiyatli qabul bo\'ladi.' },
+      { icon: TrendingUp,  title: 'Yuqori tasdiqlash foizi',     desc: 'Arizalarimizning ko\'p qismi universitetlardan ijobiy qaror oladi.' },
       { icon: Clock,       title: 'Tez ishlov berish',           desc: 'Minimal topshirish muddati — 6 soat. VIP paket darhol ustuvorlik qilinadi.' },
       { icon: Shield,      title: 'Ma\'lumotlar xavfsizligi',    desc: 'Barcha hujjatlar himoyalangan serverlarda saqlanadi va faqat universitetga uzatiladi.' },
       { icon: Users,       title: 'Mutaxassislar jamoasi',       desc: 'Ta\'lim sohasida tajribali arabshunoslar, tarjimonlar va yuristlar.' },
       { icon: Building2,   title: 'Ishonchli hamkorlar',         desc: 'Faqat Saudiya Arabistoni va BAA ning akkreditatsiyalangan universitetlari bilan ishlaymiz.' },
       { icon: ThumbsUp,    title: 'Qaytarish kafolati',          desc: 'Agar hujjatlar bizning aybimiz bilan qabul qilinmasa — pulni qaytaramiz.' },
     ] : [
-      { icon: TrendingUp,  title: 'High enrollment rate',        desc: 'Over 95% of our clients are successfully admitted to their chosen university.' },
+      { icon: TrendingUp,  title: 'High approval rate',          desc: 'Most of our applications receive a positive decision from universities.' },
       { icon: Clock,       title: 'Fast processing',             desc: 'Minimum submission time — 6 hours. VIP package is prioritized immediately.' },
       { icon: Shield,      title: 'Data security',               desc: 'All documents are stored on secure servers and transmitted only to the university.' },
       { icon: Users,       title: 'Team of professionals',       desc: 'Arabists, translators and lawyers with experience in the educational field.' },

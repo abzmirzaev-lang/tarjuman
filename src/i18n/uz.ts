@@ -23,8 +23,8 @@ export const uz: Translation = {
     stat1l:   'Hujjat topshirildi',
     stat2:    '6s',
     stat2l:   'Min. topshirish vaqti',
-    stat3:    '100%',
-    stat3l:   "Birinchi marta to'g'ri",
+    stat3:    '12+',
+    stat3l:   'Hamkor universitetlar',
   },
   services: {
     title:    'Bizning xizmatlar',
