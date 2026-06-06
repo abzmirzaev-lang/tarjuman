@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import '@/styles/globals.css'
 import { Toaster } from 'sonner'
 import TelegramButton from '@/components/TelegramButton'
+import Footer from '@/components/Footer'
 
 const APP_URL = 'https://tarjumanedu.com'
 
@@ -127,6 +128,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         {children}
+        <Footer />
         <Toaster position="top-right" richColors />
         <TelegramButton />
       </body>
