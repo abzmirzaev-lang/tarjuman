@@ -117,13 +117,13 @@ export async function POST(req: NextRequest) {
             </a>
           </p>
           <p style="margin:20px 0 0;font-size:13px;color:#999;text-align:center;">
-            Есть вопросы? Напишите нам: <a href="mailto:tarjumanedu@gmail.com" style="color:#D4A943;">tarjumanedu@gmail.com</a>
+            Есть вопросы? Напишите нам: <a href="mailto:support@tarjumanedu.com" style="color:#D4A943;">support@tarjumanedu.com</a>
           </p>
         </td></tr>
         <!-- Footer -->
         <tr><td style="background:#f9f9f9;padding:20px 40px;border-top:1px solid #f0f0f0;text-align:center;">
           <p style="margin:0;font-size:12px;color:#aaa;">
-            © 2025 TARJUMAN · <a href="mailto:tarjumanedu@gmail.com" style="color:#D4A943;text-decoration:none;">tarjumanedu@gmail.com</a>
+            © 2025 TARJUMAN · <a href="mailto:support@tarjumanedu.com" style="color:#D4A943;text-decoration:none;">support@tarjumanedu.com</a>
           </p>
         </td></tr>
       </table>

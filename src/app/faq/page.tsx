@@ -292,7 +292,7 @@ export default function FAQPage() {
                   {ui.tg}
                 </a>
                 <a
-                  href="mailto:tarjumanedu@gmail.com"
+                  href="mailto:support@tarjumanedu.com"
                   className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white/10 text-white font-semibold rounded-2xl text-sm hover:bg-white/20 transition-colors border border-white/20"
                 >
                   <Mail className="w-4 h-4" />

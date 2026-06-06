@@ -24,7 +24,7 @@ export async function sendEmail({ to, subject, html, text }: EmailOptions) {
       subject,
       html,
       text:    text ?? html.replace(/<[^>]+>/g, ' '),
-      reply_to: 'tarjumanedu@gmail.com',
+      reply_to: 'support@tarjumanedu.com',
     }),
   })
 

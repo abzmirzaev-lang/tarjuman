@@ -158,8 +158,8 @@ export default function LegalPage() {
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <Mail className="w-4 h-4 text-[#1B4332]" />
-                <a href="mailto:tarjumanedu@gmail.com" className="text-[#1B4332] hover:underline font-medium">
-                  tarjumanedu@gmail.com
+                <a href="mailto:support@tarjumanedu.com" className="text-[#1B4332] hover:underline font-medium">
+                  support@tarjumanedu.com
                 </a>
               </div>
               <div className="flex items-center gap-3 text-sm">

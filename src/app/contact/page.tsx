@@ -27,10 +27,10 @@ const CHANNELS = [
   {
     icon: Mail,
     label: 'Email',
-    value: 'tarjumanedu@gmail.com',
+    value: 'support@tarjumanedu.com',
     desc_ru: 'Для официальных запросов и документов',
     desc_en: 'For official inquiries and documents',
-    href: 'mailto:tarjumanedu@gmail.com',
+    href: 'mailto:support@tarjumanedu.com',
   },
 ]
 
