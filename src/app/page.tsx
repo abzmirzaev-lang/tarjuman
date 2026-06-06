@@ -302,7 +302,9 @@ export default function HomePage() {
       <Navbar lang={lang} onLangChange={setLang} />
 
       {/* HERO */}
-      <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[100svh] flex flex-col items-center justify-center overflow-hidden">
+
+        {/* Background slideshow */}
         <div className="absolute inset-0 z-0">
           <AnimatePresence mode="sync">
             {HERO_SLIDES.map((s, i) => i === slide && (
@@ -311,94 +313,160 @@ export default function HomePage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 1.5, ease: 'easeInOut' }}
+                transition={{ duration: 1.8, ease: 'easeInOut' }}
                 className="absolute inset-0"
               >
                 <motion.div
                   className="absolute inset-0"
                   initial={{ scale: 1 }}
-                  animate={{ scale: 1.08 }}
-                  transition={{ duration: 7, ease: 'easeInOut' }}
+                  animate={{ scale: 1.06 }}
+                  transition={{ duration: 8, ease: 'easeInOut' }}
                 >
                   <img src={s.photo} alt={s.label} className="w-full h-full object-cover" />
                 </motion.div>
               </motion.div>
             ))}
           </AnimatePresence>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/75 z-10" />
-          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-surface to-transparent z-10" />
+          {/* Premium layered overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/55 to-black/80 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/20 z-10" />
+          <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-surface to-transparent z-10" />
         </div>
 
-        <div className="container-narrow relative z-20 text-center py-28 pt-36">
-          <motion.div initial="hidden" animate="visible" transition={{ staggerChildren: 0.12 }}>
+        {/* Content */}
+        <div className="container-narrow relative z-20 w-full px-4 pt-32 pb-28 flex flex-col items-center text-center">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            transition={{ staggerChildren: 0.10 }}
+            className="flex flex-col items-center"
+          >
 
-            <motion.div variants={fadeUp} className="mb-6">
-              <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-white text-sm font-medium">
-                {t.hero.badge}
-              </span>
+            {/* Social proof pill */}
+            <motion.div variants={fadeUp} className="mb-7">
+              <div className="inline-flex items-center gap-3 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full">
+                <div className="flex -space-x-2">
+                  {['🇺🇿','🇰🇿','🇹🇯','🇰🇬'].map((f, i) => (
+                    <div key={i} className="w-6 h-6 rounded-full bg-white/20 border-2 border-white/30 flex items-center justify-center text-xs">{f}</div>
+                  ))}
+                </div>
+                <div className="flex items-center gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-3 h-3 fill-brand-400 text-brand-400" />
+                  ))}
+                </div>
+                <span className="text-white/90 text-xs font-medium">
+                  {lang === 'ru' ? '120+ студентов поступили' : lang === 'uz' ? "120+ talaba qabul bo'ldi" : '120+ students enrolled'}
+                </span>
+              </div>
             </motion.div>
 
+            {/* Headline */}
             <motion.h1
               variants={fadeUp}
-              className="text-4xl sm:text-6xl md:text-7xl font-bold text-white mb-6 leading-tight tracking-tight text-balance"
-              style={{ whiteSpace: 'pre-line', textShadow: '0 2px 20px rgba(0,0,0,0.4)' }}
+              className="text-4xl sm:text-6xl md:text-7xl font-black text-white mb-5 leading-[1.08] tracking-tight max-w-4xl"
+              style={{ textShadow: '0 2px 30px rgba(0,0,0,0.5)' }}
             >
-              {t.hero.title}
+              {lang === 'ru' ? (
+                <>Поступление в университеты<br /><span className="text-brand-400">Саудовской Аравии и ОАЭ</span></>
+              ) : lang === 'uz' ? (
+                <>Saudiya Arabistoni va BAA<br /><span className="text-brand-400">universitetlariga qabul</span></>
+              ) : (
+                <>University admissions in<br /><span className="text-brand-400">Saudi Arabia & UAE</span></>
+              )}
             </motion.h1>
 
-            <motion.p variants={fadeUp} className="text-lg sm:text-xl text-white/80 max-w-2xl mx-auto mb-10 leading-relaxed text-balance">
-              {t.hero.subtitle}
+            {/* Subtitle */}
+            <motion.p
+              variants={fadeUp}
+              className="text-base sm:text-lg text-white/75 max-w-xl mx-auto mb-9 leading-relaxed"
+            >
+              {lang === 'ru'
+                ? 'Перевод документов, проверка пакета и сопровождение при подаче заявки.'
+                : lang === 'uz'
+                ? "Hujjatlarni tarjima qilish, paketni tekshirish va ariza topshirishda hamrohlik."
+                : 'Document translation, package review and guidance through the application process.'}
             </motion.p>
 
-            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3 justify-center">
+            {/* CTAs */}
+            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
               <Link href="/apply">
-                <Button variant="primary" size="xl" iconRight={<ArrowRight className="w-5 h-5" />}>
-                  {t.hero.cta}
-                </Button>
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="inline-flex items-center gap-2 px-7 py-4 bg-brand-400 text-ink font-bold text-base rounded-2xl shadow-xl shadow-brand-400/30 hover:bg-brand-300 transition-colors"
+                >
+                  {lang === 'ru' ? 'Подать заявку' : lang === 'uz' ? 'Ariza berish' : 'Apply now'}
+                  <ArrowRight className="w-5 h-5" />
+                </motion.button>
               </Link>
-              <Link href="/universities">
-                <button className="btn btn-xl bg-white/10 backdrop-blur-sm border border-white/30 text-white hover:bg-white/20">
-                  {t.hero.ctaSecondary}
-                </button>
+              <Link href="/contact">
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="inline-flex items-center gap-2 px-7 py-4 bg-white/10 backdrop-blur-sm border border-white/25 text-white font-semibold text-base rounded-2xl hover:bg-white/20 transition-colors"
+                >
+                  {lang === 'ru' ? 'Бесплатная консультация' : lang === 'uz' ? "Bepul maslahat" : 'Free consultation'}
+                </motion.button>
               </Link>
             </motion.div>
 
-            <motion.div variants={fadeUp} className="mt-16 grid grid-cols-3 gap-6 max-w-lg mx-auto">
+            {/* Feature pills */}
+            <motion.div variants={fadeUp} className="flex flex-wrap justify-center gap-2 mb-14">
+              {(lang === 'ru'
+                ? ['✓ Официальный перевод', '✓ Проверка документов', '✓ Поддержка 24/7', '✓ Без скрытых комиссий']
+                : lang === 'uz'
+                ? ["✓ Rasmiy tarjima", "✓ Hujjatlarni tekshirish", "✓ 24/7 yordam", "✓ Yashirin to'lovlarsiz"]
+                : ['✓ Official translation', '✓ Document review', '✓ 24/7 support', '✓ No hidden fees']
+              ).map((pill, i) => (
+                <span key={i} className="px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/15 rounded-full text-white/80 text-xs font-medium">
+                  {pill}
+                </span>
+              ))}
+            </motion.div>
+
+            {/* Stats bar */}
+            <motion.div
+              variants={fadeUp}
+              className="w-full max-w-lg grid grid-cols-3 gap-px bg-white/10 rounded-2xl overflow-hidden backdrop-blur-md border border-white/15"
+            >
               {[
-                [submittedCount !== null ? String(submittedCount) : t.hero.stat1, t.hero.stat1l],
-                [t.hero.stat2, t.hero.stat2l],
-                [t.hero.stat3, t.hero.stat3l],
-              ].map(([val, label], i) => (
-                <div key={i} className="text-center">
-                  <div className="text-2xl sm:text-3xl font-bold text-white" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.3)' }}>{val}</div>
-                  <div className="text-xs text-white/60 mt-1">{label}</div>
+                { val: '120+', label: lang === 'ru' ? 'Заявок' : lang === 'uz' ? 'Ariza' : 'Applications' },
+                { val: '6 ч',  label: lang === 'ru' ? 'Мин. срок подачи' : lang === 'uz' ? 'Min. muddat' : 'Min. turnaround' },
+                { val: '95%',  label: lang === 'ru' ? 'Успешных подач' : lang === 'uz' ? 'Muvaffaqiyat' : 'Success rate' },
+              ].map((s, i) => (
+                <div key={i} className="flex flex-col items-center py-4 px-2 bg-black/20">
+                  <span className="text-2xl font-black text-white">{s.val}</span>
+                  <span className="text-white/50 text-[11px] mt-0.5 text-center">{s.label}</span>
                 </div>
               ))}
             </motion.div>
+
           </motion.div>
         </div>
 
-        <div className="absolute bottom-10 left-0 right-0 z-20 flex flex-col items-center gap-3">
+        {/* Slide indicator */}
+        <div className="absolute bottom-8 left-0 right-0 z-20 flex flex-col items-center gap-3">
           <AnimatePresence mode="wait">
             <motion.div
               key={slide}
-              initial={{ opacity: 0, y: 6 }}
+              initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.4 }}
-              className="flex items-center gap-2 text-white/70 text-xs font-medium bg-black/30 backdrop-blur-sm px-3 py-1.5 rounded-full"
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.3 }}
+              className="flex items-center gap-2 text-white/60 text-xs bg-black/25 backdrop-blur-sm px-3 py-1.5 rounded-full"
             >
               <span className="w-1.5 h-1.5 bg-brand-400 rounded-full animate-pulse" />
               {HERO_SLIDES[slide].city}
             </motion.div>
           </AnimatePresence>
-          <div className="flex gap-2">
+          <div className="flex gap-1.5">
             {HERO_SLIDES.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setSlide(i)}
-                className="relative h-1 rounded-full transition-all duration-500 overflow-hidden"
-                style={{ width: i === slide ? 32 : 16, background: 'rgba(255,255,255,0.3)' }}
+                className="relative h-[3px] rounded-full transition-all duration-500 overflow-hidden"
+                style={{ width: i === slide ? 28 : 12, background: 'rgba(255,255,255,0.25)' }}
               >
                 {i === slide && (
                   <motion.div
