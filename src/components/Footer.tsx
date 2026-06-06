@@ -2,24 +2,33 @@
 
 import Link from 'next/link'
 import { Mail, Send, MessageCircle, ExternalLink } from 'lucide-react'
+import { useLanguage } from '@/hooks/useLanguage'
 
 const LINKS = {
   company: [
-    { label: 'О нас',          href: '/about' },
-    { label: 'Университеты',   href: '/universities' },
-    { label: 'Тарифы',         href: '/pricing' },
-    { label: 'FAQ',            href: '/faq' },
-    { label: 'Контакты',       href: '/contact' },
+    { ru: 'О нас',        uz: 'Biz haqimizda', en: 'About',        href: '/about' },
+    { ru: 'Университеты', uz: 'Universitetlar', en: 'Universities', href: '/universities' },
+    { ru: 'Тарифы',       uz: 'Tariflar',       en: 'Pricing',      href: '/pricing' },
+    { ru: 'FAQ',          uz: 'FAQ',             en: 'FAQ',          href: '/faq' },
+    { ru: 'Контакты',     uz: 'Aloqa',           en: 'Contact',      href: '/contact' },
   ],
   legal: [
-    { label: 'Политика конфиденциальности', href: '/privacy' },
-    { label: 'Условия использования',       href: '/terms' },
-    { label: 'Политика возврата',           href: '/refund' },
-    { label: 'Сведения о компании',         href: '/legal' },
+    { ru: 'Политика конфиденциальности', uz: 'Maxfiylik siyosati',      en: 'Privacy Policy',  href: '/privacy' },
+    { ru: 'Условия использования',       uz: 'Foydalanish shartlari',   en: 'Terms of Use',    href: '/terms' },
+    { ru: 'Политика возврата',           uz: 'Qaytarish siyosati',      en: 'Refund Policy',   href: '/refund' },
+    { ru: 'Сведения о компании',         uz: 'Kompaniya ma\'lumotlari', en: 'Company Info',    href: '/legal' },
   ],
 }
 
 export default function Footer() {
+  const [lang] = useLanguage()
+
+  const t = (ru: string, uz: string, en: string) =>
+    lang === 'uz' ? uz : lang === 'en' ? en : ru
+
+  const label = (l: { ru: string; uz: string; en: string }) =>
+    lang === 'uz' ? l.uz : lang === 'en' ? l.en : l.ru
+
   return (
     <footer className="bg-[#0d1117] text-white/80">
 
@@ -36,16 +45,26 @@ export default function Footer() {
               <span className="text-[10px] font-semibold bg-brand-400/20 text-brand-300 px-2 py-0.5 rounded-full border border-brand-400/30">EDU</span>
             </div>
             <p className="text-sm text-white/50 leading-relaxed mb-5">
-              Консультационные, переводческие и организационные услуги для поступления в университеты Саудовской Аравии и ОАЭ.
+              {t(
+                'Консультационные, переводческие и организационные услуги для поступления в университеты Саудовской Аравии и ОАЭ.',
+                "Saudiya Arabistoni va BAA universitetlariga qabul qilish uchun konsultatsiya, tarjima va tashkiliy xizmatlar.",
+                'Consulting, translation and organizational services for admission to universities in Saudi Arabia and UAE.'
+              )}
             </p>
             <p className="text-xs text-white/30 leading-relaxed">
-              Решение о зачислении принимается университетом.
+              {t(
+                'Решение о зачислении принимается университетом.',
+                'Qabul qarori universitet tomonidan qabul qilinadi.',
+                'Admission decisions are made by the university.'
+              )}
             </p>
           </div>
 
           {/* Company links */}
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-white/30 mb-4">Компания</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-white/30 mb-4">
+              {t('Компания', 'Kompaniya', 'Company')}
+            </p>
             <ul className="space-y-2.5">
               {LINKS.company.map(l => (
                 <li key={l.href}>
@@ -53,7 +72,7 @@ export default function Footer() {
                     href={l.href}
                     className="text-sm text-white/60 hover:text-white transition-colors duration-150"
                   >
-                    {l.label}
+                    {label(l)}
                   </Link>
                 </li>
               ))}
@@ -62,7 +81,9 @@ export default function Footer() {
 
           {/* Legal links */}
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-white/30 mb-4">Документы</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-white/30 mb-4">
+              {t('Документы', 'Hujjatlar', 'Legal')}
+            </p>
             <ul className="space-y-2.5">
               {LINKS.legal.map(l => (
                 <li key={l.href}>
@@ -70,7 +91,7 @@ export default function Footer() {
                     href={l.href}
                     className="text-sm text-white/60 hover:text-white transition-colors duration-150"
                   >
-                    {l.label}
+                    {label(l)}
                   </Link>
                 </li>
               ))}
@@ -79,7 +100,9 @@ export default function Footer() {
 
           {/* Contacts */}
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-white/30 mb-4">Контакты</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-white/30 mb-4">
+              {t('Контакты', 'Aloqa', 'Contacts')}
+            </p>
             <ul className="space-y-3">
               <li>
                 <a
@@ -126,7 +149,8 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-10 pt-6 border-t border-white/[0.07] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <p className="text-xs text-white/25">
-            © {new Date().getFullYear()} Tarjuman Edu (bughyat alqasid Est.). Все права защищены.
+            © {new Date().getFullYear()} Tarjuman Edu (bughyat alqasid Est.).{' '}
+            {t('Все права защищены.', 'Barcha huquqlar himoyalangan.', 'All rights reserved.')}
           </p>
           <p className="text-xs text-white/25">
             bughyat alqasid Establishment · Riyadh, KSA · CR №&nbsp;<span className="text-white/40 font-mono">7051611031</span>
