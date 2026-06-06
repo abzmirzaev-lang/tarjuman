@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Tarjuman Edu — Postuplenie v Saudovskuyu Araviyu i OAE',
-    description: 'Perevod dokumentov, podacha zayavki, soprovozhdenie. Al Qasimia University, IUM, KSU, KAU i drugie. 120+ zayavok obrabotano.',
+    description: 'Perevod dokumentov, podacha zayavki, soprovozhdenie. Al Qasimia University, IUM, KSU, KAU i drugie. 43 zayavki obrabotano.',
     url: APP_URL,
     siteName: 'Tarjuman Edu',
     type: 'website',

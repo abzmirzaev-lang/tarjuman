@@ -19,10 +19,10 @@ const f = (delay = 0) => ({
 
 /* ─── DATA ──────────────────────────────────────────────────────────────── */
 const STATS = [
-  { val: '120+', ru: 'Заявок обработано',     uz: 'Ariza ko\'rib chiqildi',   en: 'Applications processed' },
-  { val: '12+',  ru: 'Университетов-партнёров', uz: 'Hamkor universitetlar',   en: 'Partner universities' },
-  { val: '12+',  ru: 'Университетов-партнёров', uz: 'Hamkor universitetlar',   en: 'Partner universities' },
-  { val: '6ч',   ru: 'Минимальный срок',      uz: 'Minimal muddat',           en: 'Minimum turnaround' },
+  { val: '43',  ru: 'Подали заявку',           uz: 'Ariza topshirdi',         en: 'Applications submitted' },
+  { val: '12+', ru: 'Университетов-партнёров', uz: 'Hamkor universitetlar',   en: 'Partner universities' },
+  { val: '6ч',  ru: 'Минимальный срок подачи', uz: 'Minimal topshirish',      en: 'Min. turnaround' },
+  { val: '3',   ru: 'Года на рынке',           uz: 'Yillik tajriba',          en: 'Years on market' },
 ]
 
 const VALUES = [
@@ -78,8 +78,8 @@ const TIMELINE = [
   {
     year: '2024',
     icon: TrendingUp,
-    ru: { t: 'Масштабирование', b: 'Расширили команду, добавили направление ОАЭ, запустили личный кабинет с онлайн-трекингом. Число обработанных заявок перевалило за 100.' },
-    en: { t: 'Scaling Up', b: 'Expanded the team, added the UAE direction, launched personal dashboard with online tracking. Number of processed applications crossed 100.' },
+    ru: { t: 'Масштабирование', b: 'Расширили команду, добавили направление ОАЭ, запустили личный кабинет с онлайн-трекингом. Сервис активно растёт и продолжает принимать заявки.' },
+    en: { t: 'Scaling Up', b: 'Expanded the team, added the UAE direction, launched personal dashboard with online tracking. The service is growing and continues to accept applications.' },
     uz: { t: 'Kengayish', b: 'Jamoani kengaytirdik, BAA yo\'nalishi qo\'shdik, onlayn kuzatuv bilan shaxsiy kabinet ishga tushirdik. Ko\'rib chiqilgan arizalar soni 100 dan oshdi.' },
   },
   {
@@ -94,7 +94,7 @@ const TIMELINE = [
 const PROCESS = [
   { n: '01', icon: BookOpen, ru: { t: 'Вы оставляете заявку', b: 'Заполняете форму за 5 минут и загружаете документы прямо в личный кабинет.' }, en: { t: 'You apply', b: 'Fill out the form in 5 minutes and upload documents directly to your dashboard.' }, uz: { t: 'Ariza berasiz', b: '5 daqiqada formani to\'ldirasiz va hujjatlarni shaxsiy kabinetga yuklab qo\'yasiz.' } },
   { n: '02', icon: CheckCircle2, ru: { t: 'Мы проверяем документы', b: 'Каждый документ проходит проверку на соответствие требованиям вашего университета.' }, en: { t: 'We review documents', b: 'Every document is checked against your target university\'s requirements.' }, uz: { t: 'Hujjatlarni tekshiramiz', b: 'Har bir hujjat universitetingiz talablariga muvofiqligini tekshiramiz.' } },
-  { n: '03', icon: Globe2, ru: { t: 'Переводим и оформляем', b: 'Сертифицированные переводчики переводят документы на арабский. Проверяем всё ещё раз.' }, en: { t: 'We translate', b: 'Certified translators translate documents into Arabic. We verify everything once more.' }, uz: { t: 'Tarjima qilamiz', b: 'Sertifikatlangan tarjimonlar hujjatlarni arabchaga tarjima qiladi. Hamma narsani yana bir bor tekshiramiz.' } },
+  { n: '03', icon: Globe2, ru: { t: 'Переводим и оформляем', b: 'Профессиональные переводчики переводят документы на арабский. Проверяем всё ещё раз.' }, en: { t: 'We translate', b: 'Professional translators translate documents into Arabic. We verify everything once more.' }, uz: { t: 'Tarjima qilamiz', b: 'Professional tarjimonlar hujjatlarni arabchaga tarjima qiladi. Hamma narsani yana bir bor tekshiramiz.' } },
   { n: '04', icon: Zap, ru: { t: 'Подаём заявку', b: 'Направляем полный пакет в университет в установленные сроки — 12–48 часов в зависимости от пакета.' }, en: { t: 'We submit', b: 'We send the complete package to the university on schedule — 12–48 hours depending on your plan.' }, uz: { t: 'Ariza topshiramiz', b: 'To\'liq paketni belgilangan muddatda universitetga yuboramiz — paketga qarab 12–48 soat.' } },
   { n: '05', icon: Star, ru: { t: 'Вы получаете оффер', b: 'Сопровождаем до официального письма о зачислении. Telegram-уведомления на каждом шаге.' }, en: { t: 'You get the offer', b: 'We support you until the official admission letter. Telegram notifications at every step.' }, uz: { t: 'Taklif olasiz', b: 'Rasmiy qabul xatigacha yordam beramiz. Har bosqichda Telegram bildirishnomasi.' } },
 ]
@@ -118,9 +118,9 @@ const TEAM = [
     role_uz: 'Bosh tarjimon',
     emoji: '👩‍🎓',
     grad: 'from-rose-500 to-pink-600',
-    ru: 'Сертифицированный арабист с 7-летним опытом. Отвечает за качество всех переводов и соответствие требованиям университетов.',
-    en: 'Certified Arabist with 7 years of experience. Responsible for the quality of all translations and university compliance.',
-    uz: '7 yillik tajribaga ega sertifikatlangan arabshunos. Barcha tarjimalar sifati va universitetlar talablariga muvofiqlik uchun javobgar.',
+    ru: 'Сертифицированный арабист с 7-летним опытом работы. Отвечает за качество всех переводов и соответствие требованиям университетов.',
+    en: 'Arabist with 7 years of experience. Responsible for the quality of all translations and university compliance.',
+    uz: '7 yillik tajribaga ega arabshunos. Barcha tarjimalar sifati va universitetlar talablariga muvofiqlik uchun javobgar.',
   },
   {
     name: 'Мухаммад',
@@ -231,9 +231,9 @@ export default function AboutPage() {
                 </p>
                 <p>
                   {t({
-                    ru: 'Сегодня мы помогли более чем 120 студентам из стран СНГ поступить в лучшие университеты арабского мира. И это только начало.',
-                    en: 'Today we have helped over 120 students from CIS countries enroll in the best universities of the Arab world. And this is just the beginning.',
-                    uz: "Bugun biz MDH mamlakatlaridan 120 dan ortiq talabaga arab dunyosining eng yaxshi universitetlariga kirishga yordam berdik. Bu faqat boshlanish.",
+                    ru: 'Сегодня мы помогли 43 студентам из стран СНГ поступить в лучшие университеты арабского мира. И это только начало.',
+                    en: 'Today we have helped 43 students from CIS countries enroll in the best universities of the Arab world. And this is just the beginning.',
+                    uz: "Bugun biz MDH mamlakatlaridan 43 dan ortiq talabaga arab dunyosining eng yaxshi universitetlariga kirishga yordam berdik. Bu faqat boshlanish.",
                   })}
                 </p>
               </div>

@@ -89,17 +89,17 @@ function StatItem({ target, suffix, label }: { target: number; suffix: string; l
 function StatsSection({ lang }: { lang: AppLanguage }) {
   const stats =
     lang === 'ru' ? [
-      { target: 120, suffix: '+', label: 'Заявок обработано' },
-      { target: 85,  suffix: '+', label: 'Студентов зачислено' },
-      { target: 12,  suffix: '+', label: 'Университетов-партнёров' },
+      { target: 43, suffix: '',  label: 'Подали заявку' },
+      { target: 12, suffix: '+', label: 'Университетов-партнёров' },
+      { target: 6,  suffix: 'ч', label: 'Мин. срок подачи' },
     ] : lang === 'uz' ? [
-      { target: 120, suffix: '+', label: 'Ariza ko\'rib chiqildi' },
-      { target: 85,  suffix: '+', label: 'Talaba qabul qilindi' },
-      { target: 12,  suffix: '+', label: 'Hamkor universitetlar' },
+      { target: 43, suffix: '',  label: 'Ariza topshirdi' },
+      { target: 12, suffix: '+', label: 'Hamkor universitetlar' },
+      { target: 6,  suffix: 's', label: 'Min. topshirish vaqti' },
     ] : [
-      { target: 120, suffix: '+', label: 'Applications processed' },
-      { target: 85,  suffix: '+', label: 'Students enrolled' },
-      { target: 12,  suffix: '+', label: 'Partner universities' },
+      { target: 43, suffix: '',  label: 'Applications submitted' },
+      { target: 12, suffix: '+', label: 'Partner universities' },
+      { target: 6,  suffix: 'h', label: 'Min. turnaround' },
     ]
 
   return (
@@ -134,7 +134,7 @@ function BenefitsSection({ lang }: { lang: AppLanguage }) {
 
   const items =
     lang === 'ru' ? [
-      { icon: BadgeCheck,  title: 'Официальный перевод документов',       desc: 'Все переводы заверены и приняты университетами Саудовской Аравии и ОАЭ.' },
+      { icon: BadgeCheck,  title: 'Профессиональный перевод документов',       desc: 'Переводы выполняются профессионально — так, чтобы документы принимали университеты Саудовской Аравии и ОАЭ.' },
       { icon: SearchCheck, title: 'Проверка документов перед подачей',     desc: 'Каждый документ проходит проверку на соответствие требованиям вуза.' },
       { icon: LifeBuoy,    title: 'Поддержка на каждом этапе',            desc: 'Персональный менеджер сопровождает вас от заявки до получения визы.' },
       { icon: GraduationCap, title: 'Помощь с университетами СА и ОАЭ',  desc: 'Прямое взаимодействие с приёмными комиссиями ведущих арабских вузов.' },
@@ -144,7 +144,7 @@ function BenefitsSection({ lang }: { lang: AppLanguage }) {
       { icon: LifeBuoy,    title: 'Har bosqichda yordam',                 desc: 'Shaxsiy menejer arizadan vizaga qadar siz bilan birga.' },
       { icon: GraduationCap, title: 'SA va BAA universitetlariga yordam', desc: 'Yetakchi arab universitetlarining qabul komissiyalari bilan to\'g\'ridan-to\'g\'ri aloqa.' },
     ] : [
-      { icon: BadgeCheck,  title: 'Official document translation',         desc: 'All translations are certified and accepted by universities in Saudi Arabia and UAE.' },
+      { icon: BadgeCheck,  title: 'Professional document translation',         desc: 'Translations done professionally to meet the standards of universities in Saudi Arabia and UAE.' },
       { icon: SearchCheck, title: 'Document review before submission',     desc: 'Every document is checked against the university requirements.' },
       { icon: LifeBuoy,    title: 'Support at every step',                desc: 'A personal manager accompanies you from application to visa.' },
       { icon: GraduationCap, title: 'Help with SA & UAE universities',    desc: 'Direct communication with admissions offices of leading Arab universities.' },
@@ -355,7 +355,7 @@ export default function HomePage() {
                   ))}
                 </div>
                 <span className="text-white/90 text-xs font-medium">
-                  {lang === 'ru' ? '120+ студентов поступили' : lang === 'uz' ? "120+ talaba qabul bo'ldi" : '120+ students enrolled'}
+                  {lang === 'ru' ? '43 студента уже подали заявку' : lang === 'uz' ? "43 talaba ariza topshirdi" : '43 students applied'}
                 </span>
               </div>
             </motion.div>
@@ -413,7 +413,7 @@ export default function HomePage() {
             {/* Feature pills */}
             <motion.div variants={fadeUp} className="flex flex-wrap justify-center gap-2 mb-14">
               {(lang === 'ru'
-                ? ['✓ Официальный перевод', '✓ Проверка документов', '✓ Поддержка 24/7', '✓ Без скрытых комиссий']
+                ? ['✓ Профессиональный перевод', '✓ Проверка документов', '✓ Поддержка 24/7', '✓ Без скрытых комиссий']
                 : lang === 'uz'
                 ? ["✓ Rasmiy tarjima", "✓ Hujjatlarni tekshirish", "✓ 24/7 yordam", "✓ Yashirin to'lovlarsiz"]
                 : ['✓ Official translation', '✓ Document review', '✓ 24/7 support', '✓ No hidden fees']
@@ -430,7 +430,7 @@ export default function HomePage() {
               className="w-full max-w-lg grid grid-cols-3 gap-px bg-white/10 rounded-2xl overflow-hidden backdrop-blur-md border border-white/15"
             >
               {[
-                { val: '120+', label: lang === 'ru' ? 'Заявок' : lang === 'uz' ? 'Ariza' : 'Applications' },
+                { val: '43', label: lang === 'ru' ? 'Подали заявку' : lang === 'uz' ? 'Ariza' : 'Applied' },
                 { val: '6 ч',  label: lang === 'ru' ? 'Мин. срок подачи' : lang === 'uz' ? 'Min. muddat' : 'Min. turnaround' },
                 { val: '12+',  label: lang === 'ru' ? 'Университетов-партнёров' : lang === 'uz' ? 'Hamkor universitetlar' : 'Partner universities' },
               ].map((s, i) => (
