@@ -68,8 +68,119 @@ const FAQ_RU: FAQCategory[] = [
   },
 ]
 
-const FAQ_EN: FAQCategory[] = FAQ_RU.map(cat => ({ ...cat, items: cat.items })) // English version uses same structure, simplified
-const FAQ_UZ: FAQCategory[] = FAQ_RU.map(cat => ({ ...cat, items: cat.items }))
+const FAQ_EN: FAQCategory[] = [
+  {
+    id: 'general', icon: BookOpen, title: 'General',
+    items: [
+      { q: 'What is Tarjuman Edu and how do you help?', a: 'Tarjuman Edu is a professional service helping students apply to universities in Saudi Arabia, UAE, Qatar, Kuwait and Turkey. We handle the full cycle: document translation, package review, application submission and support until you receive your enrollment offer.' },
+      { q: 'Which countries do you accept applications from?', a: 'We work with students from around the world — Uzbekistan, Kazakhstan, Kyrgyzstan, Tajikistan, Turkmenistan, Azerbaijan, Russia and others. Citizenship is not a restriction.' },
+      { q: 'Which countries and universities do you help with?', a: 'We specialize in Saudi Arabia (Islamic University of Madinah, King Saud University, KFUPM, KAU) and UAE (UAE University, University of Sharjah, American University of Sharjah). We also work with universities in Qatar, Kuwait and Turkey.' },
+      { q: 'Can I apply to several universities at once?', a: 'Yes, we recommend applying to 3–5 universities in parallel — this significantly increases your chances. With Standard and VIP packages we submit to all eligible universities at no extra charge.' },
+    ],
+  },
+  {
+    id: 'documents', icon: FileText, title: 'Documents',
+    items: [
+      { q: 'What documents are needed for admission?', a: 'Required: valid passport, 3×4 photo on white background, school certificate or diploma with transcript, criminal record clearance, medical certificate (HIV/hepatitis). Optional (improve chances): IELTS/TOEFL, Arabic language certificates, recommendation letters.' },
+      { q: 'Do documents need to be translated into Arabic?', a: 'Yes, most Saudi universities require a professional Arabic translation. Documents for UAE may be in English. All translations in Standard and VIP packages are included in the price and done by our translators.' },
+      { q: 'How does the document translation process work?', a: 'You upload document scans to your dashboard. Our Arabic translator completes the translation within 1–3 business days (priority in VIP). We then verify the translation against the specific university requirements before including it in the package.' },
+      { q: 'Do translations need to be notarized?', a: 'It depends on the university. The Islamic University of Madinah, for example, requires an apostille and notarization. We clarify your university\'s requirements in advance and inform you of any steps needed on your end.' },
+      { q: 'What if my documents are in Russian or Uzbek?', a: 'This is the standard situation — we work with documents in any language. We translate into Arabic or English depending on the university requirements. There is no extra charge for the source document language.' },
+    ],
+  },
+  {
+    id: 'process', icon: Clock, title: 'Process & Timeline',
+    items: [
+      { q: 'How long does the admission process take?', a: 'Our submission takes 6–48 hours depending on the package. The university review process takes 2 weeks to 4 months. After a positive decision, visa processing takes another 2–6 weeks. Total: expect 2–6 months from first application to entry.' },
+      { q: 'When does the application period open?', a: 'Deadlines depend on the university and change each year. Typically: Saudi Arabia — January–March for the fall semester; UAE — March–June. We track current deadlines and notify clients via the Telegram channel @tarjumanedu.' },
+      { q: 'Can I track the status of my application?', a: 'Yes! In your dashboard you can see your real-time status, all uploaded documents, change history and manager comments. With each status update you automatically receive a Telegram notification.' },
+      { q: 'What happens after the application is submitted?', a: 'After submission the university reviews the documents and makes a decision: accepted (we send the enrollment letter), pending (additional documents or interview) or rejected (we help identify the reason and resubmit). Your manager is available at every stage.' },
+    ],
+  },
+  {
+    id: 'requirements', icon: GraduationCap, title: 'Requirements',
+    items: [
+      { q: 'Do I need to know Arabic?', a: 'Not necessarily at the time of application. Many Saudi universities include a one-year preparatory language course. UAE programs are often taught in English. We will find an option that matches your language level.' },
+      { q: 'What GPA is required?', a: 'Most universities accept from 60–65% (3.0/5.0). Top universities — KFUPM, King Abdulaziz University — require 75–80%. We will honestly tell you which universities are realistic for your grade.' },
+      { q: 'Are there scholarships for international students?', a: 'Yes, and very generous ones. The Islamic University of Madinah offers a full scholarship: free tuition, monthly allowance of $300–500, dormitory and meals. Many Saudi state universities charge no tuition for international students. We help you apply for grant programs.' },
+      { q: 'Are students without work experience accepted?', a: 'Yes, most bachelor\'s and master\'s programs are available without work experience. Some master\'s and doctoral programs require 2–3 years of experience — we clarify requirements for your program in advance.' },
+    ],
+  },
+  {
+    id: 'payment', icon: CreditCard, title: 'Pricing & Payment',
+    items: [
+      { q: 'How much do your services cost?', a: 'Three plans: Submission ($49) — submission of your ready document package; Standard ($99) — translation + review + submission within 1–3 days + post-enrollment support; VIP ($199) — translation + priority submission in 12–24 hours + personal manager + unlimited chat. University tuition is paid separately.' },
+      { q: 'What payment methods are accepted?', a: 'We accept bank cards (Visa, Mastercard), cryptocurrency (USDT, BTC) and other methods. After payment you immediately receive confirmation by email and access to your dashboard where work begins.' },
+      { q: 'Are there hidden fees or extra charges?', a: 'No. The package price is fixed and includes all services listed in the description. If something extra is needed for your situation (e.g. apostille), we will inform you in advance before payment.' },
+    ],
+  },
+  {
+    id: 'refunds', icon: ShieldCheck, title: 'Refunds & Guarantees',
+    items: [
+      { q: 'Can I get a refund?', a: 'Yes. If we have not yet started work — 100% refund. If documents have been translated but the application has not been submitted — 50% refund. After the application is submitted to the university no refund is available as the work has been fully completed. See the Refund Policy for details.' },
+      { q: 'Do you guarantee admission?', a: 'No. Tarjuman Edu provides consulting, translation and organizational services. The admission decision is made by the university. We do everything possible to prepare a quality document package, but the final decision rests with the university admissions office.' },
+      { q: 'What if the university rejects my application?', a: 'Rejection is not the end. We analyze the reason for rejection, help strengthen the document package if needed (additional certificates, improved motivation letter) and resubmit or apply to an alternative university. The first resubmission is free.' },
+      { q: 'What if I change my mind about applying?', a: 'Contact our manager as soon as possible. If work has not yet started — full refund. We understand that circumstances change and approach each case individually.' },
+    ],
+  },
+]
+
+const FAQ_UZ: FAQCategory[] = [
+  {
+    id: 'general', icon: BookOpen, title: 'Umumiy savollar',
+    items: [
+      { q: 'Tarjuman Edu nima va qanday yordam berasiz?', a: "Tarjuman Edu — talabalarni Saudiya Arabistoni, BAA, Qatar, Quvayt va Turkiya universitetlariga qabul qilishda yordam beruvchi professional xizmat. Biz to'liq jarayonni o'z zimmamizga olamiz: hujjatlar tarjimasi, paketni tekshirish, ariza topshirish va qabul taklifini olguncha hamrohlik." },
+      { q: "Qaysi mamlakatlardan arizalar qabul qilasiz?", a: "Biz butun dunyo talabalari bilan ishlaymiz — O'zbekiston, Qozog'iston, Qirg'iziston, Tojikiston, Turkmaniston, Ozarbayjon, Rossiya va boshqalar. Fuqarolik cheklov emas." },
+      { q: "Qaysi mamlakatlarga va universitetlarga qabul qilishda yordam berasiz?", a: "Biz Saudiya Arabistoni (Madina Islom universiteti, Qirol Saud universiteti, KFUPM, KAU) va BAA (BAA universiteti, Sharjah universiteti, Sharjah Amerika universiteti) ga ixtisoslashganmiz. Shuningdek, Qatar, Quvayt va Turkiya universitetlari bilan ham ishlaymiz." },
+      { q: "Bir vaqtning o'zida bir necha universitetga ariza topshirish mumkinmi?", a: "Ha, biz 3–5 universitetga parallel ravishda ariza topshirishni tavsiya qilamiz — bu qabul bo'lish imkoniyatini sezilarli darajada oshiradi. Standard va VIP paketlarda biz qo'shimcha to'lovsiz barcha mos universitetlarga topshiramiz." },
+    ],
+  },
+  {
+    id: 'documents', icon: FileText, title: 'Hujjatlar',
+    items: [
+      { q: "Qabul uchun qanday hujjatlar kerak?", a: "Majburiy: amal qiluvchi xalqaro pasport, oq fonda 3×4 rasm, attestat yoki diplom (transkript bilan), jinoiy javobgarlikka tortilmaganlik ma'lumotnomasi, tibbiy ma'lumotnoma (OIV/gepatit). Qo'shimcha (imkoniyatni oshiradi): IELTS/TOEFL, arab tili sertifikatlari, o'qituvchilardan tavsiya xatlari." },
+      { q: "Hujjatlarni arabchaga tarjima qilish kerakmi?", a: "Ha, ko'pchilik Saudiya Arabistoni universitetlari professional arab tili tarjimasini talab qiladi. BAA uchun hujjatlar ingliz tilida bo'lishi mumkin. Standard va VIP paketlaridagi barcha tarjimalar narxga kiritilgan va bizning tarjimonlarimiz tomonidan bajariladi." },
+      { q: "Hujjatlarni tarjima qilish qanday amalga oshiriladi?", a: "Siz hujjatlar skanlarini shaxsiy kabinetga yuklaysiz. Bizning arabshunos tarjimonimiz 1–3 ish kuni ichida tarjimani bajaradi (VIP da ustuvor). Keyin biz tarjimani muayyan universitetning talablariga muvofiqligini tekshiramiz va shundan keyingina hujjatlar paketiga kiritamiz." },
+      { q: "Tarjimalarni notarial tasdiqlash kerakmi?", a: "Universitetga bog'liq. Masalan, Madina Islom universiteti apostil va notarial tasdiqlashni talab qiladi. Biz universitetingizning talablarini oldindan aniqlaymiz va sizdan qanday qadamlar qo'yish kerakligini xabardor qilamiz." },
+      { q: "Hujjatlarim rus yoki o'zbek tilida bo'lsa nima qilaman?", a: "Bu standart holat — biz istalgan tildagi hujjatlar bilan ishlaymiz. Universitetning talablariga qarab arabcha yoki inglizchaga tarjima qilamiz. Manba hujjat tili uchun qo'shimcha to'lov yo'q." },
+    ],
+  },
+  {
+    id: 'process', icon: Clock, title: 'Jarayon va muddatlar',
+    items: [
+      { q: "Qabul jarayoni qancha davom etadi?", a: "Bizning tomonimizdan topshirish paketga qarab 6–48 soat oladi. Universitetning ko'rib chiqish jarayoni 2 haftadan 4 oygacha. Ijobiy qarordan keyin viza rasmiylashtirilishi yana 2–6 hafta oladi. Jami: birinchi arizadan mamlakatga kirishgacha 2–6 oyga hisoblang." },
+      { q: "Arizalar qabuli qachon boshlanadi?", a: "Qabul muddatlari universitetga bog'liq va har yili o'zgaradi. Odatda: Saudiya Arabistoni — kuzgi semestr uchun yanvar–mart; BAA — mart–iyun. Biz joriy muddatlarni kuzatib boramiz va mijozlarni @tarjumanedu Telegram kanalida xabardor qilamiz." },
+      { q: "Arizamning holatini kuzatib bora olamanmi?", a: "Ha! Shaxsiy kabinetda siz real vaqt rejimida joriy holat, yuklangan barcha hujjatlar, o'zgarishlar tarixi va menejer izohlarini ko'rasiz. Har bir holat yangilanishida siz avtomatik ravishda Telegram orqali xabardor qilinasiz." },
+      { q: "Ariza topshirilgandan keyin nima bo'ladi?", a: "Topshirishdan so'ng universitet hujjatlarni ko'rib chiqadi va qaror chiqaradi: qabul qilindi (biz qabul xatini yuboramiz), kutilmoqda (qo'shimcha hujjatlar yoki suhbat) yoki rad etildi (sababini tushunishga va qayta topshirishga yordam beramiz). Har bir bosqichda menejeringiz aloqada." },
+    ],
+  },
+  {
+    id: 'requirements', icon: GraduationCap, title: 'Talabalar uchun talablar',
+    items: [
+      { q: "Arab tilini bilish shartmi?", a: "Ariza topshirish vaqtida shart emas. Ko'pchilik Saudiya Arabistoni universitetlari bir yillik tayyorlov til kursini o'z ichiga oladi. BAA dasturlari ko'pincha ingliz tilida olib boriladi. Biz sizning til darajangizga mos variant topamiz." },
+      { q: "Diplom yoki attestatning o'rtacha bali qancha bo'lishi kerak?", a: "Ko'pchilik universitetlar 60–65% (3.0/5.0) dan qabul qiladi. KFUPM, Qirol Abdulaziz universiteti kabi eng yaxshi universitetlar uchun 75–80% talab qilinadi. Biz sizga balingiz bilan qaysi universitetlarga haqiqiy imkoniyat borligini halol aytamiz." },
+      { q: "Xorijiy talabalar uchun stipendiyalar bormi?", a: "Ha, va juda saxiy. Madina Islom universiteti to'liq stipendiya taqdim etadi: bepul ta'lim, oylik nafaqa $300–500, yotoqxona va ovqatlanish. Ko'pchilik Saudiya Arabistoni davlat universitetlari xorijiy talabalardan ta'lim to'lovini olmaydi. Biz grant dasturlariga ariza berishingizda yordam beramiz." },
+      { q: "Ish tajribasiz talabalar qabul qilinadimi?", a: "Ha, ko'pchilik bakalavr va magistratura dasturlari ish tajribasisiz mavjud. Ba'zi magistratura va doktorantura dasturlari 2–3 yillik tajriba talab qiladi — biz yo'nalishingiz talablarini oldindan aniqlaymiz." },
+    ],
+  },
+  {
+    id: 'payment', icon: CreditCard, title: "Narx va to'lov",
+    items: [
+      { q: "Xizmatlaringiz qancha turadi?", a: "Uch tarif: Submission ($49) — tayyor hujjatlar paketingizni topshirish; Standard ($99) — tarjima + tekshirish + 1–3 kun ichida topshirish + qabul keyin qo'llab-quvvatlash; VIP ($199) — tarjima + 12–24 soat ichida ustuvor topshirish + shaxsiy menejer + cheksiz chat. Universitetdagi o'qish to'lovi alohida to'lanadi." },
+      { q: "Qanday to'lov usullari qabul qilinadi?", a: "Bank kartalar (Visa, Mastercard), kriptovalyuta (USDT, BTC) va boshqa usullarni qabul qilamiz. To'lovdan so'ng siz darhol email orqali tasdiqlash va ish boshlanadigan shaxsiy kabinetga kirish huquqini olasiz." },
+      { q: "Yashirin to'lovlar yoki qo'shimcha to'lovlar bormi?", a: "Yo'q. Paket narxi belgilangan va tavsifda ko'rsatilgan barcha xizmatlarni o'z ichiga oladi. Agar sizning holatingiz uchun qo'shimcha narsa kerak bo'lsa (masalan, apostil), biz to'lovdan oldin oldindan xabardor qilamiz." },
+    ],
+  },
+  {
+    id: 'refunds', icon: ShieldCheck, title: "Qaytarish va kafolatlar",
+    items: [
+      { q: "Pulni qaytarib olish mumkinmi?", a: "Ha. Agar biz hali ishni boshlamagan bo'lsak — 100% qaytarish. Agar hujjatlar tarjima qilingan, lekin ariza hali topshirilmagan bo'lsa — 50% qaytarish. Ariza universitetga topshirilgandan so'ng ish to'liq bajarilganligi sababli qaytarish ko'zda tutilmagan. Batafsil — Qaytarish siyosatida." },
+      { q: "Qabul bo'lishini kafolatlaysizmi?", a: "Yo'q. Tarjuman Edu konsultatsiya, tarjima va tashkiliy xizmatlar ko'rsatadi. Qabul qarori universitet tomonidan qabul qilinadi. Biz hujjatlar paketini sifatli tayyorlash uchun hamma narsani qilamiz, biroq yakuniy qaror universitetning qabul komissiyasida qoladi." },
+      { q: "Universitet rad etsa nima bo'ladi?", a: "Rad etish — bu oxiri emas. Biz rad etish sababini tahlil qilamiz, kerak bo'lsa hujjatlar paketini kuchaytirashga yordam beramiz (qo'shimcha ma'lumotnomalar, motivatsiya xatini yaxshilash) va qayta topshiramiz yoki muqobil universitetga murojaat qilamiz. Birinchi qayta topshirish — bepul." },
+      { q: "O'qishdan voz kechsam nima bo'ladi?", a: "Menejerimiz bilan imkon qadar tezroq bog'laning. Agar ish hali boshlanmagan bo'lsa — to'liq summani qaytarish. Biz sharoitlar o'zgarishini tushunamiz va har bir holga individual yondashamiz." },
+    ],
+  },
+]
 
 const CATEGORY_LABELS: Record<string, Record<string, string>> = {
   general:      { ru: 'Общие',    uz: 'Umumiy',   en: 'General' },
@@ -142,7 +253,7 @@ export default function FAQPage() {
   const [openItem, setOpenItem] = useState<string | null>(null)
   const [search, setSearch] = useState('')
 
-  const categories = FAQ_RU
+  const categories = lang === 'uz' ? FAQ_UZ : lang === 'en' ? FAQ_EN : FAQ_RU
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim()
