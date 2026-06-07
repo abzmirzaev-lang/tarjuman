@@ -328,7 +328,7 @@ export default function HomePage() {
                   <ArrowRight className="w-5 h-5" />
                 </motion.button>
               </Link>
-              <Link href="/contact">
+              <a href="https://t.me/TARJUMAN_EDU" target="_blank" rel="noopener noreferrer">
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
@@ -336,7 +336,7 @@ export default function HomePage() {
                 >
                   {lang === 'ru' ? 'Бесплатная консультация' : lang === 'uz' ? "Bepul maslahat" : 'Free consultation'}
                 </motion.button>
-              </Link>
+              </a>
             </motion.div>
 
             {/* Feature pills */}
