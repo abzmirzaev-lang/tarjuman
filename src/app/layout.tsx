@@ -38,6 +38,16 @@ export const metadata: Metadata = {
     'stipendiya saudiya arabistoni',
     'arab universitetlari qabul',
     'hujjat topshirish saudiya arabistoni',
+    'saudiya arabistoni universiteti',
+    'BAA universiteti qabul',
+    'arab universiteti stipendiya',
+    'study in saudi arabia from uzbekistan',
+    'study in uae from cis',
+    'apply saudi arabia university',
+    'saudi arabia university admission',
+    'document translation arabic',
+    'islamic university madinah apply',
+    'al qasimia university admission',
   ],
   authors: [{ name: 'Tarjuman Edu', url: APP_URL }],
   creator: 'Tarjuman Edu',
@@ -78,6 +88,11 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: APP_URL,
+    languages: {
+      'ru': APP_URL,
+      'uz': APP_URL,
+      'en': APP_URL,
+    },
   },
   verification: {
     google: 'CdcVagxqE94kWR5GCDlQqmsGIZQTf4YubNWu21y4TzE',
@@ -86,6 +101,37 @@ export const metadata: Metadata = {
 }
 
 const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'Как поступить в университет Саудовской Аравии?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Tarjuman Edu помогает с переводом документов, подачей заявки и сопровождением до зачисления в университеты Саудовской Аравии и ОАЭ. Процесс занимает от 2 до 6 месяцев.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'Сколько стоит помощь при поступлении в университет Саудовской Аравии?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Стоимость услуг Tarjuman Edu начинается от $49 за подачу документов. Тариф Стандарт — $99, VIP с полным сопровождением — $199.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'Какие документы нужны для поступления в Саудовскую Аравию?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Для поступления нужны: диплом или аттестат, перевод на арабский язык, паспорт, фото, медицинская справка. Мы помогаем с переводом и нотариальным заверением всех документов.' },
+      },
+      {
+        '@type': 'Question',
+        name: "Saudiya Arabistonidagi universitetlarga qanday hujjat topshirish mumkin?",
+        acceptedAnswer: { '@type': 'Answer', text: "Tarjuman Edu Saudiya Arabistoni va BAA universitetlariga hujjat topshirishda yordam beradi: tarjima, ariza, kuzatib borish. Xizmat narxi $49 dan boshlanadi." },
+      },
+      {
+        '@type': 'Question',
+        name: 'How to apply to a university in Saudi Arabia?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Tarjuman Edu helps CIS students apply to universities in Saudi Arabia and UAE: document translation, application submission, and guidance until enrollment. Starting from $49.' },
+      },
+    ],
+  },
   {
     '@context': 'https://schema.org',
     '@type': ['EducationalOrganization', 'ProfessionalService'],
@@ -148,6 +194,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ru">
       <head>
         <meta name="cryptomus" content="801d9f3b" />
+        <link rel="alternate" hrefLang="ru" href="https://tarjumanedu.com" />
+        <link rel="alternate" hrefLang="uz" href="https://tarjumanedu.com" />
+        <link rel="alternate" hrefLang="en" href="https://tarjumanedu.com" />
+        <link rel="alternate" hrefLang="x-default" href="https://tarjumanedu.com" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link rel="preconnect" href="https://images.unsplash.com" />

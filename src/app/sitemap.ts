@@ -14,6 +14,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${APP_URL}/faq`,                            lastModified: now, changeFrequency: 'monthly', priority: 0.75 },
     { url: `${APP_URL}/contact`,                        lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${APP_URL}/review`,                         lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
+    // SEO landing pages
+    { url: `${APP_URL}/postupit-v-saudovskuyu-araviyu`, lastModified: now, changeFrequency: 'monthly', priority: 0.85 },
+    { url: `${APP_URL}/study-in-saudi-arabia`,          lastModified: now, changeFrequency: 'monthly', priority: 0.85 },
+    { url: `${APP_URL}/saudiya-arabistoniga-kirish`,    lastModified: now, changeFrequency: 'monthly', priority: 0.85 },
+    { url: `${APP_URL}/stipendiya-saudovskaya-araviya`, lastModified: now, changeFrequency: 'monthly', priority: 0.85 },
+    { url: `${APP_URL}/al-qasimia-university-postuplenie`, lastModified: now, changeFrequency: 'monthly', priority: 0.85 },
+    { url: `${APP_URL}/islamskiy-universitet-mediny`,   lastModified: now, changeFrequency: 'monthly', priority: 0.85 },
     { url: `${APP_URL}/terms`,                          lastModified: now, changeFrequency: 'yearly',  priority: 0.2 },
     { url: `${APP_URL}/privacy`,                        lastModified: now, changeFrequency: 'yearly',  priority: 0.2 },
     { url: `${APP_URL}/refund`,                         lastModified: now, changeFrequency: 'yearly',  priority: 0.2 },
