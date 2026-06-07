@@ -117,7 +117,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="https://t.me/TARJUMAN_KSA"
+                  href="https://t.me/tarjumanedu"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2.5 text-sm text-white/60 hover:text-white transition-colors duration-150 group"

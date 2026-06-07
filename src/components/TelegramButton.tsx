@@ -59,7 +59,7 @@ export default function TelegramButton() {
         }
       `}</style>
       <a
-        href="https://t.me/tarjuman_help_bot"
+        href="https://t.me/tarjumanedu"
         target="_blank"
         rel="noopener noreferrer"
         className="tg-float-btn"

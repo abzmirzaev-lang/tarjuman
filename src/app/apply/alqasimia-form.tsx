@@ -1383,7 +1383,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               )}
             </p>
             <a
-              href={`https://t.me/tarjuman_help_bot?start=${appId}`}
+              href="https://t.me/tarjumanedu"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#229ED9] text-white font-semibold hover:bg-[#1a8fc4] transition-colors mb-3"

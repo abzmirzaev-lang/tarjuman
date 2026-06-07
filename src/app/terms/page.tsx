@@ -19,7 +19,7 @@ const CONTENT: Record<Lang, { hero: { badge: string; title: string; updated: str
       { title: '7. Конфиденциальность', content: `Обработка персональных данных осуществляется в соответствии с Политикой конфиденциальности (/privacy).` },
       { title: '8. Изменение условий', content: `Мы вправе изменять Условия в любое время. Актуальная версия — на странице /terms.` },
       { title: '9. Споры и применимое право', content: `9.1. Стороны стремятся урегулировать разногласия путём переговоров.\n\n9.2. При невозможности урегулирования — претензия на support@tarjumanedu.com; срок ответа 10 рабочих дней.\n\n9.3. Настоящие Условия регулируются законодательством Королевства Саудовская Аравия.\n\n9.4. Если вы инициируете чарджбэк (возврат платежа через банк) без предварительного обращения к нам, мы вправе предоставить платёжной системе доказательства оказанной услуги.` },
-      { title: '10. Контакты', content: `bughyat alqasid Establishment\nCR 7051611031 · Riyadh, Kingdom of Saudi Arabia\nEmail: support@tarjumanedu.com\nTelegram: @TARJUMAN_KSA\nСайт: tarjumanedu.com` },
+      { title: '10. Контакты', content: `bughyat alqasid Establishment\nCR 7051611031 · Riyadh, Kingdom of Saudi Arabia\nEmail: support@tarjumanedu.com\nTelegram: @tarjumanedu\nСайт: tarjumanedu.com` },
     ],
   },
   uz: {
@@ -34,7 +34,7 @@ const CONTENT: Record<Lang, { hero: { badge: string; title: string; updated: str
       { title: '6. Javobgarlikni cheklash', content: "6.1. Biz universitetlar va viza xizmatlarining qarorlari uchun javobgar emasmiz.\n\n6.2. Umumiy javobgarlik to'langan paket qiymatidan oshmaydi." },
       { title: '7. Maxfiylik', content: "Shaxsiy ma'lumotlarni qayta ishlash Maxfiylik siyosatiga (/privacy) muvofiq amalga oshiriladi." },
       { title: "8. Shartlarni o'zgartirish", content: "Biz istalgan vaqtda Shartlarni o'zgartirish huquqiga egamiz. Joriy versiya /terms sahifasida mavjud." },
-      { title: '9. Aloqa', content: "Barcha savollar uchun: support@tarjumanedu.com\nTelegram: @TARJUMAN_KSA" },
+      { title: '9. Aloqa', content: "Barcha savollar uchun: support@tarjumanedu.com\nTelegram: @tarjumanedu" },
     ],
   },
   en: {
@@ -49,7 +49,7 @@ const CONTENT: Record<Lang, { hero: { badge: string; title: string; updated: str
       { title: '6. Limitation of Liability', content: `6.1. We are not responsible for decisions made by universities or visa services.\n\n6.2. We are not responsible for delays caused by incomplete documents.\n\n6.3. Total liability shall not exceed the cost of the paid package.` },
       { title: '7. Privacy', content: `Personal data processing is carried out in accordance with our Privacy Policy (/privacy).` },
       { title: '8. Changes to Terms', content: `We reserve the right to modify these Terms at any time. The current version is always available at /terms.` },
-      { title: '9. Contact', content: `For all inquiries: support@tarjumanedu.com\nTelegram: @TARJUMAN_KSA` },
+      { title: '9. Contact', content: `For all inquiries: support@tarjumanedu.com\nTelegram: @tarjumanedu` },
     ],
   },
 }

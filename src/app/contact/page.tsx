@@ -19,10 +19,10 @@ const CHANNELS = [
   {
     icon: MessageSquare,
     label: 'Telegram',
-    value: '@TARJUMAN_KSA',
+    value: '@tarjumanedu',
     desc_ru: 'Отвечаем в течение нескольких часов',
     desc_en: 'We reply within a few hours',
-    href: 'https://t.me/TARJUMAN_KSA',
+    href: 'https://t.me/tarjumanedu',
   },
   {
     icon: Mail,

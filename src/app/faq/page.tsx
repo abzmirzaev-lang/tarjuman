@@ -394,7 +394,7 @@ export default function FAQPage() {
               <p className="text-white/60 mb-7 text-sm max-w-sm mx-auto">{ui.cta_sub}</p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <a
-                  href="https://t.me/tarjuman_help_bot"
+                  href="https://t.me/tarjumanedu"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-brand-400 text-ink font-bold rounded-2xl text-sm hover:bg-brand-300 transition-colors"

@@ -164,8 +164,8 @@ export default function LegalPage() {
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <Send className="w-4 h-4 text-[#1B4332]" />
-                <a href="https://t.me/TARJUMAN_KSA" target="_blank" rel="noopener noreferrer" className="text-[#1B4332] hover:underline font-medium">
-                  @TARJUMAN_KSA
+                <a href="https://t.me/tarjumanedu" target="_blank" rel="noopener noreferrer" className="text-[#1B4332] hover:underline font-medium">
+                  @tarjumanedu
                 </a>
               </div>
               <div className="flex items-center gap-3 text-sm">

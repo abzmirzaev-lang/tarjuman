@@ -19,7 +19,7 @@ const CONTENT: Record<Lang, {
       { val: '5–10 дней', label: 'Зачисление средств' },
     ],
     sections: [
-      { title: '1. Общие положения', content: `Настоящая Политика возврата описывает условия, при которых TARJUMAN осуществляет возврат денежных средств.\n\nОформляя заказ, вы подтверждаете, что ознакомились с настоящей Политикой и принимаете её условия.\n\nКонтакт: support@tarjumanedu.com | @TARJUMAN_KSA` },
+      { title: '1. Общие положения', content: `Настоящая Политика возврата описывает условия, при которых TARJUMAN осуществляет возврат денежных средств.\n\nОформляя заказ, вы подтверждаете, что ознакомились с настоящей Политикой и принимаете её условия.\n\nКонтакт: support@tarjumanedu.com | @tarjumanedu` },
       { title: '2. Право на возврат', content: `Возврат возможен, если:\n— Вы отменили заказ в течение 14 дней с момента оплаты, и мы ещё не приступили к работе;\n— Мы по собственной инициативе не смогли оказать оплаченную услугу;\n— Услуга была оказана с существенными отступлениями, и мы не устранили недостатки.\n\nВозврат НЕ осуществляется, если:\n— Университет отказал в зачислении (решение принимает университет, не мы);\n— Пользователь предоставил неполные или недостоверные документы;\n— Работа по заявке уже завершена;\n— Прошло более 14 дней без обращения с претензией.` },
       { title: '3. Частичный возврат', content: `Если часть услуг уже выполнена (например, перевод документов готов, но заявка не подана), возможен частичный возврат за невыполненную часть работ.\n\nРазмер частичного возврата определяется по согласованию сторон.` },
       { title: '4. Порядок обращения', content: `Шаг 1. Напишите на support@tarjumanedu.com с темой «Возврат — [номер заказа]».\n\nШаг 2. Укажите:\n— Имя и email при регистрации;\n— Номер заказа или дату платежа;\n— Причину запроса на возврат.\n\nШаг 3. Мы рассмотрим обращение и ответим в течение 3 рабочих дней.` },
@@ -27,7 +27,7 @@ const CONTENT: Record<Lang, {
       { title: '6. Чарджбэки (Chargeback)', content: `Мы призываем решать все вопросы напрямую через support@tarjumanedu.com до обращения в банк.\n\nЕсли чарджбэк инициирован без предварительного обращения к нам, мы вправе предоставить платёжной системе всю документацию об оказанной услуге (переписку, выполненные переводы, подтверждения подачи).\n\nНеобоснованные чарджбэки могут привести к ограничению возможности оплаты банковской картой в будущем.` },
       { title: '7. Изменение политики', content: `Актуальная версия — на странице /refund. Изменения не применяются к заказам, оформленным до их вступления в силу.` },
     ],
-    cta: { title: 'Нужен возврат?', sub: 'Напишите нам — разберёмся быстро и честно', email: 'support@tarjumanedu.com', tg: 'Telegram @TARJUMAN_KSA' },
+    cta: { title: 'Нужен возврат?', sub: 'Напишите нам — разберёмся быстро и честно', email: 'support@tarjumanedu.com', tg: 'Telegram @tarjumanedu' },
   },
   uz: {
     hero: { badge: 'Huquqiy hujjatlar', title: 'Qaytarish siyosati', updated: 'Oxirgi yangilanish: 1 may 2025 y.' },
@@ -37,14 +37,14 @@ const CONTENT: Record<Lang, {
       { val: '5–10 kun', label: "Mablag' o'tkazish muddati" },
     ],
     sections: [
-      { title: '1. Umumiy qoidalar', content: `Ushbu Qaytarish siyosati TARJUMAN tomonidan mablag' qaytarish shartlarini tavsiflaydi.\n\nBuyurtma rasmiylashtirish orqali siz ushbu Siyosat bilan tanishganligingizni va uning shartlarini qabul qilganligingizni tasdiqlaysiz.\n\nAloqa: support@tarjumanedu.com | @TARJUMAN_KSA` },
+      { title: '1. Umumiy qoidalar', content: `Ushbu Qaytarish siyosati TARJUMAN tomonidan mablag' qaytarish shartlarini tavsiflaydi.\n\nBuyurtma rasmiylashtirish orqali siz ushbu Siyosat bilan tanishganligingizni va uning shartlarini qabul qilganligingizni tasdiqlaysiz.\n\nAloqa: support@tarjumanedu.com | @tarjumanedu` },
       { title: '2. Qaytarish huquqi', content: `Qaytarish mumkin, agar:\n— To'lovdan 14 kun ichida buyurtmani bekor qilsangiz va biz hali ishni boshlamagan bo'lsak;\n— Biz o'z tashabbusimiz bilan to'langan xizmatni ko'rsata olmagan bo'lsak;\n— Xizmat muhim kamchiliklar bilan ko'rsatilgan bo'lsa va biz ularni bartaraf etmagan bo'lsak.\n\nQaytarish AMALGA OSHIRILMAYDI, agar:\n— Universitet qabul qilishdan bosh tortgan bo'lsa (qarorni universitet qabul qiladi, biz emas);\n— Foydalanuvchi to'liq bo'lmagan yoki noto'g'ri hujjatlar taqdim etgan bo'lsa;\n— Ariza bo'yicha ish allaqachon tugallangan bo'lsa;\n— 14 kundan ortiq vaqt o'tgan bo'lsa.` },
       { title: '3. Qisman qaytarish', content: `Agar xizmatning bir qismi bajarilgan bo'lsa (masalan, hujjatlar tarjima qilingan, lekin ariza topshirilmagan), bajarilmagan qism uchun qisman qaytarish mumkin.\n\nQisman qaytarish miqdori tomonlar o'rtasida kelishiladi.` },
       { title: '4. Murojaat tartibi', content: `1-qadam. support@tarjumanedu.com manziliga «Qaytarish — [buyurtma raqami]» mavzusi bilan yozing.\n\n2-qadam. Quyidagilarni ko'rsating:\n— Ro'yxatdan o'tishda ko'rsatilgan ism va email;\n— Buyurtma raqami yoki to'lov sanasi;\n— Qaytarish so'rovining sababi.\n\n3-qadam. Biz murojaatni ko'rib chiqib, 3 ish kuni ichida javob beramiz.` },
       { title: '5. Muddatlar va qaytarish usuli', content: `5.1. Ariza tasdiqlangandan so'ng 5–10 ish kuni ichida qaytariladi.\n\n5.2. Mablag' to'lov bilan bir xil usulda qaytariladi.\n\n5.3. To'lov tizimlari komissiyalari va kriptovalyuta qaytarishda konvertatsiya yo'qotishlari summadan ayiriladi.` },
       { title: "6. Siyosatga o'zgartirishlar", content: `Joriy versiya /refund sahifasida mavjud. O'zgartirishlar kuchga kirgunga qadar rasmiylashtirilgan buyurtmalarga tatbiq etilmaydi.` },
     ],
-    cta: { title: 'Qaytarish kerakmi?', sub: 'Bizga yozing — tez va halol hal qilamiz', email: 'support@tarjumanedu.com', tg: 'Telegram @TARJUMAN_KSA' },
+    cta: { title: 'Qaytarish kerakmi?', sub: 'Bizga yozing — tez va halol hal qilamiz', email: 'support@tarjumanedu.com', tg: 'Telegram @tarjumanedu' },
   },
   en: {
     hero: { badge: 'Legal Documents', title: 'Refund Policy', updated: 'Last updated: May 1, 2025' },
@@ -54,14 +54,14 @@ const CONTENT: Record<Lang, {
       { val: '5–10 days', label: 'Funds transfer' },
     ],
     sections: [
-      { title: '1. General Provisions', content: `This Refund Policy describes the conditions under which TARJUMAN issues refunds to users.\n\nBy placing an order, you confirm that you have read this Policy and accept its terms.\n\nContact: support@tarjumanedu.com | @TARJUMAN_KSA` },
+      { title: '1. General Provisions', content: `This Refund Policy describes the conditions under which TARJUMAN issues refunds to users.\n\nBy placing an order, you confirm that you have read this Policy and accept its terms.\n\nContact: support@tarjumanedu.com | @tarjumanedu` },
       { title: '2. Right to Refund', content: `A refund is available if:\n— You cancel the order within 14 days of payment and we have not yet started work;\n— We were unable to provide the paid service due to reasons on our side;\n— The service was rendered with significant deviations and we did not correct them.\n\nRefunds are NOT issued if:\n— The university denied admission (admission decisions are made by the university, not us);\n— The user provided incomplete or inaccurate documents;\n— Work on the application has already been completed;\n— More than 14 days have passed without a complaint.` },
       { title: '3. Partial Refund', content: `If part of the service has already been performed (e.g., documents translated but application not yet submitted), a partial refund for the unperformed portion is possible.\n\nThe amount of the partial refund is determined by mutual agreement.` },
       { title: '4. How to Request a Refund', content: `Step 1. Write to support@tarjumanedu.com with subject "Refund — [order number]".\n\nStep 2. Include:\n— Name and email used at registration;\n— Order number or payment date;\n— Reason for the refund request.\n\nStep 3. We will review your request and respond within 3 business days.` },
       { title: '5. Timeline and Method', content: `5.1. Once approved, the refund is processed within 5–10 business days.\n\n5.2. Funds are returned via the same payment method used.\n\n5.3. Payment system fees and crypto conversion losses are deducted from the refund amount.` },
       { title: '6. Policy Changes', content: `The current version is available at /refund. Changes do not apply to orders placed before they take effect.` },
     ],
-    cta: { title: 'Need a refund?', sub: "Contact us — we'll resolve it quickly and fairly", email: 'support@tarjumanedu.com', tg: 'Telegram @TARJUMAN_KSA' },
+    cta: { title: 'Need a refund?', sub: "Contact us — we'll resolve it quickly and fairly", email: 'support@tarjumanedu.com', tg: 'Telegram @tarjumanedu' },
   },
 }
 
@@ -105,7 +105,7 @@ export default function RefundPage() {
               <a href={`mailto:${c.cta.email}`} className="inline-flex items-center justify-center px-6 py-3 bg-brand-400 text-ink font-semibold rounded-xl text-sm hover:bg-brand-300 transition-colors">
                 {c.cta.email}
               </a>
-              <a href="https://t.me/TARJUMAN_KSA" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center px-6 py-3 bg-white/10 text-white font-semibold rounded-xl text-sm hover:bg-white/20 transition-colors">
+              <a href="https://t.me/tarjumanedu" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center px-6 py-3 bg-white/10 text-white font-semibold rounded-xl text-sm hover:bg-white/20 transition-colors">
                 {c.cta.tg}
               </a>
             </div>

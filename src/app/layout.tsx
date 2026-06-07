@@ -143,7 +143,7 @@ const jsonLd = [
     image: `${APP_URL}/og-image.png`,
     foundingDate: '2025',
     contactPoint: [
-      { '@type': 'ContactPoint', contactType: 'customer support', url: 'https://t.me/TARJUMAN_KSA', availableLanguage: ['Russian', 'Uzbek', 'English'] },
+      { '@type': 'ContactPoint', contactType: 'customer support', url: 'https://t.me/tarjumanedu', availableLanguage: ['Russian', 'Uzbek', 'English'] },
       { '@type': 'ContactPoint', contactType: 'customer support', email: 'support@tarjumanedu.com' },
     ],
     areaServed: [
@@ -154,7 +154,7 @@ const jsonLd = [
       { '@type': 'Country', name: 'Russia' },
       { '@type': 'Country', name: 'Azerbaijan' },
     ],
-    sameAs: ['https://t.me/TARJUMAN_KSA'],
+    sameAs: ['https://t.me/tarjumanedu'],
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
       name: 'Services',
