@@ -125,7 +125,22 @@ export default function Footer() {
                   <span className="w-7 h-7 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-brand-400/50 transition-colors">
                     <Send size={13} />
                   </span>
-                  @TARJUMAN_KSA
+                  @tarjumanedu
+                  <span className="text-[10px] text-white/30">канал</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://t.me/TARJUMAN_EDU"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2.5 text-sm text-white/60 hover:text-white transition-colors duration-150 group"
+                >
+                  <span className="w-7 h-7 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-brand-400/50 transition-colors">
+                    <MessageCircle size={13} />
+                  </span>
+                  @TARJUMAN_EDU
+                  <span className="text-[10px] text-white/30">{lang === 'uz' ? 'menejer' : lang === 'en' ? 'manager' : 'менеджер'}</span>
                 </a>
               </li>
               <li>

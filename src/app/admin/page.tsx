@@ -8,7 +8,7 @@ import {
   Bell, ChevronRight, LayoutDashboard, Settings, Filter,
   RefreshCw, GraduationCap, Clock, CircleDollarSign, Eye,
   MessageCircle, Phone, Mail, MapPin, Calendar, Globe,
-  CheckCheck, AlertCircle, Inbox
+  CheckCheck, AlertCircle, Inbox, Megaphone
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase/client'
 import { PACKAGES } from '@/types'
@@ -100,6 +100,12 @@ export default function AdminPage() {
 
   const [notifOpen, setNotifOpen] = useState(false)
   const chatEndRef = useRef<HTMLDivElement>(null)
+
+  const [broadcastOpen, setBroadcastOpen] = useState(false)
+  const [broadcastSubject, setBroadcastSubject] = useState('')
+  const [broadcastText, setBroadcastText] = useState('')
+  const [broadcastSending, setBroadcastSending] = useState(false)
+  const [broadcastResult, setBroadcastResult] = useState<{ sent: number; failed: number; total: number } | null>(null)
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -262,6 +268,64 @@ export default function AdminPage() {
     try { return JSON.parse((selected as any).notes ?? '{}') } catch { return {} }
   })() : {}
 
+  async function sendBroadcast() {
+    if (!broadcastSubject.trim() || !broadcastText.trim()) {
+      toast.error('Заполните тему и текст письма')
+      return
+    }
+    setBroadcastSending(true)
+    setBroadcastResult(null)
+    try {
+      const html = broadcastText
+        .split('\n')
+        .map(line => `<p style="margin:0 0 12px">${line || '&nbsp;'}</p>`)
+        .join('')
+      const fullHtml = `
+        <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
+          <div style="background:#1B4332;padding:20px 24px;border-radius:12px 12px 0 0">
+            <h1 style="color:white;margin:0;font-size:22px">TARJUMAN</h1>
+            <p style="color:rgba(255,255,255,0.7);margin:4px 0 0;font-size:13px">tarjumanedu.com</p>
+          </div>
+          <div style="background:white;padding:28px 24px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 12px 12px">
+            <p style="color:#374151;font-size:15px;margin:0 0 16px">Привет, {{name}}!</p>
+            ${html}
+            <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0">
+            <div style="display:flex;gap:12px;margin-bottom:16px">
+              <a href="https://t.me/tarjumanedu" style="display:inline-flex;align-items:center;gap:6px;background:#f0f9f4;color:#1B4332;text-decoration:none;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:500;border:1px solid #d1fae5">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="#1B4332"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.37l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.978.189z"/></svg>
+                Канал @tarjumanedu
+              </a>
+              <a href="https://t.me/TARJUMAN_EDU" style="display:inline-flex;align-items:center;gap:6px;background:#eff6ff;color:#1d4ed8;text-decoration:none;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:500;border:1px solid #bfdbfe">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="#1d4ed8"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.37l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.978.189z"/></svg>
+                Менеджер @TARJUMAN_EDU
+              </a>
+            </div>
+            <p style="color:#9ca3af;font-size:12px;margin:0">
+              Вы получили это письмо как зарегистрированный пользователь TARJUMAN.<br>
+              <a href="https://tarjumanedu.com" style="color:#1B4332">tarjumanedu.com</a>
+            </p>
+          </div>
+        </div>
+      `
+      const { data: sessData } = await supabase.auth.getSession()
+      const res = await fetch('/api/admin/broadcast', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-key': process.env.NEXT_PUBLIC_ADMIN_KEY ?? '',
+        },
+        body: JSON.stringify({ subject: broadcastSubject, html: fullHtml }),
+      })
+      const result = await res.json()
+      if (!res.ok) throw new Error(result.error)
+      setBroadcastResult(result)
+      toast.success(`Отправлено ${result.sent} из ${result.total} писем`)
+    } catch (e: any) {
+      toast.error(e.message || 'Ошибка отправки')
+    }
+    setBroadcastSending(false)
+  }
+
   // ── SIDEBAR NAV ───────────────────────────────────────────────────────────────
   const NAV = [
     { key: 'dashboard',    icon: LayoutDashboard, label: 'Дашборд' },
@@ -311,6 +375,10 @@ export default function AdminPage() {
 
         {/* Bottom */}
         <div className="px-3 py-4 border-t border-gray-100 space-y-0.5">
+          <button onClick={() => setBroadcastOpen(true)}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:text-[#1B4332] hover:bg-[#1B4332]/5 transition-all">
+            <Megaphone className="w-4 h-4" /> Рассылка
+          </button>
           <button onClick={() => supabase.auth.signOut().then(() => router.push('/'))}
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-gray-700 hover:bg-gray-50 transition-all">
             <LogOut className="w-4 h-4" /> Выйти
@@ -1029,6 +1097,94 @@ export default function AdminPage() {
                     {completing ? <><Loader2 className="w-4 h-4 animate-spin" />Завершаю…</> : <><Flag className="w-4 h-4" />Завершить</>}
                   </button>
                 </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* ── BROADCAST MODAL ── */}
+      <AnimatePresence>
+        {broadcastOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 bg-[#1B4332] rounded-xl flex items-center justify-center">
+                    <Megaphone className="w-4 h-4 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-gray-900">Рассылка</p>
+                    <p className="text-xs text-gray-400">{users.length} получателей</p>
+                  </div>
+                </div>
+                <button onClick={() => { setBroadcastOpen(false); setBroadcastResult(null) }}
+                  className="p-2 rounded-xl hover:bg-gray-100 transition-colors">
+                  <X className="w-4 h-4 text-gray-400" />
+                </button>
+              </div>
+
+              <div className="p-6 space-y-4">
+                {broadcastResult ? (
+                  <div className="text-center py-6">
+                    <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                      <CheckCircle2 className="w-8 h-8 text-emerald-500" />
+                    </div>
+                    <p className="text-xl font-bold text-gray-900 mb-1">Рассылка завершена</p>
+                    <p className="text-sm text-gray-500">
+                      Отправлено: <span className="font-semibold text-emerald-600">{broadcastResult.sent}</span> из {broadcastResult.total}
+                      {broadcastResult.failed > 0 && <span className="text-red-500"> · Ошибок: {broadcastResult.failed}</span>}
+                    </p>
+                    <button onClick={() => { setBroadcastResult(null); setBroadcastSubject(''); setBroadcastText('') }}
+                      className="mt-6 px-5 py-2.5 bg-[#1B4332] text-white rounded-xl text-sm font-semibold hover:bg-[#1B4332]/90 transition-colors">
+                      Новая рассылка
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1.5">Тема письма</label>
+                      <input
+                        value={broadcastSubject}
+                        onChange={e => setBroadcastSubject(e.target.value)}
+                        placeholder="Например: Открыт приём в Al Qasimia University 2025"
+                        className="w-full h-11 px-4 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 transition-all"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                        Текст письма
+                        <span className="ml-2 text-xs text-gray-400 font-normal">{'{{name}}'} — имя пользователя</span>
+                      </label>
+                      <textarea
+                        value={broadcastText}
+                        onChange={e => setBroadcastText(e.target.value)}
+                        rows={8}
+                        placeholder={"Рады сообщить вам, что открыт приём заявок...\n\nПодайте заявку на нашем сайте tarjumanedu.com"}
+                        className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 transition-all resize-none"
+                      />
+                    </div>
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-xs text-amber-700">
+                      ⚠️ Письма будут отправлены всем {users.length} зарегистрированным пользователям. Убедитесь что текст корректный.
+                    </div>
+                    <button
+                      onClick={sendBroadcast}
+                      disabled={broadcastSending || !broadcastSubject.trim() || !broadcastText.trim()}
+                      className="w-full flex items-center justify-center gap-2 py-3 bg-[#1B4332] text-white rounded-xl text-sm font-bold hover:bg-[#1B4332]/90 transition-colors disabled:opacity-40"
+                    >
+                      {broadcastSending
+                        ? <><Loader2 className="w-4 h-4 animate-spin" /> Отправляю...</>
+                        : <><Send className="w-4 h-4" /> Отправить {users.length} письма</>
+                      }
+                    </button>
+                  </>
+                )}
               </div>
             </motion.div>
           </div>

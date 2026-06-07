@@ -431,7 +431,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
 
   // ── Submit ──────────────────────────────────────────────────────────────────
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (paymentMethod: 'stripe' | 'transfer' = 'transfer') => {
     if (!user) return
     setLoading(true)
     try {
@@ -539,16 +539,20 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
         })
       await Promise.allSettled(uploads)
 
-      // Payment redirect
-      const { data: { session: sess } } = await supabase.auth.getSession()
-      const res = await fetch('/api/payments/create-checkout', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sess?.access_token ?? ''}` },
-        body:    JSON.stringify({ applicationId: app.id, package: pkg }),
-      })
-      const { url } = await res.json()
-      if (url) window.location.href = url
-      else setSuccessModal(true)
+      if (paymentMethod === 'stripe') {
+        // Redirect to Stripe checkout
+        const { data: { session: sess } } = await supabase.auth.getSession()
+        const res = await fetch('/api/payments/create-checkout', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sess?.access_token ?? ''}` },
+          body:    JSON.stringify({ applicationId: app.id, package: pkg }),
+        })
+        const { url, error } = await res.json()
+        if (url) { window.location.href = url; return }
+        if (error) throw new Error(error)
+      }
+      // Manual transfer — show success modal
+      setSuccessModal(true)
     } catch (err: any) {
       toast.error(err.message || 'Error')
       setLoading(false)
@@ -1339,8 +1343,8 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                     <Zap className="w-6 h-6 text-gray-400" />
                   </div>
                   <div className="text-center">
-                    <p className="font-semibold text-ink text-sm">{t('Оплатить сейчас', 'Hozir to\'lash', 'Pay Now')}</p>
-                    <p className="text-xs text-muted mt-0.5">{t('Карта / USDT', 'Karta / USDT', 'Card / USDT')}</p>
+                    <p className="font-semibold text-ink text-sm">{t('Оплатить картой', 'Karta bilan to\'lash', 'Pay by Card')}</p>
+                    <p className="text-xs text-muted mt-0.5">Visa / Mastercard</p>
                   </div>
                   <span className="absolute top-3 right-3 text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold">{t('Скоро', 'Tez kunda', 'Soon')}</span>
                 </button>
@@ -1383,7 +1387,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               )}
             </p>
             <a
-              href="https://t.me/tarjumanedu"
+              href="https://t.me/TARJUMAN_EDU"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#229ED9] text-white font-semibold hover:bg-[#1a8fc4] transition-colors mb-3"
@@ -1391,7 +1395,18 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
                 <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.37l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.978.189z"/>
               </svg>
-              {t('Получить уведомление в Telegram', 'Telegram bildirishnomasi olish', 'Get Telegram notification')}
+              {t('Написать менеджеру в Telegram', 'Menejerga Telegram\'da yozish', 'Message manager on Telegram')}
+            </a>
+            <a
+              href="https://t.me/tarjumanedu"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-gray-200 text-ink text-sm font-medium hover:bg-gray-50 transition-colors mb-3"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.37l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.978.189z"/>
+              </svg>
+              {t('Подписаться на канал @tarjumanedu', '@tarjumanedu kanaliga obuna bo\'lish', 'Subscribe to @tarjumanedu')}
             </a>
             <button
               onClick={() => router.push(`/dashboard?app=${appId}`)}
