@@ -4,7 +4,6 @@ import { mainMenu, backMenu, contactMenu, langSelectMenu } from '../keyboards'
 import {
   upsertUser, upsertLead, getUserLang, setUserLang, logMessage
 } from '../database'
-import { notifyAdmin } from './admin'
 import type { Lang } from '../config'
 import { SITE_URL } from '../config'
 
