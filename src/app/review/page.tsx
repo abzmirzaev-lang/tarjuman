@@ -5,15 +5,27 @@ import { Star, Send, CheckCircle2 } from 'lucide-react'
 import { Navbar } from '@/components/layout/Navbar'
 import { useLanguage } from '@/hooks/useLanguage'
 
-const COUNTRIES = [
-  '🇺🇿 Узбекистан', '🇰🇿 Казахстан', '🇹🇯 Таджикистан',
-  '🇰🇬 Кыргызстан', '🇹🇲 Туркменистан', '🇦🇿 Азербайджан',
-  '🇷🇺 Россия', '🇺🇦 Украина', '🇧🇾 Беларусь', 'Другое',
+const SERVICES = [
+  {
+    value: 'Перевод документов и подача в университет',
+    uz: 'Hujjatlarni tarjima qilish va universitetga topshirish',
+    en: 'Document translation and university application',
+  },
+  {
+    value: 'Перевод документов',
+    uz: 'Hujjatlarni tarjima qilish',
+    en: 'Document translation',
+  },
+  {
+    value: 'Консультация',
+    uz: 'Konsultatsiya',
+    en: 'Consultation',
+  },
 ]
 
 export default function ReviewPage() {
   const [lang, setLang] = useLanguage()
-  const [form, setForm] = useState({ name: '', country: '', university: '', text: '', stars: 5 })
+  const [form, setForm] = useState({ name: '', service: '', text: '', stars: 5 })
   const [sending, setSending] = useState(false)
   const [submitted, setSubmitted] = useState(false)
 
@@ -27,7 +39,7 @@ export default function ReviewPage() {
       const res = await fetch('/api/reviews', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ name: form.name, university: form.service, text: form.text, stars: form.stars }),
       })
       if (res.ok) setSubmitted(true)
     } finally {
@@ -123,32 +135,27 @@ export default function ReviewPage() {
                     />
                   </div>
 
-                  {/* Country */}
+                  {/* Service */}
                   <div>
                     <label className="block text-xs font-semibold text-muted mb-1.5">
-                      {t('Страна', 'Mamlakat', 'Country')}
+                      {t('Какой услугой воспользовались?', 'Qaysi xizmatdan foydalandingiz?', 'Which service did you use?')}
                     </label>
-                    <select
-                      className="w-full px-4 py-3 text-sm border border-border rounded-xl focus:outline-none focus:border-brand-400 bg-white text-ink"
-                      value={form.country}
-                      onChange={e => setForm(f => ({ ...f, country: e.target.value }))}
-                    >
-                      <option value="">{t('Выберите страну', 'Mamlakatni tanlang', 'Select country')}</option>
-                      {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
-                    </select>
-                  </div>
-
-                  {/* University */}
-                  <div>
-                    <label className="block text-xs font-semibold text-muted mb-1.5">
-                      {t('Университет', 'Universitet', 'University')}
-                    </label>
-                    <input
-                      className="w-full px-4 py-3 text-sm border border-border rounded-xl focus:outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100 transition"
-                      placeholder={t('Куда поступили?', 'Qayerga qabul bo\'ldingiz?', 'Where did you enroll?')}
-                      value={form.university}
-                      onChange={e => setForm(f => ({ ...f, university: e.target.value }))}
-                    />
+                    <div className="flex flex-col gap-2">
+                      {SERVICES.map(s => (
+                        <button
+                          key={s.value}
+                          type="button"
+                          onClick={() => setForm(f => ({ ...f, service: s.value }))}
+                          className={`w-full px-4 py-3 text-sm rounded-xl border text-left transition-all duration-150 ${
+                            form.service === s.value
+                              ? 'border-brand-400 bg-brand-50 text-ink font-semibold'
+                              : 'border-border bg-white text-muted hover:border-brand-300'
+                          }`}
+                        >
+                          {lang === 'uz' ? s.uz : lang === 'en' ? s.en : s.value}
+                        </button>
+                      ))}
+                    </div>
                   </div>
 
                   {/* Text */}
