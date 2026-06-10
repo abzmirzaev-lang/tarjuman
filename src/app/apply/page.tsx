@@ -1434,15 +1434,15 @@ function ApplyContent() {
             </h3>
             <p className="text-muted text-sm leading-relaxed mb-4">
               {lang === 'ru'
-                ? 'Заявка принята! Подключите Telegram-уведомления — бот сразу напишет вам и будет держать в курсе.'
+                ? 'Заявка принята! Нажмите кнопку ниже и запустите бота — он будет присылать вам обновления по статусу.'
                 : lang === 'uz'
-                ? 'Ariza qabul qilindi! Telegram bildirishnomalarini ulang — bot darhol yozadi.'
-                : 'Application accepted! Connect Telegram notifications — the bot will write to you right away.'}
+                ? 'Ariza qabul qilindi! Quyidagi tugmani bosing va botni ishga tushiring — u sizga status yangilanishlarini yuboradi.'
+                : 'Application accepted! Click below and start the bot — it will send you status updates.'}
             </p>
 
             {/* Кнопка Telegram */}
             <a
-              href="https://t.me/tarjumanedu"
+              href={`https://t.me/${process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME?.replace('@', '') || 'tarjuman_help_bot'}?start=notify`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#229ED9] text-white font-semibold hover:bg-[#1a8fc4] transition-colors mb-3"
@@ -1450,7 +1450,7 @@ function ApplyContent() {
               <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
                 <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.37l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.978.189z"/>
               </svg>
-              {lang === 'ru' ? 'Получить уведомление в Telegram' : 'Get Telegram notification'}
+              {lang === 'ru' ? '📲 Запустить бота для уведомлений' : lang === 'uz' ? '📲 Bildirishnomalar uchun botni ishga tushirish' : '📲 Start bot for notifications'}
             </a>
 
             {user ? (
