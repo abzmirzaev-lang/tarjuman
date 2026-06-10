@@ -7,12 +7,12 @@ const supabase = createClient(
 )
 
 async function sendBotMessage(chatId: number, text: string) {
-  const token = process.env.TELEGRAM_SUPPORT_BOT_TOKEN
+  const token = process.env.TELEGRAM_BOT_TOKEN
   if (!token) return
   await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'HTML' }),
+    body: JSON.stringify({ chat_id: chatId, text }),
   })
 }
 
@@ -53,10 +53,10 @@ export async function POST(req: NextRequest) {
 
     await sendBotMessage(
       chatId,
-      `${msg.emoji} <b>Статус заявки обновлён</b>\n\n` +
-      `👤 ${app.full_name}\n\n` +
+      `${msg.emoji} Статус заявки обновлён\n\n` +
+      `${app.full_name}\n\n` +
       `${msg.ru}\n\n` +
-      `📊 <a href="https://tarjumanedu.com/dashboard">Открыть кабинет</a>`
+      `https://tarjumanedu.com/dashboard`
     )
 
     return NextResponse.json({ ok: true })

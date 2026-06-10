@@ -16,16 +16,16 @@ export async function POST(req: NextRequest) {
     const pkgLabel: Record<string, string> = { SUBMISSION: 'Базовый — $39', STANDARD: 'Стандарт — $79', VIP: 'VIP — $99' }
 
     const msg =
-      `🌐 *Новая заявка (гость)*\n\n` +
-      `👤 Имя: *${full_name}*\n` +
-      `📱 Телефон: ${phone}\n` +
-      `✈️ Telegram: ${telegram ? `@${telegram.replace('@', '')}` : '—'}\n` +
-      `🌍 Страна: ${countryLabel}\n` +
-      `🎓 Образование: ${education_level || '—'}\n` +
-      `🏛 Университет: ${university_name || '—'}\n` +
-      `📦 Тариф: ${pkgLabel[pkg] || pkg}\n` +
-      `📝 Заметки: ${notes || '—'}\n\n` +
-      `⚡️ Без аккаунта — свяжитесь вручную`
+      `🌐 Новая заявка (гость)\n\n` +
+      `Имя: ${full_name}\n` +
+      `Телефон: ${phone}\n` +
+      `Telegram: ${telegram ? `@${telegram.replace('@', '')}` : '—'}\n` +
+      `Страна: ${countryLabel}\n` +
+      `Образование: ${education_level || '—'}\n` +
+      `Университет: ${university_name || '—'}\n` +
+      `Тариф: ${pkgLabel[pkg] || pkg}\n` +
+      `Заметки: ${notes || '—'}\n\n` +
+      `Без аккаунта — свяжитесь вручную`
 
     await sendTelegram(msg, undefined, ADMIN_CHAT)
 

@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     // Telegram notification to client
     if (user?.telegram_chat_id) {
       const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL ?? 'https://tarjumanedu.com'}/dashboard`
-      await sendTelegram(`✅ *Ваши документы готовы!*\n\nЗдравствуйте, ${app.full_name}!\n\nМы завершили работу над вашими документами для поступления. Переведённые документы загружены в ваш личный кабинет.\n\n[Открыть личный кабинет](${dashboardUrl})`, undefined, String(user.telegram_chat_id)).catch(() => {})
+      await sendTelegram(`✅ Ваши документы готовы!\n\nЗдравствуйте, ${app.full_name}!\n\nМы завершили работу над вашими документами для поступления. Переведённые документы загружены в ваш личный кабинет.\n\n${dashboardUrl}`, undefined, String(user.telegram_chat_id)).catch(() => {})
     }
 
     if (user?.email) {

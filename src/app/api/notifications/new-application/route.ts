@@ -38,13 +38,13 @@ export async function POST(req: NextRequest) {
     // 1. Уведомить клиента
     if (user?.telegram_chat_id) {
       await sendTelegram(
-        `✅ *Заявка принята!*\n\n` +
-        `Здравствуйте, *${app.full_name}*!\n\n` +
+        `✅ Заявка принята!\n\n` +
+        `Здравствуйте, ${app.full_name}!\n\n` +
         `Ваша заявка на поступление успешно отправлена.\n\n` +
-        `📦 Тариф: ${PKG_LABEL[app.service_package] || app.service_package}\n` +
-        `🌍 Направление: ${countryLabel}\n\n` +
+        `Тариф: ${PKG_LABEL[app.service_package] || app.service_package}\n` +
+        `Направление: ${countryLabel}\n\n` +
         `Наш менеджер свяжется с вами в течение 24 часов.\n\n` +
-        `[📊 Отслеживать статус](https://tarjumanedu.com/dashboard)`,
+        `Отслеживать статус: https://tarjumanedu.com/dashboard`,
         undefined,
         String(user.telegram_chat_id)
       ).catch(console.error)
@@ -52,14 +52,14 @@ export async function POST(req: NextRequest) {
 
     // 2. Уведомить администратора
     await sendTelegram(
-      `📋 *Новая заявка!*\n\n` +
-      `👤 Имя: *${app.full_name}*\n` +
-      `📱 Телефон: ${app.phone || '—'}\n` +
-      `✈️ Telegram: ${app.telegram ? `@${app.telegram.replace('@', '')}` : '—'}\n` +
-      `🌍 Страна: ${countryLabel}\n` +
-      `📦 Тариф: ${PKG_LABEL[app.service_package] || app.service_package}\n` +
-      `🆔 ID: \`${app.id.slice(0, 8)}\`\n\n` +
-      `👉 [Открыть в админке](https://tarjumanedu.com/admin)`,
+      `📋 Новая заявка!\n\n` +
+      `Имя: ${app.full_name}\n` +
+      `Телефон: ${app.phone || '—'}\n` +
+      `Telegram: ${app.telegram ? `@${app.telegram.replace('@', '')}` : '—'}\n` +
+      `Страна: ${countryLabel}\n` +
+      `Тариф: ${PKG_LABEL[app.service_package] || app.service_package}\n` +
+      `ID: ${app.id.slice(0, 8)}\n\n` +
+      `https://tarjumanedu.com/admin`,
       undefined,
       process.env.TELEGRAM_ADMIN_CHAT_ID
     ).catch(console.error)

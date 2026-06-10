@@ -25,9 +25,8 @@ export async function sendTelegram(
   }
 
   const payload = {
-    chat_id:    target,
+    chat_id: target,
     text,
-    parse_mode: 'Markdown' as const,
     disable_web_page_preview: true,
   }
 
