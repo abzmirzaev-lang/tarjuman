@@ -23,12 +23,15 @@ const fadeUp = {
 }
 
 function useCounter(target: number, duration = 1800) {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(target) // SSR/no-JS: show real value immediately
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true })
+  const animated = useRef(false)
   useEffect(() => {
-    if (!inView) return
+    if (!inView || animated.current) return
+    animated.current = true
     let start = 0
+    setCount(0)
     const step = target / (duration / 16)
     const timer = setInterval(() => {
       start += step
@@ -78,7 +81,7 @@ function StatItem({ target, suffix, label }: { target: number; suffix: string; l
   const { count, ref } = useCounter(target)
   return (
     <div ref={ref} className="text-center">
-      <div className="text-4xl sm:text-5xl font-black text-ink mb-1 tabular-nums">
+      <div className="text-4xl sm:text-5xl font-black text-ink mb-1 tabular-nums" suppressHydrationWarning>
         {count}{suffix}
       </div>
       <div className="text-sm text-muted font-medium">{label}</div>
