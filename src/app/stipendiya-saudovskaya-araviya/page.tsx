@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Стипендия в Саудовской Аравии для студентов из СНГ — Tarjuman Edu',
-  description: 'Полные стипендии в университетах Саудовской Аравии: бесплатное обучение, $300–500 в месяц, жильё. Исламский университет Медины, KSU, KAU. Помощь с подачей от $49.',
+  description: 'Полные стипендии в университетах Саудовской Аравии: бесплатное обучение, $300–500 в месяц, жильё. Исламский университет Медины, KSU, KAU. Помощь с подачей от $39.',
   keywords: ['стипендия Саудовская Аравия', 'бесплатное образование Саудовская Аравия', 'грант Саудовская Аравия', 'стипендия для узбекистанцев', 'stipendiya saudiya arabistoni', 'saudi arabia scholarship uzbekistan'],
   alternates: { canonical: 'https://tarjumanedu.com/stipendiya-saudovskaya-araviya' },
   openGraph: {
@@ -93,9 +93,9 @@ export default function Page() {
             <p className="text-muted mb-4 text-sm">Tarjuman Edu подготовит все документы и подаст заявку в университет за вас.</p>
             <div className="grid grid-cols-3 gap-3 mb-4">
               {[
-                { name: 'Подача', price: '$49' },
-                { name: 'Стандарт', price: '$99' },
-                { name: 'VIP', price: '$199' },
+                { name: 'Подача', price: '$39' },
+                { name: 'Стандарт', price: '$79' },
+                { name: 'VIP', price: '$99' },
               ].map(t => (
                 <div key={t.name} className="text-center p-3 bg-[#F7F8FA] rounded-xl">
                   <p className="font-bold text-ink text-sm">{t.name}</p>

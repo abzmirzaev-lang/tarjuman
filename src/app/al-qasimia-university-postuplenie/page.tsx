@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://tarjumanedu.com/al-qasimia-university-postuplenie' },
   openGraph: {
     title: 'Al Qasimia University — Поступление | Tarjuman Edu',
-    description: 'Помощь с поступлением в Al Qasimia University, Шарджа, ОАЭ. Документы и подача от $49.',
+    description: 'Помощь с поступлением в Al Qasimia University, Шарджа, ОАЭ. Документы и подача от $39.',
     url: 'https://tarjumanedu.com/al-qasimia-university-postuplenie',
   },
 }
@@ -100,9 +100,9 @@ export default function Page() {
             <h2 className="text-xl font-bold text-ink mb-4">Стоимость помощи</h2>
             <div className="grid grid-cols-3 gap-3 mb-4">
               {[
-                { name: 'Подача', price: '$49', desc: 'Только документы' },
-                { name: 'Стандарт', price: '$99', desc: 'Перевод + подача' },
-                { name: 'VIP', price: '$199', desc: 'Полное сопровождение' },
+                { name: 'Подача', price: '$39', desc: 'Только документы' },
+                { name: 'Стандарт', price: '$79', desc: 'Перевод + подача' },
+                { name: 'VIP', price: '$99', desc: 'Полное сопровождение' },
               ].map(t => (
                 <div key={t.name} className="text-center p-3 bg-[#F7F8FA] rounded-xl">
                   <p className="font-bold text-ink text-sm">{t.name}</p>

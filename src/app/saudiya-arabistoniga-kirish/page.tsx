@@ -3,12 +3,12 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: "Saudiya Arabistoniga o'qishga kirish — Tarjuman Edu",
-  description: "Saudiya Arabistoni va BAA universitetlariga hujjat topshirishda yordam. Tarjima, ariza, kuzatib borish. Al Qasimia, IUM, KSU, KAU. Narx $49 dan.",
+  description: "Saudiya Arabistoni va BAA universitetlariga hujjat topshirishda yordam. Tarjima, ariza, kuzatib borish. Al Qasimia, IUM, KSU, KAU. Narx $39 dan.",
   keywords: ['saudiya arabistoniga kirish', 'saudiya arabistoni universiteti', 'BAA universiteti', 'arab universiteti qabul', 'hujjat topshirish saudiya', 'stipendiya saudiya arabistoni', 'al qasimia university'],
   alternates: { canonical: 'https://tarjumanedu.com/saudiya-arabistoniga-kirish' },
   openGraph: {
     title: "Saudiya Arabistoniga o'qishga kirish — Tarjuman Edu",
-    description: "Universitetlarga hujjat topshirishda yordam. $49 dan boshlanadi.",
+    description: "Universitetlarga hujjat topshirishda yordam. $39 dan boshlanadi.",
     url: 'https://tarjumanedu.com/saudiya-arabistoniga-kirish',
   },
 }
@@ -69,9 +69,9 @@ export default function Page() {
             <h2 className="text-xl font-bold text-ink mb-4">Narxlar</h2>
             <div className="grid grid-cols-3 gap-4 mb-5">
               {[
-                { name: 'Topshirish', price: '$49', desc: 'Faqat hujjatlar' },
-                { name: 'Standart', price: '$99', desc: 'Tarjima + topshirish' },
-                { name: 'VIP', price: '$199', desc: "To'liq yordam" },
+                { name: 'Topshirish', price: '$39', desc: 'Faqat hujjatlar' },
+                { name: 'Standart', price: '$79', desc: 'Tarjima + topshirish' },
+                { name: 'VIP', price: '$99', desc: "To'liq yordam" },
               ].map(t => (
                 <div key={t.name} className="text-center p-3 bg-[#F7F8FA] rounded-xl">
                   <p className="font-bold text-ink">{t.name}</p>

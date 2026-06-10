@@ -3,12 +3,12 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Study in Saudi Arabia — Tarjuman Edu | University Admission Help',
-  description: 'Apply to universities in Saudi Arabia and UAE from CIS countries. Document translation, application submission, full support. Al Qasimia, IUM, KSU, KAU. From $49.',
+  description: 'Apply to universities in Saudi Arabia and UAE from CIS countries. Document translation, application submission, full support. Al Qasimia, IUM, KSU, KAU. From $39.',
   keywords: ['study in saudi arabia', 'university admission saudi arabia', 'apply saudi arabia university', 'study in uae', 'saudi arabia scholarship', 'al qasimia university apply', 'islamic university madinah'],
   alternates: { canonical: 'https://tarjumanedu.com/study-in-saudi-arabia' },
   openGraph: {
     title: 'Study in Saudi Arabia — Tarjuman Edu',
-    description: 'University admission help for CIS students. Document translation, application, guidance. From $49.',
+    description: 'University admission help for CIS students. Document translation, application, guidance. From $39.',
     url: 'https://tarjumanedu.com/study-in-saudi-arabia',
   },
 }
@@ -88,9 +88,9 @@ export default function Page() {
             <h2 className="text-xl font-bold text-ink mb-4">Pricing</h2>
             <div className="grid grid-cols-3 gap-4 mb-5">
               {[
-                { name: 'Submission', price: '$49', desc: 'Documents only' },
-                { name: 'Standard', price: '$99', desc: 'Translation + submission' },
-                { name: 'VIP', price: '$199', desc: 'Full support' },
+                { name: 'Submission', price: '$39', desc: 'Documents only' },
+                { name: 'Standard', price: '$79', desc: 'Translation + submission' },
+                { name: 'VIP', price: '$99', desc: 'Full support' },
               ].map(t => (
                 <div key={t.name} className="text-center p-3 bg-[#F7F8FA] rounded-xl">
                   <p className="font-bold text-ink">{t.name}</p>

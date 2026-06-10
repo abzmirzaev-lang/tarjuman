@@ -4,6 +4,8 @@ import { Toaster } from 'sonner'
 import TelegramButton from '@/components/TelegramButton'
 import Footer from '@/components/Footer'
 
+import { PRICES } from '@/lib/pricing'
+
 const APP_URL = 'https://tarjumanedu.com'
 
 export const metadata: Metadata = {
@@ -113,7 +115,7 @@ const jsonLd = [
       {
         '@type': 'Question',
         name: 'Сколько стоит помощь при поступлении в университет Саудовской Аравии?',
-        acceptedAnswer: { '@type': 'Answer', text: 'Стоимость услуг Tarjuman Edu начинается от $49 за подачу документов. Тариф Стандарт — $99, VIP с полным сопровождением — $199.' },
+        acceptedAnswer: { '@type': 'Answer', text: `Стоимость услуг Tarjuman Edu начинается от $${PRICES.SUBMISSION} за подачу документов. Тариф Стандарт — $${PRICES.STANDARD}, VIP с полным сопровождением — $${PRICES.VIP}.` },
       },
       {
         '@type': 'Question',
@@ -123,12 +125,12 @@ const jsonLd = [
       {
         '@type': 'Question',
         name: "Saudiya Arabistonidagi universitetlarga qanday hujjat topshirish mumkin?",
-        acceptedAnswer: { '@type': 'Answer', text: "Tarjuman Edu Saudiya Arabistoni va BAA universitetlariga hujjat topshirishda yordam beradi: tarjima, ariza, kuzatib borish. Xizmat narxi $49 dan boshlanadi." },
+        acceptedAnswer: { '@type': 'Answer', text: `Tarjuman Edu Saudiya Arabistoni va BAA universitetlariga hujjat topshirishda yordam beradi: tarjima, ariza, kuzatib borish. Xizmat narxi $${PRICES.SUBMISSION} dan boshlanadi.` },
       },
       {
         '@type': 'Question',
         name: 'How to apply to a university in Saudi Arabia?',
-        acceptedAnswer: { '@type': 'Answer', text: 'Tarjuman Edu helps CIS students apply to universities in Saudi Arabia and UAE: document translation, application submission, and guidance until enrollment. Starting from $49.' },
+        acceptedAnswer: { '@type': 'Answer', text: `Tarjuman Edu helps CIS students apply to universities in Saudi Arabia and UAE: document translation, application submission, and guidance until enrollment. Starting from $${PRICES.SUBMISSION}.` },
       },
     ],
   },
@@ -159,9 +161,9 @@ const jsonLd = [
       '@type': 'OfferCatalog',
       name: 'Services',
       itemListElement: [
-        { '@type': 'Offer', name: 'Submission', price: '49', priceCurrency: 'USD', url: `${APP_URL}/pricing` },
-        { '@type': 'Offer', name: 'Standard',   price: '99', priceCurrency: 'USD', url: `${APP_URL}/pricing` },
-        { '@type': 'Offer', name: 'VIP',        price: '199', priceCurrency: 'USD', url: `${APP_URL}/pricing` },
+        { '@type': 'Offer', name: 'Submission', price: String(PRICES.SUBMISSION), priceCurrency: 'USD', url: `${APP_URL}/pricing` },
+        { '@type': 'Offer', name: 'Standard',   price: String(PRICES.STANDARD),   priceCurrency: 'USD', url: `${APP_URL}/pricing` },
+        { '@type': 'Offer', name: 'VIP',        price: String(PRICES.VIP),        priceCurrency: 'USD', url: `${APP_URL}/pricing` },
       ],
     },
   },

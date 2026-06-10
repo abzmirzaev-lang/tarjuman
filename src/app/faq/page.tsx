@@ -7,6 +7,8 @@ import { Navbar } from '@/components/layout/Navbar'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 
+import { PRICE_STR } from '@/lib/pricing'
+
 /* ─── DATA ──────────────────────────────────────────────────────────────── */
 interface FAQItem { q: string; a: string }
 interface FAQCategory { id: string; icon: React.ElementType; title: string; items: FAQItem[] }
@@ -52,7 +54,7 @@ const FAQ_RU: FAQCategory[] = [
   {
     id: 'payment', icon: CreditCard, title: 'Стоимость и оплата',
     items: [
-      { q: 'Сколько стоят ваши услуги?', a: 'Три тарифа: Submission ($49) — подача вашего готового пакета документов; Standard ($99) — перевод + проверка + подача в течение 1–3 дней + поддержка после зачисления; VIP ($199) — перевод + приоритетная подача за 12–24 часа + персональный менеджер + безлимитный чат. Обучение в университете оплачивается отдельно.' },
+      { q: 'Сколько стоят ваши услуги?', a: `Три тарифа: Submission (${PRICE_STR.SUBMISSION}) — подача вашего готового пакета документов; Standard (${PRICE_STR.STANDARD}) — перевод + проверка + подача в течение 1–3 дней + поддержка после зачисления; VIP (${PRICE_STR.VIP}) — перевод + приоритетная подача за 12–24 часа + персональный менеджер + безлимитный чат. Обучение в университете оплачивается отдельно.` },
       { q: 'Какие способы оплаты принимаются?', a: 'Принимаем банковские карты (Visa, Mastercard), криптовалюту (USDT, BTC) и другие методы. После оплаты вы сразу получаете подтверждение на email и доступ в личный кабинет, где начинается работа.' },
       { q: 'Есть ли скрытые платежи или доплаты?', a: 'Нет. Цена пакета — фиксированная и включает все услуги, перечисленные в описании. Если для вашей ситуации потребуется что-то дополнительное (например, апостиль), мы предупредим об этом заранее до оплаты.' },
     ],
@@ -109,7 +111,7 @@ const FAQ_EN: FAQCategory[] = [
   {
     id: 'payment', icon: CreditCard, title: 'Pricing & Payment',
     items: [
-      { q: 'How much do your services cost?', a: 'Three plans: Submission ($49) — submission of your ready document package; Standard ($99) — translation + review + submission within 1–3 days + post-enrollment support; VIP ($199) — translation + priority submission in 12–24 hours + personal manager + unlimited chat. University tuition is paid separately.' },
+      { q: 'How much do your services cost?', a: `Three plans: Submission (${PRICE_STR.SUBMISSION}) — submission of your ready document package; Standard (${PRICE_STR.STANDARD}) — translation + review + submission within 1–3 days + post-enrollment support; VIP (${PRICE_STR.VIP}) — translation + priority submission in 12–24 hours + personal manager + unlimited chat. University tuition is paid separately.` },
       { q: 'What payment methods are accepted?', a: 'We accept bank cards (Visa, Mastercard), cryptocurrency (USDT, BTC) and other methods. After payment you immediately receive confirmation by email and access to your dashboard where work begins.' },
       { q: 'Are there hidden fees or extra charges?', a: 'No. The package price is fixed and includes all services listed in the description. If something extra is needed for your situation (e.g. apostille), we will inform you in advance before payment.' },
     ],
@@ -166,7 +168,7 @@ const FAQ_UZ: FAQCategory[] = [
   {
     id: 'payment', icon: CreditCard, title: "Narx va to'lov",
     items: [
-      { q: "Xizmatlaringiz qancha turadi?", a: "Uch tarif: Submission ($49) — tayyor hujjatlar paketingizni topshirish; Standard ($99) — tarjima + tekshirish + 1–3 kun ichida topshirish + qabul keyin qo'llab-quvvatlash; VIP ($199) — tarjima + 12–24 soat ichida ustuvor topshirish + shaxsiy menejer + cheksiz chat. Universitetdagi o'qish to'lovi alohida to'lanadi." },
+      { q: "Xizmatlaringiz qancha turadi?", a: `Uch tarif: Submission (${PRICE_STR.SUBMISSION}) — tayyor hujjatlar paketingizni topshirish; Standard (${PRICE_STR.STANDARD}) — tarjima + tekshirish + 1–3 kun ichida topshirish + qabul keyin qo'llab-quvvatlash; VIP (${PRICE_STR.VIP}) — tarjima + 12–24 soat ichida ustuvor topshirish + shaxsiy menejer + cheksiz chat. Universitetdagi o'qish to'lovi alohida to'lanadi.` },
       { q: "Qanday to'lov usullari qabul qilinadi?", a: "Bank kartalar (Visa, Mastercard), kriptovalyuta (USDT, BTC) va boshqa usullarni qabul qilamiz. To'lovdan so'ng siz darhol email orqali tasdiqlash va ish boshlanadigan shaxsiy kabinetga kirish huquqini olasiz." },
       { q: "Yashirin to'lovlar yoki qo'shimcha to'lovlar bormi?", a: "Yo'q. Paket narxi belgilangan va tavsifda ko'rsatilgan barcha xizmatlarni o'z ichiga oladi. Agar sizning holatingiz uchun qo'shimcha narsa kerak bo'lsa (masalan, apostil), biz to'lovdan oldin oldindan xabardor qilamiz." },
     ],

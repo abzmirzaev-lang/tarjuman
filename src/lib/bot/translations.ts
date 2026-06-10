@@ -33,8 +33,8 @@ export const T = {
     },
     faq_price:
       `━━━━━━━━━━━━━━━━━━━\n        💎 ТАРИФЫ TARJUMAN\n━━━━━━━━━━━━━━━━━━━\n\n` +
-      `📦 <b>БАЗОВЫЙ — $29</b>\n├ Подача готовых переведённых документов\n└ Поддержка после принятия\n\n` +
-      `⭐ <b>СТАНДАРТ — $69</b>\n├ Перевод документов\n├ Подача в течение 24 часов\n└ Поддержка после принятия\n\n` +
+      `📦 <b>БАЗОВЫЙ — $39</b>\n├ Подача готовых переведённых документов\n└ Поддержка после принятия\n\n` +
+      `⭐ <b>СТАНДАРТ — $79</b>\n├ Перевод документов\n├ Подача в течение 24 часов\n└ Поддержка после принятия\n\n` +
       `👑 <b>VIP — $99</b>\n├ Перевод документов\n├ Подача в течение 6 часов\n├ Поддержка после принятия\n└ Безлимитный чат с менеджером\n\n` +
       `━━━━━━━━━━━━━━━━━━━\n✅ Оплата только после одобрения документов\n\n` +
       `📝 <a href="${SITE_URL}/apply">Подать заявку</a>  •  🌐 <a href="${SITE_URL}/#pricing">Подробнее</a>`,
@@ -91,8 +91,8 @@ export const T = {
     },
     faq_price:
       `━━━━━━━━━━━━━━━━━━━\n        💎 TARJUMAN TARIFLARI\n━━━━━━━━━━━━━━━━━━━\n\n` +
-      `📦 <b>ASOSIY — $29</b>\n├ Tayyor tarjima qilingan hujjatlarni topshirish\n└ Qabul keyin yordam\n\n` +
-      `⭐ <b>STANDART — $69</b>\n├ Hujjatlarni tarjima qilish\n├ 24 soat ichida topshirish\n└ Qabul keyin yordam\n\n` +
+      `📦 <b>ASOSIY — $39</b>\n├ Tayyor tarjima qilingan hujjatlarni topshirish\n└ Qabul keyin yordam\n\n` +
+      `⭐ <b>STANDART — $79</b>\n├ Hujjatlarni tarjima qilish\n├ 24 soat ichida topshirish\n└ Qabul keyin yordam\n\n` +
       `👑 <b>VIP — $99</b>\n├ Hujjatlarni tarjima qilish\n├ 6 soat ichida topshirish\n├ Qabul keyin yordam\n└ Menejer bilan cheksiz chat\n\n` +
       `━━━━━━━━━━━━━━━━━━━\n✅ To'lov faqat hujjatlar tasdiqlangandan keyin\n\n` +
       `📝 <a href="${SITE_URL}/apply">Ariza topshirish</a>  •  🌐 <a href="${SITE_URL}/#pricing">Batafsil</a>`,
@@ -149,8 +149,8 @@ export const T = {
     },
     faq_price:
       `━━━━━━━━━━━━━━━━━━━\n        💎 TARJUMAN PLANS\n━━━━━━━━━━━━━━━━━━━\n\n` +
-      `📦 <b>BASIC — $29</b>\n├ Submission of ready translated documents\n└ Support after acceptance\n\n` +
-      `⭐ <b>STANDARD — $69</b>\n├ Document translation\n├ Submission within 24 hours\n└ Support after acceptance\n\n` +
+      `📦 <b>BASIC — $39</b>\n├ Submission of ready translated documents\n└ Support after acceptance\n\n` +
+      `⭐ <b>STANDARD — $79</b>\n├ Document translation\n├ Submission within 24 hours\n└ Support after acceptance\n\n` +
       `👑 <b>VIP — $99</b>\n├ Document translation\n├ Submission within 6 hours\n├ Support after acceptance\n└ Unlimited chat with manager\n\n` +
       `━━━━━━━━━━━━━━━━━━━\n✅ Payment only after documents are approved\n\n` +
       `📝 <a href="${SITE_URL}/apply">Apply now</a>  •  🌐 <a href="${SITE_URL}/#pricing">Learn more</a>`,

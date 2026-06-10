@@ -3,12 +3,12 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Как поступить в университет Саудовской Аравии — Tarjuman Edu',
-  description: 'Пошаговая инструкция как поступить в университет Саудовской Аравии из СНГ. Документы, сроки, стоимость. Al Qasimia, IUM, KSU, KAU. Помощь Tarjuman Edu от $49.',
+  description: 'Пошаговая инструкция как поступить в университет Саудовской Аравии из СНГ. Документы, сроки, стоимость. Al Qasimia, IUM, KSU, KAU. Помощь Tarjuman Edu от $39.',
   keywords: ['поступить в Саудовскую Аравию', 'как поступить в университет Саудовской Аравии', 'поступление в Саудию', 'документы для поступления Саудовская Аравия', 'учёба в Саудовской Аравии'],
   alternates: { canonical: 'https://tarjumanedu.com/postupit-v-saudovskuyu-araviyu' },
   openGraph: {
     title: 'Как поступить в университет Саудовской Аравии',
-    description: 'Пошаговая инструкция. Документы, сроки, стоимость. Tarjuman Edu помогает с $49.',
+    description: 'Пошаговая инструкция. Документы, сроки, стоимость. Tarjuman Edu помогает с $39.',
     url: 'https://tarjumanedu.com/postupit-v-saudovskuyu-araviyu',
   },
 }
@@ -82,9 +82,9 @@ export default function Page() {
             <p className="text-muted mb-4">Тарифы Tarjuman Edu:</p>
             <div className="grid grid-cols-3 gap-4 mb-5">
               {[
-                { name: 'Подача', price: '$49', desc: 'Только документы' },
-                { name: 'Стандарт', price: '$99', desc: 'Перевод + подача' },
-                { name: 'VIP', price: '$199', desc: 'Полное сопровождение' },
+                { name: 'Подача', price: '$39', desc: 'Только документы' },
+                { name: 'Стандарт', price: '$79', desc: 'Перевод + подача' },
+                { name: 'VIP', price: '$99', desc: 'Полное сопровождение' },
               ].map(t => (
                 <div key={t.name} className="text-center p-3 bg-[#F7F8FA] rounded-xl">
                   <p className="font-bold text-ink">{t.name}</p>
