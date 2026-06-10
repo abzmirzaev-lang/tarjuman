@@ -2,33 +2,66 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
 export async function GET() {
-  const token = process.env.TELEGRAM_BOT_TOKEN
-  const adminChat = process.env.TELEGRAM_ADMIN_CHAT_ID
-
-  // Check telegram_chat_id column
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
-  const { data: colCheck, error: colErr } = await supabase
-    .from('users')
-    .select('telegram_chat_id')
+  const token = process.env.TELEGRAM_BOT_TOKEN
+  const adminChat = process.env.TELEGRAM_ADMIN_CHAT_ID
+
+  // Get the most recent application
+  const { data: app, error: appErr } = await supabase
+    .from('applications')
+    .select('id, full_name, phone, telegram, country, service_package, user_id')
+    .order('created_at', { ascending: false })
     .limit(1)
+    .single()
 
-  const columnExists = !colErr
-  const columnError = colErr?.message || null
+  if (!app) {
+    return NextResponse.json({ error: 'No applications found', appErr })
+  }
 
-  // Check how many users have telegram_chat_id set
-  const { count } = await supabase
+  // Get user's telegram_chat_id
+  const { data: user, error: userErr } = await supabase
     .from('users')
-    .select('*', { count: 'exact', head: true })
-    .not('telegram_chat_id', 'is', null)
+    .select('id, email, telegram_chat_id')
+    .eq('id', app.user_id)
+    .single()
+
+  // Try sending admin message directly
+  let adminResult = 'skipped'
+  if (token && adminChat) {
+    const r = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: adminChat,
+        text: `DEBUG TEST\nApp: ${app.id.slice(0, 8)}\nName: ${app.full_name}\nUser ID: ${app.user_id}\nUser chat_id: ${user?.telegram_chat_id ?? 'null'}`,
+      }),
+    })
+    const d = await r.json()
+    adminResult = d.ok ? 'sent' : `error: ${d.description}`
+  }
+
+  // Try sending client message if they have chat_id
+  let clientResult = 'no telegram_chat_id'
+  if (token && user?.telegram_chat_id) {
+    const r = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: user.telegram_chat_id,
+        text: `DEBUG TEST: ваша заявка ${app.id.slice(0, 8)} найдена`,
+      }),
+    })
+    const d = await r.json()
+    clientResult = d.ok ? 'sent' : `error: ${d.description}`
+  }
 
   return NextResponse.json({
-    TELEGRAM_BOT_TOKEN: token ? `set (ends ...${token.slice(-4)})` : 'NOT SET',
-    TELEGRAM_ADMIN_CHAT_ID: adminChat || 'NOT SET',
-    telegram_chat_id_column_exists: columnExists,
-    telegram_chat_id_column_error: columnError,
-    users_with_telegram_chat_id: count ?? 0,
+    app: { id: app.id.slice(0, 8), name: app.full_name, user_id: app.user_id },
+    user: user ? { id: user.id, email: user.email, telegram_chat_id: user.telegram_chat_id } : { error: userErr?.message },
+    adminMessageResult: adminResult,
+    clientMessageResult: clientResult,
   })
 }
