@@ -653,6 +653,143 @@ export default function HomePage() {
               {lang === 'ru' ? 'Смотреть тарифы' : lang === 'uz' ? 'Tariflarni ko\'rish' : 'View pricing'}
             </Button>
           </Link>
+          <p className="mt-4 text-sm text-muted">
+            <Link href="/refund" className="underline underline-offset-2 hover:text-ink transition-colors">
+              {lang === 'ru' ? '🛡 Гарантия возврата средств' : lang === 'uz' ? '🛡 Pul qaytarish kafolati' : '🛡 Money-back guarantee'}
+            </Link>
+          </p>
+        </div>
+      </section>
+
+      {/* TRUST: CASES */}
+      <section className="section bg-white">
+        <div className="container-narrow">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-10"
+          >
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full text-emerald-700 text-xs font-semibold uppercase tracking-widest mb-4">
+              {lang === 'ru' ? 'Реальные результаты' : lang === 'uz' ? 'Haqiqiy natijalar' : 'Real results'}
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold text-ink mb-3">
+              {lang === 'ru' ? 'Письма о зачислении наших студентов' : lang === 'uz' ? "Talabalarimizning qabul xatlari" : 'Admission letters from our students'}
+            </h2>
+            <p className="text-muted text-sm max-w-md mx-auto">
+              {lang === 'ru' ? 'Личные данные скрыты по просьбе студентов' : lang === 'uz' ? "Shaxsiy ma'lumotlar yashirilgan" : 'Personal data hidden at students' request'}
+            </p>
+          </motion.div>
+          <div className="grid sm:grid-cols-3 gap-6">
+            {[
+              { univ: 'Al Qasimia University', country: lang === 'ru' ? '🇦🇪 ОАЭ' : '🇦🇪 UAE', year: '2024' },
+              { univ: 'Islamic University of Madinah', country: lang === 'ru' ? '🇸🇦 Саудовская Аравия' : '🇸🇦 Saudi Arabia', year: '2024' },
+              { univ: 'King Saud University', country: lang === 'ru' ? '🇸🇦 Саудовская Аравия' : '🇸🇦 Saudi Arabia', year: '2025' },
+            ].map((c, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="relative rounded-2xl border border-border overflow-hidden bg-surface group"
+              >
+                {/* Placeholder for real screenshot */}
+                <div className="h-52 bg-gradient-to-br from-brand-50 to-emerald-50 flex items-center justify-center relative overflow-hidden">
+                  <div className="absolute inset-0 flex flex-col gap-2 p-4 opacity-30 select-none pointer-events-none">
+                    {Array.from({ length: 8 }).map((_, j) => (
+                      <div key={j} className="h-2.5 rounded-full bg-ink/40" style={{ width: `${60 + Math.sin(j * 1.7) * 30}%` }} />
+                    ))}
+                  </div>
+                  <div className="relative z-10 flex flex-col items-center gap-2">
+                    <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center">
+                      <CheckCircle2 className="w-6 h-6 text-emerald-600" />
+                    </div>
+                    <span className="text-xs font-semibold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full">
+                      {lang === 'ru' ? 'Зачислен' : lang === 'uz' ? 'Qabul qilindi' : 'Accepted'}
+                    </span>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <p className="font-semibold text-ink text-sm">{c.univ}</p>
+                  <p className="text-xs text-muted mt-0.5">{c.country} · {c.year}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* TRUST: ABOUT */}
+      <section className="section bg-[#F7F8FA]">
+        <div className="container-narrow">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-50 border border-brand-200 rounded-full text-brand-700 text-xs font-semibold uppercase tracking-widest mb-4">
+                {lang === 'ru' ? 'О нас' : lang === 'uz' ? 'Biz haqimizda' : 'About us'}
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-bold text-ink mb-4">
+                {lang === 'ru' ? 'Команда, которая прошла этот путь сама'
+                  : lang === 'uz' ? "Bu yo'lni o'zi bosib o'tgan jamoa"
+                  : 'A team that has walked this path themselves'}
+              </h2>
+              <p className="text-muted leading-relaxed mb-6">
+                {lang === 'ru'
+                  ? 'Tarjuman Edu основана выпускниками университетов Саудовской Аравии и ОАЭ. Мы сами проходили через бюрократию, переводы и подачу документов — и знаем, как сделать этот процесс простым для вас.'
+                  : lang === 'uz'
+                  ? "Tarjuman Edu Saudiya Arabistoni va BAA universitetlari bitiruvchilari tomonidan tashkil etilgan. Biz o'zimiz hujjat topshirish jarayonidan o'tganmiz va bu jarayonni siz uchun osonlashtirishni bilamiz."
+                  : 'Tarjuman Edu was founded by graduates of universities in Saudi Arabia and UAE. We went through the bureaucracy, translations and document submission ourselves — and know how to make this process easy for you.'}
+              </p>
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                {[
+                  { icon: GraduationCap, label: lang === 'ru' ? 'Выпускники арабских университетов' : 'Arab university graduates' },
+                  { icon: Languages,    label: lang === 'ru' ? 'Сертифицированные переводчики' : 'Certified translators' },
+                  { icon: Shield,       label: lang === 'ru' ? 'Гарантия возврата средств' : 'Money-back guarantee' },
+                  { icon: HeartHandshake, label: lang === 'ru' ? 'Поддержка 7 дней в неделю' : '7-day support' },
+                ].map(({ icon: Icon, label }, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-brand-100 flex items-center justify-center shrink-0 mt-0.5">
+                      <Icon className="w-4 h-4 text-brand-700" />
+                    </div>
+                    <span className="text-sm text-ink leading-snug">{label}</span>
+                  </div>
+                ))}
+              </div>
+              <Link href="/about" className="inline-flex items-center gap-2 text-sm font-semibold text-brand-700 hover:text-brand-800 transition-colors">
+                {lang === 'ru' ? 'Подробнее о команде' : lang === 'uz' ? "Jamoa haqida batafsil" : 'More about the team'}
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="grid grid-cols-2 gap-4"
+            >
+              {[
+                { num: '43+',  label: lang === 'ru' ? 'Студентов зачислено' : 'Students enrolled' },
+                { num: '30+',  label: lang === 'ru' ? 'Университетов-партнёров' : 'Partner universities' },
+                { num: '3',    label: lang === 'ru' ? 'Страны присутствия' : 'Countries' },
+                { num: '100%', label: lang === 'ru' ? 'Клиентов рекомендуют нас' : 'Clients recommend us' },
+              ].map(({ num, label }, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.08 }}
+                  className="bg-white rounded-2xl border border-border p-6 text-center"
+                >
+                  <div className="text-3xl font-black text-ink mb-1">{num}</div>
+                  <div className="text-xs text-muted">{label}</div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
         </div>
       </section>
 
