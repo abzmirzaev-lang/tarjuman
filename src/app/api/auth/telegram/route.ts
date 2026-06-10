@@ -8,12 +8,12 @@ const supabase = createClient(
 )
 
 async function sendBotMessage(chatId: number, text: string) {
-  const token = process.env.TELEGRAM_SUPPORT_BOT_TOKEN
+  const token = process.env.TELEGRAM_BOT_TOKEN
   if (!token) return
   await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'HTML' }),
+    body: JSON.stringify({ chat_id: chatId, text }),
   })
 }
 
@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
   if (!hash) return NextResponse.redirect(new URL('/login?error=no_hash', req.url))
 
   // Verify Telegram hash
-  const botToken = process.env.TELEGRAM_SUPPORT_BOT_TOKEN!
+  const botToken = process.env.TELEGRAM_BOT_TOKEN!
   const secretKey = crypto.createHash('sha256').update(botToken).digest()
   const params = Object.fromEntries(searchParams.entries())
   delete params.hash
@@ -75,8 +75,8 @@ export async function GET(req: NextRequest) {
   await sendBotMessage(
     telegramId,
     isNewUser
-      ? `👋 <b>Добро пожаловать в TARJUMAN!</b>\n\nВы успешно зарегистрировались через Telegram.\n\nТеперь вы можете подать заявку на поступление в университеты Саудовской Аравии и ОАЭ.\n\n📝 <a href="https://tarjumanedu.com/apply">Подать заявку</a>`
-      : `👋 <b>С возвращением!</b>\n\nВы снова вошли в TARJUMAN.\n\n📊 <a href="https://tarjumanedu.com/dashboard">Личный кабинет</a>`
+      ? `👋 Добро пожаловать в TARJUMAN!\n\nВы успешно зарегистрировались через Telegram.\n\nТеперь вы можете подать заявку: https://tarjumanedu.com/apply`
+      : `👋 С возвращением!\n\nВы снова вошли в TARJUMAN.\n\nhttps://tarjumanedu.com/dashboard`
   )
 
   // Generate magic link
