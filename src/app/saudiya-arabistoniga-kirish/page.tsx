@@ -5,7 +5,15 @@ export const metadata: Metadata = {
   title: "Saudiya Arabistoniga o'qishga kirish — Tarjuman Edu",
   description: "Saudiya Arabistoni va BAA universitetlariga hujjat topshirishda yordam. Tarjima, ariza, kuzatib borish. Al Qasimia, IUM, KSU, KAU. Narx $39 dan.",
   keywords: ['saudiya arabistoniga kirish', 'saudiya arabistoni universiteti', 'BAA universiteti', 'arab universiteti qabul', 'hujjat topshirish saudiya', 'stipendiya saudiya arabistoni', 'al qasimia university'],
-  alternates: { canonical: 'https://tarjumanedu.com/saudiya-arabistoniga-kirish' },
+  alternates: {
+    canonical: 'https://tarjumanedu.com/saudiya-arabistoniga-kirish',
+    languages: {
+      'ru':        'https://tarjumanedu.com/postupit-v-saudovskuyu-araviyu',
+      'uz':        'https://tarjumanedu.com/saudiya-arabistoniga-kirish',
+      'en':        'https://tarjumanedu.com/study-in-saudi-arabia',
+      'x-default': 'https://tarjumanedu.com',
+    },
+  },
   openGraph: {
     title: "Saudiya Arabistoniga o'qishga kirish — Tarjuman Edu",
     description: "Universitetlarga hujjat topshirishda yordam. $39 dan boshlanadi.",

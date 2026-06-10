@@ -76,24 +76,25 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'ru_RU',
     images: [{
-      url: `${APP_URL}/og-image.png`,
-      width: 640,
-      height: 640,
-      alt: 'Tarjuman Edu',
+      url: `${APP_URL}/og-image-large.png`,
+      width: 1200,
+      height: 630,
+      alt: 'Tarjuman Edu — Поступление в университеты Арабского мира',
     }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Tarjuman Edu — Поступление в Саудовскую Аравию и ОАЭ',
     description: 'Перевод документов, подача заявки, сопровождение до зачисления. Al Qasimia, IUM, KSU, KAU.',
-    images: [`${APP_URL}/og-image.png`],
+    images: [`${APP_URL}/og-image-large.png`],
   },
   alternates: {
     canonical: APP_URL,
     languages: {
-      'ru': APP_URL,
-      'uz': APP_URL,
-      'en': APP_URL,
+      'ru':      `${APP_URL}/postupit-v-saudovskuyu-araviyu`,
+      'uz':      `${APP_URL}/saudiya-arabistoniga-kirish`,
+      'en':      `${APP_URL}/study-in-saudi-arabia`,
+      'x-default': APP_URL,
     },
   },
   verification: {

@@ -11,6 +11,7 @@ import {
   TrendingUp
 } from 'lucide-react'
 import { useInView } from 'framer-motion'
+import Image from 'next/image'
 import { Navbar } from '@/components/layout/Navbar'
 import { Button } from '@/components/ui'
 import ReviewsSection from '@/components/ReviewsSection'
@@ -253,7 +254,7 @@ export default function HomePage() {
                   animate={{ scale: 1.06 }}
                   transition={{ duration: 8, ease: 'easeInOut' }}
                 >
-                  <img src={s.photo} alt={s.label} className="w-full h-full object-cover" />
+                  <Image src={s.photo} alt={s.label} fill className="object-cover" priority={i === 0} sizes="100vw" />
                 </motion.div>
               </motion.div>
             ))}
@@ -434,7 +435,7 @@ export default function HomePage() {
             ] as { iso: string; code: string; name: string; desc: string; href: string; photo: string }[]).map((c) => (
               <Link key={c.code} href={c.href}>
                 <motion.div whileHover={{ y: -3 }} className="group relative rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-2xl transition-all duration-400 h-56">
-                  <img src={c.photo} alt={c.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <Image src={c.photo} alt={c.name} fill className="object-cover group-hover:scale-105 transition-transform duration-700" sizes="(max-width:768px) 50vw, 25vw" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
                   <div className="absolute inset-0 p-5 flex flex-col justify-between">
                     <div className="flex justify-end">
@@ -468,7 +469,7 @@ export default function HomePage() {
             ] as { iso: string; code: string; name: string; desc: string; href: string; photo: string }[]).map((c) => (
               <Link key={c.code} href={c.href}>
                 <motion.div whileHover={{ y: -3 }} className="group relative rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-400 h-40">
-                  <img src={c.photo} alt={c.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <Image src={c.photo} alt={c.name} fill className="object-cover group-hover:scale-105 transition-transform duration-700" sizes="(max-width:768px) 50vw, 25vw" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                   <div className="absolute inset-0 p-4 flex flex-col justify-between">
                     <div className="flex justify-end">

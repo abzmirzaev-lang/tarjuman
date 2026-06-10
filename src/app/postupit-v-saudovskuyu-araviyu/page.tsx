@@ -5,7 +5,15 @@ export const metadata: Metadata = {
   title: 'Как поступить в университет Саудовской Аравии — Tarjuman Edu',
   description: 'Пошаговая инструкция как поступить в университет Саудовской Аравии из СНГ. Документы, сроки, стоимость. Al Qasimia, IUM, KSU, KAU. Помощь Tarjuman Edu от $39.',
   keywords: ['поступить в Саудовскую Аравию', 'как поступить в университет Саудовской Аравии', 'поступление в Саудию', 'документы для поступления Саудовская Аравия', 'учёба в Саудовской Аравии'],
-  alternates: { canonical: 'https://tarjumanedu.com/postupit-v-saudovskuyu-araviyu' },
+  alternates: {
+    canonical: 'https://tarjumanedu.com/postupit-v-saudovskuyu-araviyu',
+    languages: {
+      'ru':        'https://tarjumanedu.com/postupit-v-saudovskuyu-araviyu',
+      'uz':        'https://tarjumanedu.com/saudiya-arabistoniga-kirish',
+      'en':        'https://tarjumanedu.com/study-in-saudi-arabia',
+      'x-default': 'https://tarjumanedu.com',
+    },
+  },
   openGraph: {
     title: 'Как поступить в университет Саудовской Аравии',
     description: 'Пошаговая инструкция. Документы, сроки, стоимость. Tarjuman Edu помогает с $39.',

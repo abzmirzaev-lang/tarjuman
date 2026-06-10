@@ -5,7 +5,15 @@ export const metadata: Metadata = {
   title: 'Study in Saudi Arabia — Tarjuman Edu | University Admission Help',
   description: 'Apply to universities in Saudi Arabia and UAE from CIS countries. Document translation, application submission, full support. Al Qasimia, IUM, KSU, KAU. From $39.',
   keywords: ['study in saudi arabia', 'university admission saudi arabia', 'apply saudi arabia university', 'study in uae', 'saudi arabia scholarship', 'al qasimia university apply', 'islamic university madinah'],
-  alternates: { canonical: 'https://tarjumanedu.com/study-in-saudi-arabia' },
+  alternates: {
+    canonical: 'https://tarjumanedu.com/study-in-saudi-arabia',
+    languages: {
+      'ru':        'https://tarjumanedu.com/postupit-v-saudovskuyu-araviyu',
+      'uz':        'https://tarjumanedu.com/saudiya-arabistoniga-kirish',
+      'en':        'https://tarjumanedu.com/study-in-saudi-arabia',
+      'x-default': 'https://tarjumanedu.com',
+    },
+  },
   openGraph: {
     title: 'Study in Saudi Arabia — Tarjuman Edu',
     description: 'University admission help for CIS students. Document translation, application, guidance. From $39.',
