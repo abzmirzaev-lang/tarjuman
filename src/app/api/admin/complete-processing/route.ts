@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { sendEmail } from '@/lib/email'
+import { sendTelegram } from '@/lib/telegram'
 
 export async function POST(req: NextRequest) {
   const supabase = createClient(
@@ -35,12 +36,18 @@ export async function POST(req: NextRequest) {
       note: 'Документы подготовлены и отправлены администратором',
     })
 
-    // Get user email
+    // Get user email + telegram
     const { data: user } = await supabase
       .from('users')
-      .select('email')
+      .select('email, telegram_chat_id')
       .eq('id', app.user_id)
       .single()
+
+    // Telegram notification to client
+    if (user?.telegram_chat_id) {
+      const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL ?? 'https://tarjumanedu.com'}/dashboard`
+      await sendTelegram(`✅ *Ваши документы готовы!*\n\nЗдравствуйте, ${app.full_name}!\n\nМы завершили работу над вашими документами для поступления. Переведённые документы загружены в ваш личный кабинет.\n\n[Открыть личный кабинет](${dashboardUrl})`, undefined, String(user.telegram_chat_id)).catch(() => {})
+    }
 
     if (user?.email) {
       const countryName = app.country === 'SA' ? 'Саудовской Аравии' : 'ОАЭ'
