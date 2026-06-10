@@ -6,67 +6,57 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
-const SUPPORT_BOT = process.env.TELEGRAM_SUPPORT_BOT_TOKEN!
-const API = `https://api.telegram.org/bot${SUPPORT_BOT}`
-
-async function sendTelegram(chat_id: number, text: string) {
-  await fetch(`${API}/sendMessage`, {
+async function sendBotMessage(chatId: number, text: string) {
+  const token = process.env.TELEGRAM_SUPPORT_BOT_TOKEN
+  if (!token) return
+  await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ chat_id, text, parse_mode: 'HTML' }),
+    body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'HTML' }),
   })
 }
 
 const STATUS_MESSAGES: Record<string, { emoji: string; ru: string }> = {
-  PAID: {
-    emoji: '💳',
-    ru: 'Ваша оплата подтверждена! Мы начинаем работу над вашей заявкой.',
-  },
-  IN_PROGRESS: {
-    emoji: '⚙️',
-    ru: 'Ваши документы приняты в работу. Мы переводим и проверяем их.',
-  },
-  UNDER_REVIEW: {
-    emoji: '🔍',
-    ru: 'Ваши документы проходят финальную проверку перед отправкой в университет.',
-  },
-  SUBMITTED: {
-    emoji: '📬',
-    ru: 'Ваша заявка отправлена в университет! Ожидайте ответ в течение 2–4 недель.',
-  },
-  COMPLETED: {
-    emoji: '🎉',
-    ru: 'Поздравляем! Ваша заявка успешно завершена. Добро пожаловать в университет!',
-  },
-  REJECTED: {
-    emoji: '❌',
-    ru: 'К сожалению, по вашей заявке пришёл отказ. Свяжитесь с нашим менеджером для обсуждения дальнейших шагов.',
-  },
+  PAID:         { emoji: '💳', ru: 'Ваша оплата подтверждена! Мы начинаем работу над вашей заявкой.' },
+  IN_PROGRESS:  { emoji: '⚙️', ru: 'Ваши документы приняты в работу. Мы переводим и проверяем их.' },
+  UNDER_REVIEW: { emoji: '🔍', ru: 'Ваши документы проходят финальную проверку перед отправкой в университет.' },
+  SUBMITTED:    { emoji: '📬', ru: 'Ваша заявка отправлена в университет! Ожидайте ответ в течение 2–4 недель.' },
+  COMPLETED:    { emoji: '🎉', ru: 'Поздравляем! Ваша заявка успешно завершена.' },
+  REJECTED:     { emoji: '❌', ru: 'К сожалению, по вашей заявке пришёл отказ. Свяжитесь с менеджером.' },
 }
 
 export async function POST(req: NextRequest) {
   try {
     const { applicationId, newStatus } = await req.json()
 
+    // Get application + user's telegram_chat_id via join
     const { data: app } = await supabase
       .from('applications')
-      .select('id, full_name, telegram_chat_id, service_package')
+      .select('id, full_name, user_id, service_package')
       .eq('id', applicationId)
       .single()
 
-    if (!app?.telegram_chat_id) {
-      return NextResponse.json({ ok: false, reason: 'no telegram_chat_id' })
-    }
+    if (!app) return NextResponse.json({ ok: false, reason: 'app not found' })
+
+    // Get telegram_chat_id from users table
+    const { data: user } = await supabase
+      .from('users')
+      .select('telegram_chat_id')
+      .eq('id', app.user_id)
+      .single()
+
+    const chatId = user?.telegram_chat_id
+    if (!chatId) return NextResponse.json({ ok: false, reason: 'no telegram_chat_id for user' })
 
     const msg = STATUS_MESSAGES[newStatus]
     if (!msg) return NextResponse.json({ ok: false, reason: 'unknown status' })
 
-    await sendTelegram(
-      app.telegram_chat_id,
+    await sendBotMessage(
+      chatId,
       `${msg.emoji} <b>Статус заявки обновлён</b>\n\n` +
       `👤 ${app.full_name}\n\n` +
       `${msg.ru}\n\n` +
-      `Если есть вопросы — напишите нам здесь.`
+      `📊 <a href="https://tarjumanedu.com/dashboard">Открыть кабинет</a>`
     )
 
     return NextResponse.json({ ok: true })

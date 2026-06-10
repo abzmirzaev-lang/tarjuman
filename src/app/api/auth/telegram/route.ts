@@ -1,8 +1,3 @@
-/**
- * GET /api/auth/telegram
- * Telegram Login Widget redirects here with user data in query params.
- * We verify the hash, then sign the user in via Supabase magic-link or create account.
- */
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 import { createClient } from '@supabase/supabase-js'
@@ -12,6 +7,16 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
+async function sendBotMessage(chatId: number, text: string) {
+  const token = process.env.TELEGRAM_SUPPORT_BOT_TOKEN
+  if (!token) return
+  await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'HTML' }),
+  })
+}
+
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl
   const hash = searchParams.get('hash')
@@ -20,71 +25,68 @@ export async function GET(req: NextRequest) {
   // Verify Telegram hash
   const botToken = process.env.TELEGRAM_SUPPORT_BOT_TOKEN!
   const secretKey = crypto.createHash('sha256').update(botToken).digest()
-
   const params = Object.fromEntries(searchParams.entries())
   delete params.hash
 
-  const checkString = Object.keys(params)
-    .sort()
-    .map(k => `${k}=${params[k]}`)
-    .join('\n')
-
+  const checkString = Object.keys(params).sort().map(k => `${k}=${params[k]}`).join('\n')
   const expectedHash = crypto.createHmac('sha256', secretKey).update(checkString).digest('hex')
 
-  if (expectedHash !== hash) {
-    return NextResponse.redirect(new URL('/login?error=invalid_hash', req.url))
-  }
+  if (expectedHash !== hash) return NextResponse.redirect(new URL('/login?error=invalid_hash', req.url))
 
-  // Check auth_date is not too old (5 min)
   const authDate = parseInt(searchParams.get('auth_date') || '0', 10)
-  if (Date.now() / 1000 - authDate > 300) {
-    return NextResponse.redirect(new URL('/login?error=expired', req.url))
-  }
+  if (Date.now() / 1000 - authDate > 300) return NextResponse.redirect(new URL('/login?error=expired', req.url))
 
-  const telegramId = searchParams.get('id')!
+  const telegramId = parseInt(searchParams.get('id')!, 10)
   const firstName  = searchParams.get('first_name') || ''
   const lastName   = searchParams.get('last_name') || ''
   const username   = searchParams.get('username') || ''
   const photoUrl   = searchParams.get('photo_url') || ''
+  const fullName   = [firstName, lastName].filter(Boolean).join(' ')
+  const email      = `tg_${telegramId}@telegram.tarjumanedu.com`
 
-  // Use telegram ID as synthetic email
-  const email = `tg_${telegramId}@telegram.tarjumanedu.com`
-  const fullName = [firstName, lastName].filter(Boolean).join(' ')
-
-  // Upsert user in public.users via service role
+  // Find existing user by telegram_chat_id or email
   const { data: existingUser } = await supabase
     .from('users')
     .select('id, email')
-    .eq('email', email)
+    .or(`email.eq.${email},telegram_chat_id.eq.${telegramId}`)
     .single()
 
-  let userId: string
+  let isNewUser = false
 
-  if (existingUser) {
-    userId = existingUser.id
-  } else {
-    // Create auth user + public.users entry
+  if (!existingUser) {
+    isNewUser = true
     const { data: authUser, error } = await supabase.auth.admin.createUser({
       email,
       email_confirm: true,
       user_metadata: { full_name: fullName, avatar_url: photoUrl, telegram: username },
     })
-    if (error || !authUser.user) {
-      return NextResponse.redirect(new URL('/login?error=create_failed', req.url))
-    }
-    userId = authUser.user.id
+    if (error || !authUser.user) return NextResponse.redirect(new URL('/login?error=create_failed', req.url))
+
+    // Save telegram_chat_id
+    await supabase.from('users').update({ telegram_chat_id: telegramId, telegram: username || null })
+      .eq('id', authUser.user.id)
+  } else {
+    // Update chat_id if missing
+    await supabase.from('users').update({ telegram_chat_id: telegramId, telegram: username || null })
+      .eq('id', existingUser.id)
   }
 
-  // Create magic session link and redirect
+  // Send welcome message to client
+  await sendBotMessage(
+    telegramId,
+    isNewUser
+      ? `👋 <b>Добро пожаловать в TARJUMAN!</b>\n\nВы успешно зарегистрировались через Telegram.\n\nТеперь вы можете подать заявку на поступление в университеты Саудовской Аравии и ОАЭ.\n\n📝 <a href="https://tarjumanedu.com/apply">Подать заявку</a>`
+      : `👋 <b>С возвращением!</b>\n\nВы снова вошли в TARJUMAN.\n\n📊 <a href="https://tarjumanedu.com/dashboard">Личный кабинет</a>`
+  )
+
+  // Generate magic link
   const { data: link, error: linkErr } = await supabase.auth.admin.generateLink({
     type: 'magiclink',
     email,
     options: { redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://tarjumanedu.com'}/auth/confirm` },
   })
 
-  if (linkErr || !link?.properties?.action_link) {
-    return NextResponse.redirect(new URL('/login?error=link_failed', req.url))
-  }
+  if (linkErr || !link?.properties?.action_link) return NextResponse.redirect(new URL('/login?error=link_failed', req.url))
 
   return NextResponse.redirect(link.properties.action_link)
 }

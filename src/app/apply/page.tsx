@@ -344,6 +344,20 @@ function ApplyContent() {
       if (appErr) throw appErr
       setAppId(app.id)
 
+      // Notify admin about new application
+      fetch('/api/notifications/new-application', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-internal-key': '' },
+        body: JSON.stringify({
+          name:          form.full_name,
+          telegram:      form.telegram,
+          phone:         form.phone,
+          country:       selectedCountry,
+          pkg,
+          applicationId: app.id,
+        }),
+      }).catch(() => {})
+
       // Upload documents
       const uploadPromises = Object.entries(docs)
         .filter(([, d]) => d != null)
