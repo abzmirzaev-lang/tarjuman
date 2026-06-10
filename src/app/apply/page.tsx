@@ -186,10 +186,10 @@ function ApplyContent() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (!data.session) router.push('/login?next=/apply')
-      else setUser(data.session.user)
+      if (data.session) setUser(data.session.user)
+      // guests are allowed through — no redirect
     })
-  }, [router])
+  }, [])
 
   // Load universities when entering step 3
   useEffect(() => {
@@ -280,9 +280,38 @@ function ApplyContent() {
 
   const handleStep4 = () => setStep(5)
 
+  // Guest submit — sends data to admin via Telegram, no auth required
+  const handleGuestSubmit = async () => {
+    setLoading(true)
+    try {
+      const res = await fetch('/api/apply/guest', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          full_name:       form.full_name,
+          phone:           form.phone,
+          telegram:        form.telegram,
+          country:         selectedCountry,
+          pkg,
+          citizenship:     form.citizenship,
+          education_level: form.education_level,
+          university_name: selectedFaculties[0]?.university_name || universityId || undefined,
+          notes:           comment || undefined,
+        }),
+      })
+      if (!res.ok) throw new Error('Server error')
+      try { localStorage.removeItem(DRAFT_KEY) } catch {}
+      setSuccessModal(true)
+    } catch (err: any) {
+      toast.error(t.common.error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   // Submit
   const handleSubmit = async () => {
-    if (!user) return
+    if (!user) return handleGuestSubmit()
     setLoading(true)
     try {
       const { data: app, error: appErr } = await supabase
@@ -366,7 +395,7 @@ function ApplyContent() {
 
   // Manual payment submit
   const handleSubmitManual = async () => {
-    if (!user) return
+    if (!user) return handleGuestSubmit()
     setLoading(true)
     try {
       const { data: app, error: appErr } = await supabase
@@ -448,8 +477,6 @@ function ApplyContent() {
     t.apply.step3,
     t.apply.step4,
   ]
-
-  if (!user) return null
 
   // ── UAE: Al Qasimia full form ─────────────────────────────────────────────
   if (aqFormActive && aqDegreeType) {
@@ -1419,12 +1446,21 @@ function ApplyContent() {
               {lang === 'ru' ? 'Получить уведомление в Telegram' : 'Get Telegram notification'}
             </a>
 
-            <button
-              onClick={() => router.push(`/dashboard?app=${appId}`)}
-              className="w-full py-3 rounded-xl border border-border text-muted text-sm font-medium hover:bg-surface transition-colors"
-            >
-              {lang === 'ru' ? 'Перейти в личный кабинет' : lang === 'uz' ? 'Shaxsiy kabinetga o\'tish' : 'Go to Dashboard'}
-            </button>
+            {user ? (
+              <button
+                onClick={() => router.push(`/dashboard?app=${appId}`)}
+                className="w-full py-3 rounded-xl border border-border text-muted text-sm font-medium hover:bg-surface transition-colors"
+              >
+                {lang === 'ru' ? 'Перейти в личный кабинет' : lang === 'uz' ? "Shaxsiy kabinetga o'tish" : 'Go to Dashboard'}
+              </button>
+            ) : (
+              <button
+                onClick={() => router.push('/login?next=/dashboard')}
+                className="w-full py-3 rounded-xl border border-border text-muted text-sm font-medium hover:bg-surface transition-colors"
+              >
+                {lang === 'ru' ? 'Создать аккаунт для трекинга статуса →' : lang === 'uz' ? "Status kuzatish uchun akkaunt yaratish →" : 'Create account to track status →'}
+              </button>
+            )}
           </motion.div>
         </div>
       )}

@@ -1,6 +1,6 @@
 'use client'
 import { useLanguage } from '@/hooks/useLanguage'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -8,6 +8,40 @@ import { supabase } from '@/lib/supabase/client'
 import { Button } from '@/components/ui'
 import type { AppLanguage } from '@/types'
 import { translations } from '@/i18n'
+
+
+function TelegramLoginButton({ lang }: { lang: string }) {
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!ref.current) return
+    // Telegram Login Widget — requires bot username in NEXT_PUBLIC_TELEGRAM_BOT_USERNAME
+    const botUsername = process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME
+    if (!botUsername) return
+
+    const script = document.createElement('script')
+    script.src = 'https://telegram.org/js/telegram-widget.js?22'
+    script.setAttribute('data-telegram-login', botUsername)
+    script.setAttribute('data-size', 'large')
+    script.setAttribute('data-radius', '12')
+    script.setAttribute('data-auth-url', `${window.location.origin}/api/auth/telegram`)
+    script.setAttribute('data-request-access', 'write')
+    script.async = true
+    ref.current.appendChild(script)
+    return () => { if (ref.current) ref.current.innerHTML = '' }
+  }, [])
+
+  if (!process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME) return null
+
+  return (
+    <div className="flex flex-col items-center gap-2">
+      <div ref={ref} className="flex justify-center" />
+      <p className="text-xs text-muted">
+        {lang === 'ru' ? 'Войти через Telegram-аккаунт' : lang === 'uz' ? "Telegram orqali kirish" : 'Login with your Telegram account'}
+      </p>
+    </div>
+  )
+}
 
 export default function LoginPage() {
   const [lang, setLang] = useLanguage()
@@ -81,6 +115,17 @@ export default function LoginPage() {
         >
           {t.auth.googleLogin}
         </Button>
+
+        {process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME && (
+          <>
+            <div className="flex items-center gap-3 my-4">
+              <div className="flex-1 h-px bg-border" />
+              <span className="text-xs text-muted">{lang === 'ru' ? 'или' : lang === 'uz' ? 'yoki' : 'or'}</span>
+              <div className="flex-1 h-px bg-border" />
+            </div>
+            <TelegramLoginButton lang={lang} />
+          </>
+        )}
 
         <p className="text-xs text-muted text-center mt-6">
           {t.auth.terms}{' '}
