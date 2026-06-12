@@ -110,12 +110,17 @@ export default function LoginPage() {
     }
     setLoading(true)
     if (mode === 'register') {
-      const { error: err } = await supabase.auth.signUp({
+      const { data, error: err } = await supabase.auth.signUp({
         email: email.trim(),
         password,
         options: { emailRedirectTo: `${window.location.origin}/auth/confirm` },
       })
       if (err) { setError(err.message); setLoading(false) }
+      else if (data.session) {
+        // email confirmation disabled — user is logged in immediately
+        const next = new URLSearchParams(window.location.search).get('next') || '/dashboard'
+        router.push(next)
+      }
       else { setConfirmed(true); setLoading(false) }
     } else {
       const { error: err } = await supabase.auth.signInWithPassword({
