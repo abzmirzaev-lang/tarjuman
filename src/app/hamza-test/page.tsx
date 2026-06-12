@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
 import { useLanguage } from '@/hooks/useLanguage'
 import { Navbar } from '@/components/layout/Navbar'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -9,73 +9,45 @@ import {
   PenLine, Mic, Monitor, Building2, ArrowRight, CheckCircle2, Globe
 } from 'lucide-react'
 
-function ArabicRain() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+const ARABIC_CHARS = ['ا','ب','ح','د','ع','ف','ق','ك','ل','م','ن','ه','و','ي','ص','ط','ظ','غ','خ','ش','ث','ذ','ز','همزة']
 
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    const CHARS = 'ابتثجحخدذرزسشصضطظعغفقكلمنهوي'
-    const FONT_SIZE = 18
-    let cols: number[] = []
-    let drops: number[] = []
-
-    function resize() {
-      canvas!.width = canvas!.offsetWidth
-      canvas!.height = canvas!.offsetHeight
-      cols = Array.from({ length: Math.floor(canvas!.width / FONT_SIZE) }, (_, i) => i)
-      drops = cols.map(() => Math.random() * -50)
-    }
-
-    resize()
-    window.addEventListener('resize', resize)
-
-    let frame: number
-    function draw() {
-      ctx!.fillStyle = 'rgba(10, 15, 40, 0.08)'
-      ctx!.fillRect(0, 0, canvas!.width, canvas!.height)
-
-      drops.forEach((y, i) => {
-        const char = CHARS[Math.floor(Math.random() * CHARS.length)]
-        const x = i * FONT_SIZE
-
-        // Lead char — bright gold
-        const progress = y / (canvas!.height / FONT_SIZE)
-        if (Math.floor(y) === Math.floor(drops[i])) {
-          ctx!.fillStyle = `rgba(212, 169, 67, ${0.9 - progress * 0.3})`
-          ctx!.font = `bold ${FONT_SIZE}px serif`
-        } else {
-          ctx!.fillStyle = `rgba(100, 140, 200, ${0.25 - progress * 0.1})`
-          ctx!.font = `${FONT_SIZE}px serif`
-        }
-
-        ctx!.fillText(char, x, y * FONT_SIZE)
-
-        if (y * FONT_SIZE > canvas!.height && Math.random() > 0.975) {
-          drops[i] = 0
-        }
-        drops[i] += 0.4 + Math.random() * 0.3
-      })
-
-      frame = requestAnimationFrame(draw)
-    }
-
-    draw()
-    return () => {
-      cancelAnimationFrame(frame)
-      window.removeEventListener('resize', resize)
-    }
-  }, [])
+function FloatingLetters() {
+  const letters = Array.from({ length: 18 }, (_, i) => ({
+    id: i,
+    char: ARABIC_CHARS[i % ARABIC_CHARS.length],
+    size: 48 + (i % 5) * 28,
+    left: (i * 6 + 3) % 96,
+    delay: (i * 0.7) % 8,
+    duration: 12 + (i % 4) * 4,
+    opacity: 0.06 + (i % 4) * 0.04,
+  }))
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 w-full h-full"
-      style={{ opacity: 0.85 }}
-    />
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {letters.map(l => (
+        <div
+          key={l.id}
+          className="absolute font-serif text-[#1B4332] select-none"
+          style={{
+            fontSize: l.size,
+            left: `${l.left}%`,
+            opacity: l.opacity,
+            animation: `floatUp ${l.duration}s ${l.delay}s infinite linear`,
+            bottom: '-10%',
+          }}
+        >
+          {l.char}
+        </div>
+      ))}
+      <style>{`
+        @keyframes floatUp {
+          0%   { transform: translateY(0)   rotate(0deg);   opacity: 0; }
+          10%  { opacity: 1; }
+          90%  { opacity: 1; }
+          100% { transform: translateY(-110vh) rotate(15deg); opacity: 0; }
+        }
+      `}</style>
+    </div>
   )
 }
 import Link from 'next/link'
@@ -202,31 +174,31 @@ export default function HamzaTestPage() {
 
       {/* Hero */}
       <section className="relative overflow-hidden py-20 sm:py-28" style={{ minHeight: 320 }}>
-        <div className="absolute inset-0 bg-[#080c1f]" />
-        <ArabicRain />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#080c1f]/30 via-transparent to-[#080c1f]/80" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#f0f4ef] via-[#e8f0e6] to-[#ddeedd]" />
+        <FloatingLetters />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-white/20" />
         <div className="relative z-10 max-w-3xl mx-auto px-4 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 mb-6">
-              <Globe className="w-3.5 h-3.5 text-[#C9922A]" />
-              <span className="text-white/80 text-xs font-medium">{t.badge}</span>
+            <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur-sm border border-[#1B4332]/15 rounded-full px-4 py-1.5 mb-6">
+              <Globe className="w-3.5 h-3.5 text-[#1B4332]" />
+              <span className="text-[#1B4332]/80 text-xs font-medium">{t.badge}</span>
             </div>
-            <h1 className="text-4xl sm:text-5xl font-black text-white mb-2 leading-tight">
+            <h1 className="text-4xl sm:text-5xl font-black text-[#1B4332] mb-2 leading-tight">
               {t.name}
             </h1>
             <p className="text-2xl text-[#C9922A] font-bold mb-4" dir="rtl">{t.nameAr}</p>
-            <p className="text-white/70 text-lg max-w-xl mx-auto">{t.tagline}</p>
+            <p className="text-[#1B4332]/60 text-lg max-w-xl mx-auto">{t.tagline}</p>
 
             {/* Stats */}
             <div className="flex items-center justify-center gap-6 mt-8">
               <div className="text-center">
-                <p className="text-2xl font-black text-white">{t.duration}</p>
-                <p className="text-xs text-white/50 mt-0.5">{t.durationLabel}</p>
+                <p className="text-2xl font-black text-[#1B4332]">{t.duration}</p>
+                <p className="text-xs text-[#1B4332]/50 mt-0.5">{t.durationLabel}</p>
               </div>
-              <div className="w-px h-10 bg-white/20" />
+              <div className="w-px h-10 bg-[#1B4332]/20" />
               <div className="text-center">
-                <p className="text-2xl font-black text-white">{t.questions}</p>
-                <p className="text-xs text-white/50 mt-0.5">{t.questionsLabel}</p>
+                <p className="text-2xl font-black text-[#1B4332]">{t.questions}</p>
+                <p className="text-xs text-[#1B4332]/50 mt-0.5">{t.questionsLabel}</p>
               </div>
             </div>
           </motion.div>
