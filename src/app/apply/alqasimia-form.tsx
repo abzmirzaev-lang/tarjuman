@@ -203,7 +203,12 @@ function Field({ label, required, children }: { label: string; required?: boolea
 }
 
 const INPUT = "w-full h-12 px-4 text-base border border-gray-200 rounded-xl focus:outline-none focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 transition-all bg-white"
-const DATE_INPUT = "w-full h-12 px-4 text-base border border-gray-200 rounded-xl focus:outline-none focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 transition-all bg-white"
+const DATE_INPUT = "w-full h-12 px-4 text-base border border-gray-200 rounded-xl focus:outline-none focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 transition-all bg-white [color-scheme:light]"
+const fmtDate = (iso: string) => {
+  if (!iso) return ''
+  const [y, m, d] = iso.split('-')
+  return d && m && y ? `${d}.${m}.${y}` : iso
+}
 const SELECT = "w-full h-12 px-4 text-base border border-gray-200 rounded-xl focus:outline-none focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 transition-all bg-white appearance-none"
 
 // ── Helpers (outside component to avoid focus loss on re-render) ──────────────
@@ -673,7 +678,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                   </div>
                   <div className="space-y-4">
                     <Field label={t('Срок действия паспорта', 'Pasport muddati', 'Passport expiry')} required>
-                      <input type="text" inputMode="numeric" placeholder="ДД.ММ.ГГГГ" value={form.passport_expiry} onChange={e => setF('passport_expiry', e.target.value)} className={DATE_INPUT} />
+                      <input type="date" value={form.passport_expiry} onChange={e => setF('passport_expiry', e.target.value)} className={DATE_INPUT} />
                     </Field>
                     <Field label={t('Номер нац. удостоверения (ID)', 'Milliy ID raqami', 'National ID number')}>
                       <input value={form.national_id_number} onChange={e => setF('national_id_number', e.target.value)}
@@ -682,7 +687,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                   </div>
                   <div className="space-y-4">
                     <Field label={t('Дата рождения', 'Tug\'ilgan sana', 'Date of birth')} required>
-                      <input type="text" inputMode="numeric" placeholder="ДД.ММ.ГГГГ" value={form.date_of_birth} onChange={e => setF('date_of_birth', e.target.value)} className={DATE_INPUT} />
+                      <input type="date" value={form.date_of_birth} onChange={e => setF('date_of_birth', e.target.value)} className={DATE_INPUT} />
                     </Field>
                     <Field label={t('Страна рождения', 'Tug\'ilgan mamlakat', 'Country of birth')} required>
                       <input value={form.country_of_birth} onChange={e => setF('country_of_birth', e.target.value)}
@@ -945,7 +950,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                       </select>
                     </Field>
                     <Field label={t('Дата окончания', 'Tugatish sanasi', 'Graduation date')} required>
-                      <input type="text" inputMode="numeric" placeholder="ДД.ММ.ГГГГ" value={form.graduation_date} onChange={e => setF('graduation_date', e.target.value)} className={DATE_INPUT} />
+                      <input type="date" value={form.graduation_date} onChange={e => setF('graduation_date', e.target.value)} className={DATE_INPUT} />
                     </Field>
                   </div>
                 </div>
@@ -1288,7 +1293,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                     <span className="text-muted">{t('Имя', 'Ism', 'Name')}</span><span className="text-ink font-medium">{form.full_name}</span>
                     <span className="text-muted">{t('Гражданство', 'Fuqarolik', 'Citizenship')}</span><span className="text-ink">{form.citizenship}</span>
                     <span className="text-muted">{t('Паспорт', 'Pasport', 'Passport')}</span><span className="text-ink">{form.passport_number}</span>
-                    <span className="text-muted">{t('Дата рождения', 'Tug\'ilgan sana', 'Date of birth')}</span><span className="text-ink">{form.date_of_birth}</span>
+                    <span className="text-muted">{t('Дата рождения', 'Tug\'ilgan sana', 'Date of birth')}</span><span className="text-ink">{fmtDate(form.date_of_birth)}</span>
                     <span className="text-muted">{t('Пол', 'Jinsi', 'Gender')}</span><span className="text-ink">{form.gender}</span>
                     <span className="text-muted">{t('Религия', 'Dini', 'Religion')}</span><span className="text-ink">{form.religion}</span>
                   </div>
