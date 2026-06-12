@@ -128,22 +128,21 @@ export async function POST(req: NextRequest) {
           </p>
         </td></tr>
         <!-- Footer -->
-        <tr><td style="background:#f9f9f9;padding:20px 40px;border-top:1px solid #f0f0f0;text-align:center;">
-          <p style="margin:0;font-size:12px;color:#aaa;">
-            © 2025 TARJUMAN · <a href="mailto:support@tarjumanedu.com" style="color:#D4A943;text-decoration:none;">support@tarjumanedu.com</a>
-          </p>
+        <tr><td style="background:#0a0a0a;padding:20px 40px;text-align:center;">
+          <p style="margin:0;font-size:12px;color:#ffffff40;">© TARJUMAN EDU · tarjumanedu.com</p>
         </td></tr>
       </table>
     </td></tr>
   </table>
 </body>
-</html>`,
-      }).catch(err => console.error('Email send error:', err))
+</html>
+`,
+      })
     }
 
-    return NextResponse.json({ ok: true })
-  } catch (err: any) {
-    console.error('complete-processing error:', err)
-    return NextResponse.json({ error: err.message }, { status: 500 })
+    return NextResponse.json({ success: true })
+  } catch (e: unknown) {
+    const message = e instanceof Error ? e.message : 'Unknown error'
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }
