@@ -1520,11 +1520,7 @@ function ApplyContent() {
 
 export default function ApplyPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-surface flex items-center justify-center">
-        <div className="text-muted">Загрузка...</div>
-      </div>
-    }>
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="text-muted">Загрузка...</div></div>}>
       <ApplyContent />
     </Suspense>
   )

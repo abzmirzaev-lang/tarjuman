@@ -88,9 +88,6 @@ export default function Page() {
                 </div>
               ))}
             </div>
-            <Link href="/apply" className="block w-full text-center py-3 bg-brand-400 text-ink font-bold rounded-xl hover:bg-brand-300 transition-colors">
-              Ariza topshirish
-            </Link>
           </section>
         </div>
       </div>

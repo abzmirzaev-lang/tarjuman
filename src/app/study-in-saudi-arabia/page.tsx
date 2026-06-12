@@ -105,11 +105,9 @@ export default function Page() {
                   <p className="text-2xl font-black text-brand-600">{t.price}</p>
                   <p className="text-xs text-muted">{t.desc}</p>
                 </div>
+              
               ))}
             </div>
-            <Link href="/apply" className="block w-full text-center py-3 bg-brand-400 text-ink font-bold rounded-xl hover:bg-brand-300 transition-colors">
-              Start Application
-            </Link>
           </section>
         </div>
       </div>
