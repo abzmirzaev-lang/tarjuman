@@ -232,12 +232,17 @@ export default function AlQasimiaFAQPage() {
       <Navbar lang={lang} onLangChange={setLang} />
 
       {/* ── HERO ───────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#1B4332] via-[#14532d] to-[#0d2b1e] py-20 sm:py-28">
-        {/* subtle pattern */}
-        <div className="absolute inset-0 opacity-[0.05]"
-          style={{ backgroundImage: 'repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%)', backgroundSize: '24px 24px' }} />
-        {/* gold glow */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#C9922A]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+      <section className="relative overflow-hidden py-20 sm:py-28" style={{ minHeight: 320 }}>
+        {/* Background photo */}
+        <div className="absolute inset-0">
+          <img
+            src="/al-qasimia.jpg"
+            alt="Al Qasimia University"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30" />
 
         <div className="relative z-10 max-w-4xl mx-auto px-6">
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
