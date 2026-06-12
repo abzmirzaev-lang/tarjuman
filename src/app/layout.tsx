@@ -228,15 +228,3 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   )
 }
-tInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-      </head>
-      <body>
-        <Toaster position="top-center" richColors />
-        <TelegramButton />
-        {children}
-        <Footer />
-      </body>
-    </html>
-  )
-}
