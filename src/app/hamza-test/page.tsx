@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useLanguage } from '@/hooks/useLanguage'
 import { Navbar } from '@/components/layout/Navbar'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -8,6 +8,76 @@ import {
   GraduationCap, ChevronDown, BookOpen, Headphones,
   PenLine, Mic, Monitor, Building2, ArrowRight, CheckCircle2, Globe
 } from 'lucide-react'
+
+function ArabicRain() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    const CHARS = 'ابتثجحخدذرزسشصضطظعغفقكلمنهوي'
+    const FONT_SIZE = 18
+    let cols: number[] = []
+    let drops: number[] = []
+
+    function resize() {
+      canvas!.width = canvas!.offsetWidth
+      canvas!.height = canvas!.offsetHeight
+      cols = Array.from({ length: Math.floor(canvas!.width / FONT_SIZE) }, (_, i) => i)
+      drops = cols.map(() => Math.random() * -50)
+    }
+
+    resize()
+    window.addEventListener('resize', resize)
+
+    let frame: number
+    function draw() {
+      ctx!.fillStyle = 'rgba(10, 15, 40, 0.08)'
+      ctx!.fillRect(0, 0, canvas!.width, canvas!.height)
+
+      drops.forEach((y, i) => {
+        const char = CHARS[Math.floor(Math.random() * CHARS.length)]
+        const x = i * FONT_SIZE
+
+        // Lead char — bright gold
+        const progress = y / (canvas!.height / FONT_SIZE)
+        if (Math.floor(y) === Math.floor(drops[i])) {
+          ctx!.fillStyle = `rgba(212, 169, 67, ${0.9 - progress * 0.3})`
+          ctx!.font = `bold ${FONT_SIZE}px serif`
+        } else {
+          ctx!.fillStyle = `rgba(100, 140, 200, ${0.25 - progress * 0.1})`
+          ctx!.font = `${FONT_SIZE}px serif`
+        }
+
+        ctx!.fillText(char, x, y * FONT_SIZE)
+
+        if (y * FONT_SIZE > canvas!.height && Math.random() > 0.975) {
+          drops[i] = 0
+        }
+        drops[i] += 0.4 + Math.random() * 0.3
+      })
+
+      frame = requestAnimationFrame(draw)
+    }
+
+    draw()
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener('resize', resize)
+    }
+  }, [])
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full"
+      style={{ opacity: 0.85 }}
+    />
+  )
+}
 import Link from 'next/link'
 
 type Lang = 'ru' | 'uz' | 'en'
@@ -132,9 +202,9 @@ export default function HamzaTestPage() {
 
       {/* Hero */}
       <section className="relative overflow-hidden py-20 sm:py-28" style={{ minHeight: 320 }}>
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460]" />
-        <div className="absolute inset-0 opacity-10"
-          style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, #C9922A 0%, transparent 50%), radial-gradient(circle at 80% 20%, #4a90d9 0%, transparent 40%)' }} />
+        <div className="absolute inset-0 bg-[#080c1f]" />
+        <ArabicRain />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#080c1f]/30 via-transparent to-[#080c1f]/80" />
         <div className="relative z-10 max-w-3xl mx-auto px-4 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 mb-6">
