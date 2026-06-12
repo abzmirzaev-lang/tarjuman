@@ -119,13 +119,15 @@ function DocZone({ docType, label, onUpload, uploaded, onRemove }: {
 
   if (uploaded) {
     return (
-      <div className="flex items-center gap-3 p-3 bg-brand-50 border border-brand-200 rounded-xl">
-        <FileText className="w-5 h-5 text-brand-500 shrink-0" />
+      <div className="flex items-center gap-3 p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+        <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center shrink-0">
+          <FileText className="w-4 h-4 text-emerald-600" />
+        </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium text-ink truncate">{label}</p>
-          <p className="text-xs text-muted truncate">{uploaded.file.name}</p>
+          <p className="text-xs text-emerald-600 truncate">{uploaded.file.name}</p>
         </div>
-        <button onClick={() => onRemove(docType)} className="p-1 hover:bg-brand-100 rounded-lg transition-colors">
+        <button onClick={() => onRemove(docType)} className="w-7 h-7 flex items-center justify-center hover:bg-emerald-100 rounded-lg transition-colors shrink-0">
           <X className="w-4 h-4 text-muted" />
         </button>
       </div>
@@ -136,14 +138,18 @@ function DocZone({ docType, label, onUpload, uploaded, onRemove }: {
     <div
       {...getRootProps()}
       className={cn(
-        'border-2 border-dashed rounded-xl p-4 cursor-pointer transition-all text-center',
-        isDragActive ? 'border-brand-400 bg-brand-50' : 'border-border hover:border-brand-300 hover:bg-brand-50/50'
+        'flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all',
+        isDragActive ? 'border-brand-400 bg-brand-50' : 'border-gray-200 bg-gray-50 hover:border-brand-300 hover:bg-brand-50/50'
       )}
     >
       <input {...getInputProps()} />
-      <Upload className="w-4 h-4 text-muted mx-auto mb-1" />
-      <p className="text-sm text-muted">{label}</p>
-      <p className="text-xs text-muted/60 mt-0.5">PDF, JPG, PNG — max 10MB</p>
+      <div className="w-8 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center shrink-0">
+        <Upload className="w-4 h-4 text-muted" />
+      </div>
+      <p className="text-sm text-gray-600 flex-1 leading-snug">{label}</p>
+      <span className="text-xs font-medium text-brand-600 bg-brand-50 border border-brand-200 px-2.5 py-1 rounded-lg shrink-0 whitespace-nowrap">
+        Загрузить
+      </span>
     </div>
   )
 }
@@ -196,9 +202,9 @@ function Field({ label, required, children }: { label: string; required?: boolea
   )
 }
 
-const INPUT = "w-full h-11 px-4 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 transition-all bg-white"
-const DATE_INPUT = "w-full h-11 px-4 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 transition-all bg-white"
-const SELECT = "w-full h-11 px-4 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 transition-all bg-white appearance-none"
+const INPUT = "w-full h-12 px-4 text-base border border-gray-200 rounded-xl focus:outline-none focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 transition-all bg-white"
+const DATE_INPUT = "w-full h-12 px-4 text-base border border-gray-200 rounded-xl focus:outline-none focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 transition-all bg-white"
+const SELECT = "w-full h-12 px-4 text-base border border-gray-200 rounded-xl focus:outline-none focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 transition-all bg-white appearance-none"
 
 // ── Helpers (outside component to avoid focus loss on re-render) ──────────────
 
@@ -216,7 +222,7 @@ function YesNo({ value, onChange, lang }: { value: string; onChange: (v: string)
 function SectionHeader({ title, optional, lang }: { title: string; optional?: boolean; lang: string }) {
   const ru = lang === 'ru'; const uz = lang === 'uz'
   return (
-    <div className="px-6 py-4 border-b border-gray-50 bg-gray-50/50 flex items-center justify-between">
+    <div className="px-4 sm:px-6 py-3 border-b border-gray-50 bg-gray-50/50 flex items-center justify-between">
       <p className="text-xs font-semibold text-muted uppercase tracking-wider">{title}</p>
       {optional && <span className="text-[11px] text-muted bg-gray-100 px-2 py-0.5 rounded-full">{ru ? 'Необязательно' : uz ? 'Ixtiyoriy' : 'Optional'}</span>}
     </div>
@@ -224,17 +230,18 @@ function SectionHeader({ title, optional, lang }: { title: string; optional?: bo
 }
 
 function Card({ children }: { children: React.ReactNode }) {
-  return <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-4">{children}</div>
+  return <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-3">{children}</div>
 }
 
 function NavButtons({ onBack, onNext, lang }: { onBack: () => void; onNext: () => void; lang: string }) {
   const ru = lang === 'ru'; const uz = lang === 'uz'
   return (
-    <div className="flex justify-between mt-8">
-      <button onClick={onBack} className="flex items-center gap-2 px-5 py-3 bg-white border border-gray-200 text-ink text-sm font-medium rounded-xl hover:bg-gray-50 transition-all">
-        <ChevronLeft className="w-4 h-4" /> {ru ? 'Назад' : uz ? 'Orqaga' : 'Back'}
+    <div className="flex gap-3 mt-6">
+      <button onClick={onBack} className="flex items-center justify-center gap-1.5 px-4 py-3.5 bg-white border border-gray-200 text-ink text-sm font-medium rounded-xl hover:bg-gray-50 transition-all shrink-0">
+        <ChevronLeft className="w-4 h-4" />
+        <span className="hidden sm:inline">{ru ? 'Назад' : uz ? 'Orqaga' : 'Back'}</span>
       </button>
-      <button onClick={onNext} className="flex items-center gap-2 px-8 py-3.5 bg-[#1B4332] text-white text-sm font-semibold rounded-xl hover:bg-[#1B4332]/90 transition-all shadow-sm">
+      <button onClick={onNext} className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-[#1B4332] text-white text-sm font-semibold rounded-xl hover:bg-[#1B4332]/90 transition-all shadow-sm">
         {ru ? 'Далее' : uz ? 'Keyingi' : 'Next'} <ChevronRight className="w-4 h-4" />
       </button>
     </div>
@@ -637,7 +644,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               {/* Passport info */}
               <Card>
                 <SectionHeader title={t('Паспортные данные', 'Pasport ma\'lumotlari', 'Passport information')} lang={lang} />
-                <div className="p-6 space-y-4">
+                <div className="p-4 sm:p-6 space-y-4">
                   <Field label={t('Полное имя по загранпаспорту', 'To\'liq ism (pasport bo\'yicha)', 'Full name (as in passport)')} required>
                     <input value={form.full_name} onChange={e => setF('full_name', e.target.value)}
                       placeholder={ru ? 'Иванов Иван Иванович' : uz ? 'Ivanov Ivan Ivanovich' : 'John Michael Doe'} className={INPUT} />
@@ -692,7 +699,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               {/* Personal info */}
               <Card>
                 <SectionHeader title={t('Личные сведения', 'Shaxsiy ma\'lumotlar', 'Personal information')} lang={lang} />
-                <div className="p-6 space-y-4">
+                <div className="p-4 sm:p-6 space-y-4">
                   <div className="space-y-4">
                     <Field label={t('Пол', 'Jinsi', 'Gender')} required>
                       <select value={form.gender} onChange={e => setF('gender', e.target.value)} className={SELECT}>
@@ -724,7 +731,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               {/* UAE & other status */}
               <Card>
                 <SectionHeader title={t('Дополнительные сведения', 'Qo\'shimcha ma\'lumotlar', 'Additional details')} lang={lang} />
-                <div className="p-6 space-y-4">
+                <div className="p-4 sm:p-6 space-y-4">
                   <div className="space-y-4">
                     <Field label={t('Проживаете ли в ОАЭ?', 'BAA da yashaysizmi?', 'Currently living in UAE?')} required>
                       <YesNo value={form.lives_in_uae} onChange={v => setF('lives_in_uae', v)} lang={lang} />
@@ -747,12 +754,13 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                 </div>
               </Card>
 
-              <div className="flex justify-between mt-2">
-                <button onClick={onBack} className="flex items-center gap-2 px-5 py-3 bg-white border border-gray-200 text-ink text-sm font-medium rounded-xl hover:bg-gray-50 transition-all">
-                  <ChevronLeft className="w-4 h-4" /> {ru ? 'Назад' : uz ? 'Orqaga' : 'Back'}
+              <div className="flex gap-3 mt-6">
+                <button onClick={onBack} className="flex items-center justify-center gap-1.5 px-4 py-3.5 bg-white border border-gray-200 text-ink text-sm font-medium rounded-xl hover:bg-gray-50 transition-all shrink-0">
+                  <ChevronLeft className="w-4 h-4" />
+                  <span className="hidden sm:inline">{ru ? 'Назад' : uz ? 'Orqaga' : 'Back'}</span>
                 </button>
-                <button onClick={handleNext} className="flex items-center gap-2 px-8 py-3.5 bg-[#1B4332] text-white text-sm font-semibold rounded-xl hover:bg-[#1B4332]/90 transition-all shadow-sm">
-                  {ru ? 'Далее' : 'Next'} <ChevronRight className="w-4 h-4" />
+                <button onClick={handleNext} className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-[#1B4332] text-white text-sm font-semibold rounded-xl hover:bg-[#1B4332]/90 transition-all shadow-sm">
+                  {ru ? 'Далее' : uz ? 'Keyingi' : 'Next'} <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
             </motion.div>
@@ -769,7 +777,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               {/* Contacts */}
               <Card>
                 <SectionHeader title={t('Контактные данные', 'Aloqa ma\'lumotlari', 'Contact details')} lang={lang} />
-                <div className="p-6 space-y-4">
+                <div className="p-4 sm:p-6 space-y-4">
                   <div className="space-y-4">
                     <Field label="Email" required>
                       <input type="email" value={form.email} onChange={e => setF('email', e.target.value)}
@@ -822,7 +830,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               {/* Father */}
               <Card>
                 <SectionHeader title={t('Данные отца', 'Otasi haqida', 'Father\'s information')} lang={lang} />
-                <div className="p-6 space-y-4">
+                <div className="p-4 sm:p-6 space-y-4">
                   <Field label={t('ФИО', 'To\'liq ism', 'Full name')} required>
                     <input value={form.father_name} onChange={e => setF('father_name', e.target.value)} className={INPUT} />
                   </Field>
@@ -846,7 +854,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               {/* Mother */}
               <Card>
                 <SectionHeader title={t('Данные матери', 'Onasi haqida', 'Mother\'s information')} lang={lang} />
-                <div className="p-6 space-y-4">
+                <div className="p-4 sm:p-6 space-y-4">
                   <Field label={t('ФИО', 'To\'liq ism', 'Full name')} required>
                     <input value={form.mother_name} onChange={e => setF('mother_name', e.target.value)} className={INPUT} />
                   </Field>
@@ -870,7 +878,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               {/* Relative */}
               <Card>
                 <SectionHeader title={t('Данные родственника', 'Qarindosh haqida', 'Relative\'s information')} optional lang={lang} />
-                <div className="p-6 space-y-4">
+                <div className="p-4 sm:p-6 space-y-4">
                   <Field label={t('ФИО', 'To\'liq ism', 'Full name')}>
                     <input value={form.relative_name} onChange={e => setF('relative_name', e.target.value)} className={INPUT} />
                   </Field>
@@ -902,7 +910,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
 
               <Card>
                 <SectionHeader title={t('Среднее образование', 'O\'rta ta\'lim', 'Secondary education')} lang={lang} />
-                <div className="p-6 space-y-4">
+                <div className="p-4 sm:p-6 space-y-4">
                   <Field label={t('Тип школы', 'Maktab turi', 'School type')} required>
                     <select value={form.school_type} onChange={e => setF('school_type', e.target.value)} className={SELECT}>
                       <option value="">{t('Выберите...', 'Tanlang...', 'Select...')}</option>
@@ -945,7 +953,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
 
               <Card>
                 <SectionHeader title={t('Знание языков', 'Til bilimlari', 'Languages')} lang={lang} />
-                <div className="p-6 space-y-4">
+                <div className="p-4 sm:p-6 space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-2">
                       {t('Какие языки знаете?', 'Qanday tillarni bilasiz?', 'Languages you know')}
@@ -1000,7 +1008,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
               {degreeType === 'master' && (
                 <Card>
                   <SectionHeader title={t('Данные о дипломе бакалавра', 'Bakalavr diplomi haqida', 'Bachelor\'s degree information')} lang={lang} />
-                  <div className="p-6 space-y-4">
+                  <div className="p-4 sm:p-6 space-y-4">
                     <Field label={t('Название университета', 'Universitet nomi', 'University name')} required>
                       <input value={form.bachelor_university} onChange={e => setF('bachelor_university', e.target.value)} className={INPUT} />
                     </Field>
@@ -1417,6 +1425,7 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
           </motion.div>
         </div>
       )}
+
     </div>
   )
 }
