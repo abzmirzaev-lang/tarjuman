@@ -186,10 +186,13 @@ function ApplyContent() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) setUser(data.session.user)
-      // guests are allowed through — no redirect
+      if (data.session) {
+        setUser(data.session.user)
+      } else {
+        router.push('/login?next=/apply')
+      }
     })
-  }, [])
+  }, [router])
 
   // Load universities when entering step 3
   useEffect(() => {
