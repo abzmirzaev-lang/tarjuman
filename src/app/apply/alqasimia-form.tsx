@@ -311,13 +311,13 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
 
   const programs = degreeType === 'bachelor' ? BACHELOR_PROGRAMS : MASTER_PROGRAMS
 
-  // Steps: 1=Programs, 2=Personal, 3=Contacts, 4=Education, 5=Docs, 6=Package, 7=Review
-  const TOTAL = 7
+  // Steps: 1=Personal, 2=Contacts, 3=Education, 4=Programs, 5=Package, 6=Review
+  const TOTAL = 6
   const STEP_NAMES = ru
-    ? ['Личные данные', 'Контакты и семья', 'Образование', 'Программы', 'Документы', 'Пакет', 'Проверка']
+    ? ['Личные данные', 'Контакты и семья', 'Образование', 'Программы', 'Пакет', 'Проверка']
     : uz
-    ? ['Shaxsiy ma\'lumot', 'Aloqa va oila', 'Ta\'lim', 'Yo\'nalishlar', 'Hujjatlar', 'Paket', 'Tekshirish']
-    : ['Personal data', 'Contacts & family', 'Education', 'Programs', 'Documents', 'Package', 'Review']
+    ? ['Shaxsiy ma\'lumot', 'Aloqa va oila', 'Ta\'lim', 'Yo\'nalishlar', 'Paket', 'Tekshirish']
+    : ['Personal data', 'Contacts & family', 'Education', 'Programs', 'Package', 'Review']
 
   // ── Validators ──────────────────────────────────────────────────────────────
 
@@ -407,7 +407,6 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
     if (step === 2 && !validateContacts()) return
     if (step === 3 && !validateEducation()) return
     if (step === 4 && !validatePrograms()) return
-    if (step === 5 && !validateDocs()) return
     setStep(s => s + 1)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -1135,96 +1134,11 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
             </motion.div>
           )}
 
-          {/* ── STEP 5: Documents ── */}
+          {/* ── STEP 5: Package ── */}
           {step === 5 && (
-            <motion.div key="s5" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
-              <div className="mb-8">
-                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{t(`Шаг 5 из ${TOTAL}`, `5-qadam ${TOTAL} tadan`, `Step 5 of ${TOTAL}`)}</p>
-                <h1 className="text-3xl font-bold text-ink">{t('Документы', 'Hujjatlar', 'Documents')}</h1>
-                <p className="text-muted mt-1 text-sm">{t('PDF, JPG или PNG — до 10 МБ каждый', 'PDF, JPG yoki PNG — har biri 10 MB gacha', 'PDF, JPG or PNG — up to 10MB each')}</p>
-              </div>
-
-              {/* Scanner warning */}
-              <div className="mb-6 flex gap-3 p-4 rounded-2xl bg-amber-50 border border-amber-200">
-                <div className="shrink-0 mt-0.5">
-                  <AlertCircle className="w-5 h-5 text-amber-500" />
-                </div>
-                <div className="text-sm text-amber-800 leading-relaxed">
-                  <p className="font-semibold mb-1">
-                    {t('Требования к документам', 'Hujjatlarga talablar', 'Document requirements')}
-                  </p>
-                  <p>
-                    {t(
-                      'Документы должны быть в формате PDF или JPG, отсканированные на портативном сканере. Документы, сфотографированные на телефон, не принимаются в обработку.',
-                      'Hujjatlar PDF yoki JPG formatida, portativ skaner yordamida skanerlanishi kerak. Telefonda suratga olingan hujjatlar qabul qilinmaydi.',
-                      'Documents must be in PDF or JPG format, scanned with a portable scanner. Documents photographed on a phone are not accepted for processing.'
-                    )}
-                  </p>
-                </div>
-              </div>
-
-              {/* Required */}
-              <Card>
-                <div className="px-6 py-4 border-b border-gray-50 bg-gray-50/50 flex items-center gap-2">
-                  <AlertCircle className="w-3.5 h-3.5 text-red-400" />
-                  <p className="text-xs font-semibold text-muted uppercase tracking-wider">{ru ? 'Обязательные документы' : 'Required documents'}</p>
-                </div>
-                <div className="p-4 grid grid-cols-1 gap-2">
-                  {REQUIRED_DOCS.map(dt => (
-                    <DocZone key={dt} docType={dt}
-                      label={ru ? DOC_LABELS[dt].ru : DOC_LABELS[dt].en}
-                      uploaded={docs[dt]}
-                      onUpload={handleDocUpload}
-                      onRemove={handleDocRemove}
-                    />
-                  ))}
-                </div>
-              </Card>
-
-              {/* Optional */}
-              <Card>
-                <SectionHeader title={t('Дополнительные документы', 'Qo\'shimcha hujjatlar', 'Additional documents')} optional lang={lang} />
-                <div className="p-4 grid grid-cols-1 gap-2">
-                  {OPTIONAL_DOCS.map(dt => (
-                    <DocZone key={dt} docType={dt}
-                      label={ru ? DOC_LABELS[dt].ru : DOC_LABELS[dt].en}
-                      uploaded={docs[dt]}
-                      onUpload={handleDocUpload}
-                      onRemove={handleDocRemove}
-                    />
-                  ))}
-                </div>
-              </Card>
-
-              {/* Master docs */}
-              {degreeType === 'master' && (
-                <Card>
-                  <div className="px-6 py-4 border-b border-gray-50 bg-gray-50/50 flex items-center gap-2">
-                    <AlertCircle className="w-3.5 h-3.5 text-red-400" />
-                    <p className="text-xs font-semibold text-muted uppercase tracking-wider">{ru ? 'Документы магистратуры' : 'Master\'s degree documents'}</p>
-                  </div>
-                  <div className="p-4 grid grid-cols-1 gap-2">
-                    {MASTER_DOCS.map(dt => (
-                      <DocZone key={dt} docType={dt}
-                        label={ru ? DOC_LABELS[dt].ru : DOC_LABELS[dt].en}
-                        uploaded={docs[dt]}
-                        onUpload={handleDocUpload}
-                        onRemove={handleDocRemove}
-                      />
-                    ))}
-                  </div>
-                </Card>
-              )}
-
-              <NavButtons onBack={() => setStep(4)} onNext={handleNext} lang={lang} />
-            </motion.div>
-          )}
-
-          {/* ── STEP 6: Package ── */}
-          {step === 6 && (
             <motion.div key="s6" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
               <div className="mb-8">
-                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{t(`Шаг 6 из ${TOTAL}`, `6-qadam ${TOTAL} tadan`, `Step 6 of ${TOTAL}`)}</p>
+                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{t(`Шаг 5 из ${TOTAL}`, `5-qadam ${TOTAL} tadan`, `Step 5 of ${TOTAL}`)}</p>
                 <h1 className="text-3xl font-bold text-ink">{t('Выбор пакета', 'Paket tanlash', 'Choose a plan')}</h1>
               </div>
 
@@ -1270,15 +1184,15 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                 })}
               </div>
 
-              <NavButtons onBack={() => setStep(5)} onNext={handleNext} lang={lang} />
+              <NavButtons onBack={() => setStep(4)} onNext={handleNext} lang={lang} />
             </motion.div>
           )}
 
-          {/* ── STEP 7: Review + Submit ── */}
-          {step === 7 && (
+          {/* ── STEP 6: Review + Submit ── */}
+          {step === 6 && (
             <motion.div key="s7" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
               <div className="mb-8">
-                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{t(`Шаг 7 из ${TOTAL}`, `7-qadam ${TOTAL} tadan`, `Step 7 of ${TOTAL}`)}</p>
+                <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest mb-1">{t(`Шаг 6 из ${TOTAL}`, `6-qadam ${TOTAL} tadan`, `Step 6 of ${TOTAL}`)}</p>
                 <h1 className="text-3xl font-bold text-ink">{t('Проверка и оплата', 'Tekshirish va to\'lov', 'Review & payment')}</h1>
               </div>
 
@@ -1312,25 +1226,6 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                   </div>
                 </div>
 
-                {/* Documents */}
-                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-                  <div className="px-5 py-3.5 border-b border-gray-50 flex items-center justify-between">
-                    <p className="text-xs font-semibold text-muted uppercase tracking-wider">{t('Документы', 'Hujjatlar', 'Documents')}</p>
-                    <div className="flex items-center gap-3">
-                      <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">{Object.values(docs).filter(Boolean).length} {t('файлов', 'fayl', 'files')}</span>
-                      <button onClick={() => setStep(5)} className="text-xs text-[#1B4332] font-medium hover:underline">{t('Изменить', 'O\'zgartirish', 'Edit')}</button>
-                    </div>
-                  </div>
-                  <div className="px-5 py-4 flex flex-wrap gap-2">
-                    {(Object.entries(docs) as [AQDocType, AQDoc | undefined][]).filter(([, d]) => d).map(([type]) => (
-                      <span key={type} className="inline-flex items-center gap-1.5 text-xs bg-gray-50 border border-gray-200 text-ink px-3 py-1.5 rounded-lg">
-                        <FileText className="w-3 h-3 text-muted" />
-                        {ru ? DOC_LABELS[type].ru : DOC_LABELS[type].en}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
                 {/* Package */}
                 <div className="bg-[#1B4332] rounded-2xl p-5 flex items-center justify-between">
                   <div>
@@ -1339,13 +1234,13 @@ export function AlQasimiaForm({ degreeType, lang, user, onBack }: AlQasimiaFormP
                   </div>
                   <div className="text-right">
                     <p className="text-3xl font-bold text-white">${PACKAGES[pkg].priceUSD}</p>
-                    <button onClick={() => setStep(6)} className="text-white/60 text-xs hover:text-white transition-colors">{t('Изменить', 'O\'zgartirish', 'Change')}</button>
+                    <button onClick={() => setStep(5)} className="text-white/60 text-xs hover:text-white transition-colors">{t('Изменить', 'O\'zgartirish', 'Change')}</button>
                   </div>
                 </div>
               </div>
 
               <div className="flex justify-start mb-5">
-                <button onClick={() => setStep(6)} className="flex items-center gap-2 px-5 py-3 bg-white border border-gray-200 text-ink text-sm font-medium rounded-xl hover:bg-gray-50 transition-all">
+                <button onClick={() => setStep(5)} className="flex items-center gap-2 px-5 py-3 bg-white border border-gray-200 text-ink text-sm font-medium rounded-xl hover:bg-gray-50 transition-all">
                   <ChevronLeft className="w-4 h-4" /> {ru ? 'Назад' : uz ? 'Orqaga' : 'Back'}
                 </button>
               </div>
