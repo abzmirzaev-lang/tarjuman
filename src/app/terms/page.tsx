@@ -99,7 +99,7 @@ const CONTENT: Record<Lang, {
     },
     note: {
       title: "Muhim ma'lumot",
-      body: "TARJUMAN xizmatidan foydalanib, siz quyidagi shartlarga roziligingizni bildirасиз. Savollar uchun: support@tarjumanedu.com",
+      body: "TARJUMAN xizmatidan foydalanib, siz quyidagi shartlarga roziligingizni bildirasiz. Savollar uchun: support@tarjumanedu.com",
     },
     sections: [
       {
@@ -115,4 +115,204 @@ const CONTENT: Record<Lang, {
       {
         title: "3. Ro'yxatdan o'tish va hisob",
         icon: Lock,
-        content: "3.1. Foydalanuvchi to'g'ri ma'lumotlar ko'rsatib ro'yxatdan o'tishi shart.\n\n3.2. Foydalanuvchi o'z kirish ma'lumotlari xavfsizligi uchun javobgardir.\n\n3.3. Ruxsatsiz kirish aniqlansa, darhol xabar bering: support@tarjum
+        content: "3.1. Foydalanuvchi to'g'ri ma'lumotlar ko'rsatib ro'yxatdan o'tishi shart.\n\n3.2. Foydalanuvchi o'z kirish ma'lumotlari xavfsizligi uchun javobgardir.\n\n3.3. Ruxsatsiz kirish aniqlansa, darhol xabar bering: support@tarjumanedu.com",
+      },
+      {
+        title: "4. To'lov tartibi",
+        icon: CreditCard,
+        content: "4.1. Xizmatlar narxi «Narxlar» sahifasida ko'rsatilgan.\n\n4.2. To'lov xizmat ko'rsatilishidan oldin amalga oshiriladi.\n\n4.3. Biz to'lov karta ma'lumotlarini saqlamaymiz.\n\n4.4. Narxlar o'zgarishi mumkin, ammo to'langan buyurtmalarga ta'sir qilmaydi.",
+      },
+      {
+        title: '5. Tomonlarning huquq va majburiyatlari',
+        icon: Scale,
+        content: "Foydalanuvchi majburiyatlari:\n— To'g'ri va to'liq hujjatlar taqdim etish;\n— Menejerlar so'rovlariga o'z vaqtida javob berish;\n— Xizmatdan faqat qonuniy maqsadlarda foydalanish.\n\nXizmat majburiyatlari:\n— Sifatli xizmat ko'rsatishga barcha choralarni ko'rish;\n— Biz universitetning qabul qarorini kafolatlay olmaymiz.",
+      },
+      {
+        title: '6. Taqiqlangan harakatlar',
+        icon: ShieldOff,
+        content: "Foydalanuvchiga quyidagilar taqiqlanadi:\n\n— Ataylab noto'g'ri yoki soxta hujjatlar taqdim etish;\n— Xizmatdan firibgarlik yoki noqonuniy maqsadlarda foydalanish;\n— Cheklovlardan qochish uchun bir nechta hisob yaratish;\n— Ruxsatsiz xizmat materiallarini nusxalash yoki qayta sotish;\n— Sayt ishlashiga zarar yetkazuvchi harakatlar (hujumlar, spam, zararli kod);\n— Uchinchi shaxslar huquqlarini, shu jumladan intellektual mulk huquqlarini buzish.\n\nUshbu taqiqlarni buzish hisobni darhol bloklash uchun asos bo'ladi.",
+      },
+      {
+        title: "7. Mablag' qaytarish qoidalari",
+        icon: RotateCcw,
+        content: "7.1. To'lovdan 14 kun ichida buyurtmani bekor qilsangiz va biz hali ishni boshlamagan bo'lsak, qaytarish mumkin.\n\n7.2. Quyidagi hollarda qaytarish amalga oshirilmaydi:\n— Universitet qabul qilishdan bosh tortgan bo'lsa (qarorni universitet qabul qiladi, biz emas);\n— Foydalanuvchi to'liq bo'lmagan yoki noto'g'ri hujjatlar taqdim etgan bo'lsa;\n— Ariza bo'yicha ish allaqachon tugallangan bo'lsa;\n— 14 kundan ortiq vaqt o'tgan bo'lsa.\n\n7.3. Xizmatning bir qismi bajarilgan bo'lsa, bajarilmagan qism uchun qisman qaytarish mumkin.\n\n7.4. Tasdiqlangandan so'ng 5–10 ish kuni ichida to'lov usuli orqali qaytariladi.\n\n7.5. Qaytarish uchun support@tarjumanedu.com manziliga «Qaytarish — [buyurtma raqami]» mavzusi bilan yozing.\n\nTo'liq qaytarish siyosati: tarjumanedu.com/refund",
+      },
+      {
+        title: '8. Akkauntni bloklash',
+        icon: UserX,
+        content: "8.1. Biz quyidagi hollarda foydalanuvchi hisobini bloklash yoki o'chirish huquqiga egamiz:\n— «Taqiqlangan harakatlar» bo'limini buzish;\n— Ro'yxatdan o'tishda yoki hujjatlarda ataylab noto'g'ri ma'lumot berish;\n— Asossiz chargeback (bank orqali to'lovni qaytarish) boshlash;\n— Firibgarlik yoki xizmatdan suiiste'mol qilish urinishlari.\n\n8.2. Texnik jihatdan imkon bo'lsa, foydalanuvchi email orqali xabardor qilinadi.\n\n8.3. Qoidabuzarlik sababli bloklashda mablag' qaytarilmaydi.\n\n8.4. Foydalanuvchi support@tarjumanedu.com manziliga yozib bloklashga e'tiroz bildirishi mumkin.",
+      },
+      {
+        title: '9. Javobgarlikni cheklash',
+        icon: Bell,
+        content: "9.1. Biz universitetlar va viza xizmatlarining qarorlari uchun javobgar emasmiz.\n\n9.2. Biz to'liq bo'lmagan hujjatlar sababli kechikishlar uchun javobgar emasmiz.\n\n9.3. Umumiy javobgarlik to'langan paket qiymatidan oshmaydi.",
+      },
+      {
+        title: '10. Maxfiylik',
+        icon: Lock,
+        content: "Shaxsiy ma'lumotlarni qayta ishlash Maxfiylik siyosatiga (/privacy) muvofiq amalga oshiriladi.",
+      },
+      {
+        title: "11. Shartlarni o'zgartirish",
+        icon: RefreshCw,
+        content: "Biz istalgan vaqtda Shartlarni o'zgartirish huquqiga egamiz. Joriy versiya /terms sahifasida mavjud. O'zgarishlardan keyin xizmatdan foydalanishni davom ettirish yangi shartlarga rozilikni bildiradi.",
+      },
+      {
+        title: '12. Nizolar va qo\'llaniladigan huquq',
+        icon: Scale,
+        content: "12.1. Tomonlar kelishmovchiliklarni muzokaralar orqali hal etishga intiladi.\n\n12.2. Hal etib bo'lmasa — support@tarjumanedu.com manziliga da'vo; javob muddati 10 ish kuni.\n\n12.3. Ushbu Shartlar Saudiya Arabistoni Qirolligi qonunchiligiga muvofiq tartibga solinadi.",
+      },
+      {
+        title: '13. Aloqa ma\'lumotlari',
+        icon: Phone,
+        content: "bughyat alqasid Establishment\nCR 7051611031 · Riyadh, Kingdom of Saudi Arabia\n\nEmail: support@tarjumanedu.com\nTelegram: @tarjumanedu\nSayt: tarjumanedu.com",
+      },
+    ],
+  },
+  en: {
+    hero: {
+      badge: 'Legal Documents',
+      title: 'Terms of Use',
+      sub: 'Please read these terms carefully before using our service.',
+      updated: 'Last updated: June 16, 2026',
+    },
+    note: {
+      title: 'Please read carefully',
+      body: 'By using TARJUMAN, you agree to comply with the terms below. Questions? Contact us at support@tarjumanedu.com',
+    },
+    sections: [
+      {
+        title: '1. General Provisions',
+        icon: FileText,
+        content: `These Terms of Use govern the relationship between TARJUMAN (bughyat alqasid Establishment, CR 7051611031, Riyadh, Kingdom of Saudi Arabia) and its users.\n\nBy using our website, you confirm that you have read these Terms and agree to them in full.`,
+      },
+      {
+        title: '2. Description of Services',
+        icon: FileText,
+        content: `TARJUMAN provides support services for students applying to universities in Saudi Arabia and the UAE:\n\n— Advice on choosing a university and program;\n— Translation of documents into Arabic;\n— Assistance with application forms and document submission;\n— Application status tracking and notifications;\n— Support at every stage of the admission process.\n\nThe scope of services depends on the selected package (Basic, Standard, or VIP).`,
+      },
+      {
+        title: '3. Registration & Account',
+        icon: Lock,
+        content: `3.1. Users must register with accurate information.\n\n3.2. Users are responsible for keeping their credentials secure.\n\n3.3. If you discover unauthorized access, notify us immediately at support@tarjumanedu.com`,
+      },
+      {
+        title: '4. Payment',
+        icon: CreditCard,
+        content: `4.1. Service prices are listed on the Pricing page.\n\n4.2. Payment is made before services begin.\n\n4.3. We do not store payment card data.\n\n4.4. Prices may change but do not affect already paid orders.`,
+      },
+      {
+        title: '5. Rights and Obligations',
+        icon: Scale,
+        content: `User obligations:\n— Provide accurate and complete documents;\n— Respond promptly to manager requests;\n— Use the Service for lawful purposes only.\n\nService obligations:\n— Make every effort to provide quality services;\n— We do not guarantee a positive admission decision.`,
+      },
+      {
+        title: '6. Prohibited Actions',
+        icon: ShieldOff,
+        content: `Users are prohibited from:\n\n— Submitting knowingly false or forged documents;\n— Using the Service for fraudulent or illegal purposes;\n— Creating multiple accounts to circumvent restrictions;\n— Copying, reproducing, or reselling Service materials without permission;\n— Taking actions that disrupt the website (attacks, spam, malicious code);\n— Violating third-party rights, including intellectual property rights.\n\nViolation of these prohibitions is grounds for immediate account suspension without a refund.`,
+      },
+      {
+        title: '7. Refund Policy',
+        icon: RotateCcw,
+        content: `7.1. A refund is available if you cancel within 14 days of payment and work has not yet begun.\n\n7.2. Refunds are NOT issued if:\n— The university denied admission (the decision is made by the university, not us);\n— The user provided incomplete or inaccurate documents;\n— Work on the application has already been completed;\n— More than 14 days have passed without a complaint.\n\n7.3. If part of the service has been performed, a partial refund for the unperformed portion is possible.\n\n7.4. Once approved, funds are returned within 5–10 business days via the original payment method.\n\n7.5. To request a refund, write to support@tarjumanedu.com with subject "Refund — [order number]".\n\nFull Refund Policy: tarjumanedu.com/refund`,
+      },
+      {
+        title: '8. Account Suspension',
+        icon: UserX,
+        content: `8.1. We reserve the right to suspend or delete an account in the following cases:\n— Violation of the "Prohibited Actions" section;\n— Providing knowingly false information during registration or in documents;\n— Initiating an unjustified chargeback without prior contact with us;\n— Attempts at fraud or abuse of the Service.\n\n8.2. The user will be notified by email of the suspension where technically possible.\n\n8.3. If suspended due to violations, no refund will be issued.\n\n8.4. Users may appeal a suspension by writing to support@tarjumanedu.com.`,
+      },
+      {
+        title: '9. Limitation of Liability',
+        icon: Bell,
+        content: `9.1. We are not responsible for decisions made by universities or visa services.\n\n9.2. We are not responsible for delays caused by incomplete documents.\n\n9.3. Total liability shall not exceed the cost of the paid package.`,
+      },
+      {
+        title: '10. Privacy',
+        icon: Lock,
+        content: `Personal data processing is carried out in accordance with our Privacy Policy (/privacy).`,
+      },
+      {
+        title: '11. Changes to Terms',
+        icon: RefreshCw,
+        content: `We reserve the right to modify these Terms at any time. The current version is always available at /terms. Continued use of the Service after changes constitutes acceptance of the new terms.`,
+      },
+      {
+        title: '12. Disputes & Governing Law',
+        icon: Scale,
+        content: `12.1. The parties seek to resolve disputes through negotiation.\n\n12.2. If unresolved, a claim may be submitted to support@tarjumanedu.com; response time is 10 business days.\n\n12.3. These Terms are governed by the laws of the Kingdom of Saudi Arabia.\n\n12.4. If you initiate a chargeback without prior contact, we reserve the right to provide the payment system with all documentation of services rendered.`,
+      },
+      {
+        title: '13. Contact Information',
+        icon: Phone,
+        content: `bughyat alqasid Establishment\nCR 7051611031 · Riyadh, Kingdom of Saudi Arabia\n\nEmail: support@tarjumanedu.com\nTelegram: @tarjumanedu\nWebsite: tarjumanedu.com`,
+      },
+    ],
+  },
+}
+
+export default function TermsPage() {
+  const [lang, setLang] = useLanguage()
+  const c = CONTENT[lang]
+
+  return (
+    <>
+      <Navbar lang={lang} onLangChange={setLang} />
+      <div className="pt-16 min-h-screen bg-[#F7F8FA]">
+
+        {/* Hero */}
+        <div className="bg-ink text-white py-16 px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 border border-white/20 rounded-full text-brand-400 text-xs font-semibold uppercase tracking-widest mb-5">
+              {c.hero.badge}
+            </span>
+            <h1 className="text-3xl sm:text-5xl font-black mb-4 leading-tight">{c.hero.title}</h1>
+            <p className="text-white/60 text-base sm:text-lg mb-4 max-w-xl mx-auto">{c.hero.sub}</p>
+            <p className="text-white/40 text-xs">{c.hero.updated}</p>
+          </div>
+        </div>
+
+        <div className="max-w-3xl mx-auto px-4 py-12 space-y-4">
+
+          {/* Note */}
+          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 sm:p-8">
+            <p className="font-bold text-ink mb-1 text-sm">{c.note.title}</p>
+            <p className="text-sm text-amber-800 leading-relaxed">{c.note.body}</p>
+          </div>
+
+          {/* Sections */}
+          {c.sections.map(s => {
+            const Icon = s.icon
+            return (
+              <div
+                key={s.title}
+                className="bg-white rounded-2xl border border-border p-6 sm:p-8 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-9 h-9 rounded-xl bg-brand-50 flex items-center justify-center shrink-0">
+                    <Icon className="w-4 h-4 text-brand-600" />
+                  </div>
+                  <h2 className="text-base font-bold text-ink">{s.title}</h2>
+                </div>
+                <div className="text-sm text-muted leading-relaxed whitespace-pre-line">{s.content}</div>
+              </div>
+            )
+          })}
+
+          {/* Footer links */}
+          <div className="flex flex-wrap justify-center gap-4 py-4 text-xs text-muted">
+            <Link href="/privacy" className="underline hover:text-ink transition-colors">
+              {lang === 'ru' ? 'Политика конфиденциальности' : lang === 'uz' ? 'Maxfiylik siyosati' : 'Privacy Policy'}
+            </Link>
+            <Link href="/refund" className="underline hover:text-ink transition-colors">
+              {lang === 'ru' ? 'Политика возврата' : lang === 'uz' ? 'Qaytarish siyosati' : 'Refund Policy'}
+            </Link>
+            <a href="mailto:support@tarjumanedu.com" className="underline hover:text-ink transition-colors">
+              support@tarjumanedu.com
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </>
+  )
+}
