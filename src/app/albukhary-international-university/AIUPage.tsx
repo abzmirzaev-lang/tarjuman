@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { Navbar } from '@/components/layout/Navbar'
 import { useLanguage } from '@/hooks/useLanguage'
+import { t, type Lang } from './translations'
 import {
   GraduationCap, MapPin, Globe, BookOpen, Award, Home, Utensils,
   Users, ChevronDown, ChevronRight, CheckCircle, XCircle, Star,
@@ -55,6 +56,8 @@ const schemaOrg = {
 export default function AIUPage() {
   const [lang, setLang] = useLanguage()
 
+  const tr = t[lang as Lang] ?? t.ru
+
   return (
     <>
       {/* Schema.org */}
@@ -66,27 +69,27 @@ export default function AIUPage() {
       <Navbar lang={lang} onLangChange={setLang} />
 
       <main className="min-h-screen bg-[#F7F8FA] overflow-x-hidden">
-        <HeroSection />
-        <AboutSection />
-        <WhyAIUSection />
-        <ProgramsSection />
-        <ScholarshipSection />
-        <RequirementsSection />
-        <DocumentsSection />
-        <IELTSSection />
-        <ProcessSection />
-        <InterviewSection />
-        <GallerySection />
-        <FAQSection />
-        <TestimonialsSection />
-        <CTASection />
+        <HeroSection tr={tr} />
+        <AboutSection tr={tr} />
+        <WhyAIUSection tr={tr} />
+        <ProgramsSection tr={tr} />
+        <ScholarshipSection tr={tr} />
+        <RequirementsSection tr={tr} />
+        <DocumentsSection tr={tr} />
+        <IELTSSection tr={tr} />
+        <ProcessSection tr={tr} />
+        <InterviewSection tr={tr} />
+        <GallerySection tr={tr} />
+        <FAQSection tr={tr} lang={lang as Lang} />
+        <TestimonialsSection tr={tr} />
+        <CTASection tr={tr} />
       </main>
     </>
   )
 }
 
 /* ════════════════════ HERO ════════════════════ */
-function HeroSection() {
+function HeroSection({ tr }: { tr: typeof import('./translations').t.ru }) {
   return (
     <section className="relative min-h-[92vh] flex items-center overflow-hidden bg-gradient-to-br from-[#0a2e26] via-[#0d3b30] to-[#1a4a3a]">
       {/* animated background blobs */}
@@ -107,11 +110,11 @@ function HeroSection() {
           <motion.div {...fadeUp(0.05)} className="flex flex-wrap gap-3 mb-6">
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur border border-white/20 rounded-full px-4 py-2 text-white/80 text-sm font-medium">
               <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-              Приём заявок открыт · 2025–2026
+              {tr.badge}
             </div>
             <div className="inline-flex items-center gap-2 bg-red-500/20 backdrop-blur border border-red-400/40 rounded-full px-4 py-2 text-red-200 text-sm font-bold">
               <Clock size={13} className="text-red-300" />
-              Дедлайн подачи — 30 июля
+              {tr.deadline}
             </div>
           </motion.div>
 
@@ -122,20 +125,19 @@ function HeroSection() {
           </motion.h1>
 
           <motion.p {...fadeUp(0.18)} className="text-lg text-white/70 mb-4 leading-relaxed">
-            Малайзия · Полная стипендия
+            {tr.heroSub}
           </motion.p>
 
           <motion.p {...fadeUp(0.22)} className="text-white/60 text-base leading-relaxed mb-10 max-w-xl">
-            Международный университет с кампусом мирового уровня в Алор-Старе, Малайзия.
-            Полная стипендия покрывает обучение, проживание и питание — для студентов без финансовых ограничений.
+            {tr.heroDesc}
           </motion.p>
 
           {/* stats strip */}
           <motion.div {...fadeUp(0.27)} className="grid grid-cols-3 gap-4 mb-10">
             {[
-              { value: '100%', label: 'Стипендия' },
-              { value: '60+', label: 'Стран' },
-              { value: '9', label: 'Специальностей' },
+              { value: '100%', label: tr.stat1 },
+              { value: '60+', label: tr.stat2 },
+              { value: '9', label: tr.stat3 },
             ].map(s => (
               <div key={s.label} className="bg-white/10 backdrop-blur border border-white/15 rounded-2xl p-4 text-center">
                 <div className="text-2xl font-black text-white">{s.value}</div>
@@ -152,7 +154,7 @@ function HeroSection() {
               className="inline-flex items-center justify-center gap-2 bg-brand-400 hover:bg-brand-300 text-white font-bold px-8 py-4 rounded-2xl text-base transition-all duration-200 hover:shadow-[0_8px_30px_rgba(111,175,155,0.4)] hover:-translate-y-0.5"
             >
               <GraduationCap size={20} />
-              Подать заявку
+              {tr.btnApply}
             </a>
             <a
               href={TG_LINK}
@@ -161,7 +163,7 @@ function HeroSection() {
               className="inline-flex items-center justify-center gap-2 bg-[#229ED9] hover:bg-[#1a8dc5] text-white font-semibold px-6 py-4 rounded-2xl text-base transition-all duration-200 hover:-translate-y-0.5"
             >
               <Send size={18} />
-              Telegram
+              {tr.btnTg}
             </a>
             <a
               href="https://wa.me/message/TARJUMAN"
@@ -170,7 +172,7 @@ function HeroSection() {
               className="inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5c] text-white font-semibold px-6 py-4 rounded-2xl text-base transition-all duration-200 hover:-translate-y-0.5"
             >
               <MessageCircle size={18} />
-              WhatsApp
+              {tr.btnWa}
             </a>
           </motion.div>
 
@@ -279,14 +281,14 @@ function HeroSection() {
 }
 
 /* ════════════════════ ABOUT ════════════════════ */
-function AboutSection() {
+function AboutSection({ tr }: { tr: typeof import('./translations').t.ru }) {
   const stats = [
-    { icon: <Calendar size={20} />, label: 'Основан', value: '2012' },
-    { icon: <MapPin size={20} />, label: 'Расположение', value: 'Alor Setar, Kedah' },
-    { icon: <Globe size={20} />, label: 'Язык обучения', value: 'Английский' },
-    { icon: <Users size={20} />, label: 'Студенты', value: '60+ стран' },
-    { icon: <Award size={20} />, label: 'Аккредитация', value: 'MQA, Малайзия' },
-    { icon: <GraduationCap size={20} />, label: 'Диплом', value: 'Международный' },
+    { icon: <Calendar size={20} />, label: tr.statFounded, value: '2012' },
+    { icon: <MapPin size={20} />, label: tr.statLocation, value: 'Alor Setar, Kedah' },
+    { icon: <Globe size={20} />, label: tr.statLang, value: tr.statLangVal },
+    { icon: <Users size={20} />, label: tr.statStudents, value: '60+' },
+    { icon: <Award size={20} />, label: tr.statAccred, value: 'MQA' },
+    { icon: <GraduationCap size={20} />, label: tr.statDiploma, value: tr.statDiplomaVal },
   ]
 
   return (
@@ -294,16 +296,16 @@ function AboutSection() {
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <motion.div {...fadeUp()}>
-            <SectionLabel><Building2 size={12} /> Об университете</SectionLabel>
+            <SectionLabel><Building2 size={12} /> {tr.aboutLabel}</SectionLabel>
             <h2 className="text-3xl sm:text-4xl font-black text-ink mb-6 leading-tight">
-              Международный университет<br />
-              <span className="text-brand-600">в сердце Малайзии</span>
+              {tr.aboutTitle}<br />
+              <span className="text-brand-600">{tr.aboutTitleSpan}</span>
             </h2>
             <p className="text-muted leading-relaxed mb-5">
               Albukhary International University (AIU) — частный международный университет, основанный в 2012 году в Алор-Старе, штат Кедах, Малайзия. Университет был создан с особой миссией: предоставить качественное высшее образование студентам из развивающихся стран по всему миру — бесплатно.
             </p>
             <p className="text-muted leading-relaxed mb-5">
-              AIU финансируется Фондом Albukhary — крупнейшей гуманитарной организацией, основанной малайзийским меценатом Саедом Мокхтаром Аль-Бухари. Фонд покрывает все расходы студентов: обучение, проживание и питание.
+              {tr.aboutP2}
             </p>
             <p className="text-muted leading-relaxed">
               Кампус мирового уровня включает современные учебные корпуса, библиотеку, спортивные объекты, благоустроенные общежития и студенческие центры. Студенты из более чем 60 стран создают по-настоящему интернациональную академическую среду.
@@ -345,7 +347,7 @@ function AboutSection() {
 }
 
 /* ════════════════════ WHY AIU ════════════════════ */
-function WhyAIUSection() {
+function WhyAIUSection({ tr }: { tr: typeof import('./translations').t.ru }) {
   const benefits = [
     {
       icon: <Award className="text-amber-500" size={28} />,
@@ -401,9 +403,9 @@ function WhyAIUSection() {
     <section className="py-24 bg-[#F7F8FA]">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div {...fadeUp()} className="text-center mb-14">
-          <SectionLabel><Star size={12} /> Преимущества</SectionLabel>
+          <SectionLabel><Star size={12} /> {tr.whyLabel}</SectionLabel>
           <h2 className="text-3xl sm:text-4xl font-black text-ink mb-4">
-            Почему стоит выбрать AIU?
+            {tr.whyTitle}
           </h2>
           <p className="text-muted max-w-2xl mx-auto">
             Albukhary International University — один из немногих университетов в мире, предлагающих полную стипендию с покрытием всех основных расходов студента.
@@ -434,86 +436,79 @@ function WhyAIUSection() {
 }
 
 /* ════════════════════ PROGRAMS ════════════════════ */
-function ProgramsSection() {
+function ProgramsSection({ tr }: { tr: typeof import('./translations').t.ru }) {
   const programs = [
     {
       icon: <Monitor size={22} />,
       color: 'from-blue-500 to-blue-700',
       bg: 'bg-blue-50',
       text: 'text-blue-700',
-      faculty: 'Компьютерные науки',
-      programs: ['Бакалавр компьютерных наук'],
-      degree: 'Бакалавр наук',
+      faculty: tr.p1name,
+      programs: [tr.p1p1],
+      degree: tr.p1deg,
     },
     {
       icon: <Briefcase size={22} />,
       color: 'from-brand-500 to-brand-700',
       bg: 'bg-brand-50',
       text: 'text-brand-700',
-      faculty: 'Управление бизнесом',
-      programs: [
-        'Бакалавр управления бизнесом',
-        'Управление бизнесом (Маркетинг)',
-        'Управление бизнесом (Управление персоналом)',
-      ],
-      degree: 'Бакалавр бизнеса',
+      faculty: tr.p2name,
+      programs: [tr.p2p1, tr.p2p2, tr.p2p3],
+      degree: tr.p2deg,
     },
     {
       icon: <TrendingUp size={22} />,
       color: 'from-emerald-500 to-emerald-700',
       bg: 'bg-emerald-50',
       text: 'text-emerald-700',
-      faculty: 'Экономика',
-      programs: ['Бакалавр экономики'],
-      degree: 'Бакалавр экономики',
+      faculty: tr.p3name,
+      programs: [tr.p3p1],
+      degree: tr.p3deg,
     },
     {
       icon: <Landmark size={22} />,
       color: 'from-amber-500 to-orange-600',
       bg: 'bg-amber-50',
       text: 'text-amber-700',
-      faculty: 'Исламские финансы',
-      programs: ['Бакалавр финансов (Исламские финансы)'],
-      degree: 'Бакалавр финансов',
+      faculty: tr.p4name,
+      programs: [tr.p4p1],
+      degree: tr.p4deg,
     },
     {
       icon: <Globe size={22} />,
       color: 'from-purple-500 to-purple-700',
       bg: 'bg-purple-50',
       text: 'text-purple-700',
-      faculty: 'Политика и МО',
-      programs: ['Бакалавр политики и международных отношений'],
-      degree: 'Бакалавр искусств',
+      faculty: tr.p5name,
+      programs: [tr.p5p1],
+      degree: tr.p5deg,
     },
     {
       icon: <Users size={22} />,
       color: 'from-cyan-500 to-cyan-700',
       bg: 'bg-cyan-50',
       text: 'text-cyan-700',
-      faculty: 'Социальное развитие',
-      programs: ['Бакалавр социального развития'],
-      degree: 'Бакалавр искусств',
+      faculty: tr.p6name,
+      programs: [tr.p6p1],
+      degree: tr.p6deg,
     },
     {
       icon: <Heart size={22} />,
       color: 'from-rose-500 to-rose-700',
       bg: 'bg-rose-50',
       text: 'text-rose-700',
-      faculty: 'Педагогика',
-      programs: [
-        'Бакалавр начального образования',
-        'Бакалавр дошкольного образования',
-      ],
-      degree: 'Бакалавр педагогики',
+      faculty: tr.p7name,
+      programs: [tr.p7p1, tr.p7p2],
+      degree: tr.p7deg,
     },
     {
       icon: <Newspaper size={22} />,
       color: 'from-indigo-500 to-indigo-700',
       bg: 'bg-indigo-50',
       text: 'text-indigo-700',
-      faculty: 'Медиа и коммуникации',
-      programs: ['Бакалавр медиа и коммуникаций'],
-      degree: 'Бакалавр коммуникаций',
+      faculty: tr.p8name,
+      programs: [tr.p8p1],
+      degree: tr.p8deg,
     },
   ]
 
@@ -521,12 +516,12 @@ function ProgramsSection() {
     <section className="py-24 bg-white">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div {...fadeUp()} className="text-center mb-14">
-          <SectionLabel><BookOpen size={12} /> Специальности</SectionLabel>
+          <SectionLabel><BookOpen size={12} /> {tr.progLabel}</SectionLabel>
           <h2 className="text-3xl sm:text-4xl font-black text-ink mb-4">
-            Доступные программы
+            {tr.progTitle}
           </h2>
           <p className="text-muted max-w-2xl mx-auto">
-            AIU предлагает широкий спектр программ бакалавриата на английском языке. Все программы ведутся на уровне международных академических стандартов.
+{tr.progDesc}
           </p>
         </motion.div>
 
@@ -560,7 +555,7 @@ function ProgramsSection() {
         </div>
 
         <motion.p {...fadeUp(0.2)} className="text-center text-sm text-muted mt-8">
-          * Конкретный перечень программ на текущий год уточняйте у менеджера Tarjuman Education
+{tr.progNote}
         </motion.p>
 
         {/* Preparatory English course block */}
@@ -577,15 +572,15 @@ function ProgramsSection() {
               <div className="inline-flex items-center gap-1.5 bg-white/20 rounded-full px-3 py-1 text-xs font-semibold mb-3">
                 <BadgeCheck size={12} /> Подготовительный курс
               </div>
-              <h3 className="text-xl font-bold mb-2">Подготовительный курс английского языка</h3>
+              <h3 className="text-xl font-bold mb-2">{tr.prepTitle}</h3>
               <p className="text-white/75 leading-relaxed text-sm max-w-2xl">
                 AIU предоставляет <strong className="text-white">бесплатный подготовительный курс английского языка</strong> для студентов, чей уровень языка недостаточен для начала основной программы. Студент сначала проходит языковую подготовку на кампусе, а затем переходит к основной специальности. Это снимает языковой барьер при поступлении — <strong className="text-white">IELTS не обязателен</strong>.
               </p>
             </div>
             <div className="flex-shrink-0">
               <div className="bg-white/15 border border-white/20 rounded-2xl px-5 py-4 text-center">
-                <p className="text-2xl font-black text-white">100%</p>
-                <p className="text-xs text-white/70 mt-1">Бесплатно</p>
+<p className="text-2xl font-black text-white">100%</p>
+                <p className="text-xs text-white/70 mt-1">{tr.prepFree}</p>
               </div>
             </div>
           </div>
@@ -596,13 +591,13 @@ function ProgramsSection() {
 }
 
 /* ════════════════════ SCHOLARSHIP TABLE ════════════════════ */
-function ScholarshipSection() {
+function ScholarshipSection({ tr }: { tr: typeof import('./translations').t.ru }) {
   const covered = [
-    { icon: <BookOpen size={16} />, item: 'Обучение (tuition fee)' },
-    { icon: <Home size={16} />, item: 'Проживание в кампусе' },
-    { icon: <Utensils size={16} />, item: 'Питание (3 раза в день)' },
-    { icon: <GraduationCap size={16} />, item: 'Регистрационный взнос' },
-    { icon: <BookOpen size={16} />, item: 'Учебные материалы' },
+    { icon: <BookOpen size={16} />, item: tr.cov1 },
+    { icon: <Home size={16} />, item: tr.cov2 },
+    { icon: <Utensils size={16} />, item: tr.cov3 },
+    { icon: <GraduationCap size={16} />, item: tr.cov4 },
+    { icon: <BookOpen size={16} />, item: tr.cov5 },
   ]
 
   const notCovered = [
@@ -622,12 +617,12 @@ function ScholarshipSection() {
 
       <div className="relative max-w-6xl mx-auto px-6">
         <motion.div {...fadeUp()} className="text-center mb-14">
-          <SectionLabel><Award size={12} /> Стипендия</SectionLabel>
+          <SectionLabel><Award size={12} /> {tr.schlLabel}</SectionLabel>
           <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">
-            Что покрывает стипендия?
+            {tr.schlTitle}
           </h2>
           <p className="text-white/60 max-w-2xl mx-auto">
-            Стипендия AIU — одна из самых щедрых в Азии. Студент получает полное обеспечение без ежегодных платежей за обучение и проживание.
+{tr.schlDesc}
           </p>
         </motion.div>
 
@@ -641,8 +636,8 @@ function ScholarshipSection() {
                 <CheckCircle size={20} className="text-green-400" />
               </div>
               <div>
-                <p className="font-bold text-white text-lg">Покрывается стипендией</p>
-                <p className="text-green-400/80 text-sm">100% бесплатно для студента</p>
+<p className="font-bold text-white text-lg">{tr.schlCoveredTitle}</p>
+                <p className="text-green-400/80 text-sm">{tr.schlCoveredSub}</p>
               </div>
             </div>
             <div className="space-y-3">
@@ -668,14 +663,14 @@ function ScholarshipSection() {
 }
 
 /* ════════════════════ REQUIREMENTS ════════════════════ */
-function RequirementsSection() {
+function RequirementsSection({ tr }: { tr: typeof import('./translations').t.ru }) {
   const reqs = [
-    { icon: <Calendar size={18} />, text: 'Предпочтительный возраст — до 20 лет (в отдельных случаях до 22 лет)' },
-    { icon: <GraduationCap size={18} />, text: 'Хорошая академическая успеваемость (аттестат без двоек)' },
-    { icon: <TrendingUp size={18} />, text: 'Семейный доход должен соответствовать критериям стипендии' },
-    { icon: <Globe size={18} />, text: 'Владение английским языком — приветствуется, но IELTS не обязателен' },
-    { icon: <FileText size={18} />, text: 'Полный пакет документов в соответствии с требованиями университета' },
-    { icon: <BadgeCheck size={18} />, text: 'Готовность пройти вступительное интервью (онлайн или очно)' },
+    { icon: <Calendar size={18} />, text: tr.req1 },
+    { icon: <GraduationCap size={18} />, text: tr.req2 },
+    { icon: <TrendingUp size={18} />, text: tr.req3 },
+    { icon: <Globe size={18} />, text: tr.req4 },
+    { icon: <FileText size={18} />, text: tr.req5 },
+    { icon: <BadgeCheck size={18} />, text: tr.req6 },
   ]
 
   return (
@@ -683,12 +678,12 @@ function RequirementsSection() {
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <motion.div {...fadeUp()}>
-            <SectionLabel><CheckCircle size={12} /> Требования</SectionLabel>
+            <SectionLabel><CheckCircle size={12} /> {tr.reqLabel}</SectionLabel>
             <h2 className="text-3xl sm:text-4xl font-black text-ink mb-6 leading-tight">
               Требования<br />к поступлению
             </h2>
             <p className="text-muted leading-relaxed mb-8">
-              AIU принимает студентов из развивающихся стран с хорошей успеваемостью и реальной потребностью в финансовой поддержке. Требования — адекватные, и большинство выпускников школ им соответствуют.
+  {tr.reqDesc} Требования — адекватные, и большинство выпускников школ им соответствуют.
             </p>
             <div className="space-y-4">
               {reqs.map((r, i) => (
@@ -717,16 +712,16 @@ function RequirementsSection() {
               <div className="space-y-4">
                 <div className="bg-white/10 rounded-2xl p-5">
                   <div className="text-4xl font-black text-white mb-1">до 20</div>
-                  <p className="text-white/70 text-sm">Предпочтительный возраст. Наибольшие шансы на одобрение заявки.</p>
+  <p className="text-white/70 text-sm">{tr.age1desc}</p>
                 </div>
                 <div className="bg-white/10 rounded-2xl p-5">
                   <div className="text-4xl font-black text-amber-300 mb-1">до 22</div>
-                  <p className="text-white/70 text-sm">Рассматривается в отдельных случаях, при сильном академическом досье.</p>
+  <p className="text-white/70 text-sm">{tr.age2desc}</p>
                 </div>
               </div>
               <div className="mt-6 pt-5 border-t border-white/20">
                 <p className="text-white/60 text-xs leading-relaxed">
-                  * Студентам старше 22 лет рекомендуем рассмотреть другие программы. Наши менеджеры помогут подобрать подходящий вариант.
+  {tr.ageNote} Наши менеджеры помогут подобрать подходящий вариант.
                 </p>
               </div>
             </div>
@@ -736,7 +731,7 @@ function RequirementsSection() {
                 <BadgeCheck size={16} /> Хорошая новость
               </div>
               <p className="text-sm text-muted leading-relaxed">
-                AIU не требует IELTS, TOEFL или других сертификатов английского языка. Студенты проходят внутренний языковой тест уже после поступления.
+  {tr.goodNewsText}
               </p>
             </div>
           </motion.div>
@@ -747,36 +742,36 @@ function RequirementsSection() {
 }
 
 /* ════════════════════ DOCUMENTS ════════════════════ */
-function DocumentsSection() {
+function DocumentsSection({ tr }: { tr: typeof import('./translations').t.ru }) {
   const required = [
-    'Загранпаспорт',
-    'Аттестат об окончании школы',
-    'Оценки за 9, 10 и 11 классы',
-    'Перевод всех документов на английский язык',
-    'Удостоверение личности обоих родителей',
-    'Подтверждение дохода родителей (справка или форма AIU)',
-    'Коммунальный счёт (электричество, вода или газ)',
-    'Фотография дома снаружи',
-    'Фотография кухни',
-    'Фотография гостиной',
-    'Personal Statement (эссе-мотивация)',
+tr.d1,
+tr.d2,
+tr.d3,
+tr.d4,
+tr.d5,
+tr.d6,
+tr.d7,
+tr.d8,
+tr.d9,
+tr.d10,
+tr.d11,
   ]
 
   const optional = [
-    'IELTS (при наличии)',
-    'TOEFL (при наличии)',
-    'Рекомендательное письмо',
-    'Сертификаты и грамоты за достижения',
-    'Дипломы олимпиад и конкурсов',
+tr.o1,
+tr.o2,
+tr.o3,
+tr.o4,
+tr.o5,
   ]
 
   return (
     <section className="py-24 bg-white">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div {...fadeUp()} className="text-center mb-14">
-          <SectionLabel><FileText size={12} /> Документы</SectionLabel>
+          <SectionLabel><FileText size={12} /> {tr.docLabel}</SectionLabel>
           <h2 className="text-3xl sm:text-4xl font-black text-ink mb-4">
-            Полный список документов
+            {tr.docTitle}
           </h2>
           <p className="text-muted max-w-2xl mx-auto">
             Tarjuman Education помогает собрать, перевести и правильно оформить весь пакет документов для подачи в AIU.
@@ -792,7 +787,7 @@ function DocumentsSection() {
                   <CheckCircle size={20} className="text-brand-600" />
                 </div>
                 <div>
-                  <p className="font-bold text-ink text-lg">Обязательные документы</p>
+<p className="font-bold text-ink text-lg">{tr.docReqTitle}</p>
                   <p className="text-sm text-muted">{required.length} позиций</p>
                 </div>
               </div>
@@ -824,8 +819,8 @@ function DocumentsSection() {
                   <Star size={20} className="text-amber-600" />
                 </div>
                 <div>
-                  <p className="font-bold text-ink text-lg">Необязательные документы</p>
-                  <p className="text-sm text-muted">Усиливают заявку</p>
+<p className="font-bold text-ink text-lg">{tr.docOptTitle}</p>
+                  <p className="text-sm text-muted">{tr.docOptSub}</p>
                 </div>
               </div>
               <div className="space-y-3">
@@ -867,7 +862,7 @@ function DocumentsSection() {
 }
 
 /* ════════════════════ IELTS ════════════════════ */
-function IELTSSection() {
+function IELTSSection({ tr }: { tr: typeof import('./translations').t.ru }) {
   return (
     <section className="py-16 bg-[#F7F8FA]">
       <div className="max-w-4xl mx-auto px-6">
@@ -887,19 +882,18 @@ function IELTSSection() {
             </div>
 
             <h2 className="text-3xl sm:text-4xl font-black mb-4">
-              IELTS не обязателен!
+              {tr.ieltsTitle}
             </h2>
 
             <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Для подачи заявки в AIU не требуется сертификат IELTS или TOEFL.
-              Студенты без языкового сертификата могут подавать документы.
+  {tr.ieltsDesc}
             </p>
 
             <div className="grid sm:grid-cols-3 gap-4 mb-8">
               {[
-                { icon: <CheckCircle size={20} />, text: 'Подача без IELTS' },
-                { icon: <CheckCircle size={20} />, text: 'Подача без TOEFL' },
-                { icon: <CheckCircle size={20} />, text: 'Внутренний тест в AIU' },
+{ icon: <CheckCircle size={20} />, text: tr.ielts1 },
+{ icon: <CheckCircle size={20} />, text: tr.ielts2 },
+{ icon: <CheckCircle size={20} />, text: tr.ielts3 },
               ].map(item => (
                 <div key={item.text} className="bg-white/15 backdrop-blur rounded-2xl p-4 flex items-center gap-2 justify-center font-semibold">
                   <span className="text-green-300">{item.icon}</span>
@@ -919,7 +913,7 @@ function IELTSSection() {
 }
 
 /* ════════════════════ PROCESS TIMELINE ════════════════════ */
-function ProcessSection() {
+function ProcessSection({ tr }: { tr: typeof import('./translations').t.ru }) {
   const steps = [
     {
       num: '01',
@@ -983,12 +977,12 @@ function ProcessSection() {
     <section className="py-24 bg-white">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div {...fadeUp()} className="text-center mb-16">
-          <SectionLabel><ArrowRight size={12} /> Процесс</SectionLabel>
+          <SectionLabel><ArrowRight size={12} /> {tr.procLabel}</SectionLabel>
           <h2 className="text-3xl sm:text-4xl font-black text-ink mb-4">
-            Как подать заявку в AIU?
+            {tr.procTitle}
           </h2>
           <p className="text-muted max-w-2xl mx-auto">
-            Tarjuman Education сопровождает вас на каждом шаге — от первого звонка до регистрации в кампусе.
+{tr.procDesc}
           </p>
         </motion.div>
 
@@ -1030,7 +1024,7 @@ function ProcessSection() {
 }
 
 /* ════════════════════ INTERVIEW ════════════════════ */
-function InterviewSection() {
+function InterviewSection({ tr }: { tr: typeof import('./translations').t.ru }) {
   const tips = [
     'Говорите уверенно и чётко. Университет оценивает вашу уверенность, а не идеальный английский.',
     'Заранее подготовьте ответы на вопросы о себе, своей семье и мотивации к учёбе.',
@@ -1055,12 +1049,12 @@ function InterviewSection() {
     <section className="py-24 bg-[#F7F8FA]">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div {...fadeUp()} className="text-center mb-14">
-          <SectionLabel><Mic2 size={12} /> Интервью</SectionLabel>
+          <SectionLabel><Mic2 size={12} /> {tr.intLabel}</SectionLabel>
           <h2 className="text-3xl sm:text-4xl font-black text-ink mb-4">
-            Вступительное интервью
+            {tr.intTitle}
           </h2>
           <p className="text-muted max-w-2xl mx-auto">
-            Интервью — финальный этап перед получением оффера. Tarjuman Education проводит подготовительные сессии с каждым студентом.
+{tr.intDesc}
           </p>
         </motion.div>
 
@@ -1070,15 +1064,15 @@ function InterviewSection() {
             <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
               <Monitor size={20} className="text-blue-600" />
             </div>
-            <h3 className="font-bold text-ink text-lg mb-3">Формат интервью</h3>
+<h3 className="font-bold text-ink text-lg mb-3">{tr.intFormatTitle}</h3>
             <ul className="space-y-2.5 text-sm text-muted">
               {[
-                'Проводится онлайн (Zoom/Teams)',
-                'Длительность: 20–40 минут',
-                'Язык: английский',
-                '1–3 члена приёмной комиссии',
+tr.if1,
+tr.if2,
+tr.if3,
+tr.if4,
                 'Возможно собеседование на арабском',
-                'Уведомление за 1–2 недели',
+tr.if5,
               ].map(item => (
                 <li key={item} className="flex items-center gap-2">
                   <ChevronRight size={13} className="text-brand-400" />
@@ -1093,15 +1087,15 @@ function InterviewSection() {
             <div className="w-10 h-10 bg-brand-100 rounded-xl flex items-center justify-center mb-4">
               <Users size={20} className="text-brand-600" />
             </div>
-            <h3 className="font-bold text-ink text-lg mb-3">Что оценивает комиссия</h3>
+<h3 className="font-bold text-ink text-lg mb-3">{tr.intCriteriaTitle}</h3>
             <ul className="space-y-2.5 text-sm text-muted">
               {[
-                'Мотивация к обучению',
-                'Уровень английского языка',
-                'Академический потенциал',
-                'Финансовая необходимость',
-                'Личностные качества',
-                'Цели после окончания',
+tr.ic1,
+tr.ic2,
+tr.ic3,
+tr.ic4,
+tr.ic5,
+tr.ic6,
               ].map(item => (
                 <li key={item} className="flex items-center gap-2">
                   <CheckCircle size={13} className="text-brand-400" />
@@ -1116,7 +1110,7 @@ function InterviewSection() {
             <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center mb-4">
               <Star size={20} className="text-green-600" />
             </div>
-            <h3 className="font-bold text-ink text-lg mb-3">Советы по подготовке</h3>
+<h3 className="font-bold text-ink text-lg mb-3">{tr.intTipsTitle}</h3>
             <ul className="space-y-2 text-sm text-muted">
               {tips.slice(0, 5).map((t, i) => (
                 <li key={i} className="flex items-start gap-2">
@@ -1151,31 +1145,31 @@ function InterviewSection() {
 }
 
 /* ════════════════════ GALLERY ════════════════════ */
-function GallerySection() {
+function GallerySection({ tr }: { tr: typeof import('./translations').t.ru }) {
   const images = [
     {
       src: 'https://images.unsplash.com/photo-1562774053-701939374585?w=800&q=80&auto=format',
-      label: 'Кампус AIU',
+label: tr.gal1,
       span: 'col-span-2',
     },
     {
       src: 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=600&q=80&auto=format',
-      label: 'Общежитие',
+label: tr.gal2,
       span: '',
     },
     {
       src: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&q=80&auto=format',
-      label: 'Студенческая жизнь',
+label: tr.gal3,
       span: '',
     },
     {
       src: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&q=80&auto=format',
-      label: 'Учебные аудитории',
+label: tr.gal4,
       span: '',
     },
     {
       src: 'https://images.unsplash.com/photo-1596422846543-75c6fc197f11?w=800&q=80&auto=format',
-      label: 'Малайзия',
+label: tr.gal5,
       span: 'col-span-2',
     },
   ]
@@ -1184,12 +1178,12 @@ function GallerySection() {
     <section className="py-24 bg-white">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div {...fadeUp()} className="text-center mb-12">
-          <SectionLabel>📸 Галерея</SectionLabel>
+          <SectionLabel>📸 {tr.galLabel}</SectionLabel>
           <h2 className="text-3xl sm:text-4xl font-black text-ink mb-4">
-            Жизнь в AIU
+            {tr.galTitle}
           </h2>
           <p className="text-muted max-w-xl mx-auto">
-            Современный кампус, комфортабельные общежития и студенческая жизнь в Малайзии.
+{tr.galDesc}
           </p>
         </motion.div>
 
@@ -1221,7 +1215,7 @@ function GallerySection() {
 }
 
 /* ════════════════════ FAQ ════════════════════ */
-function FAQSection() {
+function FAQSection({ tr, lang }: { tr: typeof import('./translations').t.ru, lang: import('./translations').Lang }) {
   const [open, setOpen] = useState<number | null>(null)
 
   const faqs = [
@@ -1311,12 +1305,12 @@ function FAQSection() {
     <section className="py-24 bg-[#F7F8FA]">
       <div className="max-w-4xl mx-auto px-6">
         <motion.div {...fadeUp()} className="text-center mb-14">
-          <SectionLabel>❓ FAQ</SectionLabel>
+          <SectionLabel>❓ {tr.faqLabel}</SectionLabel>
           <h2 className="text-3xl sm:text-4xl font-black text-ink mb-4">
-            Часто задаваемые вопросы
+            {tr.faqTitle}
           </h2>
           <p className="text-muted max-w-xl mx-auto">
-            {faqs.length} подробных ответа на самые частые вопросы о поступлении в AIU
+{tr.faqDesc}
           </p>
         </motion.div>
 
@@ -1367,7 +1361,7 @@ function FAQSection() {
 }
 
 /* ════════════════════ TESTIMONIALS ════════════════════ */
-function TestimonialsSection() {
+function TestimonialsSection({ tr }: { tr: typeof import('./translations').t.ru }) {
   const reviews = [
     {
       name: 'Азизбек М.',
@@ -1399,12 +1393,12 @@ function TestimonialsSection() {
     <section className="py-24 bg-white">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div {...fadeUp()} className="text-center mb-14">
-          <SectionLabel><Star size={12} /> Отзывы</SectionLabel>
+          <SectionLabel><Star size={12} /> {tr.revLabel}</SectionLabel>
           <h2 className="text-3xl sm:text-4xl font-black text-ink mb-4">
-            Студенты о Tarjuman Education
+            {tr.revTitle}
           </h2>
           <p className="text-muted max-w-xl mx-auto">
-            Реальные истории студентов, поступивших в AIU с помощью Tarjuman Education
+{tr.revDesc}
           </p>
         </motion.div>
 
@@ -1434,7 +1428,7 @@ function TestimonialsSection() {
 
         <motion.div {...fadeUp(0.2)} className="mt-10 bg-[#F7F8FA] rounded-2xl border border-dashed border-border p-6 text-center">
           <p className="text-muted text-sm">
-            Вы поступили в AIU с помощью Tarjuman Education? Поделитесь своей историей — напишите нам в{' '}
+  {tr.revShareText}{' '}
             <a href={TG_LINK} className="text-brand-600 font-semibold hover:underline" target="_blank" rel="noopener noreferrer">
               Telegram @TARJUMAN_EDU
             </a>
@@ -1446,7 +1440,7 @@ function TestimonialsSection() {
 }
 
 /* ════════════════════ CTA ════════════════════ */
-function CTASection() {
+function CTASection({ tr }: { tr: typeof import('./translations').t.ru }) {
   return (
     <section className="py-24 bg-gradient-to-br from-[#0a2e26] via-[#0d3b30] to-[#1a4a3a] relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
@@ -1462,18 +1456,17 @@ function CTASection() {
         <motion.div {...fadeUp()}>
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2 text-white/70 text-sm mb-8">
             <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-            Приём заявок открыт · 2025–2026
+{tr.ctaBadge}
           </div>
         </motion.div>
 
         <motion.h2 {...fadeUp(0.05)} className="text-3xl sm:text-5xl font-black text-white mb-6 leading-[1.1]">
-          Начните обучение в Малайзии<br />
-          <span className="text-brand-300">по полной стипендии</span>
+          {tr.ctaTitle}<br />
+          <span className="text-brand-300">{tr.ctaTitleSpan}</span>
         </motion.h2>
 
         <motion.p {...fadeUp(0.1)} className="text-lg text-white/65 mb-10 leading-relaxed">
-          Оставьте заявку — и специалисты Tarjuman Education помогут вам пройти весь путь
-          от подготовки документов до получения оффера и прибытия в кампус.
+{tr.ctaDesc}
         </motion.p>
 
         <motion.div {...fadeUp(0.15)} className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -1484,7 +1477,7 @@ function CTASection() {
             className="inline-flex items-center justify-center gap-2 bg-brand-400 hover:bg-brand-300 text-white font-bold px-10 py-5 rounded-2xl text-lg transition-all duration-200 hover:shadow-[0_8px_40px_rgba(111,175,155,0.5)] hover:-translate-y-0.5"
           >
             <GraduationCap size={22} />
-            Подать заявку
+{tr.ctaBtn}
           </a>
           <a
             href={TG_LINK}
@@ -1493,16 +1486,16 @@ function CTASection() {
             className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-8 py-5 rounded-2xl text-lg transition-all duration-200 hover:-translate-y-0.5"
           >
             <Send size={20} />
-            Написать в Telegram
+            {tr.ctaBtnTg}
           </a>
         </motion.div>
 
         <motion.div {...fadeUp(0.2)} className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-4">
           {[
-            { v: 'Бесплатно', l: 'Первая консультация' },
-            { v: '24/7',       l: 'Поддержка студентов' },
-            { v: '100%',       l: 'Сопровождение' },
-            { v: 'от A до Я',  l: 'Все этапы с нами' },
+{ v: tr.cta1v, l: tr.cta1l },
+{ v: tr.cta2v, l: tr.cta2l },
+{ v: tr.cta3v, l: tr.cta3l },
+{ v: tr.cta4v, l: tr.cta4l },
           ].map(s => (
             <div key={s.l} className="bg-white/10 backdrop-blur border border-white/15 rounded-2xl p-4 text-center">
               <div className="text-xl font-black text-white">{s.v}</div>
