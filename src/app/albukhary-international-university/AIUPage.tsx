@@ -571,8 +571,7 @@ function ScholarshipSection() {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* Covered */}
+        <div className="max-w-2xl mx-auto">
           <motion.div
             {...fadeUp(0.1)}
             className="bg-green-900/30 backdrop-blur border border-green-500/30 rounded-3xl p-8"
@@ -591,30 +590,6 @@ function ScholarshipSection() {
                 <div key={c.item} className="flex items-center gap-3 bg-green-500/10 rounded-xl px-4 py-3">
                   <CheckCircle size={16} className="text-green-400 flex-shrink-0" />
                   <span className="text-white font-medium">{c.item}</span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Not covered */}
-          <motion.div
-            {...fadeUp(0.15)}
-            className="bg-red-900/20 backdrop-blur border border-red-500/20 rounded-3xl p-8"
-          >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-red-500/20 rounded-xl flex items-center justify-center">
-                <XCircle size={20} className="text-red-400" />
-              </div>
-              <div>
-                <p className="font-bold text-white text-lg">Не покрывается</p>
-                <p className="text-red-400/80 text-sm">Оплачивается студентом единоразово</p>
-              </div>
-            </div>
-            <div className="space-y-3">
-              {notCovered.map(c => (
-                <div key={c.item} className="flex items-center gap-3 bg-red-500/10 rounded-xl px-4 py-3">
-                  <XCircle size={16} className="text-red-400 flex-shrink-0" />
-                  <span className="text-white/80 font-medium">{c.item}</span>
                 </div>
               ))}
             </div>
