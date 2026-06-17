@@ -21,6 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${APP_URL}/stipendiya-saudovskaya-araviya`, lastModified: now, changeFrequency: 'monthly', priority: 0.85 },
     { url: `${APP_URL}/al-qasimia-university-postuplenie`, lastModified: now, changeFrequency: 'monthly', priority: 0.85 },
     { url: `${APP_URL}/islamskiy-universitet-mediny`,   lastModified: now, changeFrequency: 'monthly', priority: 0.85 },
+    { url: `${APP_URL}/albukhary-international-university`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
     { url: `${APP_URL}/terms`,                          lastModified: now, changeFrequency: 'yearly',  priority: 0.2 },
     { url: `${APP_URL}/privacy`,                        lastModified: now, changeFrequency: 'yearly',  priority: 0.2 },
     { url: `${APP_URL}/refund`,                         lastModified: now, changeFrequency: 'yearly',  priority: 0.2 },
