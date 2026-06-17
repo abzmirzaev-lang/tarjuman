@@ -1,8 +1,10 @@
 'use client'
 
-import { useState, useRef } from 'react'
-import { motion, useInView, AnimatePresence } from 'framer-motion'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
+import { Navbar } from '@/components/layout/Navbar'
+import { useLanguage } from '@/hooks/useLanguage'
 import {
   GraduationCap, MapPin, Globe, BookOpen, Award, Home, Utensils,
   Users, ChevronDown, ChevronRight, CheckCircle, XCircle, Star,
@@ -51,6 +53,8 @@ const schemaOrg = {
 
 /* ════════════════════════════════════════════════════════ */
 export default function AIUPage() {
+  const [lang, setLang] = useLanguage()
+
   return (
     <>
       {/* Schema.org */}
@@ -58,6 +62,8 @@ export default function AIUPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOrg) }}
       />
+
+      <Navbar lang={lang} onLangChange={setLang} />
 
       <main className="min-h-screen bg-[#F7F8FA] overflow-x-hidden">
         <HeroSection />
