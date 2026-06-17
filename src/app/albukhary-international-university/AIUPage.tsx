@@ -104,10 +104,14 @@ function HeroSection() {
       <div className="relative max-w-6xl mx-auto px-6 py-24 grid lg:grid-cols-2 gap-16 items-center">
         {/* LEFT */}
         <div>
-          <motion.div {...fadeUp(0.05)}>
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur border border-white/20 rounded-full px-4 py-2 text-white/80 text-sm font-medium mb-6">
+          <motion.div {...fadeUp(0.05)} className="flex flex-wrap gap-3 mb-6">
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur border border-white/20 rounded-full px-4 py-2 text-white/80 text-sm font-medium">
               <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
               Приём заявок открыт · 2025–2026
+            </div>
+            <div className="inline-flex items-center gap-2 bg-red-500/20 backdrop-blur border border-red-400/40 rounded-full px-4 py-2 text-red-200 text-sm font-bold">
+              <Clock size={13} className="text-red-300" />
+              Дедлайн подачи — 30 июля
             </div>
           </motion.div>
 
@@ -167,6 +171,28 @@ function HeroSection() {
             >
               <MessageCircle size={18} />
               WhatsApp
+            </a>
+          </motion.div>
+
+          <motion.div {...fadeUp(0.37)} className="flex flex-wrap items-center gap-4 mt-5">
+            <a
+              href="https://aiu.edu.my/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-white/50 hover:text-white/90 text-sm transition-colors"
+            >
+              <Globe size={14} />
+              aiu.edu.my
+            </a>
+            <span className="text-white/20">·</span>
+            <a
+              href="https://www.instagram.com/aiuedu?igsh=MWRvZ3NrejNsc3htbg=="
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-white/50 hover:text-pink-300 text-sm transition-colors"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              @aiuedu
             </a>
           </motion.div>
         </div>
@@ -415,79 +441,79 @@ function ProgramsSection() {
       color: 'from-blue-500 to-blue-700',
       bg: 'bg-blue-50',
       text: 'text-blue-700',
-      faculty: 'Computer Science',
-      programs: ['Bachelor of Computer Science'],
-      degree: 'Bachelor of Science',
+      faculty: 'Компьютерные науки',
+      programs: ['Бакалавр компьютерных наук'],
+      degree: 'Бакалавр наук',
     },
     {
       icon: <Briefcase size={22} />,
       color: 'from-brand-500 to-brand-700',
       bg: 'bg-brand-50',
       text: 'text-brand-700',
-      faculty: 'Business Administration',
+      faculty: 'Управление бизнесом',
       programs: [
-        'Bachelor of Business Administration',
-        'BBA — Marketing',
-        'BBA — Human Resource Management',
+        'Бакалавр управления бизнесом',
+        'Управление бизнесом (Маркетинг)',
+        'Управление бизнесом (Управление персоналом)',
       ],
-      degree: 'Bachelor of Business',
+      degree: 'Бакалавр бизнеса',
     },
     {
       icon: <TrendingUp size={22} />,
       color: 'from-emerald-500 to-emerald-700',
       bg: 'bg-emerald-50',
       text: 'text-emerald-700',
-      faculty: 'Economics',
-      programs: ['Bachelor of Economics'],
-      degree: 'Bachelor of Economics',
+      faculty: 'Экономика',
+      programs: ['Бакалавр экономики'],
+      degree: 'Бакалавр экономики',
     },
     {
       icon: <Landmark size={22} />,
       color: 'from-amber-500 to-orange-600',
       bg: 'bg-amber-50',
       text: 'text-amber-700',
-      faculty: 'Islamic Finance',
-      programs: ['Bachelor of Finance (Islamic Finance)'],
-      degree: 'Bachelor of Finance',
+      faculty: 'Исламские финансы',
+      programs: ['Бакалавр финансов (Исламские финансы)'],
+      degree: 'Бакалавр финансов',
     },
     {
       icon: <Globe size={22} />,
       color: 'from-purple-500 to-purple-700',
       bg: 'bg-purple-50',
       text: 'text-purple-700',
-      faculty: 'Politics & Int. Relations',
-      programs: ['Bachelor of Politics and International Relations'],
-      degree: 'Bachelor of Arts',
+      faculty: 'Политика и МО',
+      programs: ['Бакалавр политики и международных отношений'],
+      degree: 'Бакалавр искусств',
     },
     {
       icon: <Users size={22} />,
       color: 'from-cyan-500 to-cyan-700',
       bg: 'bg-cyan-50',
       text: 'text-cyan-700',
-      faculty: 'Social Development',
-      programs: ['Bachelor of Social Development'],
-      degree: 'Bachelor of Arts',
+      faculty: 'Социальное развитие',
+      programs: ['Бакалавр социального развития'],
+      degree: 'Бакалавр искусств',
     },
     {
       icon: <Heart size={22} />,
       color: 'from-rose-500 to-rose-700',
       bg: 'bg-rose-50',
       text: 'text-rose-700',
-      faculty: 'Education',
+      faculty: 'Педагогика',
       programs: [
-        'Bachelor of Primary Education',
-        'Bachelor of Early Childhood Education',
+        'Бакалавр начального образования',
+        'Бакалавр дошкольного образования',
       ],
-      degree: 'Bachelor of Education',
+      degree: 'Бакалавр педагогики',
     },
     {
       icon: <Newspaper size={22} />,
       color: 'from-indigo-500 to-indigo-700',
       bg: 'bg-indigo-50',
       text: 'text-indigo-700',
-      faculty: 'Media & Communication',
-      programs: ['Bachelor of Media and Communication'],
-      degree: 'Bachelor of Communication',
+      faculty: 'Медиа и коммуникации',
+      programs: ['Бакалавр медиа и коммуникаций'],
+      degree: 'Бакалавр коммуникаций',
     },
   ]
 
@@ -536,6 +562,34 @@ function ProgramsSection() {
         <motion.p {...fadeUp(0.2)} className="text-center text-sm text-muted mt-8">
           * Конкретный перечень программ на текущий год уточняйте у менеджера Tarjuman Education
         </motion.p>
+
+        {/* Preparatory English course block */}
+        <motion.div
+          {...fadeUp(0.25)}
+          className="mt-10 bg-gradient-to-br from-brand-600 to-brand-800 rounded-3xl p-8 text-white relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 w-48 h-48 rounded-full bg-white/5 blur-2xl pointer-events-none" />
+          <div className="relative flex flex-col md:flex-row items-start md:items-center gap-6">
+            <div className="w-14 h-14 bg-white/15 rounded-2xl flex items-center justify-center flex-shrink-0">
+              <BookOpen size={28} className="text-white" />
+            </div>
+            <div className="flex-1">
+              <div className="inline-flex items-center gap-1.5 bg-white/20 rounded-full px-3 py-1 text-xs font-semibold mb-3">
+                <BadgeCheck size={12} /> Подготовительный курс
+              </div>
+              <h3 className="text-xl font-bold mb-2">Подготовительный курс английского языка</h3>
+              <p className="text-white/75 leading-relaxed text-sm max-w-2xl">
+                AIU предоставляет <strong className="text-white">бесплатный подготовительный курс английского языка</strong> для студентов, чей уровень языка недостаточен для начала основной программы. Студент сначала проходит языковую подготовку на кампусе, а затем переходит к основной специальности. Это снимает языковой барьер при поступлении — <strong className="text-white">IELTS не обязателен</strong>.
+              </p>
+            </div>
+            <div className="flex-shrink-0">
+              <div className="bg-white/15 border border-white/20 rounded-2xl px-5 py-4 text-center">
+                <p className="text-2xl font-black text-white">100%</p>
+                <p className="text-xs text-white/70 mt-1">Бесплатно</p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   )
@@ -1446,9 +1500,9 @@ function CTASection() {
         <motion.div {...fadeUp(0.2)} className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-4">
           {[
             { v: 'Бесплатно', l: 'Первая консультация' },
-            { v: '24/7', l: 'Поддержка студентов' },
-            { v: '100%', l: 'Сопровождение' },
-            { v: 'от A до Я', l: 'Все этапы с нами' },
+            { v: '24/7',       l: 'Поддержка студентов' },
+            { v: '100%',       l: 'Сопровождение' },
+            { v: 'от A до Я',  l: 'Все этапы с нами' },
           ].map(s => (
             <div key={s.l} className="bg-white/10 backdrop-blur border border-white/15 rounded-2xl p-4 text-center">
               <div className="text-xl font-black text-white">{s.v}</div>
