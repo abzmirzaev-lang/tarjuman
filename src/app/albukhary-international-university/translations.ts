@@ -116,6 +116,8 @@ export const t = {
     tip3: 'Расскажите о своих достижениях в школе — академических и внеучебных.',
     tip4: 'Объясните, почему вы выбрали именно AIU и конкретную специальность.',
     tip5: 'Будьте честны. Комиссия ценит искренность больше заученных шаблонных ответов.',
+    linkSiteLabel: 'Официальный сайт университета', linkSiteSub: 'aiu.edu.my',
+    linkIgLabel: 'AIU в Instagram', linkIgSub: '@aiuedu',
     intQTitle: 'Частые вопросы на интервью',
     intQNote: '* Tarjuman Education проводит полноценную подготовку к интервью — тренировочные сессии с разбором ответов.',
 
@@ -300,7 +302,9 @@ export const t = {
     tip2: 'O\'zingiz, oilangiz va o\'qishga motivatsiyangiz haqidagi savollarga oldindan javob tayyorlang.',
     tip3: 'Maktabdagi yutuqlaringiz haqida gapirib bering — akademik va maktabdan tashqari.',
     tip4: 'Nima uchun aynan AIU va muayyan mutaxassislikni tanlaganingizni tushuntiring.',
-    tip5: 'Halol bo\'ling. Komissiya yodlangan shablondan ko\'ra samimiylikni qadrlaydri.',
+    tip5: 'Halol bo\'ling. Komissiya yodlangan shablondan ko\'ra samimiylikni qadrlaydi.',
+    linkSiteLabel: 'Rasmiy sayt', linkSiteSub: 'aiu.edu.my',
+    linkIgLabel: 'AIU Instagram', linkIgSub: '@aiuedu',
     intQTitle: 'Suhbatdagi tez-tez so\'raladigan savollar',
     intQNote: '* Tarjuman Education to\'liq suhbatga tayyorgarlik o\'tkazadi — ingliz tilida javoblarni tahlil qilish bilan mashq sessiyalari.',
 

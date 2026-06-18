@@ -166,24 +166,34 @@ function HeroSection({ tr }: { tr: typeof import('./translations').t.ru }) {
 
           </motion.div>
 
-          <motion.div {...fadeUp(0.37)} className="flex flex-wrap items-center gap-3 mt-5">
+          <motion.div {...fadeUp(0.37)} className="flex flex-wrap gap-3 mt-6">
             <a
               href="https://aiu.edu.my/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl px-4 py-2 text-white/70 hover:text-white text-sm font-medium transition-all"
+              className="flex items-center gap-3 bg-white/10 hover:bg-white/18 border border-white/20 hover:border-white/35 rounded-2xl px-4 py-3 transition-all group"
             >
-              <Globe size={14} />
-              aiu.edu.my
+              <div className="w-9 h-9 bg-white/15 group-hover:bg-white/25 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors">
+                <Globe size={16} className="text-white" />
+              </div>
+              <div>
+                <p className="text-white font-semibold text-sm leading-tight">{tr.linkSiteLabel}</p>
+                <p className="text-white/55 text-xs mt-0.5">{tr.linkSiteSub}</p>
+              </div>
             </a>
             <a
               href="https://www.instagram.com/aiuedu?igsh=MWRvZ3NrejNsc3htbg=="
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-white/10 hover:bg-pink-500/20 border border-white/20 hover:border-pink-400/40 rounded-xl px-4 py-2 text-white/70 hover:text-pink-200 text-sm font-medium transition-all"
+              className="flex items-center gap-3 bg-white/10 hover:bg-pink-500/15 border border-white/20 hover:border-pink-400/40 rounded-2xl px-4 py-3 transition-all group"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-              Instagram
+              <div className="w-9 h-9 bg-gradient-to-br from-pink-500/40 to-purple-600/40 group-hover:from-pink-500/60 group-hover:to-purple-600/60 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </div>
+              <div>
+                <p className="text-white font-semibold text-sm leading-tight">{tr.linkIgLabel}</p>
+                <p className="text-white/55 text-xs mt-0.5">{tr.linkIgSub}</p>
+              </div>
             </a>
           </motion.div>
         </div>
@@ -199,7 +209,7 @@ function HeroSection({ tr }: { tr: typeof import('./translations').t.ru }) {
             {/* main image card */}
             <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/10">
               <img
-                src="https://images.unsplash.com/photo-1562774053-701939374585?w=700&q=85&auto=format"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOBGwqqltcCvK3ekMNqYExsnTHPT3co-WEfLTX9wot6w&s=10"
                 alt="Albukhary International University Campus"
                 className="w-full h-80 object-cover"
               />
@@ -522,7 +532,7 @@ function ProgramsSection({ tr }: { tr: typeof import('./translations').t.ru }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.07 }}
-              className="group bg-[#F7F8FA] hover:bg-white border border-transparent hover:border-border rounded-2xl p-5 transition-all duration-300 hover:shadow-card overflow-hidden"
+              className="group bg-[#F7F8FA] hover:bg-white border border-transparent hover:border-border rounded-2xl p-5 transition-all duration-300 hover:shadow-card"
             >
               <div className={`w-12 h-12 bg-gradient-to-br ${p.color} rounded-2xl flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform`}>
                 {p.icon}
@@ -535,7 +545,7 @@ function ProgramsSection({ tr }: { tr: typeof import('./translations').t.ru }) {
                 {p.programs.map(prog => (
                   <li key={prog} className="flex items-start gap-2 text-sm text-muted">
                     <ChevronRight size={13} className="text-brand-400 flex-shrink-0 mt-0.5" />
-                    <span className="leading-snug">{prog}</span>
+                    <span className="leading-snug break-words min-w-0">{prog}</span>
                   </li>
                 ))}
               </ul>
@@ -1136,7 +1146,7 @@ tr.ic6,
 function GallerySection({ tr }: { tr: typeof import('./translations').t.ru }) {
   const images = [
     {
-      src: 'https://images.unsplash.com/photo-1562774053-701939374585?w=800&q=80&auto=format',
+      src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOBGwqqltcCvK3ekMNqYExsnTHPT3co-WEfLTX9wot6w&s=10',
 label: tr.gal1,
       span: 'col-span-2',
     },
