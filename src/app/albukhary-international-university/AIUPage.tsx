@@ -139,7 +139,7 @@ function HeroSection({ tr }: { tr: typeof import('./translations').t.ru }) {
             ].map(s => (
               <div key={s.label} className="bg-white/10 backdrop-blur border border-white/15 rounded-2xl p-4 text-center">
                 <div className="text-2xl font-black text-white">{s.value}</div>
-                <div className="text-xs text-white/60 mt-1">{s.label}</div>
+                <div className="text-[10px] leading-tight text-white/60 mt-1 break-words">{s.label}</div>
               </div>
             ))}
           </motion.div>
