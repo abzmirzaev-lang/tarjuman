@@ -27,3 +27,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${APP_URL}/refund`,                         lastModified: now, changeFrequency: 'yearly',  priority: 0.2 },
   ]
 }
+    { url: `${APP_URL}/refund`,                         lastModified: now, changeFrequency: 'yearly',  priority: 0.2 },
+  ]
+}

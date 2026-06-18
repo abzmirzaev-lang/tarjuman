@@ -220,8 +220,8 @@ function HeroSection({ tr }: { tr: typeof import('./translations').t.ru }) {
                 <Award size={16} className="text-green-600" />
               </div>
               <div>
-                <p className="text-xs font-bold text-ink">Полная стипендия</p>
-                <p className="text-[10px] text-muted">100% покрытие</p>
+                <p className="text-xs font-bold text-ink">{tr.b1t}</p>
+                <p className="text-[10px] text-muted">100%</p>
               </div>
             </motion.div>
 
@@ -234,8 +234,8 @@ function HeroSection({ tr }: { tr: typeof import('./translations').t.ru }) {
                 <Globe size={16} className="text-blue-600" />
               </div>
               <div>
-                <p className="text-xs font-bold text-ink">Международная среда</p>
-                <p className="text-[10px] text-muted">60+ стран</p>
+                <p className="text-xs font-bold text-ink">{tr.b8t}</p>
+                <p className="text-[10px] text-muted">60+</p>
               </div>
             </motion.div>
 
@@ -247,7 +247,7 @@ function HeroSection({ tr }: { tr: typeof import('./translations').t.ru }) {
               <div className="flex items-center gap-1 mb-1">
                 {[1,2,3,4,5].map(i => <Star key={i} size={10} className="fill-amber-400 text-amber-400" />)}
               </div>
-              <p className="text-xs font-bold text-ink">Обучение на английском</p>
+              <p className="text-xs font-bold text-ink">{tr.b6t}</p>
             </motion.div>
           </div>
         </motion.div>
@@ -291,13 +291,13 @@ function AboutSection({ tr }: { tr: typeof import('./translations').t.ru }) {
               <span className="text-brand-600">{tr.aboutTitleSpan}</span>
             </h2>
             <p className="text-muted leading-relaxed mb-5">
-              Albukhary International University (AIU) — частный международный университет, основанный в 2012 году в Алор-Старе, штат Кедах, Малайзия. Университет был создан с особой миссией: предоставить качественное высшее образование студентам из развивающихся стран по всему миру — бесплатно.
+              {tr.aboutP1}
             </p>
             <p className="text-muted leading-relaxed mb-5">
               {tr.aboutP2}
             </p>
             <p className="text-muted leading-relaxed">
-              Кампус мирового уровня включает современные учебные корпуса, библиотеку, спортивные объекты, благоустроенные общежития и студенческие центры. Студенты из более чем 60 стран создают по-настоящему интернациональную академическую среду.
+              {tr.aboutP3}
             </p>
           </motion.div>
 
@@ -341,50 +341,50 @@ function WhyAIUSection({ tr }: { tr: typeof import('./translations').t.ru }) {
     {
       icon: <Award className="text-amber-500" size={28} />,
       bg: 'bg-amber-50',
-      title: 'Полная стипендия',
-      desc: 'Университет полностью финансируется Фондом Albukhary. Обучение, проживание и питание — за счёт фонда.'
+      title: tr.b1t,
+      desc: tr.b1d
     },
     {
       icon: <BookOpen className="text-brand-600" size={28} />,
       bg: 'bg-brand-50',
-      title: 'Бесплатное обучение',
-      desc: 'Стоимость обучения (до $8 000 в год) полностью покрывается стипендией. Студент не платит ни за один предмет.'
+      title: tr.b2t,
+      desc: tr.b2d
     },
     {
       icon: <Home className="text-purple-500" size={28} />,
       bg: 'bg-purple-50',
-      title: 'Бесплатное проживание',
-      desc: 'Все студенты обеспечены местом в современных кампусных общежитиях с кондиционером и всеми удобствами.'
+      title: tr.b3t,
+      desc: tr.b3d
     },
     {
       icon: <Utensils className="text-rose-500" size={28} />,
       bg: 'bg-rose-50',
-      title: 'Бесплатное питание',
-      desc: 'Завтрак, обед и ужин в студенческой столовой включены в стипендию. Никаких расходов на еду.'
+      title: tr.b4t,
+      desc: tr.b4d
     },
     {
       icon: <Globe className="text-blue-500" size={28} />,
       bg: 'bg-blue-50',
-      title: 'Международный диплом',
-      desc: 'Диплом AIU аккредитован Малайзийским агентством квалификаций (MQA) и признаётся работодателями по всему миру.'
+      title: tr.b5t,
+      desc: tr.b5d
     },
     {
       icon: <GraduationCap className="text-indigo-500" size={28} />,
       bg: 'bg-indigo-50',
-      title: 'Обучение на английском',
-      desc: 'Все программы ведутся на английском языке. IELTS не является обязательным для поступления.'
+      title: tr.b6t,
+      desc: tr.b6d
     },
     {
       icon: <Building2 className="text-teal-500" size={28} />,
       bg: 'bg-teal-50',
-      title: 'Современный кампус',
-      desc: 'Кампус мирового уровня: аудитории с проекторами, лаборатории, библиотека, спортзалы и зелёные территории.'
+      title: tr.b7t,
+      desc: tr.b7d
     },
     {
       icon: <Users className="text-orange-500" size={28} />,
       bg: 'bg-orange-50',
-      title: 'Интернациональная среда',
-      desc: 'Студенты из 60+ стран. Культурное разнообразие, международные связи и возможность развить глобальное мышление.'
+      title: tr.b8t,
+      desc: tr.b8d
     },
   ]
 
@@ -397,7 +397,7 @@ function WhyAIUSection({ tr }: { tr: typeof import('./translations').t.ru }) {
             {tr.whyTitle}
           </h2>
           <p className="text-muted max-w-2xl mx-auto">
-            Albukhary International University — один из немногих университетов в мире, предлагающих полную стипендию с покрытием всех основных расходов студента.
+            {tr.whyDesc}
           </p>
         </motion.div>
 
@@ -559,11 +559,11 @@ function ProgramsSection({ tr }: { tr: typeof import('./translations').t.ru }) {
             </div>
             <div className="flex-1">
               <div className="inline-flex items-center gap-1.5 bg-white/20 rounded-full px-3 py-1 text-xs font-semibold mb-3">
-                <BadgeCheck size={12} /> Подготовительный курс
+                <BadgeCheck size={12} /> {tr.prepBadge}
               </div>
               <h3 className="text-xl font-bold mb-2">{tr.prepTitle}</h3>
               <p className="text-white/75 leading-relaxed text-sm max-w-2xl">
-                AIU предоставляет <strong className="text-white">бесплатный подготовительный курс английского языка</strong> для студентов, чей уровень языка недостаточен для начала основной программы. Студент сначала проходит языковую подготовку на кампусе, а затем переходит к основной специальности. Это снимает языковой барьер при поступлении — <strong className="text-white">IELTS не обязателен</strong>.
+                {tr.prepDesc}
               </p>
             </div>
             <div className="flex-shrink-0">
@@ -590,11 +590,11 @@ function ScholarshipSection({ tr }: { tr: typeof import('./translations').t.ru }
   ]
 
   const notCovered = [
-    { icon: <Plane size={16} />, item: 'Авиабилет (туда-обратно)' },
-    { icon: <CreditCard size={16} />, item: 'EMGS (студенческая виза)' },
-    { icon: <FileText size={16} />, item: 'Возвратный депозит' },
-    { icon: <Globe size={16} />, item: 'Виза (стоимость оформления)' },
-    { icon: <Phone size={16} />, item: 'Личные расходы' },
+    { icon: <Plane size={16} />, item: tr.ncov1 },
+    { icon: <CreditCard size={16} />, item: tr.ncov2 },
+    { icon: <FileText size={16} />, item: tr.ncov3 },
+    { icon: <Globe size={16} />, item: tr.ncov4 },
+    { icon: <Phone size={16} />, item: tr.ncov5 },
   ]
 
   return (
@@ -643,7 +643,7 @@ function ScholarshipSection({ tr }: { tr: typeof import('./translations').t.ru }
         <motion.div {...fadeUp(0.2)} className="mt-8 bg-amber-500/10 border border-amber-500/30 rounded-2xl p-5 flex items-start gap-3">
           <AlertCircle size={20} className="text-amber-400 flex-shrink-0 mt-0.5" />
           <p className="text-amber-200/90 text-sm leading-relaxed">
-            <strong className="text-amber-300">Важно:</strong> Расходы на визу, авиабилет, EMGS и возвратный депозит — единоразовые и относительно небольшие по сравнению со стоимостью обучения. Tarjuman Education помогает рассчитать точные суммы и подготовить все документы для визы.
+            {tr.schlAlert}
           </p>
         </motion.div>
       </div>
@@ -669,7 +669,7 @@ function RequirementsSection({ tr }: { tr: typeof import('./translations').t.ru 
           <motion.div {...fadeUp()}>
             <SectionLabel><CheckCircle size={12} /> {tr.reqLabel}</SectionLabel>
             <h2 className="text-3xl sm:text-4xl font-black text-ink mb-6 leading-tight">
-              Требования<br />к поступлению
+              {tr.reqTitle}
             </h2>
             <p className="text-muted leading-relaxed mb-8">
   {tr.reqDesc} Требования — адекватные, и большинство выпускников школ им соответствуют.
@@ -696,28 +696,28 @@ function RequirementsSection({ tr }: { tr: typeof import('./translations').t.ru 
           <motion.div {...fadeUp(0.1)}>
             <div className="bg-gradient-to-br from-brand-600 to-brand-800 rounded-3xl p-8 text-white relative overflow-hidden">
               <div className="absolute top-0 right-0 w-40 h-40 rounded-full bg-white/5 blur-2xl" />
-              <h3 className="text-xl font-bold mb-2">Возрастные требования</h3>
-              <p className="text-white/70 text-sm mb-6">Ключевой критерий для поступления</p>
+              <h3 className="text-xl font-bold mb-2">{tr.ageLabel}</h3>
+              <p className="text-white/70 text-sm mb-6">{tr.ageSub}</p>
               <div className="space-y-4">
                 <div className="bg-white/10 rounded-2xl p-5">
-                  <div className="text-4xl font-black text-white mb-1">до 20</div>
+                  <div className="text-4xl font-black text-white mb-1">{tr.age1val}</div>
   <p className="text-white/70 text-sm">{tr.age1desc}</p>
                 </div>
                 <div className="bg-white/10 rounded-2xl p-5">
-                  <div className="text-4xl font-black text-amber-300 mb-1">до 22</div>
+                  <div className="text-4xl font-black text-amber-300 mb-1">{tr.age2val}</div>
   <p className="text-white/70 text-sm">{tr.age2desc}</p>
                 </div>
               </div>
               <div className="mt-6 pt-5 border-t border-white/20">
                 <p className="text-white/60 text-xs leading-relaxed">
-  {tr.ageNote} Наши менеджеры помогут подобрать подходящий вариант.
+  {tr.ageNote} {tr.ageNoteMgr}
                 </p>
               </div>
             </div>
 
             <div className="mt-5 bg-white rounded-2xl border border-border p-5">
               <div className="flex items-center gap-2 text-brand-700 font-semibold mb-2">
-                <BadgeCheck size={16} /> Хорошая новость
+                <BadgeCheck size={16} /> {tr.goodNews}
               </div>
               <p className="text-sm text-muted leading-relaxed">
   {tr.goodNewsText}
@@ -763,7 +763,7 @@ tr.o5,
             {tr.docTitle}
           </h2>
           <p className="text-muted max-w-2xl mx-auto">
-            Tarjuman Education помогает собрать, перевести и правильно оформить весь пакет документов для подачи в AIU.
+            {tr.docDesc}
           </p>
         </motion.div>
 
@@ -777,7 +777,7 @@ tr.o5,
                 </div>
                 <div>
 <p className="font-bold text-ink text-lg">{tr.docReqTitle}</p>
-                  <p className="text-sm text-muted">{required.length} позиций</p>
+                  <p className="text-sm text-muted">{required.length}</p>
                 </div>
               </div>
               <div className="space-y-3">
@@ -826,9 +826,9 @@ tr.o5,
               <div className="flex items-start gap-3">
                 <AlertCircle size={18} className="text-blue-600 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-semibold text-blue-900 mb-1">Перевод документов</p>
+                  <p className="font-semibold text-blue-900 mb-1">{tr.transNote}</p>
                   <p className="text-sm text-blue-800 leading-relaxed">
-                    Все документы должны быть переведены на английский язык. Tarjuman Education — специализируется на переводе документов для поступления в зарубежные университеты.
+                    {tr.transNoteText}
                   </p>
                 </div>
               </div>
@@ -840,7 +840,7 @@ tr.o5,
                 Personal Statement
               </p>
               <p className="text-sm text-muted leading-relaxed">
-                Мотивационное эссе — один из ключевых документов. Наши специалисты помогают написать убедительный Personal Statement, который выделит вас среди других кандидатов.
+                {tr.psNoteText}
               </p>
             </div>
           </motion.div>
@@ -867,7 +867,7 @@ function IELTSSection({ tr }: { tr: typeof import('./translations').t.ru }) {
           <div className="relative">
             <div className="inline-flex items-center gap-2 bg-white/20 rounded-full px-4 py-2 text-sm font-semibold mb-6">
               <BadgeCheck size={16} className="text-green-300" />
-              Важная информация
+              {tr.ieltsTitle}
             </div>
 
             <h2 className="text-3xl sm:text-4xl font-black mb-4">
@@ -892,7 +892,7 @@ function IELTSSection({ tr }: { tr: typeof import('./translations').t.ru }) {
             </div>
 
             <p className="text-white/60 text-sm">
-              Если у вас есть IELTS — это плюс. Но отсутствие сертификата не является причиной для отказа в рассмотрении заявки.
+              {tr.ieltsFooter}
             </p>
           </div>
         </motion.div>
@@ -907,57 +907,57 @@ function ProcessSection({ tr }: { tr: typeof import('./translations').t.ru }) {
     {
       num: '01',
       icon: <FileText size={20} />,
-      title: 'Подготовка документов',
-      desc: 'Собираем все необходимые документы: аттестат, оценки, паспорт, фотографии дома и справки о доходах.',
+      title: tr.s1t,
+      desc: tr.s1d,
       color: 'bg-blue-500',
     },
     {
       num: '02',
       icon: <Globe size={20} />,
-      title: 'Перевод документов',
-      desc: 'Переводим все документы на английский язык. Tarjuman Education специализируется на профессиональных переводах для поступления.',
+      title: tr.s2t,
+      desc: tr.s2d,
       color: 'bg-purple-500',
     },
     {
       num: '03',
       icon: <CheckCircle size={20} />,
-      title: 'Заполнение заявки',
-      desc: 'Заполняем онлайн-заявку на сайте AIU, прикладываем все документы и пишем Personal Statement.',
+      title: tr.s3t,
+      desc: tr.s3d,
       color: 'bg-brand-500',
     },
     {
       num: '04',
       icon: <Clock size={20} />,
-      title: 'Рассмотрение',
-      desc: 'Университет рассматривает заявку. Этот этап занимает от нескольких недель до 2 месяцев.',
+      title: tr.s4t,
+      desc: tr.s4d,
       color: 'bg-amber-500',
     },
     {
       num: '05',
       icon: <Mic2 size={20} />,
-      title: 'Интервью',
-      desc: 'Университет приглашает на онлайн-интервью. Мы проводим подготовку и тренировочные сессии.',
+      title: tr.s5t,
+      desc: tr.s5d,
       color: 'bg-rose-500',
     },
     {
       num: '06',
       icon: <Award size={20} />,
-      title: 'Получение оффера',
-      desc: 'Университет отправляет Letter of Offer (письмо с подтверждением зачисления и стипендии).',
+      title: tr.s6t,
+      desc: tr.s6d,
       color: 'bg-green-500',
     },
     {
       num: '07',
       icon: <CreditCard size={20} />,
-      title: 'Визовый процесс',
-      desc: 'Оформляем студенческую визу через EMGS Malaysia. Tarjuman помогает с заполнением всех форм.',
+      title: tr.s7t,
+      desc: tr.s7d,
       color: 'bg-indigo-500',
     },
     {
       num: '08',
       icon: <Plane size={20} />,
-      title: 'Прибытие в Малайзию',
-      desc: 'Вылетаем в Малайзию! Регистрируемся в кампусе, получаем ключи от комнаты и начинаем новую жизнь.',
+      title: tr.s8t,
+      desc: tr.s8d,
       color: 'bg-teal-500',
     },
   ]
@@ -1015,12 +1015,12 @@ function ProcessSection({ tr }: { tr: typeof import('./translations').t.ru }) {
 /* ════════════════════ INTERVIEW ════════════════════ */
 function InterviewSection({ tr }: { tr: typeof import('./translations').t.ru }) {
   const tips = [
-    'Говорите уверенно и чётко. Университет оценивает вашу уверенность, а не идеальный английский.',
-    'Заранее подготовьте ответы на вопросы о себе, своей семье и мотивации к учёбе.',
-    'Расскажите о своих достижениях в школе — академических и внеучебных.',
-    'Объясните, почему вы выбрали именно AIU и конкретную специальность.',
-    'Будьте честны. Комиссия ценит искренность больше, чем заученные шаблонные ответы.',
-    'Убедитесь в стабильном интернет-соединении, тихом месте и хорошем освещении.',
+    '{tr.tip1}',
+    '{tr.tip2}',
+    '{tr.tip3}',
+    '{tr.tip4}',
+    '{tr.tip5}',
+    '{tr.tip6}',
   ]
 
   const questions = [
@@ -1060,7 +1060,6 @@ tr.if1,
 tr.if2,
 tr.if3,
 tr.if4,
-                'Возможно собеседование на арабском',
 tr.if5,
               ].map(item => (
                 <li key={item} className="flex items-center gap-2">
@@ -1113,7 +1112,7 @@ tr.ic6,
 
         {/* Frequent questions */}
         <motion.div {...fadeUp(0.2)} className="mt-10 bg-white rounded-2xl border border-border p-8">
-          <h3 className="font-bold text-ink text-lg mb-5">Частые вопросы на интервью</h3>
+          <h3 className="font-bold text-ink text-lg mb-5">{tr.intQTitle}</h3>
           <div className="grid sm:grid-cols-2 gap-3">
             {questions.map((q, i) => (
               <div key={q} className="flex items-center gap-3 bg-[#F7F8FA] rounded-xl p-3 text-sm">
@@ -1125,7 +1124,7 @@ tr.ic6,
             ))}
           </div>
           <p className="text-xs text-muted mt-4">
-            * Tarjuman Education проводит полноценную подготовку к интервью — тренировочные сессии с разбором ответов на английском языке.
+            {tr.intQNote}
           </p>
         </motion.div>
       </div>
@@ -1208,86 +1207,26 @@ function FAQSection({ tr, lang }: { tr: typeof import('./translations').t.ru, la
   const [open, setOpen] = useState<number | null>(null)
 
   const faqs = [
-    {
-      q: 'Можно ли поступить в AIU без IELTS?',
-      a: 'Да. IELTS и TOEFL не являются обязательными документами для подачи заявки. Если у вас нет языкового сертификата — это не помешает подать заявку. После зачисления студенты проходят внутренний языковой тест AIU.',
-    },
-    {
-      q: 'Есть ли общежитие в AIU?',
-      a: 'Да, все студенты AIU обеспечены местом в кампусных общежитиях. Проживание полностью покрывается стипендией — студент ничего не платит. Общежития оснащены кондиционерами, Wi-Fi и всеми необходимыми удобствами.',
-    },
-    {
-      q: 'Что именно покрывает стипендия AIU?',
-      a: 'Стипендия покрывает: обучение (tuition fee), проживание в общежитии и трёхразовое питание. Не покрывается: авиабилет до Малайзии, виза, EMGS (регистрация для визы), возвратный депозит и личные расходы.',
-    },
-    {
-      q: 'Можно ли поступить сразу после школы?',
-      a: 'Да. AIU принимает выпускников школ. Более того — предпочтительный возраст кандидатов до 20 лет, поэтому подача сразу после 11 класса — это оптимальный вариант.',
-    },
-    {
-      q: 'Какой максимальный возраст для поступления?',
-      a: 'Предпочтительно до 20 лет. В отдельных случаях университет может рассматривать кандидатов до 22 лет. Кандидатам старше рекомендуем рассмотреть другие программы.',
-    },
-    {
-      q: 'На каком языке ведётся обучение в AIU?',
-      a: 'Все программы в AIU ведутся на английском языке. Хорошее знание английского значительно помогает, но отсутствие сертификата IELTS или TOEFL не является препятствием для подачи.',
-    },
-    {
-      q: 'Какие специальности доступны в AIU?',
-      a: 'AIU предлагает программы по Computer Science, Data Science, Business Administration, Marketing, Economics, Islamic Finance, Politics & International Relations, Education и Media & Communication. Перечень программ уточняйте актуальный — на текущий год.',
-    },
-    {
-      q: 'Как проходит интервью в AIU?',
-      a: 'Интервью проводится онлайн (через Zoom или Teams) на английском языке. Длительность — 20–40 минут. Комиссия оценивает мотивацию, уровень английского, академический потенциал и личностные качества. Tarjuman Education помогает подготовиться.',
-    },
-    {
-      q: 'Сколько стоит виза в Малайзию?',
-      a: 'Стоимость студенческой визы через EMGS Malaysia составляет порядка $120–150 (единоразово). Tarjuman Education помогает со всеми документами для визового процесса.',
-    },
-    {
-      q: 'Сколько длится процесс поступления?',
-      a: 'Полный процесс от подачи документов до получения оффера занимает 2–4 месяца. Визовый процесс после оффера — ещё 1–2 месяца. Рекомендуем начинать подготовку за 3–6 месяцев до желаемой даты начала учёбы.',
-    },
-    {
-      q: 'Помогает ли Tarjuman Education с переводом документов?',
-      a: 'Да. Перевод документов на английский язык — одна из ключевых услуг Tarjuman Education. Мы делаем профессиональный перевод всех необходимых документов: аттестатов, оценок, справок и других.',
-    },
-    {
-      q: 'Можно ли получить стипендию, если семья не бедная?',
-      a: 'Стипендия AIU ориентирована на студентов из семей с ограниченными финансовыми возможностями. При подаче необходимо предоставить подтверждение дохода родителей. Финансовое положение семьи — один из ключевых критериев.',
-    },
-    {
-      q: 'Принимаются ли студенты из Узбекистана, Казахстана, Таджикистана?',
-      a: 'Да. AIU принимает студентов из всех стран СНГ — Узбекистана, Казахстана, Таджикистана, Кыргызстана, Азербайджана и других. Университет специально ориентирован на студентов из развивающихся стран.',
-    },
-    {
-      q: 'Нужно ли знать малайский язык?',
-      a: 'Нет. Обучение ведётся на английском языке. Знание малайского не требуется, хотя студенты в процессе жизни в Малайзии естественным образом его изучают.',
-    },
-    {
-      q: 'Можно ли работать во время учёбы в Малайзии?',
-      a: 'Студенческая виза в Малайзии позволяет работать до 20 часов в неделю в период семестра и без ограничений во время каникул. Кампус AIU предоставляет все необходимые условия, поэтому срочная необходимость работать отсутствует.',
-    },
-    {
-      q: 'Есть ли у AIU международное признание?',
-      a: 'Да. AIU аккредитован Малайзийским агентством квалификаций (MQA). Диплом признаётся во многих странах мира и ценится работодателями, особенно в регионе Юго-Восточной Азии и странах Ближнего Востока.',
-    },
-    {
-      q: 'Как написать Personal Statement для AIU?',
-      a: 'Personal Statement — это эссе о вашей мотивации, целях и причинах выбора AIU. Его нужно писать искренне, рассказывая о своих достижениях и планах. Tarjuman Education помогает структурировать и написать убедительный Personal Statement.',
-    },
-    {
-      q: 'Что такое возвратный депозит AIU?',
-      a: 'Возвратный депозит — единоразовая сумма, которую студент вносит при поступлении и получает обратно по окончании учёбы. Точную сумму уточняйте у менеджера Tarjuman Education.',
-    },
-    {
-      q: 'Насколько безопасно жить в Малайзии?',
-      a: 'Малайзия — одна из самых безопасных стран Юго-Восточной Азии. Алор-Стар — спокойный город с низким уровнем преступности. Кампус AIU — охраняемая территория с круглосуточной безопасностью.',
-    },
-    {
-      q: 'Как начать процесс поступления через Tarjuman Education?',
-      a: 'Напишите нам в Telegram @TARJUMAN_EDU или WhatsApp. Менеджер проконсультирует вас бесплатно, проверит соответствие требованиям и составит индивидуальный план поступления. Сопровождение — от первого звонка до регистрации в кампусе.',
-    },
+    { q: tr.faq1q, a: tr.faq1a },
+    { q: tr.faq2q, a: tr.faq2a },
+    { q: tr.faq3q, a: tr.faq3a },
+    { q: tr.faq4q, a: tr.faq4a },
+    { q: tr.faq5q, a: tr.faq5a },
+    { q: tr.faq6q, a: tr.faq6a },
+    { q: tr.faq7q, a: tr.faq7a },
+    { q: tr.faq8q, a: tr.faq8a },
+    { q: tr.faq9q, a: tr.faq9a },
+    { q: tr.faq10q, a: tr.faq10a },
+    { q: tr.faq11q, a: tr.faq11a },
+    { q: tr.faq12q, a: tr.faq12a },
+    { q: tr.faq13q, a: tr.faq13a },
+    { q: tr.faq14q, a: tr.faq14a },
+    { q: tr.faq15q, a: tr.faq15a },
+    { q: tr.faq16q, a: tr.faq16a },
+    { q: tr.faq17q, a: tr.faq17a },
+    { q: tr.faq18q, a: tr.faq18a },
+    { q: tr.faq19q, a: tr.faq19a },
+    { q: tr.faq20q, a: tr.faq20a },
   ]
 
   return (
