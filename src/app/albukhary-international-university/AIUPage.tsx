@@ -333,7 +333,7 @@ function AboutSection({ tr }: { tr: typeof import('./translations').t.ru }) {
 
             <div className="mt-6 rounded-2xl overflow-hidden shadow-card">
               <img
-                src="https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?w=700&q=80&auto=format"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOBGwqqltcCvK3ekMNqYExsnTHPT3co-WEfLTX9wot6w&s=10"
                 alt="University campus Malaysia"
                 className="w-full h-48 object-cover"
               />
