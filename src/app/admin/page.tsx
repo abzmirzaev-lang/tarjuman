@@ -338,11 +338,11 @@ export default function AdminPage() {
     <div className="min-h-screen bg-gray-50 flex font-sans">
 
       {/* ── SIDEBAR ────────────────────────────────────────────────────────────── */}
-      <aside className="hidden md:flex w-60 bg-white border-r border-gray-100 min-h-screen fixed left-0 top-0 flex-col z-30">
+      <aside className="hidden md:flex w-60 bg-white border-r border-gray-100 min-h-screen fixed left-0 top-0 flex-col z-30 shadow-premium">
         {/* Logo */}
         <div className="h-16 flex items-center px-5 border-b border-gray-100">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-[#1B4332] flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#1B4332] to-[#0F2A20] flex items-center justify-center shadow-[0_4px_12px_-2px_rgba(27,67,50,0.4)]">
               <GraduationCap className="w-4 h-4 text-white" />
             </div>
             <div>
@@ -357,9 +357,9 @@ export default function AdminPage() {
           {NAV.map(n => (
             <button key={n.key} onClick={() => setTab(n.key as AdminTab)}
               className={cn(
-                'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all',
+                'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
                 tab === n.key
-                  ? 'bg-[#1B4332] text-white shadow-sm'
+                  ? 'bg-gradient-to-br from-[#1B4332] to-[#123424] text-white shadow-[0_6px_16px_-4px_rgba(27,67,50,0.45)]'
                   : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800'
               )}>
               <n.icon className="w-4 h-4 shrink-0" />
@@ -390,7 +390,7 @@ export default function AdminPage() {
       <main className="flex-1 md:ml-60 flex flex-col min-h-screen">
 
         {/* Top bar */}
-        <header className="h-16 bg-white border-b border-gray-100 flex items-center justify-between px-6 sticky top-0 z-20">
+        <header className="h-16 bg-white/90 backdrop-blur-xl border-b border-gray-100 flex items-center justify-between px-6 sticky top-0 z-20 shadow-premium">
           <div>
             <h1 className="font-bold text-gray-900 text-base">
               {tab === 'dashboard' ? 'Дашборд' : tab === 'applications' ? 'Заявки' : tab === 'users' ? 'Клиенты' : 'Платежи'}
@@ -452,8 +452,8 @@ export default function AdminPage() {
                       { label: 'Выручка',        value: formatCurrency(stats.revenue), icon: CircleDollarSign, color: 'text-emerald-600', bg: 'bg-emerald-50' },
                     ].map((s, i) => (
                       <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-                        className="bg-white rounded-2xl border border-gray-100 p-5 hover:shadow-sm transition-shadow">
-                        <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center mb-4', s.bg)}>
+                        className="card-hover p-5">
+                        <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center mb-4 ring-1 ring-black/5', s.bg)}>
                           <s.icon className={cn('w-5 h-5', s.color)} />
                         </div>
                         <div className="text-2xl font-bold text-gray-900">{s.value}</div>
@@ -464,8 +464,8 @@ export default function AdminPage() {
 
                   {/* Action needed */}
                   {stats.paid > 0 && (
-                    <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center shrink-0">
+                    <div className="bg-gradient-to-br from-emerald-50 to-emerald-100/60 border border-emerald-200 rounded-2xl p-4 flex items-center gap-4 shadow-premium">
+                      <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center shrink-0 ring-1 ring-emerald-200">
                         <AlertCircle className="w-5 h-5 text-emerald-600" />
                       </div>
                       <div className="flex-1">
@@ -473,14 +473,14 @@ export default function AdminPage() {
                         <p className="text-xs text-emerald-600 mt-0.5">Клиенты оплатили — нужно начать работу</p>
                       </div>
                       <button onClick={() => setTab('applications')}
-                        className="px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-xl hover:bg-emerald-700 transition-colors shrink-0">
+                        className="px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-xl hover:bg-emerald-700 hover:shadow-[0_6px_16px_-4px_rgba(5,150,105,0.4)] transition-all shrink-0">
                         Перейти
                       </button>
                     </div>
                   )}
 
                   {/* Recent applications */}
-                  <div className="bg-white rounded-2xl border border-gray-100">
+                  <div className="card">
                     <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
                       <h2 className="font-semibold text-gray-800 text-sm">Последние заявки</h2>
                       <button onClick={() => setTab('applications')} className="text-xs text-[#1B4332] font-medium hover:underline flex items-center gap-1">
@@ -513,7 +513,7 @@ export default function AdminPage() {
                     <div className="relative flex-1 max-w-sm">
                       <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                       <input
-                        className="w-full bg-white border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 transition-all"
+                        className="w-full bg-white border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-gray-800 placeholder-gray-400 shadow-sm focus:outline-none focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 transition-all"
                         placeholder="Поиск по имени, телефону..."
                         value={search} onChange={e => setSearch(e.target.value)}
                       />
@@ -521,7 +521,7 @@ export default function AdminPage() {
                     </div>
                     <button onClick={() => setShowFilters(v => !v)}
                       className={cn('flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium transition-all',
-                        showFilters || statusFlt ? 'bg-[#1B4332] border-[#1B4332] text-white' : 'bg-white border-gray-200 text-gray-500 hover:border-gray-300'
+                        showFilters || statusFlt ? 'bg-gradient-to-br from-[#1B4332] to-[#123424] border-[#1B4332] text-white shadow-[0_4px_12px_-2px_rgba(27,67,50,0.35)]' : 'bg-white border-gray-200 text-gray-500 hover:border-gray-300 shadow-sm'
                       )}>
                       <Filter className="w-4 h-4" /> Фильтры
                       {statusFlt && <span className="w-2 h-2 rounded-full bg-white/70" />}
@@ -532,18 +532,18 @@ export default function AdminPage() {
                   {/* Filter chips */}
                   {showFilters && (
                     <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }}
-                      className="bg-white border border-gray-100 rounded-2xl p-4 flex flex-wrap gap-2">
+                      className="card p-4 flex flex-wrap gap-2">
                       {[{ key: '', label: 'Все статусы' }, ...ALL_STATUSES.map(s => ({ key: s, label: STATUS_CONFIG[s].label }))].map(s => (
                         <button key={s.key} onClick={() => setStatusFlt(s.key as any)}
                           className={cn('px-3 py-1.5 rounded-lg text-xs font-medium transition-all border',
-                            statusFlt === s.key ? 'bg-[#1B4332] text-white border-[#1B4332]' : 'bg-gray-50 text-gray-500 border-gray-100 hover:border-gray-200'
+                            statusFlt === s.key ? 'bg-gradient-to-br from-[#1B4332] to-[#123424] text-white border-[#1B4332] shadow-sm' : 'bg-gray-50 text-gray-500 border-gray-100 hover:border-gray-200'
                           )}>{s.label}</button>
                       ))}
                     </motion.div>
                   )}
 
                   {/* Table */}
-                  <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                  <div className="card overflow-hidden">
                     <div className="hidden md:block overflow-x-auto">
                       <table className="w-full">
                         <thead>
@@ -620,7 +620,7 @@ export default function AdminPage() {
 
               {/* ══ USERS ══════════════════════════════════════════════════════════ */}
               {tab === 'users' && (
-                <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <div className="card overflow-hidden">
                   <div className="px-5 py-4 border-b border-gray-100">
                     <h2 className="font-semibold text-gray-800">Клиенты <span className="text-gray-400 font-normal">({users.length})</span></h2>
                   </div>
@@ -648,7 +648,7 @@ export default function AdminPage() {
 
               {/* ══ PAYMENTS ═══════════════════════════════════════════════════════ */}
               {tab === 'payments' && (
-                <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <div className="card overflow-hidden">
                   <div className="px-5 py-4 border-b border-gray-100">
                     <h2 className="font-semibold text-gray-800">Платежи</h2>
                   </div>
@@ -693,7 +693,7 @@ export default function AdminPage() {
       </main>
 
       {/* ── MOBILE BOTTOM NAV ──────────────────────────────────────────────────── */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 z-30 flex h-16">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-gray-100 z-30 flex h-16 shadow-[0_-4px_16px_-4px_rgba(15,23,42,0.08)]">
         {NAV.map(n => (
           <button key={n.key} onClick={() => setTab(n.key as AdminTab)}
             className={cn('flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-medium transition-colors',
@@ -716,7 +716,7 @@ export default function AdminPage() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.97, y: 12 }}
               transition={{ type: 'spring', damping: 30, stiffness: 400 }}
-              className="relative w-full max-w-3xl bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+              className="relative w-full max-w-3xl bg-white rounded-3xl shadow-2xl ring-1 ring-black/5 overflow-hidden flex flex-col max-h-[90vh]"
             >
               {/* Modal header */}
               <div className="flex items-center gap-4 px-6 py-4 border-b border-gray-100">
@@ -764,7 +764,7 @@ export default function AdminPage() {
                 {ALL_STATUSES.map(s => (
                   <button key={s} onClick={() => changeStatus(selected.id, s)}
                     className={cn('flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all border',
-                      selected.status === s ? 'bg-[#1B4332] text-white border-[#1B4332]' : 'bg-gray-50 text-gray-500 border-gray-100 hover:border-gray-200 hover:bg-gray-100'
+                      selected.status === s ? 'bg-gradient-to-br from-[#1B4332] to-[#123424] text-white border-[#1B4332] shadow-[0_4px_12px_-3px_rgba(27,67,50,0.4)]' : 'bg-gray-50 text-gray-500 border-gray-100 hover:border-gray-200 hover:bg-gray-100'
                     )}>
                     {selected.status === s && <CheckCheck className="w-3 h-3" />}
                     {STATUS_CONFIG[s].label}
@@ -782,7 +782,7 @@ export default function AdminPage() {
                 ] as const).map(t => (
                   <button key={t.key} onClick={() => setDetailTab(t.key)}
                     className={cn('flex items-center gap-1.5 px-4 py-3 text-xs font-semibold transition-all border-b-2 -mb-px',
-                      detailTab === t.key ? 'border-[#1B4332] text-[#1B4332]' : 'border-transparent text-gray-400 hover:text-gray-600'
+                      detailTab === t.key ? 'border-[#1B4332] text-[#1B4332] bg-[#1B4332]/[0.04]' : 'border-transparent text-gray-400 hover:text-gray-600'
                     )}>
                     <t.icon className="w-3.5 h-3.5" />
                     {t.label}
@@ -979,7 +979,7 @@ export default function AdminPage() {
                         <div key={msg.id} className={cn('flex', msg.sender === 'ADMIN' ? 'justify-end' : 'justify-start')}>
                           <div className={cn('max-w-[75%] rounded-2xl px-4 py-3 text-sm',
                             msg.sender === 'ADMIN'
-                              ? 'bg-[#1B4332] text-white rounded-br-sm'
+                              ? 'bg-gradient-to-br from-[#1B4332] to-[#123424] text-white rounded-br-sm shadow-sm'
                               : 'bg-gray-100 text-gray-800 rounded-bl-sm'
                           )}>
                             <p className={cn('text-[10px] font-bold mb-1', msg.sender === 'ADMIN' ? 'text-white/60' : 'text-[#1B4332]')}>
@@ -1008,7 +1008,7 @@ export default function AdminPage() {
                         onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage()}
                       />
                       <button onClick={sendMessage} disabled={sending || !msgText.trim()}
-                        className="px-4 py-2 rounded-xl bg-[#1B4332] text-white font-bold hover:bg-[#1B4332]/90 transition-colors disabled:opacity-40">
+                        className="px-4 py-2 rounded-xl bg-gradient-to-br from-[#1B4332] to-[#123424] text-white font-bold shadow-[0_4px_12px_-3px_rgba(27,67,50,0.4)] hover:shadow-[0_6px_16px_-3px_rgba(27,67,50,0.5)] transition-all disabled:opacity-40 disabled:shadow-none">
                         {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                       </button>
                     </div>
@@ -1028,7 +1028,7 @@ export default function AdminPage() {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => { if (!completing) setCompleteOpen(false) }} />
             <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.97 }}
-              className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden">
+              className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl ring-1 ring-black/5 overflow-hidden">
               <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
                 <h3 className="font-bold text-gray-900">Завершить обработку</h3>
                 <button onClick={() => { if (!completing) { setCompleteOpen(false); setCompleteFiles([]) } }}
@@ -1093,7 +1093,7 @@ export default function AdminPage() {
                     Отмена
                   </button>
                   <button onClick={completeProcessing} disabled={completing || completeFiles.length === 0}
-                    className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#1B4332] text-white text-sm font-bold hover:bg-[#1B4332]/90 transition-colors disabled:opacity-40">
+                    className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gradient-to-br from-[#1B4332] to-[#123424] text-white text-sm font-bold shadow-[0_4px_12px_-3px_rgba(27,67,50,0.4)] hover:shadow-[0_6px_16px_-3px_rgba(27,67,50,0.5)] transition-all disabled:opacity-40 disabled:shadow-none">
                     {completing ? <><Loader2 className="w-4 h-4 animate-spin" />Завершаю…</> : <><Flag className="w-4 h-4" />Завершить</>}
                   </button>
                 </div>
@@ -1111,12 +1111,12 @@ export default function AdminPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden"
+              className="bg-white rounded-2xl shadow-2xl ring-1 ring-black/5 w-full max-w-lg overflow-hidden"
             >
               {/* Header */}
               <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 bg-[#1B4332] rounded-xl flex items-center justify-center">
+                  <div className="w-9 h-9 bg-gradient-to-br from-[#1B4332] to-[#0F2A20] rounded-xl flex items-center justify-center shadow-[0_4px_12px_-2px_rgba(27,67,50,0.4)]">
                     <Megaphone className="w-4 h-4 text-white" />
                   </div>
                   <div>
@@ -1142,7 +1142,7 @@ export default function AdminPage() {
                       {broadcastResult.failed > 0 && <span className="text-red-500"> · Ошибок: {broadcastResult.failed}</span>}
                     </p>
                     <button onClick={() => { setBroadcastResult(null); setBroadcastSubject(''); setBroadcastText('') }}
-                      className="mt-6 px-5 py-2.5 bg-[#1B4332] text-white rounded-xl text-sm font-semibold hover:bg-[#1B4332]/90 transition-colors">
+                      className="mt-6 px-5 py-2.5 bg-gradient-to-br from-[#1B4332] to-[#123424] text-white rounded-xl text-sm font-semibold shadow-[0_4px_12px_-3px_rgba(27,67,50,0.4)] hover:shadow-[0_6px_16px_-3px_rgba(27,67,50,0.5)] transition-all">
                       Новая рассылка
                     </button>
                   </div>
@@ -1176,7 +1176,7 @@ export default function AdminPage() {
                     <button
                       onClick={sendBroadcast}
                       disabled={broadcastSending || !broadcastSubject.trim() || !broadcastText.trim()}
-                      className="w-full flex items-center justify-center gap-2 py-3 bg-[#1B4332] text-white rounded-xl text-sm font-bold hover:bg-[#1B4332]/90 transition-colors disabled:opacity-40"
+                      className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-br from-[#1B4332] to-[#123424] text-white rounded-xl text-sm font-bold shadow-[0_4px_12px_-3px_rgba(27,67,50,0.4)] hover:shadow-[0_6px_16px_-3px_rgba(27,67,50,0.5)] transition-all disabled:opacity-40 disabled:shadow-none"
                     >
                       {broadcastSending
                         ? <><Loader2 className="w-4 h-4 animate-spin" /> Отправляю...</>
