@@ -20,12 +20,12 @@ const COUNTRIES = [
 ]
 
 const AVATAR_GRADIENTS = [
-  'from-violet-500 to-purple-600',
-  'from-blue-500 to-cyan-500',
-  'from-emerald-500 to-teal-600',
-  'from-amber-500 to-orange-500',
-  'from-rose-500 to-pink-600',
-  'from-indigo-500 to-blue-600',
+  'from-violet-600 via-violet-500 to-purple-700',
+  'from-sky-600 via-blue-500 to-cyan-600',
+  'from-emerald-600 via-teal-500 to-teal-700',
+  'from-amber-600 via-orange-500 to-orange-700',
+  'from-rose-600 via-pink-500 to-pink-700',
+  'from-indigo-600 via-blue-500 to-indigo-800',
 ]
 
 
@@ -62,7 +62,7 @@ function MarqueeStrip({ reviews, reverse = false }: { reviews: Review[]; reverse
 function ReviewCard({ review: r }: { review: Review }) {
   const gradient = AVATAR_GRADIENTS[r.name.charCodeAt(0) % AVATAR_GRADIENTS.length]
   return (
-    <div className="w-[300px] shrink-0 bg-white rounded-2xl border border-border p-5 flex flex-col gap-4 shadow-sm hover:shadow-md transition-shadow duration-300 select-none">
+    <div className="card-hover w-[300px] shrink-0 p-5 flex flex-col gap-4 select-none">
       {/* Quote + stars */}
       <div className="flex items-start justify-between">
         <Quote className="w-7 h-7 text-brand-200 shrink-0" />
@@ -80,7 +80,7 @@ function ReviewCard({ review: r }: { review: Review }) {
 
       {/* Author */}
       <div className="flex items-center gap-3 pt-3 border-t border-border">
-        <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-sm`}>
+        <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-sm shrink-0 ring-2 ring-white shadow-md`}>
           {r.name[0]?.toUpperCase()}
         </div>
         <div className="min-w-0">

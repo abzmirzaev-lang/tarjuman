@@ -57,7 +57,7 @@ export function Navbar({ lang = 'ru', onLangChange }: NavbarProps) {
       className={cn(
         'fixed top-0 inset-x-0 z-50 transition-all duration-300',
         (scrolled || !isHome)
-          ? 'bg-white/95 border-b border-border shadow-sm'
+          ? 'bg-white/80 backdrop-blur-xl backdrop-saturate-150 border-b border-border shadow-premium'
           : 'bg-transparent'
       )}
       style={{ WebkitTransform: 'translateZ(0)', transform: 'translateZ(0)' }}

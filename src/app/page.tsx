@@ -155,10 +155,10 @@ function BenefitsSection({ lang }: { lang: AppLanguage }) {
     ]
 
   return (
-    <section className="section bg-[#F7F8FA]">
+    <section className="section-alt">
       <div className="container-narrow">
         <div className="text-center mb-12">
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-50 border border-brand-200 rounded-full text-brand-700 text-xs font-semibold uppercase tracking-widest mb-4">
+          <span className="eyebrow mb-4">
             {lang === 'ru' ? 'Преимущества' : lang === 'uz' ? 'Afzalliklar' : 'Benefits'}
           </span>
           <h2 className="text-3xl sm:text-4xl font-bold text-ink mb-3">{title}</h2>
@@ -173,7 +173,7 @@ function BenefitsSection({ lang }: { lang: AppLanguage }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
-              className="flex gap-5 bg-white rounded-2xl border border-border p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+              className="card-hover flex gap-5 p-6"
             >
               <div className="w-12 h-12 rounded-2xl bg-brand-50 flex items-center justify-center shrink-0">
                 <item.icon className="w-6 h-6 text-brand-600" />
@@ -418,7 +418,7 @@ export default function HomePage() {
       <section className="section bg-[#F7F8FA]">
         <div className="container-narrow">
           <div className="text-center mb-10">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-50 border border-brand-200 rounded-full text-brand-700 text-xs font-semibold uppercase tracking-widest mb-4">
+            <span className="eyebrow mb-4">
               {lang === 'ru' ? 'Направления' : lang === 'uz' ? "Yo'nalishlar" : 'Destinations'}
             </span>
             <h2 className="text-3xl font-bold text-ink mb-2">{t.countries.title}</h2>
@@ -496,7 +496,7 @@ export default function HomePage() {
       <section className="section bg-white">
         <div className="container-narrow">
           <div className="text-center mb-14">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-50 border border-brand-200 rounded-full text-brand-700 text-xs font-semibold uppercase tracking-widest mb-4">
+            <span className="eyebrow mb-4">
               {lang === 'ru' ? 'Что мы делаем' : lang === 'uz' ? 'Biz nima qilamiz' : 'What we do'}
             </span>
             <h2 className="text-3xl sm:text-4xl font-bold text-ink mb-3">{t.services.title}</h2>
