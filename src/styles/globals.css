@@ -132,4 +132,79 @@
   .badge-green  { @apply badge bg-brand-100 text-brand-700; }
   .badge-blue   { @apply badge bg-blue-50 text-blue-700; }
   .badge-yellow { @apply badge bg-yellow-50 text-yellow-700; }
-  .badge-red    { @app
+  .badge-red    { @apply badge bg-red-50 text-red-600; }
+  .badge-gray   { @apply badge bg-slate-100 text-slate-600; }
+
+  /* ── Section layouts ── */
+  .section { @apply py-16 md:py-24; }
+  .section-alt {
+    @apply py-16 md:py-24;
+    background-color: #F7F8FA;
+    background-image: radial-gradient(circle at 20% 20%, rgb(111 175 155 / 0.06), transparent 45%),
+                       radial-gradient(circle at 80% 80%, rgb(212 169 67 / 0.05), transparent 45%);
+  }
+  .container-narrow { @apply max-w-5xl mx-auto px-4 sm:px-6; }
+  .container-wide   { @apply max-w-7xl mx-auto px-4 sm:px-6; }
+
+  /* ── Eyebrow label ── */
+  .eyebrow {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full
+           text-xs font-semibold uppercase tracking-wide
+           bg-brand-50 text-brand-700 border border-brand-100;
+  }
+
+  /* ── Divider ── */
+  .divider { @apply border-t border-border my-6; }
+
+  /* ── Page header ── */
+  .page-title {
+    @apply text-2xl sm:text-4xl md:text-5xl font-bold text-ink
+           tracking-tight leading-tight;
+  }
+  .page-subtitle {
+    @apply text-base sm:text-lg text-muted leading-relaxed;
+  }
+
+  /* ── Status dots ── */
+  .status-dot {
+    @apply w-2 h-2 rounded-full inline-block;
+  }
+
+  /* ── Loading shimmer ── */
+  .shimmer {
+    @apply relative overflow-hidden bg-slate-100 rounded-lg;
+  }
+  .shimmer::after {
+    content: '';
+    @apply absolute inset-0;
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.6), transparent);
+    animation: shimmer 1.5s infinite;
+  }
+
+  /* ── Scrollbar ── */
+  .scrollbar-thin::-webkit-scrollbar { width: 4px; height: 4px; }
+  .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { @apply bg-border rounded-full; }
+}
+
+@layer utilities {
+  .text-balance  { text-wrap: balance; }
+  .glass {
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    background: rgb(248 250 249 / 0.85);
+  }
+  .text-gradient-brand {
+    background: linear-gradient(135deg, #6FAF9B 0%, #3F7863 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .shadow-premium { box-shadow: var(--shadow-soft); }
+  .shadow-glow { box-shadow: var(--shadow-brand-glow); }
+}
+
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
