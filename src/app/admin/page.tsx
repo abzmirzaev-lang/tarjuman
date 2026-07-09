@@ -347,7 +347,7 @@ export default function AdminPage() {
             </div>
             <div>
               <p className="font-bold text-gray-900 text-sm leading-none">TARJUMAN</p>
-              <p className="text-[10px] text-gray-400 mt-0.5">Admin Panel</p>
+              <p className="text-[10px] text-gray-500 mt-0.5">Admin Panel</p>
             </div>
           </div>
         </div>
@@ -357,7 +357,7 @@ export default function AdminPage() {
           {NAV.map(n => (
             <button key={n.key} onClick={() => setTab(n.key as AdminTab)}
               className={cn(
-                'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
+                'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4332]/40',
                 tab === n.key
                   ? 'bg-gradient-to-br from-[#1B4332] to-[#123424] text-white shadow-[0_6px_16px_-4px_rgba(27,67,50,0.45)]'
                   : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800'
@@ -380,7 +380,7 @@ export default function AdminPage() {
             <Megaphone className="w-4 h-4" /> Рассылка
           </button>
           <button onClick={() => supabase.auth.signOut().then(() => router.push('/'))}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-gray-700 hover:bg-gray-50 transition-all">
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 transition-all">
             <LogOut className="w-4 h-4" /> Выйти
           </button>
         </div>
@@ -397,11 +397,11 @@ export default function AdminPage() {
             </h1>
           </div>
           <div className="flex items-center gap-2">
-            <button onClick={loadData} className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-all">
+            <button onClick={loadData} aria-label="Обновить данные" className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-600 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4332]/30">
               <RefreshCw className="w-4 h-4" />
             </button>
             <div className="relative">
-              <button onClick={() => setNotifOpen(v => !v)} className="relative p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-all">
+              <button onClick={() => setNotifOpen(v => !v)} aria-label="Уведомления" className="relative p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-600 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4332]/30">
                 <Bell className="w-4 h-4" />
                 {stats.paid > 0 && <span className="absolute top-1 right-1 w-2 h-2 bg-emerald-500 rounded-full" />}
               </button>
@@ -411,7 +411,7 @@ export default function AdminPage() {
                     className="absolute right-0 top-12 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
                     <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
                       <p className="font-semibold text-gray-800 text-sm">Уведомления</p>
-                      <button onClick={() => setNotifOpen(false)}><X className="w-4 h-4 text-gray-400" /></button>
+                      <button onClick={() => setNotifOpen(false)} aria-label="Закрыть" className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4332]/30 rounded-lg"><X className="w-4 h-4 text-gray-500" /></button>
                     </div>
                     {stats.paid > 0 ? (
                       <div className="p-3 space-y-1">
@@ -421,13 +421,13 @@ export default function AdminPage() {
                             <div className="w-2 h-2 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
                             <div>
                               <p className="text-sm font-medium text-gray-800">{app.full_name}</p>
-                              <p className="text-xs text-gray-400">Оплатил — ждёт обработки · {formatDate(app.created_at)}</p>
+                              <p className="text-xs text-gray-500">Оплатил — ждёт обработки · {formatDate(app.created_at)}</p>
                             </div>
                           </button>
                         ))}
                       </div>
                     ) : (
-                      <div className="py-10 text-center text-gray-400 text-sm">Новых уведомлений нет</div>
+                      <div className="py-10 text-center text-gray-500 text-sm">Новых уведомлений нет</div>
                     )}
                   </motion.div>
                 )}
@@ -456,8 +456,8 @@ export default function AdminPage() {
                         <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center mb-4 ring-1 ring-black/5', s.bg)}>
                           <s.icon className={cn('w-5 h-5', s.color)} />
                         </div>
-                        <div className="text-2xl font-bold text-gray-900">{s.value}</div>
-                        <div className="text-xs text-gray-400 mt-1">{s.label}</div>
+                        <div className="text-2xl font-bold text-gray-900 tabular-nums">{s.value}</div>
+                        <div className="text-xs text-gray-500 mt-1">{s.label}</div>
                       </motion.div>
                     ))}
                   </div>
@@ -473,7 +473,7 @@ export default function AdminPage() {
                         <p className="text-xs text-emerald-600 mt-0.5">Клиенты оплатили — нужно начать работу</p>
                       </div>
                       <button onClick={() => setTab('applications')}
-                        className="px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-xl hover:bg-emerald-700 hover:shadow-[0_6px_16px_-4px_rgba(5,150,105,0.4)] transition-all shrink-0">
+                        className="px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-xl hover:bg-emerald-700 hover:shadow-[0_6px_16px_-4px_rgba(5,150,105,0.4)] transition-all shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2">
                         Перейти
                       </button>
                     </div>
@@ -494,7 +494,7 @@ export default function AdminPage() {
                           <Avatar name={app.full_name} size="sm" />
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium text-gray-800 truncate">{app.full_name}</p>
-                            <p className="text-xs text-gray-400">{app.citizenship ?? app.country} · {formatDate(app.created_at)}</p>
+                            <p className="text-xs text-gray-500">{app.citizenship ?? app.country} · {formatDate(app.created_at)}</p>
                           </div>
                           <StatusBadge status={app.status} />
                           <ChevronRight className="w-4 h-4 text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -511,13 +511,13 @@ export default function AdminPage() {
                   {/* Toolbar */}
                   <div className="flex gap-3 items-center">
                     <div className="relative flex-1 max-w-sm">
-                      <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                       <input
                         className="w-full bg-white border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-gray-800 placeholder-gray-400 shadow-sm focus:outline-none focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 transition-all"
                         placeholder="Поиск по имени, телефону..."
                         value={search} onChange={e => setSearch(e.target.value)}
                       />
-                      {search && <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-500"><X className="w-4 h-4" /></button>}
+                      {search && <button onClick={() => setSearch('')} aria-label="Очистить поиск" className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4332]/30 rounded"><X className="w-4 h-4" /></button>}
                     </div>
                     <button onClick={() => setShowFilters(v => !v)}
                       className={cn('flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium transition-all',
@@ -526,7 +526,7 @@ export default function AdminPage() {
                       <Filter className="w-4 h-4" /> Фильтры
                       {statusFlt && <span className="w-2 h-2 rounded-full bg-white/70" />}
                     </button>
-                    <span className="text-xs text-gray-400 ml-1">{filteredApps.length} из {apps.length}</span>
+                    <span className="text-xs text-gray-500 ml-1">{filteredApps.length} из {apps.length}</span>
                   </div>
 
                   {/* Filter chips */}
@@ -549,7 +549,7 @@ export default function AdminPage() {
                         <thead>
                           <tr className="border-b border-gray-100 bg-gray-50/50">
                             {['Клиент', 'Гражданство', 'Пакет', 'Статус', 'Дата', ''].map(h => (
-                              <th key={h} className="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">{h}</th>
+                              <th key={h} className="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{h}</th>
                             ))}
                           </tr>
                         </thead>
@@ -561,7 +561,7 @@ export default function AdminPage() {
                                   <Avatar name={app.full_name} size="sm" />
                                   <div>
                                     <p className="text-sm font-semibold text-gray-800">{app.full_name}</p>
-                                    <p className="text-xs text-gray-400">{app.phone ?? '—'}</p>
+                                    <p className="text-xs text-gray-500">{app.phone ?? '—'}</p>
                                   </div>
                                 </div>
                               </td>
@@ -572,7 +572,7 @@ export default function AdminPage() {
                                 </span>
                               </td>
                               <td className="px-5 py-3.5"><StatusBadge status={app.status} /></td>
-                              <td className="px-5 py-3.5 text-xs text-gray-400">{formatDate(app.created_at)}</td>
+                              <td className="px-5 py-3.5 text-xs text-gray-500">{formatDate(app.created_at)}</td>
                               <td className="px-5 py-3.5">
                                 <div className="flex items-center gap-2 justify-end opacity-0 group-hover:opacity-100 transition-opacity">
                                   {app.status === 'PAID' && (
@@ -602,7 +602,7 @@ export default function AdminPage() {
                           <Avatar name={app.full_name} />
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-semibold text-gray-800 truncate">{app.full_name}</p>
-                            <p className="text-xs text-gray-400">{app.citizenship ?? app.country} · {formatDate(app.created_at)}</p>
+                            <p className="text-xs text-gray-500">{app.citizenship ?? app.country} · {formatDate(app.created_at)}</p>
                           </div>
                           <StatusBadge status={app.status} />
                         </div>
@@ -611,7 +611,7 @@ export default function AdminPage() {
                     {filteredApps.length === 0 && (
                       <div className="py-16 text-center">
                         <Inbox className="w-8 h-8 text-gray-200 mx-auto mb-3" />
-                        <p className="text-sm text-gray-400">Заявки не найдены</p>
+                        <p className="text-sm text-gray-500">Заявки не найдены</p>
                       </div>
                     )}
                   </div>
@@ -622,7 +622,7 @@ export default function AdminPage() {
               {tab === 'users' && (
                 <div className="card overflow-hidden">
                   <div className="px-5 py-4 border-b border-gray-100">
-                    <h2 className="font-semibold text-gray-800">Клиенты <span className="text-gray-400 font-normal">({users.length})</span></h2>
+                    <h2 className="font-semibold text-gray-800">Клиенты <span className="text-gray-500 font-normal">({users.length})</span></h2>
                   </div>
                   <div className="divide-y divide-gray-50">
                     {users.map(user => {
@@ -632,9 +632,9 @@ export default function AdminPage() {
                           <Avatar name={user.full_name ?? 'U'} />
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-semibold text-gray-800">{user.full_name ?? 'N/A'}</p>
-                            <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                            <p className="text-xs text-gray-500 truncate">{user.email}</p>
                           </div>
-                          <div className="hidden sm:flex items-center gap-4 text-xs text-gray-400">
+                          <div className="hidden sm:flex items-center gap-4 text-xs text-gray-500">
                             <span>{user.citizenship ?? '—'}</span>
                             <span>{formatDate(user.created_at)}</span>
                           </div>
@@ -657,7 +657,7 @@ export default function AdminPage() {
                       <thead>
                         <tr className="border-b border-gray-100 bg-gray-50/50">
                           {['Клиент', 'Сумма', 'Метод', 'Статус', 'Пакет', 'Дата'].map(h => (
-                            <th key={h} className="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">{h}</th>
+                            <th key={h} className="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{h}</th>
                           ))}
                         </tr>
                       </thead>
@@ -667,7 +667,7 @@ export default function AdminPage() {
                           return (
                             <tr key={p.id} className="hover:bg-gray-50">
                               <td className="px-5 py-3.5 text-sm text-gray-700">{au?.full_name ?? '—'}</td>
-                              <td className="px-5 py-3.5 text-sm font-bold text-gray-900">{formatCurrency(p.amount)}</td>
+                              <td className="px-5 py-3.5 text-sm font-bold text-gray-900 tabular-nums">{formatCurrency(p.amount)}</td>
                               <td className="px-5 py-3.5 text-xs text-gray-500">{p.method}</td>
                               <td className="px-5 py-3.5">
                                 <span className={cn('text-xs font-medium px-2.5 py-1 rounded-full ring-1',
@@ -676,14 +676,14 @@ export default function AdminPage() {
                                 )}>{p.status}</span>
                               </td>
                               <td className="px-5 py-3.5 text-xs text-gray-500">{PACKAGES[p.package]?.name_ru}</td>
-                              <td className="px-5 py-3.5 text-xs text-gray-400">{formatDate(p.created_at)}</td>
+                              <td className="px-5 py-3.5 text-xs text-gray-500">{formatDate(p.created_at)}</td>
                             </tr>
                           )
                         })}
                       </tbody>
                     </table>
                   </div>
-                  {payments.length === 0 && <div className="py-12 text-center text-sm text-gray-400">Нет платежей</div>}
+                  {payments.length === 0 && <div className="py-12 text-center text-sm text-gray-500">Нет платежей</div>}
                 </div>
               )}
 
@@ -697,7 +697,7 @@ export default function AdminPage() {
         {NAV.map(n => (
           <button key={n.key} onClick={() => setTab(n.key as AdminTab)}
             className={cn('flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-medium transition-colors',
-              tab === n.key ? 'text-[#1B4332]' : 'text-gray-400'
+              tab === n.key ? 'text-[#1B4332]' : 'text-gray-500'
             )}>
             <n.icon className="w-5 h-5" />
             <span>{n.label}</span>
@@ -727,13 +727,13 @@ export default function AdminPage() {
                     <StatusBadge status={selected.status} />
                   </div>
                   <div className="flex items-center gap-3 mt-1 flex-wrap">
-                    <span className="text-xs text-gray-400">{PACKAGES[selected.service_package]?.name_ru}</span>
+                    <span className="text-xs text-gray-500">{PACKAGES[selected.service_package]?.name_ru}</span>
                     <span className="text-gray-200">·</span>
-                    <span className="text-xs text-gray-400">{formatDate(selected.created_at)}</span>
+                    <span className="text-xs text-gray-500">{formatDate(selected.created_at)}</span>
                     {clientUser?.email && (
                       <>
                         <span className="text-gray-200">·</span>
-                        <span className="text-xs text-gray-400">{clientUser.email}</span>
+                        <span className="text-xs text-gray-500">{clientUser.email}</span>
                       </>
                     )}
                   </div>
@@ -752,7 +752,7 @@ export default function AdminPage() {
                       <Flag className="w-4 h-4" /> Завершить
                     </button>
                   )}
-                  <button onClick={() => setDetailOpen(false)} className="p-2 rounded-xl hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors">
+                  <button onClick={() => setDetailOpen(false)} aria-label="Закрыть окно" className="p-2 rounded-xl hover:bg-gray-100 text-gray-500 hover:text-gray-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4332]/30">
                     <X className="w-5 h-5" />
                   </button>
                 </div>
@@ -760,7 +760,7 @@ export default function AdminPage() {
 
               {/* Status chips */}
               <div className="px-6 py-3 border-b border-gray-100 flex items-center gap-2 flex-wrap">
-                <span className="text-xs text-gray-400 font-medium mr-1">Статус:</span>
+                <span className="text-xs text-gray-500 font-medium mr-1">Статус:</span>
                 {ALL_STATUSES.map(s => (
                   <button key={s} onClick={() => changeStatus(selected.id, s)}
                     className={cn('flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all border',
@@ -782,7 +782,7 @@ export default function AdminPage() {
                 ] as const).map(t => (
                   <button key={t.key} onClick={() => setDetailTab(t.key)}
                     className={cn('flex items-center gap-1.5 px-4 py-3 text-xs font-semibold transition-all border-b-2 -mb-px',
-                      detailTab === t.key ? 'border-[#1B4332] text-[#1B4332] bg-[#1B4332]/[0.04]' : 'border-transparent text-gray-400 hover:text-gray-600'
+                      detailTab === t.key ? 'border-[#1B4332] text-[#1B4332] bg-[#1B4332]/[0.04]' : 'border-transparent text-gray-500 hover:text-gray-600'
                     )}>
                     <t.icon className="w-3.5 h-3.5" />
                     {t.label}
@@ -807,8 +807,8 @@ export default function AdminPage() {
                       ].filter(i => i.value).map(({ icon: Icon, label, value }) => (
                         <div key={label} className="bg-gray-50 rounded-2xl p-4">
                           <div className="flex items-center gap-2 mb-2">
-                            <Icon className="w-3.5 h-3.5 text-gray-400" />
-                            <span className="text-[10px] text-gray-400 font-medium uppercase tracking-wide">{label}</span>
+                            <Icon className="w-3.5 h-3.5 text-gray-500" />
+                            <span className="text-[10px] text-gray-500 font-medium uppercase tracking-wide">{label}</span>
                           </div>
                           <p className="text-sm font-semibold text-gray-800 truncate">{value}</p>
                         </div>
@@ -816,7 +816,7 @@ export default function AdminPage() {
                     </div>
                     {ex.programs?.length > 0 && (
                       <div>
-                        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Выбранные факультеты</p>
+                        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Выбранные факультеты</p>
                         <div className="flex flex-wrap gap-2">
                           {ex.programs.map((p: string, i: number) => (
                             <span key={i} className="text-xs font-medium bg-[#1B4332]/8 text-[#1B4332] border border-[#1B4332]/15 px-3 py-1.5 rounded-full" dir="rtl">{p}</span>
@@ -825,7 +825,7 @@ export default function AdminPage() {
                       </div>
                     )}
                     <div>
-                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Внутренние заметки</p>
+                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Внутренние заметки</p>
                       <textarea
                         className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 placeholder-gray-300 focus:outline-none focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 h-24 resize-none transition-all"
                         value={noteText} onChange={e => setNoteText(e.target.value)} placeholder="Заметки видны только администратору..."
@@ -919,7 +919,7 @@ export default function AdminPage() {
                           <div className="divide-y divide-gray-50">
                             {visibleRows.map(([label, value]) => (
                               <div key={label} className="flex items-start justify-between gap-4 px-4 py-3">
-                                <span className="text-xs text-gray-400 shrink-0 w-40">{label}</span>
+                                <span className="text-xs text-gray-500 shrink-0 w-40">{label}</span>
                                 <span className="text-xs font-semibold text-gray-700 text-right break-words">{String(value)}</span>
                               </div>
                             ))}
@@ -950,7 +950,7 @@ export default function AdminPage() {
                     {appDocs.length === 0 ? (
                       <div className="py-16 text-center">
                         <Download className="w-8 h-8 text-gray-200 mx-auto mb-3" />
-                        <p className="text-sm text-gray-400">Документов нет</p>
+                        <p className="text-sm text-gray-500">Документов нет</p>
                       </div>
                     ) : appDocs.map(doc => {
                       const typeLabel = DOC_TYPE_LABEL[doc.type] ?? doc.type
@@ -958,11 +958,11 @@ export default function AdminPage() {
                         <button key={doc.id} onClick={() => downloadDoc(doc)}
                           className="w-full flex items-center gap-4 p-4 rounded-2xl border border-gray-100 hover:border-[#1B4332]/30 hover:bg-[#1B4332]/3 transition-all group text-left">
                           <div className="w-10 h-10 rounded-xl bg-gray-100 group-hover:bg-[#1B4332]/10 flex items-center justify-center shrink-0 transition-colors">
-                            <FileText className="w-4 h-4 text-gray-400 group-hover:text-[#1B4332] transition-colors" />
+                            <FileText className="w-4 h-4 text-gray-500 group-hover:text-[#1B4332] transition-colors" />
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-semibold text-gray-800 group-hover:text-[#1B4332] transition-colors">{typeLabel}</p>
-                            <p className="text-xs text-gray-400 truncate mt-0.5">{doc.file_name}</p>
+                            <p className="text-xs text-gray-500 truncate mt-0.5">{doc.file_name}</p>
                           </div>
                           <Download className="w-4 h-4 text-gray-300 group-hover:text-[#1B4332] transition-colors shrink-0" />
                         </button>
@@ -986,7 +986,7 @@ export default function AdminPage() {
                               {msg.sender === 'ADMIN' ? 'Вы' : selected.full_name}
                             </p>
                             <p className="whitespace-pre-wrap leading-relaxed">{msg.content}</p>
-                            <p className={cn('text-[10px] mt-1.5', msg.sender === 'ADMIN' ? 'text-white/40' : 'text-gray-400')}>
+                            <p className={cn('text-[10px] mt-1.5', msg.sender === 'ADMIN' ? 'text-white/40' : 'text-gray-500')}>
                               {formatDate(msg.created_at)}
                             </p>
                           </div>
@@ -995,7 +995,7 @@ export default function AdminPage() {
                       {appMsgs.length === 0 && (
                         <div className="flex flex-col items-center justify-center h-full text-center">
                           <MessageCircle className="w-8 h-8 text-gray-200 mb-3" />
-                          <p className="text-sm text-gray-400">Сообщений пока нет</p>
+                          <p className="text-sm text-gray-500">Сообщений пока нет</p>
                         </div>
                       )}
                       <div ref={chatEndRef} />
@@ -1007,8 +1007,8 @@ export default function AdminPage() {
                         value={msgText} onChange={e => setMsgText(e.target.value)}
                         onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage()}
                       />
-                      <button onClick={sendMessage} disabled={sending || !msgText.trim()}
-                        className="px-4 py-2 rounded-xl bg-gradient-to-br from-[#1B4332] to-[#123424] text-white font-bold shadow-[0_4px_12px_-3px_rgba(27,67,50,0.4)] hover:shadow-[0_6px_16px_-3px_rgba(27,67,50,0.5)] transition-all disabled:opacity-40 disabled:shadow-none">
+                      <button onClick={sendMessage} disabled={sending || !msgText.trim()} aria-label="Отправить сообщение"
+                        className="px-4 py-2 rounded-xl bg-gradient-to-br from-[#1B4332] to-[#123424] text-white font-bold shadow-[0_4px_12px_-3px_rgba(27,67,50,0.4)] hover:shadow-[0_6px_16px_-3px_rgba(27,67,50,0.5)] transition-all disabled:opacity-40 disabled:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4332]/40 focus-visible:ring-offset-2">
                         {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                       </button>
                     </div>
@@ -1032,7 +1032,7 @@ export default function AdminPage() {
               <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
                 <h3 className="font-bold text-gray-900">Завершить обработку</h3>
                 <button onClick={() => { if (!completing) { setCompleteOpen(false); setCompleteFiles([]) } }}
-                  className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 transition-colors">
+                  aria-label="Закрыть окно" className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4332]/30">
                   <X className="w-4 h-4" />
                 </button>
               </div>
@@ -1049,7 +1049,7 @@ export default function AdminPage() {
 
                 {/* Credentials */}
                 <div className="space-y-3">
-                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Данные studyinsaudi.com</p>
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Данные studyinsaudi.com</p>
                   <input type="text" value={studysaudiLogin} onChange={e => setStudysaudiLogin(e.target.value)}
                     placeholder="Email" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 transition-all" />
                   <input type="text" value={studysaudiPassword} onChange={e => setStudysaudiPassword(e.target.value)}
@@ -1061,7 +1061,7 @@ export default function AdminPage() {
                   className="border-2 border-dashed border-gray-200 rounded-2xl p-8 text-center cursor-pointer hover:border-[#1B4332]/40 hover:bg-[#1B4332]/3 transition-all">
                   <Upload className="w-7 h-7 text-gray-300 mx-auto mb-2" />
                   <p className="text-sm font-medium text-gray-500">Нажмите для загрузки файлов</p>
-                  <p className="text-xs text-gray-400 mt-1">PDF, JPG, PNG, DOCX</p>
+                  <p className="text-xs text-gray-500 mt-1">PDF, JPG, PNG, DOCX</p>
                   <input ref={fileInputRef} type="file" multiple className="hidden"
                     onChange={e => {
                       if (!e.target.files) return
@@ -1077,10 +1077,10 @@ export default function AdminPage() {
                         <FileText className="w-4 h-4 text-[#1B4332] shrink-0" />
                         <div className="flex-1 min-w-0">
                           <p className="text-sm text-gray-700 truncate">{file.name}</p>
-                          <p className="text-xs text-gray-400">{(file.size / 1024).toFixed(0)} KB</p>
+                          <p className="text-xs text-gray-500">{(file.size / 1024).toFixed(0)} KB</p>
                         </div>
                         <button onClick={() => setCompleteFiles(prev => prev.filter((_, j) => j !== i))}
-                          className="p-1.5 rounded-lg hover:bg-red-50 text-gray-300 hover:text-red-400 transition-colors">
+                          aria-label={`Удалить файл ${file.name}`} className="p-1.5 rounded-lg hover:bg-red-50 text-gray-300 hover:text-red-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300">
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
@@ -1121,12 +1121,12 @@ export default function AdminPage() {
                   </div>
                   <div>
                     <p className="font-bold text-gray-900">Рассылка</p>
-                    <p className="text-xs text-gray-400">{users.length} получателей</p>
+                    <p className="text-xs text-gray-500">{users.length} получателей</p>
                   </div>
                 </div>
                 <button onClick={() => { setBroadcastOpen(false); setBroadcastResult(null) }}
-                  className="p-2 rounded-xl hover:bg-gray-100 transition-colors">
-                  <X className="w-4 h-4 text-gray-400" />
+                  aria-label="Закрыть окно" className="p-2 rounded-xl hover:bg-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4332]/30">
+                  <X className="w-4 h-4 text-gray-500" />
                 </button>
               </div>
 
@@ -1160,7 +1160,7 @@ export default function AdminPage() {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1.5">
                         Текст письма
-                        <span className="ml-2 text-xs text-gray-400 font-normal">{'{{name}}'} — имя пользователя</span>
+                        <span className="ml-2 text-xs text-gray-500 font-normal">{'{{name}}'} — имя пользователя</span>
                       </label>
                       <textarea
                         value={broadcastText}
