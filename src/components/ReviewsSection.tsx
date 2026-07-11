@@ -14,9 +14,9 @@ interface Review {
 }
 
 const COUNTRIES = [
-  '🇺🇿 Узбекистан', '🇰🇿 Казахстан', '🇹🇯 Таджикистан',
-  '🇰🇬 Кыргызстан', '🇹🇲 Туркменистан', '🇦🇿 Азербайджан',
-  '🇷🇺 Россия', '🇺🇦 Украина', '🇧🇾 Беларусь', 'Другое',
+  'Узбекистан', 'Казахстан', 'Таджикистан',
+  'Кыргызстан', 'Туркменистан', 'Азербайджан',
+  'Россия', 'Украина', 'Беларусь', 'Другое',
 ]
 
 const AVATAR_GRADIENTS = [
@@ -62,7 +62,7 @@ function MarqueeStrip({ reviews, reverse = false }: { reviews: Review[]; reverse
 function ReviewCard({ review: r }: { review: Review }) {
   const gradient = AVATAR_GRADIENTS[r.name.charCodeAt(0) % AVATAR_GRADIENTS.length]
   return (
-    <div className="card-hover w-[300px] shrink-0 p-5 flex flex-col gap-4 select-none">
+    <div className="card-hover w-[300px] shrink-0 p-6 flex flex-col gap-4 select-none">
       {/* Quote + stars */}
       <div className="flex items-start justify-between">
         <Quote className="w-7 h-7 text-brand-200 shrink-0" />
@@ -74,19 +74,19 @@ function ReviewCard({ review: r }: { review: Review }) {
       </div>
 
       {/* Text */}
-      <p className="text-sm text-muted leading-relaxed flex-1 line-clamp-4">
+      <p className="text-sm text-muted leading-relaxed flex-1 line-clamp-5">
         {r.text}
       </p>
 
       {/* Author */}
-      <div className="flex items-center gap-3 pt-3 border-t border-border">
+      <div className="flex items-center gap-3 pt-4 border-t border-border/60">
         <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-sm shrink-0 ring-2 ring-white shadow-md`}>
           {r.name[0]?.toUpperCase()}
         </div>
         <div className="min-w-0">
           <p className="text-sm font-bold text-ink truncate">{r.name}</p>
-          {r.country && <p className="text-xs text-muted truncate">{r.country}</p>}
-          {r.university && <p className="text-xs text-brand-600 font-medium truncate mt-0.5">{r.university}</p>}
+          {r.country && <p className="text-[11px] text-muted truncate">{r.country}</p>}
+          {r.university && <p className="text-[11px] text-brand-600 font-medium truncate mt-0.5">{r.university}</p>}
         </div>
       </div>
     </div>
@@ -166,7 +166,7 @@ export default function ReviewsSection({ lang = 'ru' }: { lang?: string }) {
           <p className="text-muted max-w-md mx-auto text-sm mb-6">{t.subtitle}</p>
 
           {/* Rating summary */}
-          <div className="inline-flex items-center gap-3 px-5 py-3 bg-white border border-border rounded-2xl shadow-sm">
+          <div className="inline-flex items-center gap-3 px-6 py-3.5 bg-white border border-border rounded-2xl shadow-sm">
             <div className="flex gap-0.5">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />

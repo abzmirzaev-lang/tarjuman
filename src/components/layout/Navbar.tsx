@@ -150,21 +150,21 @@ export function Navbar({ lang = 'ru', onLangChange }: NavbarProps) {
               </Link>
               <button
                 onClick={() => supabase.auth.signOut()}
-                className="btn-ghost btn-sm p-2 rounded-lg"
+                className="btn-ghost btn-sm p-2 rounded-lg cursor-pointer"
                 title={t.nav.logout}
               >
                 <LogOut className="w-4 h-4" />
               </button>
             </div>
           ) : (
-            <>
+            <div className="flex items-center gap-2">
               <Link href="/login">
                 <Button variant="secondary" size="sm">{t.nav.login}</Button>
               </Link>
               <Link href="/apply">
                 <Button variant="primary" size="sm">{t.nav.apply}</Button>
               </Link>
-            </>
+            </div>
           )}
         </div>
 

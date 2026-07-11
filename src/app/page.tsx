@@ -83,7 +83,7 @@ function StatItem({ target, suffix, label }: { target: number; suffix: string; l
   const { count, ref } = useCounter(target)
   return (
     <div ref={ref} className="text-center">
-      <div className="text-4xl sm:text-5xl font-black text-ink mb-1 tabular-nums" suppressHydrationWarning>
+      <div className="text-4xl sm:text-5xl font-black text-ink mb-2 tabular-nums tracking-tight" suppressHydrationWarning>
         {count}{suffix}
       </div>
       <div className="text-sm text-muted font-medium">{label}</div>
@@ -108,13 +108,13 @@ function StatsSection({ lang, studentCount }: { lang: AppLanguage; studentCount:
     ]
 
   return (
-    <section className="py-16 bg-white border-y border-border">
+    <section className="py-20 bg-white border-y border-border">
       <div className="container-narrow">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="grid grid-cols-3 gap-6 sm:gap-10 divide-x divide-border"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-10 sm:divide-x divide-border"
         >
           {stats.map((s, i) => (
             <StatItem key={i} {...s} />
@@ -176,7 +176,7 @@ function BenefitsSection({ lang }: { lang: AppLanguage }) {
               transition={{ delay: i * 0.08 }}
               className="card-hover flex gap-5 p-6"
             >
-              <div className="w-12 h-12 rounded-2xl bg-brand-50 flex items-center justify-center shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-brand-50 ring-1 ring-brand-100 flex items-center justify-center shrink-0">
                 <item.icon className="w-6 h-6 text-brand-600" />
               </div>
               <div>
@@ -277,10 +277,12 @@ export default function HomePage() {
 
             {/* Social proof pill */}
             <motion.div variants={fadeUp} className="mb-7">
-              <div className="inline-flex items-center gap-3 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full">
-                <div className="flex -space-x-2">
-                  {['🇺🇿','🇰🇿','🇹🇯','🇰🇬'].map((f, i) => (
-                    <div key={i} className="w-6 h-6 rounded-full bg-white/20 border-2 border-white/30 flex items-center justify-center text-xs">{f}</div>
+              <div className="inline-flex items-center gap-3 px-4 py-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full">
+                <div className="flex -space-x-1.5">
+                  {['uz','kz','tj','kg'].map((code, i) => (
+                    <div key={i} className="w-7 h-7 rounded-full border-2 border-white/40 overflow-hidden shadow-sm">
+                      <img src={`https://flagcdn.com/w40/${code}.png`} alt="" className="w-full h-full object-cover" />
+                    </div>
                   ))}
                 </div>
                 <div className="flex items-center gap-1">
@@ -327,7 +329,7 @@ export default function HomePage() {
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  className="inline-flex items-center gap-2 px-7 py-4 bg-brand-400 text-ink font-bold text-base rounded-2xl shadow-xl shadow-brand-400/30 hover:bg-brand-300 transition-colors"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-brand-400 text-ink font-bold text-base rounded-2xl shadow-xl shadow-brand-400/30 hover:bg-brand-300 transition-all duration-200"
                 >
                   {lang === 'ru' ? 'Подать заявку' : lang === 'uz' ? 'Ariza berish' : 'Apply now'}
                   <ArrowRight className="w-5 h-5" />
@@ -337,7 +339,7 @@ export default function HomePage() {
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  className="inline-flex items-center gap-2 px-7 py-4 bg-white/10 backdrop-blur-sm border border-white/25 text-white font-semibold text-base rounded-2xl hover:bg-white/20 transition-colors"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/25 text-white font-semibold text-base rounded-2xl hover:bg-white/20 transition-all duration-200"
                 >
                   {lang === 'ru' ? 'Бесплатная консультация' : lang === 'uz' ? "Bepul maslahat" : 'Free consultation'}
                 </motion.button>
@@ -347,12 +349,13 @@ export default function HomePage() {
             {/* Feature pills */}
             <motion.div variants={fadeUp} className="flex flex-wrap justify-center gap-2 mb-14">
               {(lang === 'ru'
-                ? ['✓ Профессиональный перевод', '✓ Проверка документов', '✓ Поддержка 24/7', '✓ Без скрытых комиссий']
+                ? ['Профессиональный перевод', 'Проверка документов', 'Поддержка 24/7', 'Без скрытых комиссий']
                 : lang === 'uz'
-                ? ["✓ Rasmiy tarjima", "✓ Hujjatlarni tekshirish", "✓ 24/7 yordam", "✓ Yashirin to'lovlarsiz"]
-                : ['✓ Official translation', '✓ Document review', '✓ 24/7 support', '✓ No hidden fees']
+                ? ["Rasmiy tarjima", "Hujjatlarni tekshirish", "24/7 yordam", "Yashirin to'lovlarsiz"]
+                : ['Official translation', 'Document review', '24/7 support', 'No hidden fees']
               ).map((pill, i) => (
-                <span key={i} className="px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/15 rounded-full text-white/80 text-xs font-medium">
+                <span key={i} className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-white/10 backdrop-blur-sm border border-white/15 rounded-full text-white/80 text-xs font-medium">
+                  <Check className="w-3 h-3 text-brand-400 shrink-0" />
                   {pill}
                 </span>
               ))}
@@ -366,11 +369,11 @@ export default function HomePage() {
               {[
                 { val: String(submittedCount ?? 70), label: lang === 'ru' ? 'Подали заявку' : lang === 'uz' ? 'Ariza' : 'Applied' },
                 { val: '6 ч',  label: lang === 'ru' ? 'Мин. срок подачи' : lang === 'uz' ? 'Min. muddat' : 'Min. turnaround' },
-                { val: '30+',  label: lang === 'ru' ? 'Университетов для подачи' : lang === 'uz' ? 'Topshirish universitetlari' : 'Universities to apply' },
+                { val: '30+',  label: lang === 'ru' ? 'Университетов' : lang === 'uz' ? 'Universitetlar' : 'Universities' },
               ].map((s, i) => (
-                <div key={i} className="flex flex-col items-center py-4 px-2 bg-black/20">
-                  <span className="text-2xl font-black text-white">{s.val}</span>
-                  <span className="text-white/50 text-[11px] mt-0.5 text-center">{s.label}</span>
+                <div key={i} className="flex flex-col items-center py-5 px-3 bg-black/20">
+                  <span className="text-2xl font-black text-white tabular-nums">{s.val}</span>
+                  <span className="text-white/50 text-[11px] mt-1 text-center leading-tight">{s.label}</span>
                 </div>
               ))}
             </motion.div>
@@ -459,7 +462,7 @@ export default function HomePage() {
           </div>
 
           {/* Bottom row: QA + KW + TR smaller cards */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {([
               { iso: 'qa', code: 'QA', name: t.countries.qa, desc: t.countries.qaDesc, href: '/apply',
                 photo: 'https://images.unsplash.com/photo-1647252262017-582a7dbb73d0?w=600&q=85' },
@@ -568,7 +571,7 @@ export default function HomePage() {
                 className="group relative bg-white rounded-2xl border border-border p-7 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${s.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
-                <div className={`w-12 h-12 rounded-2xl ${s.bg} flex items-center justify-center mb-5 shadow-sm ${s.shadow}`}>
+                <div className={`w-12 h-12 rounded-2xl ${s.bg} flex items-center justify-center mb-5 ring-1 ring-black/[0.03]`}>
                   <s.icon className="w-6 h-6 text-ink" />
                 </div>
                 <h3 className="text-lg font-bold text-ink mb-2">{s.title}</h3>
@@ -617,7 +620,7 @@ export default function HomePage() {
                 transition={{ delay: i * 0.1 }}
                 className="relative p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
               >
-                <div className="text-3xl font-black text-white/10 mb-4">{s.n}</div>
+                <div className="text-3xl font-black text-brand-400/20 mb-4">{s.n}</div>
                 <div className="w-10 h-10 rounded-xl bg-brand-400/20 flex items-center justify-center mb-4">
                   <s.icon className="w-5 h-5 text-brand-400" />
                 </div>
