@@ -1,5 +1,6 @@
 'use client'
 import { useLanguage } from '@/hooks/useLanguage'
+import { useStudentCount } from '@/hooks/useStudentCount'
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -90,18 +91,18 @@ function StatItem({ target, suffix, label }: { target: number; suffix: string; l
   )
 }
 
-function StatsSection({ lang }: { lang: AppLanguage }) {
+function StatsSection({ lang, studentCount }: { lang: AppLanguage; studentCount: number }) {
   const stats =
     lang === 'ru' ? [
-      { target: 43, suffix: '',  label: 'Подали заявку' },
+      { target: studentCount, suffix: '',  label: 'Подали заявку' },
       { target: 30, suffix: '+', label: 'Университетов для подачи' },
       { target: 6,  suffix: 'ч', label: 'Мин. срок подачи' },
     ] : lang === 'uz' ? [
-      { target: 43, suffix: '',  label: 'Ariza topshirdi' },
+      { target: studentCount, suffix: '',  label: 'Ariza topshirdi' },
       { target: 30, suffix: '+', label: 'Topshirish universitetlari' },
       { target: 6,  suffix: 's', label: 'Min. topshirish vaqti' },
     ] : [
-      { target: 43, suffix: '',  label: 'Applications submitted' },
+      { target: studentCount, suffix: '',  label: 'Applications submitted' },
       { target: 30, suffix: '+', label: 'Universities to apply' },
       { target: 6,  suffix: 'h', label: 'Min. turnaround' },
     ]
@@ -209,7 +210,7 @@ export default function HomePage() {
     fetch('/api/stats')
       .then(r => r.json())
       .then(d => setSubmittedCount(d.submitted))
-      .catch(() => setSubmittedCount(41))
+      .catch(() => setSubmittedCount(70))
   }, [])
 
   const steps = lang === 'ru' ? [
@@ -288,7 +289,7 @@ export default function HomePage() {
                   ))}
                 </div>
                 <span className="text-white/90 text-xs font-medium">
-                  {lang === 'ru' ? '43 студента уже подали заявку' : lang === 'uz' ? "43 talaba ariza topshirdi" : '43 students applied'}
+                  {lang === 'ru' ? `${submittedCount ?? 70} студентов уже подали заявку` : lang === 'uz' ? `${submittedCount ?? 70} talaba ariza topshirdi` : `${submittedCount ?? 70} students applied`}
                 </span>
               </div>
             </motion.div>
@@ -363,7 +364,7 @@ export default function HomePage() {
               className="w-full max-w-lg grid grid-cols-3 gap-px bg-white/10 rounded-2xl overflow-hidden backdrop-blur-md border border-white/15"
             >
               {[
-                { val: '43', label: lang === 'ru' ? 'Подали заявку' : lang === 'uz' ? 'Ariza' : 'Applied' },
+                { val: String(submittedCount ?? 70), label: lang === 'ru' ? 'Подали заявку' : lang === 'uz' ? 'Ariza' : 'Applied' },
                 { val: '6 ч',  label: lang === 'ru' ? 'Мин. срок подачи' : lang === 'uz' ? 'Min. muddat' : 'Min. turnaround' },
                 { val: '30+',  label: lang === 'ru' ? 'Университетов для подачи' : lang === 'uz' ? 'Topshirish universitetlari' : 'Universities to apply' },
               ].map((s, i) => (
@@ -587,7 +588,7 @@ export default function HomePage() {
       </section>
 
       {/* STATS */}
-      <StatsSection lang={lang} />
+      <StatsSection lang={lang} studentCount={submittedCount ?? 70} />
 
       {/* BENEFITS */}
       <BenefitsSection lang={lang} />

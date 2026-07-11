@@ -1,5 +1,6 @@
 'use client'
 import { useLanguage } from '@/hooks/useLanguage'
+import { useStudentCount } from '@/hooks/useStudentCount'
 import { motion } from 'framer-motion'
 import {
   ArrowRight, Target, Heart, Zap, Shield,
@@ -19,7 +20,7 @@ const f = (delay = 0) => ({
 
 /* ─── DATA ──────────────────────────────────────────────────────────────── */
 const STATS = [
-  { val: '43',  ru: 'Подали заявку',           uz: 'Ariza topshirdi',         en: 'Applications submitted' },
+  { val: 'DYNAMIC',  ru: 'Подали заявку',           uz: 'Ariza topshirdi',         en: 'Applications submitted' },
   { val: '30+', ru: 'Университетов для подачи', uz: 'Topshirish universitetlari',   en: 'Universities to apply' },
   { val: '6ч',  ru: 'Минимальный срок подачи', uz: 'Minimal topshirish',      en: 'Min. turnaround' },
   { val: '1',   ru: 'Год на рынке',           uz: 'Yillik tajriba',          en: 'Year on market' },
@@ -111,6 +112,7 @@ const TEAM = [
 /* ─── PAGE ──────────────────────────────────────────────────────────────── */
 export default function AboutPage() {
   const [lang, setLang] = useLanguage()
+  const studentCount = useStudentCount()
   const l = lang as AppLanguage
 
   const t = (obj: { ru: string; en: string; uz: string }) =>
@@ -153,7 +155,7 @@ export default function AboutPage() {
           <motion.div {...f(0.22)} className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/10 rounded-3xl overflow-hidden max-w-2xl mx-auto border border-white/10">
             {STATS.map((s, i) => (
               <div key={i} className="bg-black/20 py-6 px-4 text-center">
-                <div className="text-3xl font-black text-white mb-1">{s.val}</div>
+                <div className="text-3xl font-black text-white mb-1">{s.val === 'DYNAMIC' ? studentCount : s.val}</div>
                 <div className="text-white/50 text-xs">{t({ ru: s.ru, en: s.en, uz: s.uz })}</div>
               </div>
             ))}

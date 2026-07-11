@@ -1,5 +1,6 @@
 'use client'
 import { useLanguage } from '@/hooks/useLanguage'
+import { useStudentCount } from '@/hooks/useStudentCount'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import {
@@ -80,6 +81,7 @@ function Cell({ value, isPopular }: { value: Cell; isPopular: boolean }) {
 export default function PricingPage() {
   const [lang, setLang] = useLanguage()
   const [tableOpen, setTableOpen] = useState(false)
+  const studentCount = useStudentCount()
 
   const L = lang as AppLanguage
   const tr = (obj: { ru: string; en: string; uz: string }) => L === 'uz' ? obj.uz : L === 'en' ? obj.en : obj.ru
@@ -99,7 +101,7 @@ export default function PricingPage() {
     ctaSub:  tr({ ru: 'Подайте заявку за 5 минут — мы возьмём всё в свои руки.', en: 'Apply in 5 minutes — we\'ll handle everything.', uz: '5 daqiqada ariza bering — biz hamma narsani o\'z zimmamizga olamiz.' }),
     ctaBtn:  tr({ ru: 'Подать заявку', en: 'Apply now', uz: 'Ariza berish' }),
     trust:   tr({ ru: 'Безопасная оплата · Возврат средств · Данные защищены', en: 'Secure payment · Money-back · Data protected', uz: "Xavfsiz to'lov · Qaytarish · Ma'lumotlar himoyasi" }),
-    social:  tr({ ru: '43 студента уже подали заявку', en: '43 students already applied', uz: "43 talaba ariza topshirdi" }),
+    social:  tr({ ru: `${studentCount} студентов уже подали заявку`, en: `${studentCount} students already applied`, uz: `${studentCount} talaba ariza topshirdi` }),
     notSure: tr({ ru: 'Не уверены, что выбрать?', en: 'Not sure which plan?', uz: 'Qaysi tarifni tanlashni bilmaysizmi?' }),
     consult: tr({ ru: 'Бесплатная консультация', en: 'Free consultation', uz: 'Bepul maslahat' }),
   }
@@ -282,7 +284,7 @@ export default function PricingPage() {
                 <span>{[
                   tr({ ru: 'Безопасная оплата', en: 'Secure payment', uz: "Xavfsiz to'lov" }),
                   tr({ ru: 'Быстрая обработка', en: 'Fast processing', uz: 'Tez ishlov' }),
-                  tr({ ru: '43 студента уже подали', en: '43 students already applied', uz: '43 talaba ariza topshirdi' }),
+                  tr({ ru: `${studentCount} студентов уже подали`, en: `${studentCount} students already applied`, uz: `${studentCount} talaba ariza topshirdi` }),
                 ][i]}</span>
               </div>
             ))}
