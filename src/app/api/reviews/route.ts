@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+}
 
 export async function GET() {
+  const supabase = getSupabase()
   const { data, error } = await supabase
     .from('reviews')
     .select('*')
@@ -18,6 +21,7 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const supabase = getSupabase()
   const body = await req.json()
   const { name, country, university, text, stars } = body
 

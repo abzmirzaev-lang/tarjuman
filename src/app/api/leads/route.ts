@@ -12,12 +12,15 @@ import { upsertUser, upsertLead } from '@/lib/bot/database'
 import { sendMessage } from '@/lib/bot/telegram'
 import { ADMIN_CHAT_ID, STATUS_LABELS } from '@/lib/bot/config'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+}
 
 export async function POST(req: NextRequest) {
+  const supabase = getSupabase()
   // Auth
   const apiKey = req.headers.get('x-api-key')
   if (apiKey !== process.env.ADMIN_SECRET_KEY) {

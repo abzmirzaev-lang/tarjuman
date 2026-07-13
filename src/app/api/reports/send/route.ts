@@ -1,16 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+}
 
 const ADMIN_BOT = process.env.TELEGRAM_BOT_TOKEN!
 const ADMIN_CHAT_ID = process.env.TELEGRAM_ADMIN_CHAT_ID!
 const API = `https://api.telegram.org/bot${ADMIN_BOT}`
 
 export async function GET(req: NextRequest) {
+  const supabase = getSupabase()
   const secret = req.nextUrl.searchParams.get('secret')
   if (secret !== process.env.REPORT_SECRET) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })

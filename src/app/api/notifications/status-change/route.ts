@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+}
 
 async function sendBotMessage(chatId: number, text: string) {
   const token = process.env.TELEGRAM_BOT_TOKEN
@@ -26,6 +28,7 @@ const STATUS_MESSAGES: Record<string, { emoji: string; ru: string }> = {
 }
 
 export async function POST(req: NextRequest) {
+  const supabase = getSupabase()
   try {
     const { applicationId, newStatus } = await req.json()
 

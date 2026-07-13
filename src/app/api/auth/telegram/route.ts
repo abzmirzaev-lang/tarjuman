@@ -2,10 +2,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+}
 
 async function sendBotMessage(chatId: number, text: string) {
   const token = process.env.TELEGRAM_BOT_TOKEN
@@ -18,6 +20,7 @@ async function sendBotMessage(chatId: number, text: string) {
 }
 
 export async function GET(req: NextRequest) {
+  const supabase = getSupabase()
   const { searchParams } = req.nextUrl
   const hash = searchParams.get('hash')
   if (!hash) return NextResponse.redirect(new URL('/login?error=no_hash', req.url))

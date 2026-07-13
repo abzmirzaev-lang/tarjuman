@@ -2,10 +2,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { sendTelegram } from '@/lib/telegram'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+}
 
 const PKG_LABEL: Record<string, string> = {
   SUBMISSION: 'Базовый — $39',
@@ -17,6 +19,7 @@ const PKG_LABEL: Record<string, string> = {
 const notifiedIds = new Map<string, number>()
 
 export async function POST(req: NextRequest) {
+  const supabase = getSupabase()
   try {
     const { applicationId } = await req.json()
     if (!applicationId) return NextResponse.json({ error: 'Missing applicationId' }, { status: 400 })
