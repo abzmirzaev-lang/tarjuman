@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 import {
   Check, X, ArrowRight, ShieldCheck, Zap, Star,
   FileText, Languages, Clock, Bell, HeartHandshake,
-  MessageCircle, Crown, Sparkles, Users, RotateCcw,
+  MessageCircle, Crown, Sparkles, Users,
   BadgeCheck, ChevronDown, ChevronUp,
 } from 'lucide-react'
 import Link from 'next/link'
@@ -36,7 +36,6 @@ const FEATURES: Feature[] = [
   { icon: Crown,        ru: 'Приоритетная обработка',     uz: "Ustuvor ko'rib chiqish",   en: 'Priority processing',       basic: false,     standard: false,     vip: true,    highlight: true },
   { icon: Users,        ru: 'Персональный менеджер',      uz: 'Shaxsiy menejer',          en: 'Personal manager',          basic: false,     standard: false,     vip: true },
   { icon: MessageCircle, ru: 'Безлимитный чат',           uz: 'Cheksiz chat',             en: 'Unlimited chat',            basic: false,     standard: false,     vip: true },
-  { icon: RotateCcw,    ru: 'Гарантия возврата',          uz: 'Qaytarish kafolati',       en: 'Money-back guarantee',      basic: true,      standard: true,      vip: true },
 ]
 
 const PLANS: { key: ServicePackage; popular: boolean; icon: React.ElementType; gradient: string; accentBg: string }[] = [
@@ -50,7 +49,6 @@ const PLAN_FEATURES: Record<ServicePackage, { icon: React.ElementType; ru: strin
     { icon: FileText,      ru: 'Подача готового пакета',       en: 'Ready package submission',      uz: 'Tayyor paketni topshirish' },
     { icon: Zap,           ru: 'Онлайн-трекинг статуса',       en: 'Online status tracking',        uz: 'Onlayn holat kuzatuvi' },
     { icon: Bell,          ru: 'Telegram-уведомления',         en: 'Telegram notifications',        uz: 'Telegram bildirishnomalar' },
-    { icon: RotateCcw,     ru: 'Гарантия возврата',            en: 'Money-back guarantee',          uz: 'Qaytarish kafolati' },
   ],
   STANDARD: [
     { icon: Languages,     ru: 'Перевод на арабский',          en: 'Arabic translation',            uz: 'Arabchaga tarjima' },
@@ -100,7 +98,7 @@ export default function PricingPage() {
     ctaTitle: tr({ ru: 'Готовы поступить?', en: 'Ready to enroll?', uz: 'Qabulga tayyormisiz?' }),
     ctaSub:  tr({ ru: 'Подайте заявку за 5 минут — мы возьмём всё в свои руки.', en: 'Apply in 5 minutes — we\'ll handle everything.', uz: '5 daqiqada ariza bering — biz hamma narsani o\'z zimmamizga olamiz.' }),
     ctaBtn:  tr({ ru: 'Подать заявку', en: 'Apply now', uz: 'Ariza berish' }),
-    trust:   tr({ ru: 'Безопасная оплата · Возврат средств · Данные защищены', en: 'Secure payment · Money-back · Data protected', uz: "Xavfsiz to'lov · Qaytarish · Ma'lumotlar himoyasi" }),
+    trust:   tr({ ru: 'Безопасная оплата · Данные защищены', en: 'Secure payment · Data protected', uz: "Xavfsiz to'lov · Ma'lumotlar himoyasi" }),
     social:  tr({ ru: `${studentCount} студентов уже подали заявку`, en: `${studentCount} students already applied`, uz: `${studentCount} talaba ariza topshirdi` }),
     notSure: tr({ ru: 'Не уверены, что выбрать?', en: 'Not sure which plan?', uz: 'Qaysi tarifni tanlashni bilmaysizmi?' }),
     consult: tr({ ru: 'Бесплатная консультация', en: 'Free consultation', uz: 'Bepul maslahat' }),
