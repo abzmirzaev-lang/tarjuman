@@ -197,6 +197,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ru">
       <head>
         <meta name="cryptomus" content="801d9f3b" />
+        <meta name="domain-verification" content="369ef4d867b326931e400bd8f98026a8ec31c551e900e66eec75c12c55f9a72a" />
         <link rel="alternate" hrefLang="ru" href="https://tarjumanedu.com" />
         <link rel="alternate" hrefLang="uz" href="https://tarjumanedu.com" />
         <link rel="alternate" hrefLang="en" href="https://tarjumanedu.com" />
