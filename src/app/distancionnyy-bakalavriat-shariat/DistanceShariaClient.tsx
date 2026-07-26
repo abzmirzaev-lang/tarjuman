@@ -50,7 +50,7 @@ const conditions = [
   'Если предыдущее образование было не на арабском — нужно сдать тест на уровень языка',
   'Готовы соблюдать академические и поведенческие правила университета',
   'Нет медицинских противопоказаний к дистанционному обучению',
-  'Готовы выполнять условия вакфа-донора — при нарушении грант могут отменить',
+  'Готовы выполнять условия вакфа — при нарушении грант могут отменить',
 ]
 
 const documents = [
@@ -266,13 +266,15 @@ export default function DistanceShariaClient() {
           <motion.section {...fadeUp()} className="bg-white rounded-2xl border border-border p-6">
             <h2 className="text-xl font-bold text-ink mb-2">Подать заявку на программу</h2>
             <p className="text-muted text-sm mb-4">Tarjuman Edu переведёт документы на арабский язык, поможет правильно оформить заявку и подать её через официальный портал Исламского университета Медины.</p>
-            <Link
-              href="/apply"
+            <a
+              href="https://t.me/tarjumanedu"
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 w-full py-3 bg-brand-400 text-ink font-bold rounded-xl hover:bg-brand-300 active:scale-[0.98] transition-all duration-150"
             >
               Начать поступление в IUM
               <ArrowRight className="w-4 h-4" />
-            </Link>
+            </a>
           </motion.section>
         </div>
       </div>
