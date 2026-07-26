@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { Navbar } from '@/components/layout/Navbar'
 import {
   GraduationCap,
   Globe2,
@@ -84,7 +85,9 @@ const diplomaSteps = [
 
 export default function DistanceShariaClient() {
   return (
-    <main className="min-h-screen bg-[#F7F8FA]">
+    <>
+      <Navbar />
+      <main className="min-h-screen bg-[#F7F8FA]">
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <section className="relative h-[56vh] min-h-[380px] flex items-end overflow-hidden">
         <div className="absolute inset-0">
@@ -278,6 +281,7 @@ export default function DistanceShariaClient() {
           </motion.section>
         </div>
       </div>
-    </main>
+      </main>
+    </>
   )
 }
