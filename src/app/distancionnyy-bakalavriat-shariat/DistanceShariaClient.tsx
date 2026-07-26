@@ -89,7 +89,7 @@ export default function DistanceShariaClient() {
       <Navbar />
       <main className="min-h-screen bg-[#F7F8FA]">
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section className="relative h-[56vh] min-h-[380px] flex items-end overflow-hidden">
+      <section className="relative min-h-[560px] sm:min-h-[460px] sm:h-[56vh] flex items-end overflow-hidden">
         <div className="absolute inset-0">
           <img
             src={HERO_IMAGE}
@@ -122,7 +122,7 @@ export default function DistanceShariaClient() {
         <div className="space-y-8">
 
           <motion.section {...fadeUp()} className="bg-white rounded-2xl border border-border p-6">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {facts.map(f => (
                 <div key={f.label} className="flex items-start gap-3 bg-[#F7F8FA] rounded-xl p-3">
                   <f.icon className="w-5 h-5 text-brand-600 shrink-0 mt-0.5" />
@@ -143,7 +143,7 @@ export default function DistanceShariaClient() {
             <p className="text-sm text-emerald-800 mb-4">
               Вакф короля Абдаллы бен Абдулазиза оплачивает большинство учебных расходов студентам, которые приняты в программу и соблюдают её условия:
             </p>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {grantCovers.map((g, i) => (
                 <motion.div
                   key={g.title}
@@ -177,7 +177,7 @@ export default function DistanceShariaClient() {
 
           <motion.section {...fadeUp()}>
             <h2 className="text-2xl font-bold text-ink mb-3">Какие документы понадобятся</h2>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {documents.map(s => (
                 <div key={s} className="flex items-center gap-2 bg-white border border-border rounded-xl p-3 text-sm font-medium text-ink">
                   <FileCheck2 className="w-4 h-4 text-brand-500 shrink-0" />
@@ -220,7 +220,7 @@ export default function DistanceShariaClient() {
               <Wallet className="w-5 h-5 text-brand-600" />
               <h2 className="text-xl font-bold text-ink">Сколько нужно заплатить самому при подаче</h2>
             </div>
-            <div className="grid grid-cols-2 gap-3 mb-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
               <div className="text-center p-3 bg-[#F7F8FA] rounded-xl">
                 <p className="font-bold text-ink text-sm">Регистрация и активация файла</p>
                 <p className="text-xl font-black text-brand-600">230 SAR</p>
