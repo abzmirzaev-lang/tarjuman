@@ -31,6 +31,7 @@ interface SaudiApp {
   income_currency: string | null
   motivation: string
   selected_programs: SelectedProgram[]
+  desired_programs: string | null
   service_package: SaudiPackageId
   service_package_price: number
   status: SaudiStatus
@@ -505,15 +506,21 @@ export default function AdminSaudiPage() {
                 <div className="flex items-start gap-2">
                   <GraduationCap className="w-4 h-4 text-muted mt-0.5 shrink-0" />
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs text-muted mb-1.5">Университеты и факультеты ({selected.selected_programs.length})</p>
-                    <div className="space-y-1">
-                      {selected.selected_programs.map((p, i) => (
-                        <div key={i} className="text-sm text-ink flex gap-2">
-                          <span className="text-muted">{i + 1}.</span>
-                          <span>{p.university_name} — {p.faculty}</span>
-                        </div>
-                      ))}
-                    </div>
+                    <p className="text-xs text-muted mb-1.5">Университеты и факультеты</p>
+                    {selected.desired_programs ? (
+                      <p className="text-sm text-ink whitespace-pre-wrap" dir="auto">{selected.desired_programs}</p>
+                    ) : selected.selected_programs?.length ? (
+                      <div className="space-y-1">
+                        {selected.selected_programs.map((p, i) => (
+                          <div key={i} className="text-sm text-ink flex gap-2">
+                            <span className="text-muted">{i + 1}.</span>
+                            <span>{p.university_name} — {p.faculty}</span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-muted italic">Не указано</p>
+                    )}
                   </div>
                 </div>
 

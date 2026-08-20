@@ -6,12 +6,6 @@ import { SAUDI_PACKAGES, SaudiPackageId } from '@/lib/saudiPackages'
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const PHONE_RE = /^\+[1-9]\d{7,14}$/ // international format, e.g. +998901234567
 
-interface SelectedProgram {
-  university_id?:   string | null
-  university_name?: string
-  faculty?:          string
-}
-
 function getSupabase() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -30,7 +24,7 @@ export async function POST(req: NextRequest) {
       annual_income,
       income_currency,
       motivation,
-      selected_programs,
+      desired_programs,
       service_package,
       lang,
     } = body ?? {}
@@ -51,25 +45,10 @@ export async function POST(req: NextRequest) {
     if (typeof motivation !== 'string' || motivation.trim().length < 10) {
       return NextResponse.json({ error: 'invalid_motivation' }, { status: 400 })
     }
-    if (!Array.isArray(selected_programs) || selected_programs.length < 1 || selected_programs.length > 25) {
+    if (typeof desired_programs !== 'string' || desired_programs.trim().length < 5) {
       return NextResponse.json({ error: 'invalid_programs' }, { status: 400 })
     }
-    const cleanedPrograms = (selected_programs as SelectedProgram[]).map((p, i) => ({
-      university_id:   p.university_id ?? null,
-      university_name: String(p.university_name ?? '').trim(),
-      faculty:          String(p.faculty ?? '').trim(),
-      order:            i,
-    }))
-    if (cleanedPrograms.some(p => !p.university_name || !p.faculty)) {
-      return NextResponse.json({ error: 'invalid_programs' }, { status: 400 })
-    }
-    // no duplicate university+faculty combos
-    const seen = new Set<string>()
-    for (const p of cleanedPrograms) {
-      const key = `${p.university_name.toLowerCase()}::${p.faculty.toLowerCase()}`
-      if (seen.has(key)) return NextResponse.json({ error: 'duplicate_program' }, { status: 400 })
-      seen.add(key)
-    }
+    const cleanedDesiredPrograms = desired_programs.trim().slice(0, 4000)
 
     if (!service_package || !(service_package in SAUDI_PACKAGES)) {
       return NextResponse.json({ error: 'invalid_package' }, { status: 400 })
@@ -96,7 +75,7 @@ export async function POST(req: NextRequest) {
         annual_income:          cleanedIncome,
         income_currency:        cleanedIncome !== null ? (income_currency || 'USD') : null,
         motivation:             motivation.trim(),
-        selected_programs:      cleanedPrograms,
+        desired_programs:       cleanedDesiredPrograms,
         service_package:        pkg.id,
         service_package_price:  pkg.priceUSD,
         status:                 'REGISTERED',
@@ -115,7 +94,7 @@ export async function POST(req: NextRequest) {
       `Email: ${app.email}\n` +
       `Телефон: ${app.phone}\n` +
       `Тариф: ${pkg.name_ru} — $${pkg.priceUSD}\n` +
-      `Университеты/факультеты: ${cleanedPrograms.length}\n` +
+      `Университеты/факультеты: ${cleanedDesiredPrograms.slice(0, 200)}${cleanedDesiredPrograms.length > 200 ? '…' : ''}\n` +
       `ID: ${app.id.slice(0, 8)}\n\n` +
       `https://tarjumanedu.com/admin`
     ).catch(console.error)

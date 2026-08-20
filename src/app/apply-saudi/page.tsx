@@ -7,8 +7,8 @@ import { toast } from 'sonner'
 import { SAUDI_PACKAGES, SAUDI_PACKAGE_IDS, SAUDI_FEATURES, SaudiPackageId } from '@/lib/saudiPackages'
 import {
   Mail, Phone, MapPin, HeartPulse, Wallet, MessageSquare,
-  GraduationCap, Plus, X, ArrowUp, ArrowDown, CheckCircle2, Send, Loader2,
-  Check, Minus, Crown, ShieldCheck,
+  GraduationCap, CheckCircle2, Send, Loader2,
+  Check, Minus, Crown, ShieldCheck, ExternalLink,
 } from 'lucide-react'
 
 // ── Palette (this page only) ───────────────────────────────────────────────
@@ -24,8 +24,8 @@ const GOLD_TEXT  = '#8A6116'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const PHONE_RE = /^\+[1-9]\d{7,14}$/
-const MAX_PROGRAMS = 25
 const CURRENCIES = ['USD', 'EUR', 'RUB', 'UZS', 'SAR', 'GBP']
+const STUDY_IN_SAUDI_URL = 'https://studyinsaudi.sa/en/programs'
 const SERIF = "'Playfair Display', Georgia, serif"
 
 const INPUT = 'w-full h-12 px-4 text-base border border-[#E7E1D3] rounded-xl focus:outline-none focus:border-[#1B4332] focus:ring-4 focus:ring-[#1B4332]/10 transition-all bg-white placeholder:text-muted/70'
@@ -43,12 +43,6 @@ const formatPhoneDisplay = (v: string) => {
   const digits = v.replace('+', '')
   const groups = digits.match(/.{1,3}/g) || []
   return (hasPlus ? '+' : '') + groups.join(' ')
-}
-
-interface SelectedProgram {
-  id:              string
-  university_name: string
-  faculty:         string
 }
 
 // ── Small building blocks ──────────────────────────────────────────────────
@@ -108,10 +102,8 @@ export default function ApplySaudiPage() {
   const [currency, setCurrency]           = useState('USD')
   const [motivation, setMotivation]       = useState('')
 
-  // Programs (placeholder architecture — manual add, ready for future catalogue swap-in)
-  const [programs, setPrograms]   = useState<SelectedProgram[]>([])
-  const [newUni, setNewUni]       = useState('')
-  const [newFaculty, setNewFaculty] = useState('')
+  // Universities/faculties — free text, client writes their own preferences
+  const [desiredPrograms, setDesiredPrograms] = useState('')
 
   // Package
   const [pkg, setPkg] = useState<SaudiPackageId | ''>('')
@@ -120,46 +112,13 @@ export default function ApplySaudiPage() {
   const [loading, setLoading]     = useState(false)
   const [submitted, setSubmitted] = useState(false)
 
-  const addProgram = () => {
-    const uni = newUni.trim()
-    const fac = newFaculty.trim()
-    if (!uni || !fac) {
-      toast.error(t('Укажите университет и факультет', 'Universitet va fakultetni kiriting', 'Enter university and faculty'))
-      return
-    }
-    if (programs.length >= MAX_PROGRAMS) {
-      toast.error(t(`Максимум ${MAX_PROGRAMS} вариантов`, `Maksimal ${MAX_PROGRAMS} ta`, `Maximum ${MAX_PROGRAMS} options`))
-      return
-    }
-    const dup = programs.some(p => p.university_name.toLowerCase() === uni.toLowerCase() && p.faculty.toLowerCase() === fac.toLowerCase())
-    if (dup) {
-      toast.error(t('Этот вариант уже выбран', 'Bu variant allaqachon tanlangan', 'This option is already selected'))
-      return
-    }
-    setPrograms(p => [...p, { id: crypto.randomUUID(), university_name: uni, faculty: fac }])
-    setNewUni('')
-    setNewFaculty('')
-  }
-
-  const removeProgram = (id: string) => setPrograms(p => p.filter(x => x.id !== id))
-
-  const moveProgram = (index: number, dir: -1 | 1) => {
-    setPrograms(p => {
-      const next = [...p]
-      const target = index + dir
-      if (target < 0 || target >= next.length) return p
-      ;[next[index], next[target]] = [next[target], next[index]]
-      return next
-    })
-  }
-
   const validate = (): string | null => {
     if (!EMAIL_RE.test(email.trim())) return t('Укажите корректный email', 'To\'g\'ri email kiriting', 'Enter a valid email')
     if (!PHONE_RE.test(phone.trim())) return t('Укажите телефон в международном формате (+998...)', 'Telefonni xalqaro formatda kiriting (+998...)', 'Enter phone in international format (+1...)')
     if (address.trim().length < 5) return t('Укажите полный адрес', 'To\'liq manzilni kiriting', 'Enter your full address')
     if (!hasDisability) return t('Ответьте на вопрос об инвалидности', 'Nogironlik haqidagi savolga javob bering', 'Answer the disability question')
     if (motivation.trim().length < 10) return t('Расскажите, почему хотите учиться в Саудовской Аравии', 'Nima uchun Saudiya Arabistonida o\'qimoqchisiz — yozing', 'Tell us why you want to study in Saudi Arabia')
-    if (programs.length < 1) return t('Добавьте хотя бы один университет/факультет', 'Kamida bitta universitet/fakultet qo\'shing', 'Add at least one university/faculty')
+    if (desiredPrograms.trim().length < 5) return t('Укажите университеты/факультеты или напишите, что выбор за нами', 'Universitet/fakultetlarni yozing yoki tanlovni bizga qoldiring deb yozing', 'Enter universities/faculties, or write that you\'d like us to choose')
     if (!pkg) return t('Выберите пакет услуг', 'Xizmat paketini tanlang', 'Choose a service package')
     return null
   }
@@ -180,7 +139,7 @@ export default function ApplySaudiPage() {
           annual_income: income ? Number(income) : null,
           income_currency: income ? currency : null,
           motivation: motivation.trim(),
-          selected_programs: programs.map(p => ({ university_name: p.university_name, faculty: p.faculty })),
+          desired_programs: desiredPrograms.trim(),
           service_package: pkg,
           lang,
         }),
@@ -312,75 +271,36 @@ export default function ApplySaudiPage() {
         </Card>
 
         {/* ── Section 2: Universities/faculties ── */}
-        <Card className="mb-5" accent="green">
+        <Card className="mb-5 space-y-5" accent="green">
           <Eyebrow step="02">{t('Университеты и факультеты', 'Universitet va fakultetlar', 'Universities & faculties')}</Eyebrow>
 
-          <div className="flex items-start justify-between mb-4 gap-3">
-            <div className="flex items-center gap-3">
-              <span className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: 'rgba(27,67,50,0.08)' }}>
-                <GraduationCap className="w-4.5 h-4.5" style={{ color: GREEN }} />
-              </span>
-              <p className="text-xs text-muted leading-relaxed">
-                {t('Добавьте до 25 вариантов в порядке приоритета — первый в списке рассматривается первым', 'Ustuvorlik tartibida 25 tagacha variant qo\'shing — ro\'yxatdagi birinchisi birinchi bo\'lib ko\'rib chiqiladi', 'Add up to 25 options in priority order — the first one is considered first')}
-              </p>
-            </div>
-            <span className={cn(
-              'text-sm font-bold px-3 py-1.5 rounded-xl shrink-0 tabular-nums',
-              programs.length >= MAX_PROGRAMS ? 'bg-red-50 text-red-600 border border-red-200' : ''
-            )} style={programs.length >= MAX_PROGRAMS ? undefined : { background: 'rgba(27,67,50,0.08)', color: GREEN }}>
-              {programs.length}/{MAX_PROGRAMS}
+          <div className="flex items-start gap-3 p-4 rounded-2xl border border-[#ECE0C4]" style={{ background: 'rgba(201,146,42,0.06)' }}>
+            <span className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: 'rgba(201,146,42,0.14)' }}>
+              <GraduationCap className="w-4.5 h-4.5" style={{ color: GOLD_TEXT }} />
             </span>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-2">
-            <input type="text" value={newUni} onChange={e => setNewUni(e.target.value)} onKeyDown={e => e.key === 'Enter' && addProgram()}
-              placeholder={t('Университет', 'Universitet', 'University')}
-              className="flex-1 h-11 px-3 text-sm border border-[#E7E1D3] rounded-lg focus:outline-none focus:border-[#1B4332] focus:ring-4 focus:ring-[#1B4332]/10 bg-white" />
-            <input type="text" value={newFaculty} onChange={e => setNewFaculty(e.target.value)} onKeyDown={e => e.key === 'Enter' && addProgram()}
-              placeholder={t('Факультет / направление', 'Fakultet / yo\'nalish', 'Faculty / program')}
-              className="flex-1 h-11 px-3 text-sm border border-[#E7E1D3] rounded-lg focus:outline-none focus:border-[#1B4332] focus:ring-4 focus:ring-[#1B4332]/10 bg-white" />
-            <button type="button" onClick={addProgram}
-              className="flex items-center justify-center gap-1.5 px-4 h-11 text-white text-sm font-medium rounded-lg hover:opacity-90 transition-colors shrink-0" style={{ background: GREEN }}>
-              <Plus className="w-4 h-4" /> {t('Добавить', 'Qo\'shish', 'Add')}
-            </button>
-          </div>
-          <p className="text-[11px] text-muted mt-2">
-            {t('Пока указывайте вручную — скоро подключим каталог Study in Saudi, и вы сможете выбирать из готового списка', 'Hozircha qo\'lda kiriting — tez orada Study in Saudi katalogi ulanadi va tayyor ro\'yxatdan tanlaysiz', 'Enter manually for now — we\'ll soon connect the Study in Saudi catalogue so you can pick from a ready list')}
-          </p>
-
-          {programs.length === 0 ? (
-            <p className="text-sm text-muted text-center py-6 mt-4 border-2 border-dashed border-[#ECE6D6] rounded-xl">
-              {t('Пока ничего не выбрано', 'Hozircha hech narsa tanlanmagan', 'Nothing selected yet')}
-            </p>
-          ) : (
-            <div className="space-y-2 mt-4">
-              {programs.map((p, i) => (
-                <div key={p.id} className="flex items-center gap-3 p-3 rounded-xl border border-[#ECE6D6] bg-[#FAF8F4]">
-                  <span className="w-6 h-6 shrink-0 rounded-full text-white text-xs font-bold flex items-center justify-center" style={{ background: GREEN }}>
-                    {i + 1}
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-ink truncate">{p.university_name}</p>
-                    <p className="text-xs text-muted truncate">{p.faculty}</p>
-                  </div>
-                  <div className="flex items-center gap-1 shrink-0">
-                    <button type="button" onClick={() => moveProgram(i, -1)} disabled={i === 0} aria-label={t('Выше', 'Yuqoriga', 'Move up')}
-                      className="w-7 h-7 rounded-lg flex items-center justify-center text-muted hover:bg-white disabled:opacity-30 disabled:hover:bg-transparent transition-colors">
-                      <ArrowUp className="w-3.5 h-3.5" />
-                    </button>
-                    <button type="button" onClick={() => moveProgram(i, 1)} disabled={i === programs.length - 1} aria-label={t('Ниже', 'Pastga', 'Move down')}
-                      className="w-7 h-7 rounded-lg flex items-center justify-center text-muted hover:bg-white disabled:opacity-30 disabled:hover:bg-transparent transition-colors">
-                      <ArrowDown className="w-3.5 h-3.5" />
-                    </button>
-                    <button type="button" onClick={() => removeProgram(p.id)} aria-label={t('Удалить', 'O\'chirish', 'Remove')}
-                      className="w-7 h-7 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-50 transition-colors">
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </div>
-              ))}
+            <div className="min-w-0">
+              <p className="text-sm text-ink leading-relaxed">
+                {t('Чтобы узнать, какие факультеты и университеты доступны, перейдите по ссылке:', 'Qanday fakultet va universitetlar mavjudligini bilish uchun havolaga o\'ting:', 'To see which faculties and universities are available, follow the link:')}
+              </p>
+              <a href={STUDY_IN_SAUDI_URL} target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 mt-3 px-4 py-2.5 text-sm font-semibold rounded-xl text-white hover:opacity-90 transition-all shadow-sm"
+                style={{ background: GOLD }}>
+                <ExternalLink className="w-3.5 h-3.5" />
+                studyinsaudi.sa/en/programs
+              </a>
             </div>
-          )}
+          </div>
+
+          <Field label={t('Какие университеты и факультеты вас интересуют?', 'Qaysi universitet va fakultetlar sizni qiziqtiradi?', 'Which universities and faculties interest you?')} required icon={GraduationCap}
+            hint={t(
+              '(Или напишите «выбирайте сами, мы сами выберем университеты и факультеты на свой выбор» — просто укажите, какие направления вас интересуют)',
+              '(Yoki «o\'zingiz tanlang, universitet va fakultetlarni o\'zimiz tanlaymiz» deb yozing — faqat qaysi yo\'nalishlar qiziqtirishini ko\'rsating)',
+              '(Or write "choose for us — we\'ll pick universities and faculties at our discretion", just tell us which fields interest you)'
+            )}>
+            <textarea rows={6} dir="auto" value={desiredPrograms} onChange={e => setDesiredPrograms(e.target.value)}
+              placeholder={t('Например: King Saud University — Медицина; Al Qasimia University — Исламские науки...', 'Masalan: King Saud University — Tibbiyot; Al Qasimia University — Islom ilmlari...', 'E.g.: King Saud University — Medicine; Al Qasimia University — Islamic Studies...')}
+              className={TEXTAREA} />
+          </Field>
         </Card>
 
         {/* ── Section 3: Package ── */}
