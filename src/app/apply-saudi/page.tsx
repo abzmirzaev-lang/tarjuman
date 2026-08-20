@@ -269,12 +269,12 @@ export default function ApplySaudiPage() {
         <Card className="mb-5 space-y-8" accent="green">
           <Eyebrow step="01">{t('Контактные данные', 'Kontakt ma\'lumotlari', 'Contact details')}</Eyebrow>
 
-          <Field label={t('Email', 'Email', 'Email')} required icon={Mail} hint={t('Предпочтительно указывать Gmail', 'Iloji bo\'lsa Gmail kiriting', 'Gmail preferred')}>
+          <Field label={t('Email', 'Email', 'Email')} required icon={Mail}>
             <input type="email" inputMode="email" value={email} onChange={e => setEmail(e.target.value)}
               placeholder="name@gmail.com" className={INPUT} />
           </Field>
 
-          <Field label={t('Номер телефона', 'Telefon raqami', 'Phone number')} required icon={Phone} hint={t('Международный формат, начинается с +', 'Xalqaro format, + bilan boshlanadi', 'International format, starts with +')}>
+          <Field label={t('Номер телефона', 'Telefon raqami', 'Phone number')} required icon={Phone}>
             <input type="tel" inputMode="tel" value={formatPhoneDisplay(phone)} onChange={e => setPhone(sanitizePhone(e.target.value))}
               placeholder="+998 90 123 45 67" className={cn(INPUT, 'tabular-nums tracking-wide')} />
           </Field>
@@ -285,8 +285,7 @@ export default function ApplySaudiPage() {
               className={TEXTAREA} />
           </Field>
 
-          <Field label={t('Есть ли у вас инвалидность?', 'Sizda nogironlik bormi?', 'Do you have a disability?')} required icon={HeartPulse}
-            hint={t('Нужно, чтобы университет мог подготовить условия при необходимости', 'Universitet zarur sharoitlarni tayyorlashi uchun kerak', 'Helps the university prepare accommodations if needed')}>
+          <Field label={t('Есть ли у вас инвалидность?', 'Sizda nogironlik bormi?', 'Do you have a disability?')} required icon={HeartPulse}>
             <div className="flex gap-2">
               {(['yes', 'no'] as const).map(v => (
                 <button key={v} type="button" onClick={() => setHasDisability(v)}
@@ -312,7 +311,6 @@ export default function ApplySaudiPage() {
           </Field>
 
           <Field label={t('Почему вы хотите учиться в Саудовской Аравии?', 'Nima uchun Saudiya Arabistonida o\'qimoqchisiz?', 'Why do you want to study in Saudi Arabia?')} required icon={MessageSquare}
-            hint={t('Можно писать на арабском или английском языке — вручную или вставить готовый текст', 'Arab yoki ingliz tilida yozishingiz mumkin — qo\'lda yozing yoki tayyor matnni joylashtiring', 'You may answer in Arabic or English — type it yourself or paste a ready text')}
             trailing={<span className="text-[11px] text-muted tabular-nums">{motivation.trim().length}/10+</span>}>
             <textarea rows={8} dir="auto" value={motivation} onChange={e => setMotivation(e.target.value)}
               placeholder={t('Расскажите о своей мотивации...', 'Motivatsiyangiz haqida yozing...', 'Tell us about your motivation...')} className={TEXTAREA} />
