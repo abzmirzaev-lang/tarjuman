@@ -4,11 +4,21 @@ import Link from 'next/link'
 import { useLanguage } from '@/hooks/useLanguage'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
-import { SAUDI_PACKAGES, SAUDI_PACKAGE_IDS, SaudiPackageId } from '@/lib/saudiPackages'
+import { SAUDI_PACKAGES, SAUDI_PACKAGE_IDS, SAUDI_FEATURES, SaudiPackageId } from '@/lib/saudiPackages'
 import {
   Mail, Phone, MapPin, HeartPulse, Wallet, MessageSquare,
   GraduationCap, Plus, X, ArrowUp, ArrowDown, CheckCircle2, Send, Loader2,
+  Check, Minus, Crown, ShieldCheck, Clock, UserCheck,
 } from 'lucide-react'
+
+// ── Palette (this page only) ───────────────────────────────────────────────
+// GREEN drives structure & primary actions (brand identity, matches the logo).
+// GOLD is decorative-only (icons, borders, gradients, badge fills) — text that
+// needs to sit on white uses GOLD_TEXT, a darkened variant that clears 4.5:1.
+const GREEN      = '#1B4332'
+const GREEN_SOFT = '#2F6B53'
+const GOLD       = '#C9922A'
+const GOLD_TEXT  = '#8A6116'
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
@@ -16,9 +26,10 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const PHONE_RE = /^\+[1-9]\d{7,14}$/
 const MAX_PROGRAMS = 25
 const CURRENCIES = ['USD', 'EUR', 'RUB', 'UZS', 'SAR', 'GBP']
+const SERIF = "'Playfair Display', Georgia, serif"
 
-const INPUT = 'w-full h-12 px-4 text-base border border-gray-200 rounded-xl focus:outline-none focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 transition-all bg-white'
-const TEXTAREA = 'w-full px-4 py-3 text-base border border-gray-200 rounded-xl focus:outline-none focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 transition-all bg-white resize-y'
+const INPUT = 'w-full h-12 px-4 text-base border border-[#E7E1D3] rounded-xl focus:outline-none focus:border-[#1B4332] focus:ring-4 focus:ring-[#1B4332]/10 transition-all bg-white placeholder:text-muted/70'
+const TEXTAREA = 'w-full px-4 py-3.5 text-base border border-[#E7E1D3] rounded-xl focus:outline-none focus:border-[#1B4332] focus:ring-4 focus:ring-[#1B4332]/10 transition-all bg-white resize-y placeholder:text-muted/70'
 
 interface SelectedProgram {
   id:              string
@@ -28,23 +39,43 @@ interface SelectedProgram {
 
 // ── Small building blocks ──────────────────────────────────────────────────
 
-function Field({ label, required, hint, icon: Icon, children }: {
-  label: string; required?: boolean; hint?: string; icon?: any; children: React.ReactNode
+function Field({ label, required, hint, icon: Icon, trailing, children }: {
+  label: string; required?: boolean; hint?: string; icon?: any; trailing?: React.ReactNode; children: React.ReactNode
 }) {
   return (
     <div>
-      <label className="flex items-center gap-1.5 text-sm font-semibold text-ink mb-1.5">
-        {Icon && <Icon className="w-4 h-4 text-[#1B4332]" />}
-        {label} {required && <span className="text-red-400">*</span>}
-      </label>
+      <div className="flex items-center justify-between mb-2">
+        <label className="flex items-center gap-2 text-sm font-semibold text-ink">
+          {Icon && (
+            <span className="w-7 h-7 rounded-full bg-[#1B4332]/8 flex items-center justify-center shrink-0">
+              <Icon className="w-3.5 h-3.5 text-[#1B4332]" />
+            </span>
+          )}
+          {label} {required && <span className="text-[#B45309]">*</span>}
+        </label>
+        {trailing}
+      </div>
       {children}
-      {hint && <p className="text-xs text-muted mt-1.5">{hint}</p>}
+      {hint && <p className="text-xs text-muted mt-1.5 ml-9">{hint}</p>}
     </div>
   )
 }
 
-function Card({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={cn('bg-white rounded-2xl border border-gray-100 shadow-sm p-5 sm:p-6', className)}>{children}</div>
+function Card({ children, className, accent = 'green' }: { children: React.ReactNode; className?: string; accent?: 'green' | 'gold' }) {
+  return (
+    <div className={cn('bg-white rounded-3xl border border-[#ECE6D6] shadow-card overflow-hidden', className)}>
+      <div className={cn('h-1 w-full', accent === 'gold' ? 'bg-gradient-to-r from-[#C9922A] to-[#E2B562]' : 'bg-gradient-to-r from-[#1B4332] to-[#2F6B53]')} />
+      <div className="p-5 sm:p-7">{children}</div>
+    </div>
+  )
+}
+
+function Eyebrow({ step, children }: { step: string; children: React.ReactNode }) {
+  return (
+    <p className="text-[11px] font-bold uppercase tracking-[0.18em] mb-1.5" style={{ color: GOLD_TEXT }}>
+      {step} — {children}
+    </p>
+  )
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────
@@ -154,12 +185,12 @@ export default function ApplySaudiPage() {
   // ── Success screen ──────────────────────────────────────────────────────
   if (submitted) {
     return (
-      <div className="min-h-screen bg-[#F7F8FA] flex items-center justify-center px-4">
-        <div className="max-w-md w-full text-center bg-white rounded-3xl border border-gray-100 shadow-lg p-8 sm:p-10">
-          <div className="w-16 h-16 rounded-full bg-[#1B4332]/10 flex items-center justify-center mx-auto mb-5">
-            <CheckCircle2 className="w-8 h-8 text-[#1B4332]" />
+      <div className="min-h-screen bg-[#FAF8F4] flex items-center justify-center px-4">
+        <div className="max-w-md w-full text-center bg-white rounded-3xl border border-[#ECE6D6] shadow-modal p-8 sm:p-10">
+          <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5" style={{ background: 'rgba(27,67,50,0.08)' }}>
+            <CheckCircle2 className="w-8 h-8" style={{ color: GREEN }} />
           </div>
-          <h1 className="text-2xl font-bold text-ink mb-2">
+          <h1 className="text-2xl font-bold text-ink mb-2" style={{ fontFamily: SERIF }}>
             {t('Заявка отправлена!', 'Ariza yuborildi!', 'Application submitted!')}
           </h1>
           <p className="text-muted text-sm leading-relaxed mb-6">
@@ -169,7 +200,7 @@ export default function ApplySaudiPage() {
               'We\'ve received your Saudi Arabia university application. Our manager will contact you shortly.'
             )}
           </p>
-          <Link href="/" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#1B4332] text-white text-sm font-semibold rounded-xl hover:bg-[#1B4332]/90 transition-all">
+          <Link href="/" className="inline-flex items-center justify-center gap-2 px-6 py-3 text-white text-sm font-semibold rounded-xl hover:opacity-90 transition-all" style={{ background: GREEN }}>
             {t('На главную', 'Bosh sahifaga', 'Back to home')}
           </Link>
         </div>
@@ -179,9 +210,9 @@ export default function ApplySaudiPage() {
 
   // ── Form ────────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-[#F7F8FA]">
-      <header className="bg-white border-b border-gray-100 sticky top-0 z-20">
-        <div className="max-w-2xl mx-auto px-4 h-16 flex items-center">
+    <div className="min-h-screen bg-[#FAF8F4]">
+      <header className="bg-white sticky top-0 z-20 shadow-[0_1px_0_0_rgba(0,0,0,0.04)]">
+        <div className="max-w-2xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/">
             <svg viewBox="0 0 156 36" width="120" height="28" aria-label="TARJUMAN">
               <path d="M 2,36 L 2,22 L 8,10 L 16,4 L 24,10 L 30,22 L 30,36" fill="none" stroke="#1B4332" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round"/>
@@ -190,28 +221,40 @@ export default function ApplySaudiPage() {
               <text x="40" y="24" fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif" fontSize="15" fontWeight="700" fill="#1B4332" style={{ letterSpacing: '4px' }}>TARJUMAN</text>
             </svg>
           </Link>
+          <div className="hidden sm:flex items-center gap-1.5 text-xs font-medium text-muted">
+            <ShieldCheck className="w-3.5 h-3.5" style={{ color: GREEN }} />
+            {t('Конфиденциально', 'Maxfiy', 'Confidential')}
+          </div>
         </div>
-        <div className="h-0.5 bg-gray-100" />
+        <div className="h-[3px] w-full bg-gradient-to-r from-[#1B4332] via-[#2F6B53] to-[#C9922A]" />
       </header>
 
-      <div className="max-w-2xl mx-auto px-4 py-8 pb-20">
-        <div className="mb-8 text-center">
-          <div className="inline-flex items-center gap-2 mb-3">
-            <img src="https://flagcdn.com/w40/sa.png" alt="Saudi Arabia" className="w-8 h-5 rounded object-cover" />
-            <p className="text-xs font-semibold text-[#C9922A] uppercase tracking-widest">
+      <div className="max-w-2xl mx-auto px-4 py-10 pb-20">
+        <div className="mb-9 text-center">
+          <div className="inline-flex items-center gap-2 mb-4 px-3 py-1.5 rounded-full border border-[#ECE0C4] bg-white">
+            <img src="https://flagcdn.com/w40/sa.png" alt="Saudi Arabia" className="w-5 h-3.5 rounded-sm object-cover" />
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: GOLD_TEXT }}>
               {t('Саудовская Аравия', 'Saudiya Arabistoni', 'Saudi Arabia')}
             </p>
           </div>
-          <h1 className="text-3xl font-bold text-ink mb-2">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-3 leading-tight" style={{ fontFamily: SERIF, color: GREEN }}>
             {t('Подача в университеты Саудовской Аравии', 'Saudiya Arabistoni universitetlariga topshirish', 'Apply to Saudi Arabia universities')}
           </h1>
-          <p className="text-muted text-sm">
-            {t('Заполните анкету в один шаг', 'Anketani bir bosqichda to\'ldiring', 'Fill out the form in one step')}
+          <p className="text-muted text-sm max-w-md mx-auto">
+            {t('Одна анкета, один шаг — контакты, выбор университетов и пакет TARJUMAN', 'Bitta anketa, bitta bosqich — kontaktlar, universitet tanlash va TARJUMAN paketi', 'One form, one step — contacts, university picks and your TARJUMAN package')}
           </p>
+
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 mt-5 text-xs text-muted">
+            <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" style={{ color: GREEN }} />{t('Займёт 5–7 минут', '5–7 daqiqa vaqt oladi', 'Takes 5–7 minutes')}</span>
+            <span className="flex items-center gap-1.5"><UserCheck className="w-3.5 h-3.5" style={{ color: GREEN }} />{t('Личный менеджер', 'Shaxsiy menejer', 'Personal manager')}</span>
+            <span className="flex items-center gap-1.5"><ShieldCheck className="w-3.5 h-3.5" style={{ color: GREEN }} />{t('Защищённая передача данных', 'Xavfsiz uzatish', 'Secure data transfer')}</span>
+          </div>
         </div>
 
         {/* ── Section 1: Contact info ── */}
-        <Card className="mb-4 space-y-5">
+        <Card className="mb-5 space-y-6" accent="green">
+          <Eyebrow step="01">{t('Контактные данные', 'Kontakt ma\'lumotlari', 'Contact details')}</Eyebrow>
+
           <Field label={t('Email', 'Email', 'Email')} required icon={Mail} hint={t('Предпочтительно указывать Gmail', 'Iloji bo\'lsa Gmail kiriting', 'Gmail preferred')}>
             <input type="email" inputMode="email" value={email} onChange={e => setEmail(e.target.value)}
               placeholder="name@gmail.com" className={INPUT} />
@@ -228,24 +271,26 @@ export default function ApplySaudiPage() {
               className={TEXTAREA} />
           </Field>
 
-          <Field label={t('Есть ли у вас инвалидность?', 'Sizda nogironlik bormi?', 'Do you have a disability?')} required icon={HeartPulse}>
+          <Field label={t('Есть ли у вас инвалидность?', 'Sizda nogironlik bormi?', 'Do you have a disability?')} required icon={HeartPulse}
+            hint={t('Нужно, чтобы университет мог подготовить условия при необходимости', 'Universitet zarur sharoitlarni tayyorlashi uchun kerak', 'Helps the university prepare accommodations if needed')}>
             <div className="flex gap-2">
               {(['yes', 'no'] as const).map(v => (
                 <button key={v} type="button" onClick={() => setHasDisability(v)}
                   className={cn(
                     'flex-1 h-12 rounded-xl border-2 text-sm font-semibold transition-all',
-                    hasDisability === v ? 'border-[#1B4332] bg-[#1B4332]/5 text-[#1B4332]' : 'border-gray-200 text-ink hover:border-gray-300'
-                  )}>
+                    hasDisability === v ? 'text-white shadow-sm' : 'border-[#E7E1D3] text-ink hover:border-[#1B4332]/30'
+                  )}
+                  style={hasDisability === v ? { borderColor: GREEN, background: GREEN } : undefined}>
                   {v === 'yes' ? t('Да', 'Ha', 'Yes') : t('Нет', 'Yo\'q', 'No')}
                 </button>
               ))}
             </div>
           </Field>
 
-          <Field label={t('Сколько вы зарабатываете в год?', 'Yiliga qancha topasiz?', 'What is your annual income?')} icon={Wallet} hint={t('Необязательно', 'Ixtiyoriy', 'Optional')}>
+          <Field label={t('Сколько вы зарабатываете в год?', 'Yiliga qancha topasiz?', 'What is your annual income?')} icon={Wallet} hint={t('Необязательно — помогает подобрать программы стипендий', 'Ixtiyoriy — stipendiya dasturlarini tanlashga yordam beradi', 'Optional — helps us match scholarship programs')}>
             <div className="flex gap-2">
               <input type="number" min={0} value={income} onChange={e => setIncome(e.target.value)}
-                placeholder="0" className={cn(INPUT, 'flex-1')} />
+                placeholder="0" className={cn(INPUT, 'flex-1 tabular-nums')} />
               <select value={currency} onChange={e => setCurrency(e.target.value)} className={cn(INPUT, 'w-28 appearance-none')}>
                 {CURRENCIES.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
@@ -253,54 +298,59 @@ export default function ApplySaudiPage() {
           </Field>
 
           <Field label={t('Почему вы хотите учиться в Саудовской Аравии?', 'Nima uchun Saudiya Arabistonida o\'qimoqchisiz?', 'Why do you want to study in Saudi Arabia?')} required icon={MessageSquare}
-            hint={t('Можно писать на арабском или английском языке', 'Arab yoki ingliz tilida yozishingiz mumkin', 'You may answer in Arabic or English')}>
+            hint={t('Можно писать на арабском или английском языке — вручную или вставить готовый текст', 'Arab yoki ingliz tilida yozishingiz mumkin — qo\'lda yozing yoki tayyor matnni joylashtiring', 'You may answer in Arabic or English — type it yourself or paste a ready text')}
+            trailing={<span className="text-[11px] text-muted tabular-nums">{motivation.trim().length}/10+</span>}>
             <textarea rows={8} dir="auto" value={motivation} onChange={e => setMotivation(e.target.value)}
-              placeholder="..." className={TEXTAREA} />
+              placeholder={t('Расскажите о своей мотивации...', 'Motivatsiyangiz haqida yozing...', 'Tell us about your motivation...')} className={TEXTAREA} />
           </Field>
         </Card>
 
         {/* ── Section 2: Universities/faculties ── */}
-        <Card className="mb-4">
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <h2 className="font-bold text-ink text-lg flex items-center gap-2">
-                <GraduationCap className="w-5 h-5 text-[#1B4332]" />
-                {t('Университеты и факультеты', 'Universitet va fakultetlar', 'Universities & faculties')}
-              </h2>
-              <p className="text-xs text-muted mt-1">
-                {t('Добавьте до 25 вариантов, в порядке приоритета', 'Ustuvorlik tartibida 25 tagacha variant qo\'shing', 'Add up to 25 options, in order of priority')}
+        <Card className="mb-5" accent="green">
+          <Eyebrow step="02">{t('Университеты и факультеты', 'Universitet va fakultetlar', 'Universities & faculties')}</Eyebrow>
+
+          <div className="flex items-start justify-between mb-4 gap-3">
+            <div className="flex items-center gap-3">
+              <span className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: 'rgba(27,67,50,0.08)' }}>
+                <GraduationCap className="w-4.5 h-4.5" style={{ color: GREEN }} />
+              </span>
+              <p className="text-xs text-muted leading-relaxed">
+                {t('Добавьте до 25 вариантов в порядке приоритета — первый в списке рассматривается первым', 'Ustuvorlik tartibida 25 tagacha variant qo\'shing — ro\'yxatdagi birinchisi birinchi bo\'lib ko\'rib chiqiladi', 'Add up to 25 options in priority order — the first one is considered first')}
               </p>
             </div>
             <span className={cn(
-              'text-sm font-bold px-3 py-1.5 rounded-xl shrink-0',
-              programs.length >= MAX_PROGRAMS ? 'bg-red-50 text-red-600 border border-red-200' : 'bg-[#1B4332]/10 text-[#1B4332]'
-            )}>
-              {t('Выбрано', 'Tanlandi', 'Selected')}: {programs.length}/{MAX_PROGRAMS}
+              'text-sm font-bold px-3 py-1.5 rounded-xl shrink-0 tabular-nums',
+              programs.length >= MAX_PROGRAMS ? 'bg-red-50 text-red-600 border border-red-200' : ''
+            )} style={programs.length >= MAX_PROGRAMS ? undefined : { background: 'rgba(27,67,50,0.08)', color: GREEN }}>
+              {programs.length}/{MAX_PROGRAMS}
             </span>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-2 mb-4">
+          <div className="flex flex-col sm:flex-row gap-2">
             <input type="text" value={newUni} onChange={e => setNewUni(e.target.value)} onKeyDown={e => e.key === 'Enter' && addProgram()}
               placeholder={t('Университет', 'Universitet', 'University')}
-              className="flex-1 h-11 px-3 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-[#1B4332] bg-white" />
+              className="flex-1 h-11 px-3 text-sm border border-[#E7E1D3] rounded-lg focus:outline-none focus:border-[#1B4332] focus:ring-4 focus:ring-[#1B4332]/10 bg-white" />
             <input type="text" value={newFaculty} onChange={e => setNewFaculty(e.target.value)} onKeyDown={e => e.key === 'Enter' && addProgram()}
               placeholder={t('Факультет / направление', 'Fakultet / yo\'nalish', 'Faculty / program')}
-              className="flex-1 h-11 px-3 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-[#1B4332] bg-white" />
+              className="flex-1 h-11 px-3 text-sm border border-[#E7E1D3] rounded-lg focus:outline-none focus:border-[#1B4332] focus:ring-4 focus:ring-[#1B4332]/10 bg-white" />
             <button type="button" onClick={addProgram}
-              className="flex items-center justify-center gap-1.5 px-4 h-11 bg-[#1B4332] text-white text-sm font-medium rounded-lg hover:bg-[#1B4332]/90 transition-colors shrink-0">
+              className="flex items-center justify-center gap-1.5 px-4 h-11 text-white text-sm font-medium rounded-lg hover:opacity-90 transition-colors shrink-0" style={{ background: GREEN }}>
               <Plus className="w-4 h-4" /> {t('Добавить', 'Qo\'shish', 'Add')}
             </button>
           </div>
+          <p className="text-[11px] text-muted mt-2">
+            {t('Пока указывайте вручную — скоро подключим каталог Study in Saudi, и вы сможете выбирать из готового списка', 'Hozircha qo\'lda kiriting — tez orada Study in Saudi katalogi ulanadi va tayyor ro\'yxatdan tanlaysiz', 'Enter manually for now — we\'ll soon connect the Study in Saudi catalogue so you can pick from a ready list')}
+          </p>
 
           {programs.length === 0 ? (
-            <p className="text-sm text-muted text-center py-6 border-2 border-dashed border-gray-100 rounded-xl">
+            <p className="text-sm text-muted text-center py-6 mt-4 border-2 border-dashed border-[#ECE6D6] rounded-xl">
               {t('Пока ничего не выбрано', 'Hozircha hech narsa tanlanmagan', 'Nothing selected yet')}
             </p>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-2 mt-4">
               {programs.map((p, i) => (
-                <div key={p.id} className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 bg-gray-50/50">
-                  <span className="w-6 h-6 shrink-0 rounded-full bg-[#1B4332]/10 text-[#1B4332] text-xs font-bold flex items-center justify-center">
+                <div key={p.id} className="flex items-center gap-3 p-3 rounded-xl border border-[#ECE6D6] bg-[#FAF8F4]">
+                  <span className="w-6 h-6 shrink-0 rounded-full text-white text-xs font-bold flex items-center justify-center" style={{ background: GREEN }}>
                     {i + 1}
                   </span>
                   <div className="flex-1 min-w-0">
@@ -308,16 +358,16 @@ export default function ApplySaudiPage() {
                     <p className="text-xs text-muted truncate">{p.faculty}</p>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
-                    <button type="button" onClick={() => moveProgram(i, -1)} disabled={i === 0}
-                      className="w-7 h-7 rounded-lg flex items-center justify-center text-muted hover:bg-gray-100 disabled:opacity-30 disabled:hover:bg-transparent transition-colors">
+                    <button type="button" onClick={() => moveProgram(i, -1)} disabled={i === 0} aria-label={t('Выше', 'Yuqoriga', 'Move up')}
+                      className="w-7 h-7 rounded-lg flex items-center justify-center text-muted hover:bg-white disabled:opacity-30 disabled:hover:bg-transparent transition-colors">
                       <ArrowUp className="w-3.5 h-3.5" />
                     </button>
-                    <button type="button" onClick={() => moveProgram(i, 1)} disabled={i === programs.length - 1}
-                      className="w-7 h-7 rounded-lg flex items-center justify-center text-muted hover:bg-gray-100 disabled:opacity-30 disabled:hover:bg-transparent transition-colors">
+                    <button type="button" onClick={() => moveProgram(i, 1)} disabled={i === programs.length - 1} aria-label={t('Ниже', 'Pastga', 'Move down')}
+                      className="w-7 h-7 rounded-lg flex items-center justify-center text-muted hover:bg-white disabled:opacity-30 disabled:hover:bg-transparent transition-colors">
                       <ArrowDown className="w-3.5 h-3.5" />
                     </button>
-                    <button type="button" onClick={() => removeProgram(p.id)}
-                      className="w-7 h-7 rounded-lg flex items-center justify-center text-red-400 hover:bg-red-50 transition-colors">
+                    <button type="button" onClick={() => removeProgram(p.id)} aria-label={t('Удалить', 'O\'chirish', 'Remove')}
+                      className="w-7 h-7 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-50 transition-colors">
                       <X className="w-3.5 h-3.5" />
                     </button>
                   </div>
@@ -328,41 +378,75 @@ export default function ApplySaudiPage() {
         </Card>
 
         {/* ── Section 3: Package ── */}
-        <Card className="mb-4">
-          <h2 className="font-bold text-ink text-lg mb-4">{t('Выберите пакет TARJUMAN', 'TARJUMAN paketini tanlang', 'Choose a TARJUMAN package')}</h2>
+        <Card className="mb-5" accent="gold">
+          <Eyebrow step="03">{t('Пакет услуг', 'Xizmat paketi', 'Service package')}</Eyebrow>
+          <h2 className="font-bold text-ink text-xl mb-1" style={{ fontFamily: SERIF }}>
+            {t('Выберите пакет TARJUMAN', 'TARJUMAN paketini tanlang', 'Choose a TARJUMAN package')}
+          </h2>
+          <p className="text-xs text-muted mb-5">
+            {t('Один пакет действует на все выбранные университеты и факультеты', 'Tanlangan barcha universitet va fakultetlar uchun bitta paket amal qiladi', 'One package covers every university and faculty you selected above')}
+          </p>
+
           <div className="space-y-3">
             {SAUDI_PACKAGE_IDS.map(id => {
               const p = SAUDI_PACKAGES[id]
               const isSelected = pkg === id
-              const desc = t(p.desc_ru, p.desc_uz, p.desc_en)
+              const tagline = t(p.tagline_ru, p.tagline_uz, p.tagline_en)
+              const isVip = id === 'VIP'
               return (
                 <button key={id} type="button" onClick={() => setPkg(id)}
                   className={cn(
-                    'w-full text-left rounded-2xl border-2 p-5 transition-all shadow-sm',
-                    isSelected ? 'border-[#1B4332] bg-[#1B4332]/5 shadow-md' : 'border-gray-100 bg-white hover:border-gray-200 hover:shadow-md'
-                  )}>
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className={cn('w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all shrink-0',
-                        isSelected ? 'border-[#1B4332] bg-[#1B4332]' : 'border-gray-300'
-                      )}>
+                    'w-full text-left rounded-2xl border-2 p-5 transition-all',
+                    isSelected ? 'shadow-md' : 'border-[#ECE6D6] bg-white hover:border-[#1B4332]/25 hover:shadow-sm'
+                  )}
+                  style={isSelected ? { borderColor: isVip ? GOLD : GREEN, background: isVip ? 'rgba(201,146,42,0.06)' : 'rgba(27,67,50,0.05)' } : undefined}>
+                  <div className="flex items-start justify-between gap-3 mb-1">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className={cn('w-4.5 h-4.5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5')}
+                        style={{ borderColor: isSelected ? (isVip ? GOLD : GREEN) : '#D9D2BE', background: isSelected ? (isVip ? GOLD : GREEN) : 'transparent' }}>
                         {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                       </div>
-                      <p className="font-bold text-ink text-base">
-                        {id === 'STANDARD' && (
-                          <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full mr-2 align-middle">
-                            {t('популярный', 'mashhur', 'popular')}
-                          </span>
-                        )}
-                        {p.name_ru}
-                      </p>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <p className="font-bold text-ink text-base" style={{ fontFamily: SERIF }}>{p.name_ru}</p>
+                          {id === 'STANDARD' && (
+                            <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+                              {t('популярный', 'mashhur', 'popular')}
+                            </span>
+                          )}
+                          {isVip && (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border" style={{ color: GOLD_TEXT, background: 'rgba(201,146,42,0.12)', borderColor: 'rgba(201,146,42,0.35)' }}>
+                              <Crown className="w-3 h-3" /> {t('максимум', 'maksimal', 'max')}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-muted mt-0.5">{tagline}</p>
+                      </div>
                     </div>
                     <div className="text-right shrink-0">
-                      <p className="text-2xl font-bold text-ink">${p.priceUSD}</p>
-                      <p className="text-xs text-muted">{t('разово', 'bir martalik', 'one-time')}</p>
+                      <p className="text-2xl font-bold text-ink tabular-nums" style={{ fontFamily: SERIF }}>${p.priceUSD}</p>
+                      <p className="text-[11px] text-muted">{t('разово', 'bir martalik', 'one-time')}</p>
                     </div>
                   </div>
-                  <p className="text-sm text-muted leading-relaxed">{desc}</p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 mt-4 pt-4 border-t border-[#ECE6D6]">
+                    {SAUDI_FEATURES.map(f => {
+                      const included = p.features[f.key]
+                      return (
+                        <div key={f.key} className="flex items-center gap-2">
+                          <span className={cn('w-4 h-4 rounded-full flex items-center justify-center shrink-0',
+                            included ? '' : 'bg-gray-100')} style={included ? { background: isVip ? 'rgba(201,146,42,0.18)' : 'rgba(27,67,50,0.1)' } : undefined}>
+                            {included
+                              ? <Check className="w-2.5 h-2.5" style={{ color: isVip ? GOLD_TEXT : GREEN }} strokeWidth={3} />
+                              : <Minus className="w-2.5 h-2.5 text-gray-400" strokeWidth={3} />}
+                          </span>
+                          <span className={cn('text-xs', included ? 'text-ink' : 'text-muted/70')}>
+                            {t(f.label_ru, f.label_uz, f.label_en)}
+                          </span>
+                        </div>
+                      )
+                    })}
+                  </div>
                 </button>
               )
             })}
@@ -371,10 +455,15 @@ export default function ApplySaudiPage() {
 
         {/* ── Submit ── */}
         <button type="button" onClick={handleSubmit} disabled={loading}
-          className="w-full flex items-center justify-center gap-2 py-4 text-sm font-semibold rounded-2xl transition-all duration-200 bg-[#1B4332] text-white hover:bg-[#1B4332]/90 shadow-lg shadow-[#1B4332]/20 disabled:opacity-60">
+          className="w-full flex items-center justify-center gap-2 py-4 text-sm font-semibold rounded-2xl transition-all duration-200 text-white disabled:opacity-60 hover:-translate-y-0.5"
+          style={{ background: `linear-gradient(135deg, ${GREEN}, ${GREEN_SOFT})`, boxShadow: '0 12px 28px -10px rgba(27,67,50,0.45)' }}>
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
           {t('Отправить заявку', 'Arizani yuborish', 'Submit application')}
         </button>
+        <p className="flex items-center justify-center gap-1.5 text-[11px] text-muted mt-3">
+          <ShieldCheck className="w-3.5 h-3.5" style={{ color: GREEN }} />
+          {t('Данные передаются по защищённому соединению и не публикуются', 'Ma\'lumotlar xavfsiz kanal orqali uzatiladi va e\'lon qilinmaydi', 'Data is sent over a secure connection and never published')}
+        </p>
       </div>
     </div>
   )

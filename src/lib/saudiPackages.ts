@@ -9,15 +9,34 @@
 
 export type SaudiPackageId = 'SUPPORT' | 'STANDARD' | 'VIP'
 
+export type SaudiFeatureKey = 'translation' | 'submission' | 'priority' | 'support'
+
+export interface SaudiFeatureDef {
+  key:    SaudiFeatureKey
+  label_ru: string
+  label_uz: string
+  label_en: string
+}
+
+// Shared feature rows — every package renders the same rows so the three
+// cards line up and differences are scannable at a glance.
+export const SAUDI_FEATURES: SaudiFeatureDef[] = [
+  { key: 'translation', label_ru: 'Перевод документов на арабский', label_uz: 'Hujjatlarni arab tiliga tarjima qilish', label_en: 'Document translation into Arabic' },
+  { key: 'submission',  label_ru: 'Подача документов в университеты', label_uz: 'Universitetlarga hujjat topshirish', label_en: 'Submission to universities' },
+  { key: 'priority',    label_ru: 'Приоритетная подача без очереди', label_uz: 'Navbatsiz ustuvor topshirish', label_en: 'Priority, no-queue submission' },
+  { key: 'support',     label_ru: 'Личный менеджер на связи', label_uz: 'Shaxsiy menejer aloqada', label_en: 'Dedicated personal manager' },
+]
+
 export interface SaudiPackage {
   id:            SaudiPackageId
   priceUSD:      number
   name_ru:       string
   name_uz:       string
   name_en:       string
-  desc_ru:       string
-  desc_uz:       string
-  desc_en:       string
+  tagline_ru:    string
+  tagline_uz:    string
+  tagline_en:    string
+  features:      Record<SaudiFeatureKey, boolean>
 }
 
 export const SAUDI_PACKAGES: Record<SaudiPackageId, SaudiPackage> = {
@@ -27,9 +46,10 @@ export const SAUDI_PACKAGES: Record<SaudiPackageId, SaudiPackage> = {
     name_ru:  'Support',
     name_uz:  'Support',
     name_en:  'Support',
-    desc_ru:  'Подача готовых документов, уже переведённых на арабский язык, в выбранные университеты + поддержка.',
-    desc_uz:  'Arab tiliga tarjima qilingan tayyor hujjatlarni tanlangan universitetlarga topshirish + qo\'llab-quvvatlash.',
-    desc_en:  'Submission of ready documents, already translated into Arabic, to your chosen universities + support.',
+    tagline_ru: 'Документы уже переведены, нужна только подача',
+    tagline_uz: 'Hujjatlar allaqachon tarjima qilingan, faqat topshirish kerak',
+    tagline_en: 'Your documents are already translated, you just need submission',
+    features: { translation: false, submission: true, priority: false, support: true },
   },
   STANDARD: {
     id:       'STANDARD',
@@ -37,9 +57,10 @@ export const SAUDI_PACKAGES: Record<SaudiPackageId, SaudiPackage> = {
     name_ru:  'Standard',
     name_uz:  'Standard',
     name_en:  'Standard',
-    desc_ru:  'Перевод документов на арабский язык + подача документов в университеты + поддержка.',
-    desc_uz:  'Hujjatlarni arab tiliga tarjima qilish + universitetlarga topshirish + qo\'llab-quvvatlash.',
-    desc_en:  'Translation of documents into Arabic + submission to universities + support.',
+    tagline_ru: 'Полный цикл: перевод и подача под ключ',
+    tagline_uz: 'Toliq tsikl: tarjima va topshirish kalit topshirish tizimida',
+    tagline_en: 'Full cycle: translation and submission, done for you',
+    features: { translation: true, submission: true, priority: false, support: true },
   },
   VIP: {
     id:       'VIP',
@@ -47,9 +68,10 @@ export const SAUDI_PACKAGES: Record<SaudiPackageId, SaudiPackage> = {
     name_ru:  'VIP',
     name_uz:  'VIP',
     name_en:  'VIP',
-    desc_ru:  'Перевод документов на арабский язык + подача документов в университеты без очереди + поддержка.',
-    desc_uz:  'Hujjatlarni arab tiliga tarjima qilish + universitetlarga navbatsiz topshirish + qo\'llab-quvvatlash.',
-    desc_en:  'Translation of documents into Arabic + priority (no-queue) submission to universities + support.',
+    tagline_ru: 'Все из Standard плюс максимальный приоритет и скорость',
+    tagline_uz: 'Standard imkoniyatlari plyus maksimal ustuvorlik va tezlik',
+    tagline_en: 'Everything in Standard plus maximum priority and speed',
+    features: { translation: true, submission: true, priority: true, support: true },
   },
 }
 
