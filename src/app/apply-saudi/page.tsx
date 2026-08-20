@@ -300,7 +300,7 @@ export default function ApplySaudiPage() {
             </div>
           </Field>
 
-          <Field label={t('Сколько вы зарабатываете в год?', 'Yiliga qancha topasiz?', 'What is your annual income?')} icon={Wallet} hint={t('Необязательно — помогает подобрать программы стипендий', 'Ixtiyoriy — stipendiya dasturlarini tanlashga yordam beradi', 'Optional — helps us match scholarship programs')}>
+          <Field label={t('Сколько вы зарабатываете в год?', 'Yiliga qancha topasiz?', 'What is your annual income?')} icon={Wallet}>
             <div className="flex gap-2">
               <input type="number" min={0} value={income} onChange={e => setIncome(e.target.value)}
                 placeholder="0" className={cn(INPUT, 'flex-1 tabular-nums')} />
