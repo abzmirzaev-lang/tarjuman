@@ -66,7 +66,6 @@ export default function GrantPageClient() {
         <HeroSection />
         <StatsStrip />
         <BenefitsSection />
-        <TwentyFiveSection />
         <DegreeLevelsSection />
         <SpecialtiesSection />
         <UniversitiesSection />
@@ -253,42 +252,6 @@ function BenefitsSection() {
             )
           })}
         </div>
-      </div>
-    </section>
-  )
-}
-
-// ════════════════════════ 25 OPTIONS SECTION ════════════════════════
-function TwentyFiveSection() {
-  return (
-    <section className="py-20 md:py-28" style={{ background: GREEN_DEEP }}>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <motion.div {...fadeUp(0)} className="flex justify-center"><Eyebrow>Один грант — до 25 вариантов</Eyebrow></motion.div>
-          <motion.h2 {...fadeUp(0.06)} className="text-3xl sm:text-4xl font-bold mt-5 text-white">
-            Каждый кандидат может выбрать до 25 факультетов<br className="hidden sm:block" /> в разных университетах Саудовской Аравии
-          </motion.h2>
-        </div>
-
-        <motion.div {...fadeUp(0.1)} className="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-2.5 sm:gap-3 mb-10">
-          {Array.from({ length: 25 }).map((_, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.02, duration: 0.35 }}
-              className="aspect-square rounded-xl flex items-center justify-center text-xs sm:text-sm font-bold border"
-              style={{ background: 'rgba(255,255,255,0.05)', borderColor: 'rgba(201,164,76,0.35)', color: GOLD }}
-            >
-              {String(i + 1).padStart(2, '0')}
-            </motion.div>
-          ))}
-        </motion.div>
-
-        <motion.p {...fadeUp(0.16)} className="text-center text-white/70 text-base max-w-xl mx-auto">
-          Выберите наиболее подходящие университеты, факультеты и специальности.
-        </motion.p>
       </div>
     </section>
   )

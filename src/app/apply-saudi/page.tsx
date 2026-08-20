@@ -31,6 +31,20 @@ const SERIF = "'Playfair Display', Georgia, serif"
 const INPUT = 'w-full h-12 px-4 text-base border border-[#E7E1D3] rounded-xl focus:outline-none focus:border-[#1B4332] focus:ring-4 focus:ring-[#1B4332]/10 transition-all bg-white placeholder:text-muted/70'
 const TEXTAREA = 'w-full px-4 py-3.5 text-base border border-[#E7E1D3] rounded-xl focus:outline-none focus:border-[#1B4332] focus:ring-4 focus:ring-[#1B4332]/10 transition-all bg-white resize-y placeholder:text-muted/70'
 
+// Phone is stored raw (digits + leading "+", no spaces) so PHONE_RE / the API
+// never have to deal with formatting — spaces are only ever added for display.
+const sanitizePhone = (v: string) => {
+  const hasPlus = v.trim().startsWith('+')
+  const digits = v.replace(/[^\d]/g, '')
+  return (hasPlus ? '+' : '') + digits
+}
+const formatPhoneDisplay = (v: string) => {
+  const hasPlus = v.startsWith('+')
+  const digits = v.replace('+', '')
+  const groups = digits.match(/.{1,3}/g) || []
+  return (hasPlus ? '+' : '') + groups.join(' ')
+}
+
 interface SelectedProgram {
   id:              string
   university_name: string
@@ -56,7 +70,7 @@ function Field({ label, required, hint, icon: Icon, trailing, children }: {
         {trailing}
       </div>
       {children}
-      {hint && <p className="text-xs text-muted mt-1.5 ml-9">{hint}</p>}
+      {hint && <p className="text-xs text-muted mt-2 ml-9 leading-relaxed">{hint}</p>}
     </div>
   )
 }
@@ -252,7 +266,7 @@ export default function ApplySaudiPage() {
         </div>
 
         {/* ── Section 1: Contact info ── */}
-        <Card className="mb-5 space-y-6" accent="green">
+        <Card className="mb-5 space-y-8" accent="green">
           <Eyebrow step="01">{t('Контактные данные', 'Kontakt ma\'lumotlari', 'Contact details')}</Eyebrow>
 
           <Field label={t('Email', 'Email', 'Email')} required icon={Mail} hint={t('Предпочтительно указывать Gmail', 'Iloji bo\'lsa Gmail kiriting', 'Gmail preferred')}>
@@ -261,8 +275,8 @@ export default function ApplySaudiPage() {
           </Field>
 
           <Field label={t('Номер телефона', 'Telefon raqami', 'Phone number')} required icon={Phone} hint={t('Международный формат, начинается с +', 'Xalqaro format, + bilan boshlanadi', 'International format, starts with +')}>
-            <input type="tel" value={phone} onChange={e => setPhone(e.target.value)}
-              placeholder="+998901234567" className={INPUT} />
+            <input type="tel" inputMode="tel" value={formatPhoneDisplay(phone)} onChange={e => setPhone(sanitizePhone(e.target.value))}
+              placeholder="+998 90 123 45 67" className={cn(INPUT, 'tabular-nums tracking-wide')} />
           </Field>
 
           <Field label={t('Полный адрес', 'To\'liq manzil', 'Full address')} required icon={MapPin}>
