@@ -375,6 +375,10 @@ export default function AdminPage() {
 
         {/* Bottom */}
         <div className="px-3 py-4 border-t border-gray-100 space-y-0.5">
+          <button onClick={() => router.push('/admin/saudi')}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:text-[#1B4332] hover:bg-[#1B4332]/5 transition-all">
+            <Globe className="w-4 h-4" /> Подача в Саудию
+          </button>
           <button onClick={() => setBroadcastOpen(true)}
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:text-[#1B4332] hover:bg-[#1B4332]/5 transition-all">
             <Megaphone className="w-4 h-4" /> Рассылка
