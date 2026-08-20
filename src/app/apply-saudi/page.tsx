@@ -69,11 +69,13 @@ function Field({ label, required, hint, icon: Icon, trailing, children }: {
   )
 }
 
-function Card({ children, className, accent = 'green' }: { children: React.ReactNode; className?: string; accent?: 'green' | 'gold' }) {
+function Card({ children, className, contentClassName, accent = 'green' }: {
+  children: React.ReactNode; className?: string; contentClassName?: string; accent?: 'green' | 'gold'
+}) {
   return (
     <div className={cn('bg-white rounded-3xl border border-[#ECE6D6] shadow-card overflow-hidden', className)}>
       <div className={cn('h-1 w-full', accent === 'gold' ? 'bg-gradient-to-r from-[#C9922A] to-[#E2B562]' : 'bg-gradient-to-r from-[#1B4332] to-[#2F6B53]')} />
-      <div className="p-5 sm:p-7">{children}</div>
+      <div className={cn('p-5 sm:p-7', contentClassName)}>{children}</div>
     </div>
   )
 }
@@ -219,7 +221,7 @@ export default function ApplySaudiPage() {
         </div>
 
         {/* ── Section 1: Contact info ── */}
-        <Card className="mb-5 space-y-8" accent="green">
+        <Card className="mb-5" contentClassName="space-y-7" accent="green">
           <Eyebrow step="01">{t('Контактные данные', 'Kontakt ma\'lumotlari', 'Contact details')}</Eyebrow>
 
           <Field label={t('Email', 'Email', 'Email')} required icon={Mail}>
@@ -271,7 +273,7 @@ export default function ApplySaudiPage() {
         </Card>
 
         {/* ── Section 2: Universities/faculties ── */}
-        <Card className="mb-5 space-y-5" accent="green">
+        <Card className="mb-5" contentClassName="space-y-6" accent="green">
           <Eyebrow step="02">{t('Университеты и факультеты', 'Universitet va fakultetlar', 'Universities & faculties')}</Eyebrow>
 
           <div className="flex items-start gap-3 p-4 rounded-2xl border border-[#ECE0C4]" style={{ background: 'rgba(201,146,42,0.06)' }}>
