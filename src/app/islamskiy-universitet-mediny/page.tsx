@@ -101,7 +101,7 @@ export default function Page() {
           <section className="bg-white rounded-2xl border border-border p-6">
             <h2 className="text-xl font-bold text-ink mb-2">Подать документы в IUM</h2>
             <p className="text-muted text-sm mb-4">Tarjuman Edu поможет с переводом документов и подачей заявки в Исламский университет Медины.</p>
-            <Link href="/apply" className="block w-full text-center py-3 bg-brand-400 text-ink font-bold rounded-xl hover:bg-brand-300 transition-colors">
+            <Link href="/apply-saudi" className="block w-full text-center py-3 bg-brand-400 text-ink font-bold rounded-xl hover:bg-brand-300 transition-colors">
               Начать поступление в IUM
             </Link>
           </section>

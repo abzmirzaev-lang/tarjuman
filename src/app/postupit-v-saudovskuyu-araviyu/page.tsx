@@ -102,7 +102,7 @@ export default function Page() {
               ))}
             </div>
             <Link
-              href="/apply"
+              href="/apply-saudi"
               className="block w-full text-center py-3 bg-brand-400 text-ink font-bold rounded-xl hover:bg-brand-300 transition-colors"
             >
               Начать поступление

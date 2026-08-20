@@ -8,7 +8,7 @@ import { SAUDI_PACKAGES, SAUDI_PACKAGE_IDS, SAUDI_FEATURES, SaudiPackageId } fro
 import {
   Mail, Phone, MapPin, HeartPulse, Wallet, MessageSquare,
   GraduationCap, Plus, X, ArrowUp, ArrowDown, CheckCircle2, Send, Loader2,
-  Check, Minus, Crown, ShieldCheck, Clock, UserCheck,
+  Check, Minus, Crown, ShieldCheck,
 } from 'lucide-react'
 
 // ── Palette (this page only) ───────────────────────────────────────────────
@@ -254,13 +254,7 @@ export default function ApplySaudiPage() {
           <h1 className="text-3xl sm:text-4xl font-bold mb-3 leading-tight" style={{ fontFamily: SERIF, color: GREEN }}>
             {t('Подача в университеты Саудовской Аравии', 'Saudiya Arabistoni universitetlariga topshirish', 'Apply to Saudi Arabia universities')}
           </h1>
-          <p className="text-muted text-sm max-w-md mx-auto">
-            {t('Одна анкета, один шаг — контакты, выбор университетов и пакет TARJUMAN', 'Bitta anketa, bitta bosqich — kontaktlar, universitet tanlash va TARJUMAN paketi', 'One form, one step — contacts, university picks and your TARJUMAN package')}
-          </p>
-
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 mt-5 text-xs text-muted">
-            <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" style={{ color: GREEN }} />{t('Займёт 5–7 минут', '5–7 daqiqa vaqt oladi', 'Takes 5–7 minutes')}</span>
-            <span className="flex items-center gap-1.5"><UserCheck className="w-3.5 h-3.5" style={{ color: GREEN }} />{t('Личный менеджер', 'Shaxsiy menejer', 'Personal manager')}</span>
             <span className="flex items-center gap-1.5"><ShieldCheck className="w-3.5 h-3.5" style={{ color: GREEN }} />{t('Защищённая передача данных', 'Xavfsiz uzatish', 'Secure data transfer')}</span>
           </div>
         </div>
