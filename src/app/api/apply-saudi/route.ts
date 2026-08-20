@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
     const {
+      full_name,
       email,
       phone,
       address,
@@ -30,6 +31,9 @@ export async function POST(req: NextRequest) {
     } = body ?? {}
 
     // ── Validation ──────────────────────────────────────────────
+    if (typeof full_name !== 'string' || full_name.trim().length < 3) {
+      return NextResponse.json({ error: 'invalid_full_name' }, { status: 400 })
+    }
     if (typeof email !== 'string' || !EMAIL_RE.test(email.trim())) {
       return NextResponse.json({ error: 'invalid_email' }, { status: 400 })
     }
@@ -68,6 +72,7 @@ export async function POST(req: NextRequest) {
     const { data: app, error } = await supabase
       .from('saudi_applications')
       .insert({
+        full_name:              full_name.trim(),
         email:                  email.trim().toLowerCase(),
         phone:                  phone.trim(),
         address:                address.trim(),
@@ -91,6 +96,7 @@ export async function POST(req: NextRequest) {
 
     await notifyAdmin(
       `🇸🇦 Новая заявка — Саудовская Аравия\n\n` +
+      `ФИО: ${app.full_name}\n` +
       `Email: ${app.email}\n` +
       `Телефон: ${app.phone}\n` +
       `Тариф: ${pkg.name_ru} — $${pkg.priceUSD}\n` +

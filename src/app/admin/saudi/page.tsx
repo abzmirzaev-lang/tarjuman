@@ -7,7 +7,7 @@ import {
   ArrowLeft, Search, RefreshCw, X, Loader2, Upload, Download, Trash2,
   Eye, EyeOff, Copy, Check, Mail, Phone, MapPin, HeartPulse, Wallet,
   MessageSquare, GraduationCap, Package as PackageIcon, FileText, Lock,
-  CircleDollarSign, CreditCard, Languages, Send,
+  CircleDollarSign, CreditCard, Languages, Send, User,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase/client'
@@ -23,6 +23,7 @@ interface DocEntry { file_name: string; file_path: string; file_size: number; mi
 
 interface SaudiApp {
   id: string
+  full_name: string | null
   email: string
   phone: string
   address: string
@@ -384,8 +385,8 @@ export default function AdminSaudiPage() {
                         <div className="flex items-start gap-2.5">
                           <Avatar email={app.email} />
                           <div className="min-w-0 flex-1">
-                            <p className="text-sm font-semibold text-ink truncate">{app.email}</p>
-                            <p className="text-xs text-muted">{app.phone}</p>
+                            <p className="text-sm font-semibold text-ink truncate">{app.full_name || app.email}</p>
+                            <p className="text-xs text-muted truncate">{app.full_name ? app.email : app.phone}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2 mt-2.5">
@@ -477,7 +478,7 @@ export default function AdminSaudiPage() {
               <div className="sticky top-0 bg-white border-b border-[#E7E1D3] px-6 py-4 flex items-center gap-3 z-10">
                 <Avatar email={selected.email} />
                 <div className="flex-1 min-w-0">
-                  <p className="font-bold text-ink truncate">{selected.email}</p>
+                  <p className="font-bold text-ink truncate">{selected.full_name || selected.email}</p>
                   <p className="text-xs text-muted">{COLUMNS.find(c => c.status === selected.status)?.title ?? selected.status}</p>
                 </div>
                 <button onClick={() => setDetailOpen(false)} className="p-2 rounded-lg hover:bg-[#F5F1E8] text-muted"><X className="w-5 h-5" /></button>
@@ -486,6 +487,7 @@ export default function AdminSaudiPage() {
               <div className="p-6 space-y-5">
                 {/* Contact */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="flex items-start gap-2 sm:col-span-2"><User className="w-4 h-4 text-muted mt-0.5 shrink-0" /><div><p className="text-xs text-muted">ФИО (как в паспорте)</p><p className="text-sm text-ink">{selected.full_name || '—'}</p></div></div>
                   <div className="flex items-start gap-2"><Mail className="w-4 h-4 text-muted mt-0.5 shrink-0" /><div><p className="text-xs text-muted">Email</p><p className="text-sm text-ink">{selected.email}</p></div></div>
                   <div className="flex items-start gap-2"><Phone className="w-4 h-4 text-muted mt-0.5 shrink-0" /><div><p className="text-xs text-muted">Телефон</p><p className="text-sm text-ink">{selected.phone}</p></div></div>
                   <div className="flex items-start gap-2 sm:col-span-2"><MapPin className="w-4 h-4 text-muted mt-0.5 shrink-0" /><div><p className="text-xs text-muted">Адрес</p><p className="text-sm text-ink">{selected.address}</p></div></div>

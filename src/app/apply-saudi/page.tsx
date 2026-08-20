@@ -8,7 +8,7 @@ import { SAUDI_PACKAGES, SAUDI_PACKAGE_IDS, SAUDI_FEATURES, SaudiPackageId } fro
 import {
   Mail, Phone, MapPin, HeartPulse, Wallet, MessageSquare,
   GraduationCap, CheckCircle2, Send, Loader2,
-  Check, Minus, Crown, ShieldCheck, ExternalLink,
+  Check, Minus, Crown, ShieldCheck, ExternalLink, User,
 } from 'lucide-react'
 
 // ── Palette (this page only) ───────────────────────────────────────────────
@@ -96,6 +96,7 @@ export default function ApplySaudiPage() {
   const t = (r: string, u: string, e: string) => (ru ? r : uz ? u : e)
 
   // Contact / screening
+  const [fullName, setFullName]           = useState('')
   const [email, setEmail]                 = useState('')
   const [phone, setPhone]                 = useState('')
   const [address, setAddress]             = useState('')
@@ -115,6 +116,7 @@ export default function ApplySaudiPage() {
   const [submitted, setSubmitted] = useState(false)
 
   const validate = (): string | null => {
+    if (fullName.trim().length < 3) return t('Укажите имя и фамилию как в загранпаспорте', 'Ism va familiyangizni pasportdagidek kiriting', 'Enter your full name as it appears in your passport')
     if (!EMAIL_RE.test(email.trim())) return t('Укажите корректный email', 'To\'g\'ri email kiriting', 'Enter a valid email')
     if (!PHONE_RE.test(phone.trim())) return t('Укажите телефон в международном формате (+998...)', 'Telefonni xalqaro formatda kiriting (+998...)', 'Enter phone in international format (+1...)')
     if (address.trim().length < 5) return t('Укажите полный адрес', 'To\'liq manzilni kiriting', 'Enter your full address')
@@ -134,6 +136,7 @@ export default function ApplySaudiPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          full_name: fullName.trim(),
           email: email.trim(),
           phone: phone.trim(),
           address: address.trim(),
@@ -223,6 +226,11 @@ export default function ApplySaudiPage() {
         {/* ── Section 1: Contact info ── */}
         <Card className="mb-5" contentClassName="space-y-7" accent="green">
           <Eyebrow step="01">{t('Контактные данные', 'Kontakt ma\'lumotlari', 'Contact details')}</Eyebrow>
+
+          <Field label={t('Имя и фамилия (как в загранпаспорте)', 'Ism va familiya (pasportdagidek)', 'Full name (as in your passport)')} required icon={User}>
+            <input type="text" value={fullName} onChange={e => setFullName(e.target.value)}
+              placeholder={t('Например: IVANOV IVAN', 'Masalan: IVANOV IVAN', 'E.g.: IVANOV IVAN')} className={INPUT} />
+          </Field>
 
           <Field label={t('Email', 'Email', 'Email')} required icon={Mail}>
             <input type="email" inputMode="email" value={email} onChange={e => setEmail(e.target.value)}
