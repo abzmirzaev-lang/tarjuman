@@ -307,6 +307,9 @@ export default function ApplySaudiPage() {
               '(Yoki «o\'zingiz tanlang, universitet va fakultetlarni o\'zimiz tanlaymiz» deb yozing — faqat qaysi yo\'nalishlar qiziqtirishini ko\'rsating)',
               '(Or write "choose for us — we\'ll pick universities and faculties at our discretion", just tell us which fields interest you)'
             )}>
+            <p className="text-xs font-semibold mb-2" style={{ color: GOLD_TEXT }}>
+              {t('У вас есть право выбрать до 25 факультетов в разных университетах', 'Turli universitetlarda 25 tagacha fakultetni tanlash huquqingiz bor', 'You have the right to choose up to 25 faculties across different universities')}
+            </p>
             <textarea rows={6} dir="auto" value={desiredPrograms} onChange={e => setDesiredPrograms(e.target.value)}
               placeholder={t('Например: King Saud University — Медицина; Al Qasimia University — Исламские науки...', 'Masalan: King Saud University — Tibbiyot; Al Qasimia University — Islom ilmlari...', 'E.g.: King Saud University — Medicine; Al Qasimia University — Islamic Studies...')}
               className={TEXTAREA} />
