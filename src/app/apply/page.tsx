@@ -799,7 +799,7 @@ function ApplyContent() {
               <div className="grid grid-cols-1 gap-3 mb-10">
                 {([
                   { code: 'AE', iso: 'ae', nameRu: 'ОАЭ',               nameEn: 'UAE',                 descRu: 'Современное образование в Дубае и Абу-Даби',    descEn: 'Modern education in Dubai & Abu Dhabi', closed: true },
-                  { code: 'SA', iso: 'sa', nameRu: 'Саудовская Аравия', nameEn: 'Saudi Arabia',       descRu: 'Ведущие исламские университеты мира',          descEn: "World's top Islamic universities", closed: true },
+                  { code: 'SA', iso: 'sa', nameRu: 'Саудовская Аравия', nameEn: 'Saudi Arabia',       descRu: 'Ведущие исламские университеты мира',          descEn: "World's top Islamic universities" },
                   { code: 'QA', iso: 'qa', nameRu: 'Катар',             nameEn: 'Qatar',               descRu: 'Образование мирового класса на Ближнем Востоке', descEn: 'World-class education in the Middle East', closed: true },
                   { code: 'KW', iso: 'kw', nameRu: 'Кувейт',            nameEn: 'Kuwait',              descRu: 'Стипендии и бесплатное обучение',               descEn: 'Scholarships & free education programs', closed: true },
                   { code: 'TR', iso: 'tr', nameRu: 'Турция',            nameEn: 'Turkey',              descRu: 'Доступное образование европейского уровня',      descEn: 'Affordable European-level education', closed: true },
@@ -874,6 +874,7 @@ function ApplyContent() {
                 onClick={() => {
                   if (!selectedCountry) return
                   if (selectedCountry === 'AE') { setUaeStep('university') }
+                  else if (selectedCountry === 'SA') { router.push('/apply-saudi') }
                   else { setStep(1) }
                 }}
                 disabled={!selectedCountry}
