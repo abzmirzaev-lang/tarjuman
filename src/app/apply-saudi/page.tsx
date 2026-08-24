@@ -91,7 +91,7 @@ function Eyebrow({ step, children }: { step: string; children: React.ReactNode }
 // ── Page ──────────────────────────────────────────────────────────────────
 
 export default function ApplySaudiPage() {
-  const [lang] = useLanguage()
+  const [lang, setLang] = useLanguage()
   const ru = lang === 'ru'; const uz = lang === 'uz'
   const t = (r: string, u: string, e: string) => (ru ? r : uz ? u : e)
 
@@ -199,9 +199,27 @@ export default function ApplySaudiPage() {
               <text x="40" y="24" fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif" fontSize="15" fontWeight="700" fill="#1B4332" style={{ letterSpacing: '4px' }}>TARJUMAN</text>
             </svg>
           </Link>
-          <div className="hidden sm:flex items-center gap-1.5 text-xs font-medium text-muted">
-            <ShieldCheck className="w-3.5 h-3.5" style={{ color: GREEN }} />
-            {t('Конфиденциально', 'Maxfiy', 'Confidential')}
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-0.5 rounded-full border border-[#E7E1D3] p-0.5">
+              {(['ru', 'uz'] as const).map(code => (
+                <button
+                  key={code}
+                  type="button"
+                  onClick={() => setLang(code)}
+                  className={cn(
+                    'px-2.5 py-1 rounded-full text-xs font-bold uppercase transition-all',
+                    lang === code ? 'text-white' : 'text-muted hover:text-ink'
+                  )}
+                  style={lang === code ? { background: GREEN } : undefined}
+                >
+                  {code}
+                </button>
+              ))}
+            </div>
+            <div className="hidden sm:flex items-center gap-1.5 text-xs font-medium text-muted">
+              <ShieldCheck className="w-3.5 h-3.5" style={{ color: GREEN }} />
+              {t('Конфиденциально', 'Maxfiy', 'Confidential')}
+            </div>
           </div>
         </div>
         <div className="h-[3px] w-full bg-gradient-to-r from-[#1B4332] via-[#2F6B53] to-[#C9922A]" />
