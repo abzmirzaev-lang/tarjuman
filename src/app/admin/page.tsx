@@ -401,6 +401,9 @@ export default function AdminPage() {
             </h1>
           </div>
           <div className="flex items-center gap-2">
+            <button onClick={() => router.push('/admin/saudi')} aria-label="Подача в Саудию" className="md:hidden p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-600 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4332]/30">
+              <Globe className="w-4 h-4" />
+            </button>
             <button onClick={loadData} aria-label="Обновить данные" className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-600 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4332]/30">
               <RefreshCw className="w-4 h-4" />
             </button>
