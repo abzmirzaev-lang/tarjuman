@@ -337,15 +337,18 @@ export default function AdminSaudiPage() {
     <div className="min-h-screen bg-[#FAF8F3]">
       {/* Header */}
       <div className="sticky top-0 z-20 bg-white border-b border-[#E7E1D3]">
-        <div className="max-w-[1600px] mx-auto px-6 py-4 flex items-center gap-4">
-          <Link href="/admin" className="p-2 rounded-lg hover:bg-[#F5F1E8] text-muted hover:text-ink">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 py-3 sm:py-4 flex flex-wrap items-center gap-3">
+          <Link href="/admin" className="p-2 rounded-lg hover:bg-[#F5F1E8] text-muted hover:text-ink shrink-0">
             <ArrowLeft className="w-5 h-5" />
           </Link>
-          <div className="flex-1">
-            <h1 className="text-lg font-bold text-ink">🇸🇦 Подача в Саудовскую Аравию</h1>
+          <div className="flex-1 min-w-[140px]">
+            <h1 className="text-base sm:text-lg font-bold text-ink truncate">🇸🇦 Подача в Саудовскую Аравию</h1>
             <p className="text-xs text-muted">{apps.length} заявок всего</p>
           </div>
-          <div className="relative w-64">
+          <button onClick={loadData} className="p-2 rounded-lg hover:bg-[#F5F1E8] text-muted hover:text-ink shrink-0 order-2 sm:order-3" title="Обновить">
+            <RefreshCw className={cn('w-5 h-5', loading && 'animate-spin')} />
+          </button>
+          <div className="relative w-full sm:w-64 order-3 sm:order-2">
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
             <input
               value={search} onChange={e => setSearch(e.target.value)}
@@ -353,19 +356,16 @@ export default function AdminSaudiPage() {
               className="w-full h-9 pl-9 pr-3 rounded-lg border border-[#E7E1D3] text-sm bg-[#FAF8F3] focus:outline-none focus:ring-2 focus:ring-brand/30"
             />
           </div>
-          <button onClick={loadData} className="p-2 rounded-lg hover:bg-[#F5F1E8] text-muted hover:text-ink" title="Обновить">
-            <RefreshCw className={cn('w-5 h-5', loading && 'animate-spin')} />
-          </button>
         </div>
       </div>
 
       {/* Board */}
-      <div className="max-w-[1600px] mx-auto px-6 py-6">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 py-4 sm:py-6">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
           {COLUMNS.map(col => {
             const colApps = filtered.filter(a => a.status === col.status)
             return (
-              <div key={col.status} className={cn('bg-white rounded-2xl border border-[#E7E1D3] border-t-4 flex flex-col min-h-[320px]', col.accent)}>
+              <div key={col.status} className={cn('bg-white rounded-2xl border border-[#E7E1D3] border-t-4 flex flex-col md:min-h-[320px]', col.accent)}>
                 <div className="px-4 py-3 border-b border-[#E7E1D3]">
                   <div className="flex items-center justify-between">
                     <h2 className="text-sm font-bold text-ink">{col.title}</h2>
@@ -373,7 +373,7 @@ export default function AdminSaudiPage() {
                   </div>
                   <p className="text-xs text-muted mt-0.5">{col.sub}</p>
                 </div>
-                <div className="p-3 space-y-2.5 flex-1 overflow-y-auto max-h-[70vh]">
+                <div className="p-3 space-y-2.5 flex-1 md:overflow-y-auto md:max-h-[70vh]">
                   {loading ? (
                     <div className="flex items-center justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-muted" /></div>
                   ) : colApps.length === 0 ? (
@@ -470,21 +470,21 @@ export default function AdminSaudiPage() {
       {/* Detail modal */}
       <AnimatePresence>
         {detailOpen && selected && (
-          <motion.div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setDetailOpen(false)}>
+          <motion.div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center sm:p-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setDetailOpen(false)}>
             <motion.div
-              className="bg-white rounded-2xl w-full max-w-2xl max-h-[88vh] overflow-y-auto" initial={{ scale: 0.96, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.96, opacity: 0 }}
+              className="bg-white rounded-none sm:rounded-2xl w-full h-full sm:h-auto sm:max-w-2xl sm:max-h-[88vh] overflow-y-auto" initial={{ scale: 0.96, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.96, opacity: 0 }}
               onClick={e => e.stopPropagation()}
             >
-              <div className="sticky top-0 bg-white border-b border-[#E7E1D3] px-6 py-4 flex items-center gap-3 z-10">
+              <div className="sticky top-0 bg-white border-b border-[#E7E1D3] px-4 sm:px-6 py-3 sm:py-4 flex items-center gap-3 z-10">
                 <Avatar email={selected.email} />
                 <div className="flex-1 min-w-0">
                   <p className="font-bold text-ink truncate">{selected.full_name || selected.email}</p>
                   <p className="text-xs text-muted">{COLUMNS.find(c => c.status === selected.status)?.title ?? selected.status}</p>
                 </div>
-                <button onClick={() => setDetailOpen(false)} className="p-2 rounded-lg hover:bg-[#F5F1E8] text-muted"><X className="w-5 h-5" /></button>
+                <button onClick={() => setDetailOpen(false)} className="p-2 rounded-lg hover:bg-[#F5F1E8] text-muted shrink-0"><X className="w-5 h-5" /></button>
               </div>
 
-              <div className="p-6 space-y-5">
+              <div className="p-4 sm:p-6 space-y-5">
                 {/* Contact */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="flex items-start gap-2 sm:col-span-2"><User className="w-4 h-4 text-muted mt-0.5 shrink-0" /><div><p className="text-xs text-muted">ФИО (как в паспорте)</p><p className="text-sm text-ink">{selected.full_name || '—'}</p></div></div>
@@ -539,7 +539,7 @@ export default function AdminSaudiPage() {
                 {(selected.study_portal_login || selected.study_portal_password) && (
                   <div className="rounded-xl bg-[#F5F1E8] p-4">
                     <div className="flex items-center gap-2 mb-2"><Lock className="w-4 h-4 text-muted" /><p className="text-xs font-semibold uppercase tracking-wide text-muted">Study in Saudi — доступ</p></div>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div><p className="text-xs text-muted mb-0.5">Логин</p><p className="text-sm font-mono text-ink">{selected.study_portal_login}</p></div>
                       <div><p className="text-xs text-muted mb-0.5">Пароль</p>{selected.study_portal_password && <PasswordField value={selected.study_portal_password} />}</div>
                     </div>
@@ -566,7 +566,7 @@ export default function AdminSaudiPage() {
               </div>
 
               {/* Footer action */}
-              <div className="sticky bottom-0 bg-white border-t border-[#E7E1D3] px-6 py-4">
+              <div className="sticky bottom-0 bg-white border-t border-[#E7E1D3] px-4 sm:px-6 py-3 sm:py-4">
                 {selected.status === 'REGISTERED' && (
                   <button onClick={() => markPaid(selected)} disabled={busyId === selected.id} className="w-full h-11 rounded-xl bg-[#1B4332] text-white text-sm font-semibold disabled:opacity-50 flex items-center justify-center gap-2">
                     {busyId === selected.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />} Отметить как оплачено
