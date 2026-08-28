@@ -78,7 +78,7 @@ export default function Page() {
             <div className="grid grid-cols-3 gap-4 mb-5">
               {[
                 { name: 'Topshirish', price: '$39', desc: 'Faqat hujjatlar' },
-                { name: 'Standart', price: '$79', desc: 'Tarjima + topshirish' },
+                { name: 'Standart', price: '$69', desc: 'Tarjima + topshirish' },
                 { name: 'VIP', price: '$99', desc: "To'liq yordam" },
               ].map(t => (
                 <div key={t.name} className="text-center p-3 bg-[#F7F8FA] rounded-xl">

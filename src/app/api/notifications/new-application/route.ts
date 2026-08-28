@@ -11,7 +11,7 @@ function getSupabase() {
 
 const PKG_LABEL: Record<string, string> = {
   SUBMISSION: 'Базовый — $39',
-  STANDARD:   'Стандарт — $79',
+  STANDARD:   'Стандарт — $69',
   VIP:        'VIP — $99',
 }
 

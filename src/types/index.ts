@@ -161,7 +161,7 @@ export const PACKAGES: Record<ServicePackage, {
     features_en: ['Submission of ready translated documents', 'Support after acceptance'],
   },
   STANDARD: {
-    priceUSD:    79,
+    priceUSD:    69,
     name_ru:     'Стандарт',
     name_en:     'Standard',
     name_uz:     'Standart',

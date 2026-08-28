@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     }
 
     const countryLabel = country === 'SA' ? '🇸🇦 Саудовская Аравия' : country === 'AE' ? '🇦🇪 ОАЭ' : country
-    const pkgLabel: Record<string, string> = { SUBMISSION: 'Базовый — $39', STANDARD: 'Стандарт — $79', VIP: 'VIP — $99' }
+    const pkgLabel: Record<string, string> = { SUBMISSION: 'Базовый — $39', STANDARD: 'Стандарт — $69', VIP: 'VIP — $99' }
 
     const msg =
       `🌐 Новая заявка (гость)\n\n` +

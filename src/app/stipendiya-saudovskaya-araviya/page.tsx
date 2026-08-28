@@ -94,7 +94,7 @@ export default function Page() {
             <div className="grid grid-cols-3 gap-3 mb-4">
               {[
                 { name: 'Подача', price: '$39' },
-                { name: 'Стандарт', price: '$79' },
+                { name: 'Стандарт', price: '$69' },
                 { name: 'VIP', price: '$99' },
               ].map(t => (
                 <div key={t.name} className="text-center p-3 bg-[#F7F8FA] rounded-xl">

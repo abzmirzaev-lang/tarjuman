@@ -7,13 +7,13 @@ import { PACKAGES } from '@/types'
  */
 export const PRICES = {
   SUBMISSION: PACKAGES.SUBMISSION.priceUSD,  // 39
-  STANDARD:   PACKAGES.STANDARD.priceUSD,   // 79
+  STANDARD:   PACKAGES.STANDARD.priceUSD,   // 69
   VIP:        PACKAGES.VIP.priceUSD,        // 99
 } as const
 
 /** Форматированные строки вида "$39" для вставки в тексты и schema.org */
 export const PRICE_STR = {
   SUBMISSION: `$${PACKAGES.SUBMISSION.priceUSD}`,  // '$39'
-  STANDARD:   `$${PACKAGES.STANDARD.priceUSD}`,   // '$79'
+  STANDARD:   `$${PACKAGES.STANDARD.priceUSD}`,   // '$69'
   VIP:        `$${PACKAGES.VIP.priceUSD}`,         // '$99'
 } as const
