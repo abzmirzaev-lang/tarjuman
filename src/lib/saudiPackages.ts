@@ -53,7 +53,7 @@ export const SAUDI_PACKAGES: Record<SaudiPackageId, SaudiPackage> = {
   },
   STANDARD: {
     id:       'STANDARD',
-    priceUSD: 69,
+    priceUSD: 79,
     name_ru:  'Standard',
     name_uz:  'Standard',
     name_en:  'Standard',
