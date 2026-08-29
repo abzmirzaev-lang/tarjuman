@@ -485,13 +485,13 @@ export default function ApplySaudiPage() {
                 </li>
               </ol>
             </div>
-            <div className="p-5 sm:p-6 border-t border-[#ECE6D6] flex flex-col sm:flex-row gap-3 shrink-0">
+            <div className="p-5 sm:p-6 border-t border-[#ECE6D6] flex flex-col-reverse sm:flex-row gap-3 shrink-0">
               <button type="button" onClick={() => setShowOffer(false)} disabled={loading}
                 className="flex-1 h-12 rounded-xl border-2 border-[#E7E1D3] text-sm font-semibold text-ink hover:border-[#1B4332]/30 transition-all disabled:opacity-60">
                 {t('Отмена', 'Bekor qilish', 'Cancel')}
               </button>
               <button type="button" onClick={handleSubmit} disabled={loading}
-                className="flex-1 h-12 flex items-center justify-center gap-2 rounded-xl text-white text-sm font-semibold transition-all disabled:opacity-60"
+                className="flex-1 h-14 sm:h-12 flex items-center justify-center gap-2 rounded-xl text-white text-base sm:text-sm font-bold sm:font-semibold shadow-md transition-all disabled:opacity-60 hover:-translate-y-0.5"
                 style={{ background: GREEN }}>
                 {loading && <Loader2 className="w-4 h-4 animate-spin" />}
                 {t('Принимаю', 'Qabul qilaman', 'I accept')}
