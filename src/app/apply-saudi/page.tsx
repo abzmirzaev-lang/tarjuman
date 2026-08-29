@@ -114,6 +114,7 @@ export default function ApplySaudiPage() {
   // Submit
   const [loading, setLoading]     = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [showOffer, setShowOffer] = useState(false)
 
   const validate = (): string | null => {
     if (fullName.trim().length < 3) return t('Укажите имя и фамилию как в загранпаспорте', 'Ism va familiyangizni pasportdagidek kiriting', 'Enter your full name as it appears in your passport')
@@ -127,9 +128,17 @@ export default function ApplySaudiPage() {
     return null
   }
 
-  const handleSubmit = async () => {
+  // Validates the form and opens the public-offer confirmation modal.
+  // Actual submission only happens once the client clicks "I accept" in the modal.
+  const handleSubmitClick = () => {
     const err = validate()
     if (err) { toast.error(err); return }
+    setShowOffer(true)
+  }
+
+  const handleSubmit = async () => {
+    const err = validate()
+    if (err) { toast.error(err); setShowOffer(false); return }
     setLoading(true)
     try {
       const res = await fetch('/api/apply-saudi', {
@@ -411,7 +420,7 @@ export default function ApplySaudiPage() {
         </Card>
 
         {/* ── Submit ── */}
-        <button type="button" onClick={handleSubmit} disabled={loading}
+        <button type="button" onClick={handleSubmitClick} disabled={loading}
           className="w-full flex items-center justify-center gap-2 py-4 text-sm font-semibold rounded-2xl transition-all duration-200 text-white disabled:opacity-60 hover:-translate-y-0.5"
           style={{ background: `linear-gradient(135deg, ${GREEN}, ${GREEN_SOFT})`, boxShadow: '0 12px 28px -10px rgba(27,67,50,0.45)' }}>
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
@@ -422,6 +431,75 @@ export default function ApplySaudiPage() {
           {t('Данные передаются по защищённому соединению и не публикуются', 'Ma\'lumotlar xavfsiz kanal orqali uzatiladi va e\'lon qilinmaydi', 'Data is sent over a secure connection and never published')}
         </p>
       </div>
+
+      {/* ── Public offer confirmation modal ── */}
+      {showOffer && (
+        <div
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm px-4 py-6"
+          onClick={() => !loading && setShowOffer(false)}
+        >
+          <div
+            className="w-full max-w-lg bg-white rounded-3xl border border-[#ECE6D6] shadow-modal max-h-[85vh] flex flex-col overflow-hidden"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="h-1 w-full bg-gradient-to-r from-[#1B4332] to-[#2F6B53] shrink-0" />
+            <div className="p-6 sm:p-7 overflow-y-auto">
+              <h2 className="text-xl font-bold text-ink mb-1" style={{ fontFamily: SERIF }}>
+                {t('Публичная оферта', 'Ommaviy oferta', 'Public offer')}
+              </h2>
+              <p className="text-xs text-muted mb-5">
+                {t(
+                  'Перед отправкой заявки ознакомьтесь с условиями и подтвердите согласие',
+                  'Arizani yuborishdan oldin shartlar bilan tanishing va roziligingizni tasdiqlang',
+                  'Please review the terms and confirm your agreement before submitting'
+                )}
+              </p>
+              <ol className="space-y-3 text-sm text-ink leading-relaxed list-decimal list-outside pl-5">
+                <li>
+                  {t(
+                    'Мы не гарантируем поступление в университет. Решение о принятии или отказе принимает только университет. Мы гарантируем со своей стороны выполнение оплаченной работы: перевод документов и подачу заявления в университет.',
+                    'Biz universitetga qabul qilinishingizni kafolatlamaymiz. Qabul qilish yoki rad etish haqidagi qarorni faqat universitet qabul qiladi. Biz o\'z tomonimizdan to\'langan ishning bajarilishini kafolatlaymiz: hujjatlarni tarjima qilish va universitetga ariza topshirish.',
+                    'We do not guarantee admission to the university. The decision to accept or reject an applicant is made solely by the university. On our part, we guarantee completion of the paid work: document translation and submission of the application to the university.'
+                  )}
+                </li>
+                <li>
+                  {t(
+                    'Ответ от университета обычно приходит в течение 1–5 месяцев после оплаты и подачи заявления. Срок может зависеть от университета.',
+                    'Universitetdan javob odatda to\'lov va ariza topshirilgandan so\'ng 1–5 oy ichida keladi. Muddat universitetga qarab farq qilishi mumkin.',
+                    'A response from the university usually arrives within 1–5 months after payment and submission. The timeframe may vary by university.'
+                  )}
+                </li>
+                <li>
+                  {t(
+                    'Если после оплаты вы передумали подавать документы, возврат денежных средств не производится.',
+                    'Agar to\'lovdan so\'ng hujjat topshirishdan voz kechsangiz, pul qaytarilmaydi.',
+                    'If you change your mind about submitting your documents after payment, no refund will be issued.'
+                  )}
+                </li>
+                <li>
+                  {t(
+                    'Оплачивая услугу, вы подтверждаете, что ознакомились и согласны с данными условиями.',
+                    'Xizmat uchun to\'lov qilish orqali siz ushbu shartlar bilan tanishganingizni va rozi ekanligingizni tasdiqlaysiz.',
+                    'By paying for the service, you confirm that you have read and agree to these terms.'
+                  )}
+                </li>
+              </ol>
+            </div>
+            <div className="p-5 sm:p-6 border-t border-[#ECE6D6] flex flex-col sm:flex-row gap-3 shrink-0">
+              <button type="button" onClick={() => setShowOffer(false)} disabled={loading}
+                className="flex-1 h-12 rounded-xl border-2 border-[#E7E1D3] text-sm font-semibold text-ink hover:border-[#1B4332]/30 transition-all disabled:opacity-60">
+                {t('Отмена', 'Bekor qilish', 'Cancel')}
+              </button>
+              <button type="button" onClick={handleSubmit} disabled={loading}
+                className="flex-1 h-12 flex items-center justify-center gap-2 rounded-xl text-white text-sm font-semibold transition-all disabled:opacity-60"
+                style={{ background: GREEN }}>
+                {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+                {t('Принимаю', 'Qabul qilaman', 'I accept')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
