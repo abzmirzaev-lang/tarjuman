@@ -23,7 +23,7 @@ const GOLD_TEXT  = '#8A6116'
 // ── Constants ────────────────────────────────────────────────────────────────
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-const PHONE_RE = /^\+[1-9]\d{7,14}$/
+const PHONE_RE = /^\+?\d{5,15}$/
 const CURRENCIES = ['USD', 'EUR', 'RUB', 'UZS', 'SAR', 'GBP']
 const STUDY_IN_SAUDI_URL = 'https://studyinsaudi.sa/en/programs'
 const SERIF = "'Playfair Display', Georgia, serif"
@@ -119,7 +119,7 @@ export default function ApplySaudiPage() {
   const validate = (): string | null => {
     if (fullName.trim().length < 3) return t('Укажите имя и фамилию как в загранпаспорте', 'Ism va familiyangizni pasportdagidek kiriting', 'Enter your full name as it appears in your passport')
     if (!EMAIL_RE.test(email.trim())) return t('Укажите корректный email', 'To\'g\'ri email kiriting', 'Enter a valid email')
-    if (!PHONE_RE.test(phone.trim())) return t('Укажите телефон в международном формате (+998...)', 'Telefonni xalqaro formatda kiriting (+998...)', 'Enter phone in international format (+1...)')
+    if (!PHONE_RE.test(phone.trim())) return t('Укажите корректный номер телефона', 'To\'g\'ri telefon raqamini kiriting', 'Enter a valid phone number')
     if (address.trim().length < 5) return t('Укажите полный адрес', 'To\'liq manzilni kiriting', 'Enter your full address')
     if (!hasDisability) return t('Ответьте на вопрос об инвалидности', 'Nogironlik haqidagi savolga javob bering', 'Answer the disability question')
     if (motivation.trim().length < 10) return t('Расскажите, почему хотите учиться в Саудовской Аравии', 'Nima uchun Saudiya Arabistonida o\'qimoqchisiz — yozing', 'Tell us why you want to study in Saudi Arabia')
