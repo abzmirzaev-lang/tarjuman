@@ -178,16 +178,22 @@ export default function ApplySaudiPage() {
             <CheckCircle2 className="w-8 h-8" style={{ color: GREEN }} />
           </div>
           <h1 className="text-2xl font-bold text-ink mb-2" style={{ fontFamily: SERIF }}>
-            {t('Заявка отправлена!', 'Ariza yuborildi!', 'Application submitted!')}
+            {t('Ваша заявка принята!', 'Arizangiz qabul qilindi!', 'Your application has been accepted!')}
           </h1>
           <p className="text-muted text-sm leading-relaxed mb-6">
             {t(
-              'Мы получили вашу анкету на поступление в университеты Саудовской Аравии. Наш менеджер свяжется с вами в ближайшее время.',
-              'Saudiya Arabistoni universitetlariga kirish uchun arizangizni qabul qildik. Menejerimiz tez orada siz bilan bog\'lanadi.',
-              'We\'ve received your Saudi Arabia university application. Our manager will contact you shortly.'
+              'Для продолжения подачи на университет Саудовской Аравии свяжитесь с нашим менеджером в Telegram.',
+              'Saudiya Arabistoni universitetiga topshirishni davom ettirish uchun menejerimiz bilan Telegram orqali bog\'laning.',
+              'To continue your application to the Saudi Arabia university, please contact our manager on Telegram.'
             )}
           </p>
-          <Link href="/" className="inline-flex items-center justify-center gap-2 px-6 py-3 text-white text-sm font-semibold rounded-xl hover:opacity-90 transition-all" style={{ background: GREEN }}>
+          <a href="https://t.me/tarjuman_edu" target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 w-full px-6 py-3.5 text-white text-sm font-bold rounded-xl hover:opacity-90 transition-all shadow-md"
+            style={{ background: '#229ED9' }}>
+            <Send className="w-4 h-4" />
+            {t('Написать в Telegram', 'Telegramda yozish', 'Message on Telegram')}
+          </a>
+          <Link href="/" className="inline-block mt-4 text-sm font-medium text-muted hover:text-ink transition-all">
             {t('На главную', 'Bosh sahifaga', 'Back to home')}
           </Link>
         </div>
