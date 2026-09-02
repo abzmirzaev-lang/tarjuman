@@ -4,9 +4,10 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import {
   GraduationCap, Stamp, Plane, Wallet, Home, HeartPulse,
-  Building2, MapPin, CheckCircle2, AlertTriangle, ExternalLink,
+  MapPin, CheckCircle2, AlertTriangle, ExternalLink,
   Send, ArrowRight, ShieldCheck, Sparkles, BookOpen, Layers,
   Languages, Camera, Fingerprint, FileText, ScrollText, Users,
+  Calendar,
 } from 'lucide-react'
 import { Navbar } from '@/components/layout/Navbar'
 import { useLanguage } from '@/hooks/useLanguage'
@@ -276,12 +277,48 @@ function AudienceSection() {
 // Section 4 — Universities
 // ─────────────────────────────────────────────────────────────────────────────
 const UNIVERSITIES = [
-  { name: 'Islamic University of Madinah', city: 'Медина' },
-  { name: 'Umm Al-Qura University', city: 'Мекка' },
-  { name: 'King Abdulaziz University', city: 'Джидда' },
-  { name: 'Imam Muhammad ibn Saud Islamic University', city: 'Эр-Рияд' },
-  { name: 'King Saud University', city: 'Эр-Рияд' },
-  { name: 'Princess Nourah University', city: 'Эр-Рияд' },
+  {
+    name: 'Islamic University of Madinah',
+    city: 'Медина',
+    founded: 1961,
+    students: '16,000+',
+    photo: 'https://images.unsplash.com/photo-1692977579997-948328cdb7d2?w=800&q=75',
+  },
+  {
+    name: 'Umm Al-Qura University',
+    city: 'Мекка',
+    founded: 1949,
+    students: '55,000+',
+    photo: 'https://images.unsplash.com/photo-1724191078796-8a997b989f43?w=800&q=75',
+  },
+  {
+    name: 'King Abdulaziz University',
+    city: 'Джидда',
+    founded: 1967,
+    students: '117,000+',
+    photo: 'https://images.unsplash.com/photo-1586715065342-98d1f6016fd1?w=800&q=75',
+  },
+  {
+    name: 'Imam Muhammad ibn Saud Islamic University',
+    city: 'Эр-Рияд',
+    founded: 1953,
+    students: '81,000+',
+    photo: 'https://images.unsplash.com/photo-1663900108404-a05e8bf82cda?w=800&q=75',
+  },
+  {
+    name: 'King Saud University',
+    city: 'Эр-Рияд',
+    founded: 1957,
+    students: '40,000+',
+    photo: 'https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800&q=75',
+  },
+  {
+    name: 'Princess Nourah University',
+    city: 'Эр-Рияд',
+    founded: 1970,
+    students: '50,000+',
+    photo: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=75',
+  },
 ]
 
 function UniversitiesSection() {
@@ -296,23 +333,43 @@ function UniversitiesSection() {
           <GoldRule />
         </motion.div>
 
-        <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {UNIVERSITIES.map((u, i) => (
             <motion.div
               key={u.name}
               {...fadeUp(0.05 * i)}
-              className="flex items-start gap-3 rounded-2xl border p-5 shadow-sm"
-              style={{ borderColor: 'rgba(13,59,46,0.12)', background: IVORY }}
+              className="overflow-hidden rounded-2xl border shadow-sm transition-transform hover:-translate-y-1 hover:shadow-lg"
+              style={{ borderColor: 'rgba(13,59,46,0.12)' }}
             >
-              <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl" style={{ background: 'rgba(13,59,46,0.08)' }}>
-                <Building2 className="h-5 w-5" style={{ color: GREEN_DEEP }} aria-hidden="true" />
+              <div className="relative h-40 overflow-hidden">
+                <div
+                  className="absolute inset-0 z-10 opacity-55"
+                  style={{ background: `linear-gradient(160deg, ${GREEN_DEEP}, ${GREEN_DARK})` }}
+                />
+                <img
+                  src={u.photo}
+                  alt={u.name}
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+                />
+                <div className="absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-black/70 to-transparent p-4">
+                  <p className="text-sm font-bold leading-snug text-white drop-shadow">{u.name}</p>
+                  <p className="mt-1 flex items-center gap-1 text-xs text-white/80">
+                    <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
+                    {u.city}
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="font-bold leading-snug" style={{ color: GREEN_DEEP }}>{u.name}</p>
-                <p className="mt-0.5 flex items-center gap-1 text-sm text-slate-500">
-                  <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
-                  {u.city}
-                </p>
+              <div className="flex items-center gap-4 p-4 text-xs text-slate-500">
+                <span className="flex items-center gap-1">
+                  <Calendar className="h-3.5 w-3.5" aria-hidden="true" />
+                  Осн. {u.founded}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Users className="h-3.5 w-3.5" aria-hidden="true" />
+                  {u.students} студентов
+                </span>
               </div>
             </motion.div>
           ))}
