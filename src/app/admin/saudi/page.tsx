@@ -326,7 +326,12 @@ export default function AdminSaudiPage() {
   const filtered = apps.filter(a => {
     const q = search.trim().toLowerCase()
     if (!q) return true
-    return a.email.toLowerCase().includes(q) || a.phone.includes(q) || a.address.toLowerCase().includes(q)
+    return (
+      (a.full_name ?? '').toLowerCase().includes(q) ||
+      a.email.toLowerCase().includes(q) ||
+      a.phone.includes(q) ||
+      a.address.toLowerCase().includes(q)
+    )
   })
 
   if (checking) {
@@ -352,7 +357,7 @@ export default function AdminSaudiPage() {
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
             <input
               value={search} onChange={e => setSearch(e.target.value)}
-              placeholder="Поиск по email, телефону..."
+              placeholder="Поиск по имени, фамилии, email, телефону..."
               className="w-full h-9 pl-9 pr-3 rounded-lg border border-[#E7E1D3] text-sm bg-[#FAF8F3] focus:outline-none focus:ring-2 focus:ring-brand/30"
             />
           </div>
